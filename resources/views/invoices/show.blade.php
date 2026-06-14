@@ -8,6 +8,14 @@
             <span class="text-secondary">{{ $invoice->status->label() }} · {{ $invoice->billingPeriod->name }}</span>
         </div>
         <div class="d-flex flex-wrap gap-2">
+            @if (auth()->user()->canManageBilling() && $invoice->canReceivePaymentReminder())
+                @php($latestActiveNotice = $invoice->dunningNotices->firstWhere('status', App\Enums\DunningNoticeStatus::Issued))
+                @if (! $latestActiveNotice || ($latestActiveNotice->level < 3 && $latestActiveNotice->due_at->isPast()))
+                    <a class="btn btn-outline-danger" href="{{ route('invoices.dunning-notices.create', $invoice) }}">
+                        {{ $latestActiveNotice ? 'Nächste Mahnstufe erstellen' : 'Erste Mahnung erstellen' }}
+                    </a>
+                @endif
+            @endif
             @can('reminder', $invoice)
                 <a class="btn btn-outline-primary" href="{{ route('invoices.payment-reminder', $invoice) }}">Zahlungserinnerung als PDF</a>
             @endcan
@@ -76,5 +84,30 @@
             </table>
         </div>
     </div>
+
+    @if ($invoice->dunningNotices->isNotEmpty())
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-header"><h2 class="h5 mb-0">Mahnhistorie</h2></div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead><tr><th>Mahnung</th><th>Stufe</th><th>Frist</th><th>Gebühr</th><th>Status</th><th></th></tr></thead>
+                    <tbody>
+                        @foreach ($invoice->dunningNotices as $notice)
+                            @can('view', $notice)
+                                <tr>
+                                    <td>{{ $notice->notice_number }}<br><small class="text-secondary">{{ $notice->issued_at->format('d.m.Y') }}</small></td>
+                                    <td>{{ $notice->level }}</td>
+                                    <td>{{ $notice->due_at->format('d.m.Y') }}</td>
+                                    <td>{{ number_format((float) $notice->fee_amount, 2, ',', '.') }} €</td>
+                                    <td>{{ $notice->status->label() }}</td>
+                                    <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ route('dunning-notices.show', $notice) }}">Anzeigen</a></td>
+                                </tr>
+                            @endcan
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif
 </div>
 @endsection

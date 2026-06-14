@@ -25,6 +25,7 @@ final class ActionIndicatorService
      *     meters_group: int,
      *     finance_group: int,
      *     communication_group: int,
+     *     dunning_notices: int,
      *     total: int
      * }
      */
@@ -47,8 +48,9 @@ final class ActionIndicatorService
             default => 0,
         };
 
-        $invoices = $user->role === UserRole::Tenant
-            ? Invoice::query()
+        $invoices = match (true) {
+            $user->canManageBilling() => $this->dunnableInvoiceCount(),
+            $user->role === UserRole::Tenant => Invoice::query()
                 ->where('status', InvoiceStatus::Approved)
                 ->whereIn('payment_status', [
                     InvoicePaymentStatus::Open,
@@ -60,8 +62,10 @@ final class ActionIndicatorService
                         ->orWhereHas('member', fn ($query) => $query
                             ->where('user_id', $user->id));
                 })
-                ->count()
-            : 0;
+                ->count(),
+            default => 0,
+        };
+        $dunningNotices = $user->canManageBilling() ? $invoices : 0;
 
         $failedCampaigns = $user->canManageCommunication()
             ? MailCampaign::query()->where('status', MailCampaignStatus::Failed)->count()
@@ -75,7 +79,28 @@ final class ActionIndicatorService
             'meters_group' => $meterReadings,
             'finance_group' => $invoices,
             'communication_group' => $failedCampaigns,
+            'dunning_notices' => $dunningNotices,
             'total' => $registrations + $meterReadings + $invoices + $failedCampaigns,
         ];
+    }
+
+    private function dunnableInvoiceCount(): int
+    {
+        return Invoice::query()
+            ->with('activeDunningNotices')
+            ->where('status', InvoiceStatus::Approved)
+            ->whereIn('payment_status', [
+                InvoicePaymentStatus::Open,
+                InvoicePaymentStatus::Returned,
+            ])
+            ->whereDate('due_at', '<', today())
+            ->get()
+            ->filter(function (Invoice $invoice): bool {
+                $latest = $invoice->activeDunningNotices->first();
+
+                return $latest === null
+                    || ($latest->level < 3 && $latest->due_at->isPast());
+            })
+            ->count();
     }
 }

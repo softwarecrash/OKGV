@@ -9,6 +9,7 @@ use App\Models\BillingRateAssignment;
 use App\Models\BillingRateTemplate;
 use App\Models\CommunicationSetting;
 use App\Models\Document;
+use App\Models\DunningNotice;
 use App\Models\Invoice;
 use App\Models\Letter;
 use App\Models\MailCampaign;
@@ -32,6 +33,7 @@ use App\Policies\BillingRatePolicy;
 use App\Policies\BillingRateTemplatePolicy;
 use App\Policies\CommunicationSettingPolicy;
 use App\Policies\DocumentPolicy;
+use App\Policies\DunningNoticePolicy;
 use App\Policies\InvoicePolicy;
 use App\Policies\LetterPolicy;
 use App\Policies\MailCampaignPolicy;
@@ -115,6 +117,7 @@ class AppServiceProvider extends ServiceProvider
                         'meters_group' => 0,
                         'finance_group' => 0,
                         'communication_group' => 0,
+                        'dunning_notices' => 0,
                         'total' => 0,
                     ],
             );
@@ -140,6 +143,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(PaymentBatchItem::class, PaymentBatchItemPolicy::class);
         Gate::policy(PermissionProfile::class, PermissionProfilePolicy::class);
         Gate::policy(Document::class, DocumentPolicy::class);
+        Gate::policy(DunningNotice::class, DunningNoticePolicy::class);
         Gate::policy(RegistrationRequest::class, RegistrationRequestPolicy::class);
         Gate::policy(SepaMandate::class, SepaMandatePolicy::class);
         Gate::policy(SepaSetting::class, SepaSettingPolicy::class);

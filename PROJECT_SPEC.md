@@ -613,9 +613,64 @@ Dieser Vorgang setzt keine Mahnstufe, berechnet keine Gebühr und verändert die
 Rechnung nicht. Mahnstufen, Fristen und Mahngebühren bleiben Phase 8
 vorbehalten.
 
-### Phase 8 bis 18
+### Phase 8: Mahnwesen
 
-Mahnwesen, Arbeitsstunden, Warteliste, Inventar, Arbeitseinsätze, CSV-Import und -Export, DSGVO, Vereinseinstellungen, Nummernkreise, Pächterwechsel und später ein Lageplan.
+#### Voraussetzungen und Rechte
+
+Mahnungen setzen das granulare Recht `Abrechnungen und Rechnungen verwalten`
+voraus. Sie dürfen ausschließlich für freigegebene, überfällige Rechnungen
+mit Zahlungsstatus `open` oder `returned` erstellt werden. Pächter können nur
+eigene, ausgestellte Mahnungen lesen und als PDF herunterladen.
+
+#### Mahnstufen und Fristen
+
+Eine Rechnung unterstützt maximal drei aufeinanderfolgende Mahnstufen. Die
+erste Mahnung darf nach Ablauf der ursprünglichen Rechnungsfrist erstellt
+werden. Eine weitere Stufe ist erst möglich, wenn die Zahlungsfrist der
+vorherigen aktiven Mahnung abgelaufen ist. Übersprungene oder doppelte Stufen
+sind ausgeschlossen.
+
+Jede Mahnung speichert:
+
+- eindeutige Mahnnummer,
+- Rechnungsbezug und Rechnungsnummer als Snapshot,
+- Mahnstufe,
+- Ausstellungs- und neue Fälligkeit,
+- ursprünglichen Rechnungsbetrag,
+- Mahngebühr,
+- Gesamtforderung,
+- vollständige historische Rechnungsempfänger,
+- optionalen verständlichen Hinweis,
+- Ersteller und Erstellungszeitpunkt.
+
+Gebühren sind optional, nicht negativ und werden nicht rückwirkend in die
+freigegebene Rechnung geschrieben. Die Gesamtforderung einer Mahnung besteht
+aus dem ursprünglichen Rechnungsbetrag plus den Gebühren aller aktiven
+Mahnstufen dieser Rechnung.
+
+#### Unveränderlichkeit und Stornierung
+
+Ausgestellte Mahnungen sind unveränderliche historische Snapshots und können
+nicht gelöscht werden. Eine sachlich fehlerhafte Mahnung kann mit
+Pflichtbegründung storniert werden. Stornierung beendet ihre Wirkung, erhält
+aber Datensatz und PDF-Historie. Nach einer Stornierung kann dieselbe Stufe
+erneut korrekt ausgestellt werden. Erstellung und Stornierung werden
+auditiert.
+
+#### Zahlung und Anzeige
+
+Sobald die Rechnung als bezahlt markiert ist, sind keine weiteren Mahnungen
+möglich. Vorhandene Mahnungen bleiben historisch sichtbar. Die
+Rechnungsübersicht zeigt überfällige offene Rechnungen und die aktuelle
+Mahnstufe. Berechtigte Finanzkonten erhalten hierfür einen Aktionshinweis.
+Die PDF-Ausgabe enthält Rechnungsnummer, Mahnnummer, Mahnstufe, Frist,
+Einzelgebühr, bisherige aktive Gebühren und Gesamtforderung.
+
+### Phase 9 bis 18
+
+Arbeitsstunden, Warteliste, Inventar, Arbeitseinsätze, CSV-Import und -Export,
+DSGVO, Vereinseinstellungen, Nummernkreise, Pächterwechsel und später ein
+Lageplan.
 
 ## Versionen
 

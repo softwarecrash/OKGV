@@ -7,6 +7,7 @@ use App\Http\Controllers\BillingRateController;
 use App\Http\Controllers\BillingRateTemplateController;
 use App\Http\Controllers\CommunicationSettingController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DunningNoticeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LetterController;
@@ -139,6 +140,16 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         ->name('invoices.pdf');
     Route::get('invoices/{invoice}/payment-reminder', [PaymentReminderController::class, 'pdf'])
         ->name('invoices.payment-reminder');
+    Route::get('invoices/{invoice}/dunning-notices/create', [DunningNoticeController::class, 'create'])
+        ->name('invoices.dunning-notices.create');
+    Route::post('invoices/{invoice}/dunning-notices', [DunningNoticeController::class, 'store'])
+        ->name('invoices.dunning-notices.store');
+    Route::get('dunning-notices/{dunning_notice}/pdf', [DunningNoticeController::class, 'pdf'])
+        ->name('dunning-notices.pdf');
+    Route::patch('dunning-notices/{dunning_notice}/cancel', [DunningNoticeController::class, 'cancel'])
+        ->name('dunning-notices.cancel');
+    Route::resource('dunning-notices', DunningNoticeController::class)
+        ->only(['index', 'show']);
     Route::resource('invoices', InvoiceController::class)->only(['index', 'show']);
     Route::get('sepa-settings', [SepaSettingController::class, 'edit'])
         ->name('sepa-settings.edit');

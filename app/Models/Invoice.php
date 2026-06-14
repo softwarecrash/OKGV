@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DunningNoticeStatus;
 use App\Enums\InvoicePaymentStatus;
 use App\Enums\InvoiceStatus;
 use Database\Factories\InvoiceFactory;
@@ -90,6 +91,18 @@ class Invoice extends Model
     public function paymentBatchItems(): HasMany
     {
         return $this->hasMany(PaymentBatchItem::class);
+    }
+
+    public function dunningNotices(): HasMany
+    {
+        return $this->hasMany(DunningNotice::class)->orderByDesc('level');
+    }
+
+    public function activeDunningNotices(): HasMany
+    {
+        return $this->hasMany(DunningNotice::class)
+            ->where('status', DunningNoticeStatus::Issued)
+            ->orderByDesc('level');
     }
 
     public function primaryRecipient(): ?InvoiceRecipient

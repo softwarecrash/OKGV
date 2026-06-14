@@ -99,7 +99,7 @@ vorherigen Phase geprüft sein.
 
 ## Phase 8: Mahnwesen
 
-- [ ] Mahnwesen
+- [x] Mahnwesen
 
 ## Phase 9: Arbeitsstunden
 
@@ -163,5 +163,5 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 7 sind abgeschlossen. Als Nächstes folgt Phase 8:
-Mahnwesen.
+Die Phasen 0 bis 8 sind abgeschlossen. Als Nächstes folgt Phase 9:
+Arbeitsstunden und Strafzahlungen.

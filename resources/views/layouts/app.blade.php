@@ -120,6 +120,14 @@
                                                     <x-action-indicator :count="$actionIndicators['invoices']" label="offene Rechnungen" />
                                                 </a>
                                             </li>
+                                            @if (auth()->user()->canManageBilling())
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('dunning-notices.index') }}">
+                                                        Mahnwesen
+                                                        <x-action-indicator :count="$actionIndicators['dunning_notices']" label="mahnfähige Rechnungen" />
+                                                    </a>
+                                                </li>
+                                            @endif
                                         @endif
                                         @if ($canViewSepa)
                                             <li><hr class="dropdown-divider"></li>

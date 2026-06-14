@@ -53,6 +53,11 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Granulare interne, Pächter- und öffentliche Dokumentfreigaben
 - Nicht erratbare öffentliche Freigabelinks mit sofortiger Widerrufsmöglichkeit
 - Suche, Filter und revisionsfreundliche Dokumentarchivierung
+- Dreistufiges Mahnwesen für überfällige offene Rechnungen
+- Unveränderliche Mahnungssnapshots mit Empfänger- und Betragshistorie
+- Optionale Mahngebühren, neue Zahlungsfristen und kumulierte Forderungen
+- PDF-Mahnungen und begründete, historisierte Stornierungen
+- Pächterzugriff auf eigene Mahnhistorie
 
 Freigegebene Rechnungen sind unveränderbar. Pächterwechsel innerhalb einer
 Periode werden bis zum vollständigen Übergabeprozess bewusst nicht automatisch
@@ -125,7 +130,11 @@ Konten mit dem Recht `Kommunikation verwalten` finden in der Hauptnavigation
 den Bereich `Kommunikation`. Dort stehen Serienmails, PDF-Briefe und die
 Versandhistorie bereit. Eine Zahlungserinnerung erscheint an einer Rechnung
 erst nach überschrittener Fälligkeit und verändert weder Zahlungsstatus noch
-Mahnstufe. Mahngebühren und Mahnstufen folgen erst in Phase 8.
+Mahnstufe. Im Bereich `Mahnwesen` können berechtigte Finanzkonten anschließend
+bis zu drei aufeinanderfolgende Mahnstufen mit eigener Frist und optionaler
+Gebühr ausstellen. Eine weitere Stufe ist erst nach Ablauf der vorherigen
+Frist möglich. Ausgestellte Mahnungen bleiben unveränderlich; fehlerhafte
+Mahnungen werden begründet storniert und nicht gelöscht.
 
 Konten mit dem Recht `Dokumente verwalten` können Dateien unter `Dokumente`
 hochladen, Mitgliedern oder Parzellen zuordnen und gezielt veröffentlichen.

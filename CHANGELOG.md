@@ -2,6 +2,45 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.25] - 2026-06-14
+
+### Phase 8
+
+- Dreistufiges Mahnwesen für freigegebene, überfällige und offene oder
+  zurückgegebene Rechnungen umgesetzt.
+- Mahnstufen werden lückenlos und erst nach Ablauf der vorherigen Frist
+  ausgestellt.
+- Jede Mahnung speichert Rechnungsnummer, Beträge, Empfänger, Frist, Gebühr,
+  Gesamtforderung und Ersteller als unveränderlichen Snapshot.
+- Optionale Gebühren werden über alle aktiven Mahnstufen kumuliert, ohne die
+  freigegebene Rechnung rückwirkend zu verändern.
+- PDF-Mahnungen mit Mahnstufe, Frist, Gebührenübersicht und Gesamtforderung
+  ergänzt.
+- Mahnübersicht, Rechnungsintegration und Pächterzugriff auf eigene Mahnungen
+  hinzugefügt.
+- Überfällige, tatsächlich mahnfähige Rechnungen erzeugen einen
+  rollenabhängigen Aktionspunkt im Finanzbereich.
+
+### Security
+
+- Mahnungen verwenden das bestehende granulare Abrechnungsrecht.
+- Bezahlte, noch nicht fällige oder nicht freigegebene Rechnungen können
+  serverseitig nicht gemahnt werden.
+- Ausgestellte Mahnungen können weder verändert noch gelöscht werden.
+- Nur die höchste aktive Mahnstufe kann mit Pflichtbegründung storniert
+  werden; Erstellung und Stornierung werden auditiert.
+- Die Migration wurde vorwärts und rückwärts isoliert geprüft und
+  anschließend ausschließlich mit `php artisan migrate` auf MariaDB
+  angewendet; vorhandene Bestandszahlen blieben unverändert.
+
+### Tests
+
+- Mahnstufen, Fristsperren, Gebührenkumulation, Stornierung,
+  Unveränderlichkeit, Rechteisolation, Pächterzugriff, PDF und Aktionspunkte
+  werden durch Feature-Tests abgedeckt.
+- Insgesamt bestehen 90 Tests mit 533 Assertions.
+- Entwicklungsstand auf `0.2.0.25` erhöht.
+
 ## [0.2.0.24] - 2026-06-14
 
 ### Fixed

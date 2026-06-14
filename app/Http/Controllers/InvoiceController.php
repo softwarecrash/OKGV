@@ -38,7 +38,14 @@ class InvoiceController extends Controller
     public function show(Invoice $invoice): View
     {
         $this->authorize('view', $invoice);
-        $invoice->load(['member', 'recipients', 'billingPeriod', 'items.parcel', 'approver']);
+        $invoice->load([
+            'member',
+            'recipients',
+            'billingPeriod',
+            'items.parcel',
+            'approver',
+            'dunningNotices.creator',
+        ]);
 
         return view('invoices.show', compact('invoice'));
     }

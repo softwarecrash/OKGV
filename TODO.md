@@ -199,3 +199,19 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] SMTP-Einstellungen aus Kommunikation in die globale Konfiguration verschieben
 - [x] Berechtigungen, Navigation und Tests der SMTP-Integration prüfen
 - [x] Entwicklungsstand veröffentlichen
+
+## Phase 8: Mahnwesen
+
+- [x] Datenmodell, Mahnstufen, Fristen und Rechtekonzept spezifizieren
+- [x] Unveränderliche Mahnungssnapshots und Empfängerhistorie implementieren
+- [x] Sequentielle Mahnstufen und Fristprüfung implementieren
+- [x] Optionale Mahngebühren und kumulierte Gesamtforderung implementieren
+- [x] Stornierung mit Pflichtbegründung und Auditlog implementieren
+- [x] Mahnungsübersicht und Rechnungsintegration implementieren
+- [x] PDF-Mahnungen implementieren
+- [x] Pächterzugriff auf eigene Mahnungen implementieren
+- [x] Aktionshinweis für überfällige Rechnungen ergänzen
+- [x] Feature-, Rechte-, PDF- und Unveränderlichkeitstests ergänzen
+- [x] Migration vorwärts und rückwärts isoliert prüfen
+- [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
+- [ ] Phase 8 vollständig prüfen und veröffentlichen
