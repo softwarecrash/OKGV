@@ -99,6 +99,39 @@ class CommunicationWorkflowTest extends TestCase
         Mail::assertSent(SmtpTestMessage::class, 1);
     }
 
+    public function test_smtp_test_rate_limit_returns_to_form_with_german_message(): void
+    {
+        Mail::fake();
+        $administrator = User::factory()->administrator()->create();
+        CommunicationSetting::create([
+            'smtp_enabled' => true,
+            'smtp_scheme' => 'smtp',
+            'smtp_host' => 'smtp.example.test',
+            'smtp_port' => 587,
+            'from_address' => 'verein@example.test',
+            'from_name' => 'KGV Test',
+        ]);
+
+        for ($attempt = 1; $attempt <= 10; $attempt++) {
+            $this->actingAs($administrator)
+                ->post(route('communication-settings.test'), [
+                    'test_email' => 'extern@example.test',
+                ])
+                ->assertRedirect(route('application-settings.edit', ['section' => 'smtp']));
+        }
+
+        $this->actingAs($administrator)
+            ->post(route('communication-settings.test'), [
+                'test_email' => 'extern@example.test',
+            ])
+            ->assertRedirect(route('application-settings.edit', ['section' => 'smtp']))
+            ->assertSessionHasErrors([
+                'test_email' => 'Zu viele Testmails in kurzer Zeit. Bitte warte etwa eine Minute und versuche es erneut.',
+            ]);
+
+        Mail::assertSent(SmtpTestMessage::class, 10);
+    }
+
     public function test_campaign_deduplicates_recipients_and_records_delivery_history(): void
     {
         Mail::fake();

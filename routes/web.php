@@ -101,7 +101,7 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::put('globale-konfiguration/smtp', [CommunicationSettingController::class, 'update'])
         ->name('communication-settings.update');
     Route::post('globale-konfiguration/smtp/test', [CommunicationSettingController::class, 'test'])
-        ->middleware('throttle:3,10')
+        ->middleware('throttle:smtp-tests')
         ->name('communication-settings.test');
     Route::post('mail-campaigns/{mail_campaign}/send', [MailCampaignController::class, 'send'])
         ->name('mail-campaigns.send');

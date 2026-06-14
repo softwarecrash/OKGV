@@ -2,6 +2,22 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.23] - 2026-06-14
+
+### Fixed
+
+- Zu strenges SMTP-Testlimit von drei Versuchen in zehn Minuten ersetzt.
+- Pro Benutzer sind nun zehn Testmails pro Minute möglich.
+- Beim Überschreiten erfolgt eine Rückleitung zum SMTP-Formular mit
+  verständlicher deutscher Meldung statt einer allgemeinen 429-Seite.
+
+### Tests
+
+- Zulässige Testversuche und benutzerfreundliche Begrenzungsmeldung werden
+  durch einen Feature-Test abgedeckt.
+- Insgesamt bestehen 85 Tests mit 485 Assertions.
+- Entwicklungsstand auf `0.2.0.23` erhöht.
+
 ## [0.2.0.22] - 2026-06-14
 
 ### Changed

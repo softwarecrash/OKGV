@@ -53,9 +53,11 @@ use App\Services\AuditLogger;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -76,6 +78,17 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+
+        RateLimiter::for('smtp-tests', function ($request): Limit {
+            return Limit::perMinute(10)
+                ->by((string) $request->user()->id)
+                ->response(fn ($request, array $headers) => redirect()
+                    ->route('application-settings.edit', ['section' => 'smtp'])
+                    ->withErrors([
+                        'test_email' => 'Zu viele Testmails in kurzer Zeit. Bitte warte etwa eine Minute und versuche es erneut.',
+                    ])
+                    ->withHeaders($headers));
+        });
 
         if (Schema::hasTable('application_settings')) {
             $systemName = ApplicationSetting::query()->value('system_name');
