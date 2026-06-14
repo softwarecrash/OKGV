@@ -1,5 +1,11 @@
 # AGENTS.md
 
+## Verbindlicher Code Style
+
+- Lies vor jeder Codeänderung `AGENT_CODE_STYLE.md`.
+- Die dort definierten Regeln gelten projektweit für PHP, Laravel, Blade, Datenbank, Sicherheit, Tests und Veröffentlichung.
+- Neue Muster dürfen nur eingeführt werden, wenn sie einen konkreten technischen Vorteil haben und in `AGENT_CODE_STYLE.md` dokumentiert werden.
+
 ## Arbeitsregeln
 
 - Arbeite strikt phasenweise nach `PROJECT_SPEC.md` und `TODO.md`.

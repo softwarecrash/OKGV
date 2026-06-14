@@ -51,3 +51,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Tests erstellen
 - [x] Phase 2 vollständig prüfen
 - [x] Entwicklungsstand 0.2.0.1 veröffentlichen
+
+## Projektweite Standards
+
+- [x] Verbindliche Code-Style-Richtlinie für Agents erstellen
+- [x] Code-Style-Richtlinie aus `AGENTS.md` referenzieren
+- [ ] Entwicklungsstand 0.2.0.2 veröffentlichen

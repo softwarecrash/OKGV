@@ -61,6 +61,7 @@ Für die Frontend-Entwicklung kann parallel `npm run dev` gestartet werden.
 Die frühe Entwicklung erfolgt direkt im Linux-LXC. Docker- und Deployment-Artefakte werden erst nach Fertigstellung der Kernmodule erstellt.
 
 Die verbindliche Reihenfolge und Fachspezifikation stehen in [PROJECT_SPEC.md](PROJECT_SPEC.md), Arbeitsregeln in [AGENTS.md](AGENTS.md) und der aktuelle Fortschritt in [TODO.md](TODO.md).
+Der projektweite Programmierstil ist in [AGENT_CODE_STYLE.md](AGENT_CODE_STYLE.md) verbindlich dokumentiert.
 
 ## Lizenz
 

@@ -1,0 +1,176 @@
+# OKGV Code Style für Agents
+
+Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindlich. Neue Änderungen müssen den vorhandenen Projektstil fortführen. Abweichungen benötigen einen dokumentierten technischen Grund.
+
+## Allgemeine Formatierung
+
+- Verwende UTF-8, LF-Zeilenenden und eine abschließende Leerzeile.
+- Rücke PHP, JavaScript, SCSS und Blade mit vier Leerzeichen ein.
+- Rücke YAML mit zwei Leerzeichen ein.
+- Entferne nachgestellte Leerzeichen.
+- Formatiere PHP mit Laravel Pint. Vor einem Commit muss `vendor/bin/pint --test` erfolgreich sein.
+- Behalte Änderungen eng am jeweiligen Fachmodul. Vermische keine unabhängigen Refactorings mit einer Fachänderung.
+- Verwende technische Bezeichner und Kommentare auf Englisch.
+- Verwende sichtbare Texte, Validierungsfehler und Beschriftungen auf Deutsch.
+- Kommentiere nur nicht offensichtliche Fach- oder Sicherheitslogik. Kommentare erklären das Warum, nicht den unmittelbar sichtbaren Code.
+
+## PHP und Laravel
+
+- Halte PSR-4-Namensräume und die bestehende Verzeichnisstruktur ein.
+- Verwende Typdeklarationen für Parameter und Rückgabewerte.
+- Verwende `final` für zustandslose Services, die nicht zur Erweiterung vorgesehen sind.
+- Verwende Constructor Property Promotion und `readonly` für injizierte Services.
+- Verwende Enums statt frei verteilter Status- oder Typ-Strings.
+- Stelle für sichtbare Enum-Werte eine deutsche `label()`-Methode bereit.
+- Stelle Einheiten oder weitere feste Metadaten direkt am zugehörigen Enum bereit.
+- Verwende frühe Rückgaben, um Verschachtelung gering zu halten.
+- Verwende benannte Argumente, wenn mehrere gleichartige Argumente sonst schwer unterscheidbar wären.
+- Verwende keine globalen Hilfsfunktionen für neue Fachlogik. Kapsle sie in klar benannte Services oder Models.
+- Nutze Laravel-Fassaden und Framework-APIs in der im Projekt etablierten Form.
+- Verwende `bccomp`, `bcadd` und `bcsub` für abrechnungsrelevante Dezimalwerte. Nutze dafür keine Fließkommaarithmetik.
+
+## Schichten und Verantwortlichkeiten
+
+### Controller
+
+- Controller bleiben klein und koordinieren nur Request, Policy, Service, Model und Response.
+- Autorisiere jeden fachlichen Endpunkt explizit mit Policies.
+- Verwende Form Requests für alle fachlichen Schreiboperationen.
+- Lege komplexe oder transaktionale Geschäftslogik nicht im Controller ab.
+- Lade Beziehungen gezielt und vermeide unbeabsichtigte N+1-Abfragen.
+- Verwende benannte Routen und Redirects.
+- Setze deutsche Flash-Meldungen nach erfolgreichen Schreiboperationen.
+
+### Form Requests
+
+- `authorize()` delegiert an Policies und enthält keine parallele Rechteimplementierung.
+- `rules()` enthält strukturelle und feldbezogene Validierung.
+- Verwende Laravel-Regelobjekte wie `Rule::enum`, `Rule::unique` und `Rule::exists`.
+- Verwende `after()` nur für datenbankabhängige, fachübergreifende Validierung.
+- Wiederhole kritische Konsistenzprüfungen zusätzlich im transaktionalen Service, wenn parallele Requests möglich sind.
+- Begrenze Freitextfelder explizit.
+- Validiere Datumsreihenfolgen und nichtnegative Dezimalwerte.
+
+### Services
+
+- Services kapseln fachliche Abläufe, Berechnungen und Transaktionen.
+- Transaktionale Services sperren den kleinsten stabilen übergeordneten Datensatz mit `lockForUpdate()`.
+- Prüfe Geschäftsbedingungen nach dem Sperren erneut.
+- Wirf bei fachlich ungültigen Benutzereingaben `ValidationException::withMessages()`.
+- Halte Berechnungsservices deterministisch und frei von UI-Verantwortung.
+- Gib erzeugte oder veränderte Models zurück, wenn der aufrufende Controller sie für Redirects oder Auditlogs benötigt.
+
+### Models
+
+- Models definieren Casts, Beziehungen, lokale Scopes und kleine modellnahe Hilfsmethoden.
+- Verwende Laravel-Attribute für `Fillable` und `Hidden`, wie im Projekt etabliert.
+- Caste Status- und Typfelder auf Enums.
+- Caste Datumsfelder auf Laravel-Datumsobjekte.
+- Caste Dezimalwerte mit fester Präzision, zum Beispiel `decimal:4`.
+- Benenne Beziehungen fachlich und eindeutig, etwa `readings()`, `tenancies()` oder `parcelTenancies()`.
+- Verwende Query Scopes für wiederkehrende Filter wie Suche oder zeitliche Gültigkeit.
+- Lege komplexe, mehrere Models betreffende Geschäftsabläufe nicht in Model Events ab.
+
+### Policies
+
+- Alle Berechtigungen werden serverseitig geprüft.
+- Verwende `viewAny`, `view`, `create`, `update` und fachliche Fähigkeiten wie `archive` oder `replace`.
+- Kapsle wiederkehrende Rollenentscheidungen als Methoden am `UserRole`-Enum.
+- Pächterzugriffe werden immer über die eindeutige Benutzer-Mitglied-Zuordnung und die zugehörigen Fachdaten eingeschränkt.
+- Ein ausgeblendeter Button ersetzt niemals eine Policy.
+
+## Datenbank und Migrationen
+
+- Erstelle pro fachlicher Tabelle eine eigene Migration.
+- Migrationen müssen vollständig vorwärts und rückwärts ausführbar sein.
+- Verwende Fremdschlüssel mit bewusst gewähltem Löschverhalten.
+- Verwende `restrictOnDelete()` für unverzichtbare historische Beziehungen.
+- Verwende `nullOnDelete()` nur, wenn der historische Datensatz ohne den Bezug sinnvoll erhalten bleibt.
+- Lege Eindeutigkeitsregeln und häufige Suchpfade als Datenbankindizes an.
+- Verwende für abrechnungs- und zählerrelevante Werte `decimal`, niemals `float` oder `double`.
+- Historische Datensätze werden nicht physisch gelöscht.
+- Bestehende historische Werte werden nicht überschrieben, wenn die Fachregel einen neuen Korrekturdatensatz verlangt.
+- Verwende reversible Archivierung statt Löschung, wenn Aufbewahrung erforderlich ist.
+- Verlasse dich bei Regeln mit Parallelitätsrisiko nicht ausschließlich auf Formvalidierung.
+
+## Audit und Sicherheit
+
+- Auditiere sicherheits- und fachrelevante Schreiboperationen.
+- Benenne Auditaktionen als stabile englische Schlüssel im Format `bereich.aktion`, zum Beispiel `meter.replaced`.
+- Speichere keine Passwörter, Bankdaten oder vollständigen personenbezogenen Änderungswerte im Auditlog.
+- Speichere bei Änderungen bevorzugt nur `changed_fields`.
+- Nutze verschlüsselte Audit-Metadaten für notwendige Zusatzinformationen.
+- Hardcode keine Geheimnisse, Zugangsdaten oder personenbezogenen Beispieldaten.
+- Sensible lokale Werte gehören ausschließlich in die ignorierte `.env`.
+- Private Uploads gehören in private Storage-Verzeichnisse.
+- Neue Uploadfunktionen benötigen MIME-, Größen- und Dateitypprüfung.
+- Öffentliche Schreibendpunkte benötigen Rate Limiting, sobald sie eingeführt werden.
+
+## Historische Daten
+
+- Historien müssen dauerhaft nachvollziehbar bleiben.
+- Verwende Start- und Enddaten statt den aktuellen Zustand rückwirkend umzuschreiben.
+- Verhindere überschneidende Zeiträume, wenn die Fachregel Eindeutigkeit fordert.
+- Verwende Transaktionen für Wechselprozesse, die einen alten Datensatz abschließen und einen neuen anlegen.
+- Append-only-Daten wie Zählerstände erhalten keine Update- oder Delete-Routen.
+- Korrekturen an Append-only-Daten erfolgen als neuer, nachvollziehbarer Datensatz.
+
+## Blade und Benutzeroberfläche
+
+- Sichtbare Oberfläche und Meldungen sind deutsch.
+- Verwende Bootstrap-5-Komponenten und die vorhandenen OKGV-Farben.
+- Halte Ansichten responsiv und verwende Tabellen in `.table-responsive`.
+- Verwende gemeinsame Partials oder Blade-Komponenten für wiederkehrende Formbereiche und Fehlerausgabe.
+- Formulare enthalten CSRF-Schutz und bei Bedarf die korrekte HTTP-Methodensimulation.
+- Zeige Aktionen nur mit `@can`, prüfe dieselbe Fähigkeit aber zusätzlich im Controller oder Form Request.
+- Escape Benutzereingaben standardmäßig mit Blade.
+- Falls Zeilenumbrüche dargestellt werden, verwende das bestehende Muster `{!! nl2br(e($value)) !!}`.
+- Verwende keine Inline-Skripte für Fachlogik. Alpine.js ist für kleine UI-Zustände vorgesehen.
+- Halte interne Notizen für Pächter unsichtbar.
+
+## Routen und Benennung
+
+- Verwende REST-Ressourcenrouten für gewöhnliche CRUD-Abläufe.
+- Lass nicht erlaubte Aktionen wie `destroy` explizit weg.
+- Verwende eigene benannte Routen für Fachabläufe wie Archivierung oder Zählerwechsel.
+- Controller heißen nach der verwalteten Ressource oder dem Fachablauf.
+- Services heißen nach ihrer Verantwortung, zum Beispiel `MeterManager` oder `ConsumptionCalculator`.
+- Tests benennen das erwartete Verhalten vollständig in `snake_case`.
+- Verwende englische Tabellen-, Spalten-, Klassen- und Methodennamen.
+- Verwende deutsche Labels nur in der sichtbaren Oberfläche.
+
+## Tests
+
+- Jede neue Fachregel benötigt mindestens einen Test.
+- Verwende Feature-Tests für HTTP, Policies, Validierung, Datenbankwirkung und Auditlogs.
+- Verwende `RefreshDatabase`, damit Tests unabhängig bleiben.
+- Erzeuge Testdaten mit Factories.
+- Prüfe sowohl erlaubte als auch verbotene Rollen.
+- Prüfe Pächterisolation ausdrücklich gegen fremde Datensätze.
+- Prüfe bei Schreiboperationen Redirects, Validierungsfehler und Datenbankzustand.
+- Prüfe historische Regeln, Randdaten und konfliktbehaftete Zeiträume.
+- Prüfe, dass verbotene Update- oder Delete-Routen tatsächlich fehlen.
+- Verwende feste, lesbare Testwerte für fachliche Berechnungen.
+- Vor Veröffentlichung müssen mindestens folgende Befehle erfolgreich sein:
+
+```bash
+composer test
+vendor/bin/pint --test
+composer validate --strict
+composer audit
+npm run build
+npm audit --audit-level=high
+```
+
+- Neue Migrationen werden zusätzlich mit Rollback und erneutem Migrate geprüft.
+
+## Dokumentation und Veröffentlichung
+
+- Aktualisiere `PROJECT_SPEC.md`, bevor unklare Fachregeln implementiert werden.
+- Hake abgeschlossene Aufgaben unmittelbar in `TODO.md` ab.
+- Dokumentiere jede Änderung in `CHANGELOG.md`.
+- Aktualisiere `README.md`, wenn Installation, Bedienung oder verfügbare Module betroffen sind.
+- Erhöhe den Entwicklungsstand nach der aktuellen Regel nur an der vierten Stelle.
+- Veröffentliche keine Version, solange Tests, Formatter, Builds oder Audits fehlschlagen.
+- Commit-Nachrichten sind kurz, englisch und beschreiben den fachlichen Inhalt.
+- Git-Tags verwenden das Format `v0.2.0.<Build>`.
