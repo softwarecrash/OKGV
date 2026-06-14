@@ -12,11 +12,14 @@ class UserGuidanceTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_login_explains_credentials_and_shared_device_risk(): void
+    public function test_login_offers_password_visibility_toggle_and_shared_device_warning(): void
     {
         $this->get(route('login'))
             ->assertOk()
-            ->assertSee('Verwende die E-Mail-Adresse, die deinem OKGV-Konto zugeordnet ist.')
+            ->assertSee('data-password-toggle', false)
+            ->assertSee('aria-label="Passwort anzeigen"', false)
+            ->assertDontSee('Verwende die E-Mail-Adresse, die deinem OKGV-Konto zugeordnet ist.')
+            ->assertDontSee('Das Passwort wird verdeckt eingegeben und nicht im Klartext gespeichert.')
             ->assertSee('Nur auf einem persönlichen Gerät verwenden.');
     }
 

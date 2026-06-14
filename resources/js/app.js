@@ -35,4 +35,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateThemeToggle();
     });
+
+    document.querySelectorAll('[data-password-toggle]').forEach((toggle) => {
+        const inputId = toggle.getAttribute('aria-controls');
+        const input = inputId ? document.getElementById(inputId) : null;
+
+        if (!(input instanceof HTMLInputElement)) {
+            return;
+        }
+
+        toggle.addEventListener('click', () => {
+            const showPassword = input.type === 'password';
+            const label = showPassword ? 'Passwort verbergen' : 'Passwort anzeigen';
+
+            input.type = showPassword ? 'text' : 'password';
+            toggle.setAttribute('aria-pressed', String(showPassword));
+            toggle.setAttribute('aria-label', label);
+            toggle.setAttribute('title', label);
+            toggle.querySelector('[data-password-show-icon]')?.classList.toggle('d-none', showPassword);
+            toggle.querySelector('[data-password-hide-icon]')?.classList.toggle('d-none', !showPassword);
+            input.focus();
+        });
+    });
 });

@@ -2,6 +2,24 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.16] - 2026-06-14
+
+### Changed
+
+- Entbehrliche Hilfetexte unter E-Mail-Adresse und Passwort aus der
+  Anmeldemaske entfernt.
+
+### Added
+
+- Barrierearmen Augenschalter zum Anzeigen und erneuten Verbergen des
+  eingegebenen Passworts ergänzt.
+
+### Tests
+
+- Darstellung des Passwortschalters und Entfernung der Hilfetexte durch einen
+  Feature-Test abgesichert.
+- Entwicklungsstand auf `0.2.0.16` erhöht.
+
 ## [0.2.0.15] - 2026-06-14
 
 ### Added
