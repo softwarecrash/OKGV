@@ -43,6 +43,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
   Verifizierungsversand und Zugriffssperre werden durch Feature-Tests
   abgedeckt.
 - Entwicklungsstand auf `0.2.0.15` erhöht.
+- Entwicklungsstand `0.2.0.15` auf GitHub veröffentlicht.
 
 ## [0.2.0.14] - 2026-06-14
 

@@ -125,7 +125,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] E-Mail-Verifizierung nach Freigabe einer Registrierung aktivieren
 - [x] Bestehende Policies auf benutzerspezifische Rechte umstellen
 - [x] Rollen-, Vorlagen-, Branding- und Verifizierungstests ergänzen
-- [ ] Entwicklungsstand 0.2.0.15 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.15 veröffentlichen
 
 ## Phase 4: SEPA
 
