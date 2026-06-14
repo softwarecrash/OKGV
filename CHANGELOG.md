@@ -31,6 +31,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
   periodenspezifische Beträge und Historienstabilität werden durch
   Feature-Tests abgedeckt.
 - Entwicklungsstand auf `0.2.0.11` erhöht.
+- Entwicklungsstand `0.2.0.11` auf GitHub veröffentlicht.
 
 ## [0.2.0.10] - 2026-06-14
 
