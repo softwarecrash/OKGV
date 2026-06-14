@@ -2,6 +2,42 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.14] - 2026-06-14
+
+### Changed
+
+- Hauptnavigation in die kompakten Gruppen `Mitglieder`, `Zähler` und
+  `Finanzen` gegliedert.
+- Abrechnung, Preisvorlagen, Rechnungen und SEPA unter `Finanzen`
+  zusammengeführt.
+- Registrierungsanfragen unter `Mitglieder` und Zählerstandsmeldungen unter
+  `Zähler` eingeordnet.
+- Rechteverwaltung aus der Hauptnavigation in das persönliche Benutzermenü
+  verschoben.
+- Hellen und dunklen Darstellungsmodus mit lokaler, persistenter Auswahl
+  ergänzt.
+
+### Added
+
+- Zentrales rollenabhängiges Aktionshinweis-System mit pulsierendem Punkt
+  hinzugefügt.
+- Aktionspunkte für wartende Registrierungen, wartende oder abgelehnte
+  Zählerstandsmeldungen sowie offene Pächterrechnungen aktiviert.
+- Projektweite Regel ergänzt, nach der zukünftige handlungsbedürftige
+  Vorgänge ebenfalls einen Aktionspunkt erhalten.
+
+### Security
+
+- Theme-Initialisierung als lokale, CSP-konforme JavaScript-Datei umgesetzt.
+- Aktionspunkte werden nur aus Datensätzen berechnet, die für die jeweilige
+  Rolle tatsächlich handlungsrelevant sind.
+
+### Tests
+
+- Navigationsgruppen, Rollenfilter, Aktionszahlen, Rechteverwaltung und
+  Theme-Schalter werden durch Feature-Tests abgedeckt.
+- Entwicklungsstand auf `0.2.0.14` erhöht.
+
 ## [0.2.0.13] - 2026-06-14
 
 ### Phase 5

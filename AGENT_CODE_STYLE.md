@@ -193,6 +193,10 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 - Prüfe historische Regeln, Randdaten und konfliktbehaftete Zeiträume.
 - Prüfe, dass verbotene Update- oder Delete-Routen tatsächlich fehlen.
 - Verwende feste, lesbare Testwerte für fachliche Berechnungen.
+- Ergänze für jeden Vorgang, bei dem Pächter, Vorstand oder eine andere Rolle
+  handeln muss, einen rollenabhängigen Aktionshinweis in der passenden
+  Navigationsgruppe. Berechne Hinweise zentral und zeige sie nur Personen,
+  die die Aufgabe serverseitig bearbeiten dürfen.
 - Vor Veröffentlichung müssen mindestens folgende Befehle erfolgreich sein:
 
 ```bash

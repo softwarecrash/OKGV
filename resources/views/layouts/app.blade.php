@@ -9,6 +9,8 @@
 
     <title>{{ config('app.name', 'OKGV') }}</title>
 
+    <script src="{{ asset('js/theme-init.js') }}"></script>
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
@@ -18,7 +20,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-lg bg-body shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     OKGV
@@ -31,64 +33,100 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         @auth
+                            @php
+                                $canViewMembers = auth()->user()->can('viewAny', App\Models\Member::class);
+                                $canViewRegistrations = auth()->user()->can('viewAny', App\Models\RegistrationRequest::class);
+                                $canViewMeters = auth()->user()->can('viewAny', App\Models\Meter::class);
+                                $canViewMeterSubmissions = auth()->user()->can('viewAny', App\Models\MeterReadingSubmission::class);
+                                $canViewBilling = auth()->user()->can('viewAny', App\Models\BillingPeriod::class);
+                                $canViewTemplates = auth()->user()->can('viewAny', App\Models\BillingRateTemplate::class);
+                                $canViewInvoices = auth()->user()->can('viewAny', App\Models\Invoice::class);
+                                $canViewSepa = auth()->user()->can('viewAny', App\Models\SepaMandate::class);
+                            @endphp
                             @if (auth()->user()->role === App\Enums\UserRole::Tenant)
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('tenant-portal.index') }}">Mein Portal</a>
+                                    <a class="nav-link" href="{{ route('tenant-portal.index') }}">
+                                        Mein Portal
+                                        <x-action-indicator :count="$actionIndicators['total']" label="offene Aufgaben" />
+                                    </a>
                                 </li>
                             @endif
-                            @can('viewAny', App\Models\Member::class)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('members.index') }}">Mitglieder</a>
+                            @if ($canViewMembers || $canViewRegistrations)
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                        Mitglieder
+                                        <x-action-indicator :count="$actionIndicators['members_group']" label="wartende Registrierungen" />
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @if ($canViewMembers)
+                                            <li><a class="dropdown-item" href="{{ route('members.index') }}">Mitgliederübersicht</a></li>
+                                        @endif
+                                        @if ($canViewRegistrations)
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('registration-requests.index') }}">
+                                                    Registrierungsanfragen
+                                                    <x-action-indicator :count="$actionIndicators['registrations']" label="wartende Registrierungen" />
+                                                </a>
+                                            </li>
+                                        @endif
+                                    </ul>
                                 </li>
-                            @endcan
+                            @endif
                             @can('viewAny', App\Models\Parcel::class)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('parcels.index') }}">Parzellen</a>
                                 </li>
                             @endcan
-                            @can('viewAny', App\Models\Meter::class)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('meters.index') }}">Zähler</a>
-                                </li>
-                            @endcan
-                            @can('viewAny', App\Models\BillingPeriod::class)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('billing-periods.index') }}">Abrechnung</a>
-                                </li>
-                            @endcan
-                            @can('viewAny', App\Models\BillingRateTemplate::class)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('billing-rate-templates.index') }}">Preisvorlagen</a>
-                                </li>
-                            @endcan
-                            @can('viewAny', App\Models\Invoice::class)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('invoices.index') }}">Rechnungen</a>
-                                </li>
-                            @endcan
-                            @can('viewAny', App\Models\SepaMandate::class)
+                            @if ($canViewMeters || $canViewMeterSubmissions)
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">SEPA</a>
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                        Zähler
+                                        <x-action-indicator :count="$actionIndicators['meters_group']" label="offene Zählerstandsmeldungen" />
+                                    </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('sepa-mandates.index') }}">Mandate</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('payment-batches.index') }}">Sammellastschriften</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('sepa-settings.edit') }}">Einstellungen</a></li>
+                                        @if ($canViewMeters)
+                                            <li><a class="dropdown-item" href="{{ route('meters.index') }}">Zählerübersicht</a></li>
+                                        @endif
+                                        @if ($canViewMeterSubmissions)
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('meter-reading-submissions.index') }}">
+                                                    Zählerstandsmeldungen
+                                                    <x-action-indicator :count="$actionIndicators['meter_readings']" label="offene Zählerstandsmeldungen" />
+                                                </a>
+                                            </li>
+                                        @endif
                                     </ul>
                                 </li>
-                            @endcan
-                            @can('viewAny', App\Models\RegistrationRequest::class)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('registration-requests.index') }}">Registrierungen</a>
-                                </li>
-                            @endcan
-                            @can('viewAny', App\Models\MeterReadingSubmission::class)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('meter-reading-submissions.index') }}">Zählerstandsmeldungen</a>
-                                </li>
-                            @endcan
-                            @if (auth()->user()->isAdministrator())
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('user-permissions.index') }}">Benutzerrechte</a>
+                            @endif
+                            @if ($canViewBilling || $canViewTemplates || $canViewInvoices || $canViewSepa)
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                        Finanzen
+                                        <x-action-indicator :count="$actionIndicators['finance_group']" label="offene Rechnungen" />
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @if ($canViewBilling)
+                                            <li><a class="dropdown-item" href="{{ route('billing-periods.index') }}">Abrechnungsperioden</a></li>
+                                        @endif
+                                        @if ($canViewTemplates)
+                                            <li><a class="dropdown-item" href="{{ route('billing-rate-templates.index') }}">Preisvorlagen</a></li>
+                                        @endif
+                                        @if ($canViewInvoices)
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('invoices.index') }}">
+                                                    Rechnungen
+                                                    <x-action-indicator :count="$actionIndicators['invoices']" label="offene Rechnungen" />
+                                                </a>
+                                            </li>
+                                        @endif
+                                        @if ($canViewSepa)
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><h6 class="dropdown-header">SEPA</h6></li>
+                                            <li><a class="dropdown-item" href="{{ route('sepa-mandates.index') }}">Mandate</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('payment-batches.index') }}">Sammellastschriften</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('sepa-settings.edit') }}">SEPA-Einstellungen</a></li>
+                                        @endif
+                                    </ul>
                                 </li>
                             @endif
                         @endauth
@@ -96,6 +134,16 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
+                        <li class="nav-item d-flex align-items-center">
+                            <button class="btn btn-sm btn-outline-secondary theme-toggle mx-2"
+                                    type="button"
+                                    data-theme-toggle
+                                    aria-label="Darstellungsmodus wechseln"
+                                    title="Darstellungsmodus wechseln">
+                                <span data-theme-icon aria-hidden="true">◐</span>
+                                <span class="d-lg-none ms-1" data-theme-label>Darstellung</span>
+                            </button>
+                        </li>
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
@@ -111,6 +159,12 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    @can('viewAny', App\Models\User::class)
+                                        <a class="dropdown-item" href="{{ route('user-permissions.index') }}">
+                                            Rechteverwaltung
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                    @endcan
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

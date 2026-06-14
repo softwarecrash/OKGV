@@ -13,6 +13,14 @@ vorherigen Phase geprüft sein.
 - `[x]` abgeschlossen
 - `[ ]` noch nicht begonnen oder nicht vollständig abgeschlossen
 
+## Projektweite UX-Regeln
+
+- [x] Fachbereiche in kompakten Navigationsgruppen zusammenfassen
+- [x] Leuchtenden Aktionspunkt für rollenabhängig offene Aufgaben verwenden
+- [x] Aktionspunkte in zukünftigen Phasen für jeden notwendigen Benutzer-
+  oder Vorstandsschritt ergänzen
+- [x] Hellen und dunklen Darstellungsmodus bereitstellen
+
 ## Phase 0: Projektbasis
 
 - [x] Projektbasis

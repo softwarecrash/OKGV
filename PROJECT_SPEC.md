@@ -430,6 +430,28 @@ Plausibilität und erzeugt anschließend einen Zählerstand mit Quelle
 verknüpft und werden auditiert. Pächter können Meldungen nach dem Absenden
 nicht verändern oder löschen.
 
+#### Navigation und Aktionshinweise
+
+Die Hauptnavigation wird fachlich gruppiert:
+
+- `Mitglieder` enthält Mitgliederverwaltung und Registrierungsanfragen.
+- `Zähler` enthält Zählerverwaltung und Zählerstandsmeldungen.
+- `Finanzen` enthält Abrechnung, Preisvorlagen, Rechnungen und SEPA.
+- Die Rechteverwaltung befindet sich ausschließlich im Benutzermenü.
+
+Ein zentraler Aktionshinweis zeigt als leuchtender Punkt an, wenn die
+angemeldete Person in einem Bereich handeln muss. Der Punkt erscheint nur,
+wenn die Rolle die Aufgabe serverseitig bearbeiten darf. In Phase 5 gilt
+dies für wartende Registrierungsanfragen, wartende Zählerstandsmeldungen,
+abgelehnte eigene Zählerstandsmeldungen sowie offene oder zurückgegebene
+eigene Rechnungen. Künftige Phasen verwenden dasselbe System für weitere
+handlungsbedürftige Vorgänge.
+
+Die Oberfläche unterstützt einen hellen und einen dunklen Darstellungsmodus.
+Die Auswahl wird lokal im Browser gespeichert, gilt bereits vor dem
+Seitenaufbau und kann jederzeit über einen Schalter im Benutzermenü geändert
+werden. Ohne gespeicherte Auswahl wird die Systemeinstellung verwendet.
+
 ### Phase 6: Dokumente und Kommunikation
 
 Private Dokumentverwaltung mit Sichtbarkeiten, Serienmail, Versandhistorie sowie Brief- und PDF-Erzeugung.

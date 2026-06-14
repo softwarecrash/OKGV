@@ -37,6 +37,9 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Isoliertes Pächterportal für eigene Daten, Parzellen und Rechnungen
 - Private Dokumentdownloads für Mitglieder und aktuelle Parzellen
 - Prüfpflichtige Zählerstandsmeldungen mit optionalem privatem Foto
+- Kompakte Navigationsgruppen für Mitglieder, Zähler und Finanzen
+- Rollenabhängige Aktionspunkte für Vorgänge mit notwendiger Bearbeitung
+- Persistenter heller und dunkler Darstellungsmodus
 
 Freigegebene Rechnungen sind unveränderbar. Pächterwechsel innerhalb einer
 Periode werden bis zum vollständigen Übergabeprozess bewusst nicht automatisch

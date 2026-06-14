@@ -112,6 +112,12 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Abgeschlossene Phasen 0 bis 3 im Phasenplan markieren
 - [x] Phasenplan in den Agent-Arbeitsregeln verankern
 - [x] Entwicklungsstand 0.2.0.10 veröffentlichen
+- [x] Navigation in Mitglieder, Zähler und Finanzen gruppieren
+- [x] Zentrales rollenabhängiges Aktionshinweis-System implementieren
+- [x] Rechteverwaltung in das Benutzermenü verschieben
+- [x] Persistenten Hell-/Dunkelmodus implementieren
+- [x] Navigation, Aktionshinweise und Theme-Umschaltung testen
+- [x] Entwicklungsstand 0.2.0.14 veröffentlichen
 
 ## Phase 4: SEPA
 
