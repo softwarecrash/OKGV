@@ -19,6 +19,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Darstellung des Passwortschalters und Entfernung der Hilfetexte durch einen
   Feature-Test abgesichert.
 - Entwicklungsstand auf `0.2.0.16` erhöht.
+- Entwicklungsstand `0.2.0.16` auf GitHub veröffentlicht.
 
 ## [0.2.0.15] - 2026-06-14
 

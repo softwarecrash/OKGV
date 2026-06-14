@@ -128,7 +128,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Entwicklungsstand 0.2.0.15 veröffentlichen
 - [x] Passwort-Sichtbarkeitsschalter in der Anmeldemaske ergänzen
 - [x] Entbehrliche Hilfetexte aus der Anmeldemaske entfernen
-- [ ] Entwicklungsstand 0.2.0.16 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.16 veröffentlichen
 
 ## Phase 4: SEPA
 
