@@ -55,8 +55,8 @@
         <p class="text-secondary mb-3">Mailserver für Kontobestätigungen und Serienmails konfigurieren.</p>
 
         <div class="alert alert-warning">
-            Benutzername und Passwort werden verschlüsselt gespeichert und nicht angezeigt.
-            Leere Zugangsfelder behalten die vorhandenen Werte bei.
+            Die Zugangsdaten werden verschlüsselt gespeichert. Das Passwort wird nicht angezeigt
+            und bleibt unverändert, wenn das Passwortfeld leer ist.
         </div>
 
         <form method="POST" action="{{ route('communication-settings.update') }}" class="card border-0 shadow-sm">
@@ -89,10 +89,9 @@
                         </select>
                     </div>
                     <div class="col-lg-6">
-                        <label class="form-label" for="smtp_username">Neuer Benutzername</label>
+                        <label class="form-label" for="smtp_username">Benutzername</label>
                         <input class="form-control" id="smtp_username" name="smtp_username" maxlength="255"
-                               value="{{ old('smtp_username') }}" autocomplete="off">
-                        <div class="form-text">Leer lassen, um den gespeicherten Benutzernamen beizubehalten.</div>
+                               value="{{ old('smtp_username', $communicationSettings->smtp_username) }}" autocomplete="username">
                     </div>
                     <div class="col-lg-6">
                         <label class="form-label" for="smtp_password">Passwort</label>

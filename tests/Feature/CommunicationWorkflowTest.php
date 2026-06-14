@@ -58,7 +58,7 @@ class CommunicationWorkflowTest extends TestCase
             ->get(route('application-settings.edit'))
             ->assertOk()
             ->assertSee('SMTP-Einstellungen')
-            ->assertDontSee('mailer@example.test')
+            ->assertSee('mailer@example.test')
             ->assertDontSee('VerySecretPassword');
     }
 

@@ -2,6 +2,21 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.22] - 2026-06-14
+
+### Changed
+
+- SMTP-Feldbezeichnung `Neuer Benutzername` zu `Benutzername` korrigiert.
+- Irreführenden Hinweis zum Leerlassen des Benutzerfeldes entfernt.
+- Der gespeicherte SMTP-Benutzername wird beim Bearbeiten wieder im Feld
+  angezeigt; ausschließlich das Passwort bleibt maskiert.
+
+### Tests
+
+- Sichtbarkeit des Benutzernamens und Maskierung des Passworts werden durch
+  einen Feature-Test abgesichert.
+- Entwicklungsstand auf `0.2.0.22` erhöht.
+
 ## [0.2.0.21] - 2026-06-14
 
 ### Changed
