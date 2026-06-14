@@ -38,6 +38,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Rollen, Validierung, Verschlüsselung, Maskierung, XML-Inhalt,
   Zahlungsstatus und Rücklastschriften werden durch Feature-Tests abgedeckt.
 - Entwicklungsstand auf `0.2.0.12` erhöht.
+- Entwicklungsstand `0.2.0.12` auf GitHub veröffentlicht.
 
 ## [0.2.0.11] - 2026-06-14
 
