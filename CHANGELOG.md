@@ -14,6 +14,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Deployment, Docker, Backupstrategie und Produktionsdokumentation bleiben
   ausdrücklich bis Phase 20 zurückgestellt.
 - Entwicklungsstand auf `0.2.0.10` erhöht.
+- Entwicklungsstand `0.2.0.10` auf GitHub veröffentlicht.
 
 ## [0.2.0.9] - 2026-06-14
 
