@@ -214,4 +214,4 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Feature-, Rechte-, PDF- und Unveränderlichkeitstests ergänzen
 - [x] Migration vorwärts und rückwärts isoliert prüfen
 - [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
-- [ ] Phase 8 vollständig prüfen und veröffentlichen
+- [x] Phase 8 vollständig prüfen und veröffentlichen
