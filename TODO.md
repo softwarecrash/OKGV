@@ -277,4 +277,4 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Leere Parzellenzuordnung verständlich erklären
 - [x] Regressionstests ergänzen
 - [x] Gesamttests, Formatter, Build und Audits ausführen
-- [ ] Nachbesserung vollständig prüfen und veröffentlichen
+- [x] Nachbesserung vollständig prüfen und veröffentlichen
