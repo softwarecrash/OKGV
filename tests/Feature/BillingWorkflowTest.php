@@ -8,6 +8,7 @@ use App\Enums\BillingRateType;
 use App\Enums\InvoiceStatus;
 use App\Enums\MeterStatus;
 use App\Enums\MeterType;
+use App\Models\AuditLog;
 use App\Models\BillingPeriod;
 use App\Models\BillingRate;
 use App\Models\BillingRateAssignment;
@@ -157,7 +158,7 @@ class BillingWorkflowTest extends TestCase
         $this->assertModelMissing($firstInvoice);
         $this->assertSame(
             2,
-            \App\Models\AuditLog::query()
+            AuditLog::query()
                 ->where('action', 'billing.period.calculated')
                 ->where('subject_id', $period->id)
                 ->count(),

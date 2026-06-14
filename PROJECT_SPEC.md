@@ -310,6 +310,64 @@ werden sichtbar als solche gekennzeichnet.
 
 Mandate, IBAN-Prüfung, Sammellastschriften, pain.008-Export, Rücklastschriften und Zahlungsstatus.
 
+#### Technischer Standard
+
+OKGV erzeugt SEPA-Basislastschriften nach dem aktuell gültigen EPC SDD Core
+Rulebook 2025 Version 1.1 und den Customer-to-PSP Implementation Guidelines
+auf Basis von `pain.008.001.08`. Exportiert werden ausschließlich
+CORE-Lastschriften in EUR.
+
+Die Gläubiger-ID und jede Mandatsreferenz sind verpflichtend und höchstens 35
+Zeichen lang. IBANs werden anhand des von SWIFT geführten IBAN-Registers
+strukturell und per Prüfziffer validiert. BIC-Angaben sind optional.
+Unstrukturierte Anschriften werden nicht in den Export aufgenommen; dadurch
+ist der Export bereits mit der ab 15. November 2026 geltenden Einschränkung
+für unstrukturierte Adressen vereinbar.
+
+#### SEPA-Einstellungen
+
+Die Installation besitzt genau einen Satz aus Gläubigername, Gläubiger-ID,
+Vereins-IBAN, optionaler BIC und Sammelbuchungswunsch. IBAN und BIC werden
+verschlüsselt gespeichert. Vollständige Bankdaten erscheinen nur im
+geschützten Bearbeitungsformular und im XML-Export.
+
+#### Mandate
+
+`sepa_mandates` verknüpft ein Mitglied mit einer eindeutigen
+Mandatsreferenz, verschlüsselter IBAN, optionaler BIC, verschlüsseltem
+Kontoinhaber, Unterschriftsdatum, Gültigkeitszeitraum, Mandatsart und Status.
+Mandate werden nicht gelöscht. Wiederkehrende Mandate erzeugen beim ersten
+Einzug `FRST`, danach `RCUR`; einmalige Mandate erzeugen `OOFF` und werden
+nach Einreichung als abgelaufen markiert.
+
+#### Sammellastschriften
+
+`payment_batches` bündelt freigegebene, offene Rechnungen für einen
+Einzugstag. Der Sammler speichert die zum Erstellungszeitpunkt geltenden
+Gläubigerdaten verschlüsselt als unveränderlichen Snapshot. Jede Position
+speichert zusätzlich einen unveränderlichen Snapshot von Betrag,
+Mandatsreferenz, Unterschriftsdatum, Kontoinhaber, IBAN, BIC, End-to-End-ID
+und Verwendungszweck. Der Export speichert einen SHA-256-Hash des erzeugten
+XML-Inhalts. Erzeugung, Export, Einreichung und Verbuchung werden auditiert.
+
+#### Zahlungsstatus und Rücklastschriften
+
+Der Rechnungsinhalt bleibt nach Freigabe unveränderbar. Nur der getrennte
+Zahlungsstatus darf von `open` über `pending` zu `paid` wechseln. Eine
+Rücklastschrift wird mit ISO-Grundcode, optionaler Erläuterung und Datum als
+eigener Vorgang am Sammlerposten gespeichert; die Rechnung erhält den Status
+`returned` und kann erneut bearbeitet werden. Der ursprüngliche
+Lastschrift-Snapshot bleibt erhalten.
+
+#### Rechte in Phase 4
+
+- Administrator, Vorstand und Kassierer dürfen SEPA-Einstellungen, Mandate,
+  Sammler, Exporte, Zahlungsstatus und Rücklastschriften verwalten.
+- Wasserwart, Gartenwart und Pächter erhalten keinen Zugriff auf Bankdaten
+  oder SEPA-Verwaltung.
+- Listen zeigen IBANs nur maskiert mit den letzten vier Stellen.
+- Bankdaten und vollständige XML-Inhalte werden nicht im Auditlog gespeichert.
+
 ### Phase 5: Pächterportal
 
 Eigene Daten, Parzellen, Dokumente, Rechnungen und Zähler sowie Zählerstandsmeldungen mit Foto und Freigabe.

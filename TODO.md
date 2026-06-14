@@ -112,3 +112,21 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Abgeschlossene Phasen 0 bis 3 im Phasenplan markieren
 - [x] Phasenplan in den Agent-Arbeitsregeln verankern
 - [x] Entwicklungsstand 0.2.0.10 veröffentlichen
+
+## Phase 4: SEPA
+
+- [x] Aktuelle EPC-, ISO-20022-, SWIFT- und Bundesbank-Vorgaben prüfen
+- [x] Datenmodell und Rechtekonzept vollständig spezifizieren
+- [x] Verschlüsselte SEPA-Einstellungen implementieren
+- [x] Mandatsverwaltung mit IBAN- und Gläubiger-ID-Prüfung implementieren
+- [x] Zahlungsstatus an freigegebenen Rechnungen ergänzen
+- [x] Sammellastschriften mit unveränderlichen Snapshots implementieren
+- [x] pain.008.001.08-XML-Export implementieren
+- [x] Export-Hash und Auditlogs ergänzen
+- [x] Einreichungs- und Buchungsstatus implementieren
+- [x] Rücklastschriften mit ISO-Grundcode historisieren
+- [x] Bankdaten in Listen maskieren und serverseitig schützen
+- [x] Rollen-, Verschlüsselungs-, XML- und Workflowtests ergänzen
+- [x] Migration vorwärts und rückwärts prüfen
+- [x] Phase 4 vollständig prüfen
+- [x] Entwicklungsstand 0.2.0.12 veröffentlichen

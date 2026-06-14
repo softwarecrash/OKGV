@@ -12,6 +12,10 @@ use App\Models\Meter;
 use App\Models\MeterReading;
 use App\Models\Parcel;
 use App\Models\ParcelTenant;
+use App\Models\PaymentBatch;
+use App\Models\PaymentBatchItem;
+use App\Models\SepaMandate;
+use App\Models\SepaSetting;
 use App\Models\User;
 use App\Policies\BillingPeriodPolicy;
 use App\Policies\BillingRateAssignmentPolicy;
@@ -23,6 +27,10 @@ use App\Policies\MeterPolicy;
 use App\Policies\MeterReadingPolicy;
 use App\Policies\ParcelPolicy;
 use App\Policies\ParcelTenantPolicy;
+use App\Policies\PaymentBatchItemPolicy;
+use App\Policies\PaymentBatchPolicy;
+use App\Policies\SepaMandatePolicy;
+use App\Policies\SepaSettingPolicy;
 use App\Policies\UserPolicy;
 use App\Services\AuditLogger;
 use Illuminate\Auth\Events\Failed;
@@ -61,6 +69,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(MeterReading::class, MeterReadingPolicy::class);
         Gate::policy(Parcel::class, ParcelPolicy::class);
         Gate::policy(ParcelTenant::class, ParcelTenantPolicy::class);
+        Gate::policy(PaymentBatch::class, PaymentBatchPolicy::class);
+        Gate::policy(PaymentBatchItem::class, PaymentBatchItemPolicy::class);
+        Gate::policy(SepaMandate::class, SepaMandatePolicy::class);
+        Gate::policy(SepaSetting::class, SepaSettingPolicy::class);
         Gate::before(fn (User $user) => $user->isAdministrator() ? true : null);
 
         Event::listen(Login::class, fn (Login $event) => AuditLogger::log(

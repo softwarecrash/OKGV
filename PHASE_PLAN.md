@@ -51,10 +51,10 @@ vorherigen Phase geprüft sein.
 
 ## Phase 4: SEPA
 
-- [ ] SEPA-Mandate
-- [ ] pain.008-XML-Export
-- [ ] Rücklastschriften
-- [ ] Zahlungsstatus
+- [x] SEPA-Mandate
+- [x] pain.008-XML-Export
+- [x] Rücklastschriften
+- [x] Zahlungsstatus
 
 ## Phase 5: Pächterportal
 
@@ -146,5 +146,5 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 3 sind abgeschlossen. Als nächste Produktphase wird
-ausschließlich Phase 4: SEPA geplant und umgesetzt.
+Die Phasen 0 bis 4 sind abgeschlossen. Als nächste Produktphase wird
+ausschließlich Phase 5: Pächterportal geplant und umgesetzt.

@@ -64,6 +64,11 @@ class Member extends Model
         return $this->hasMany(Invoice::class);
     }
 
+    public function sepaMandates(): HasMany
+    {
+        return $this->hasMany(SepaMandate::class);
+    }
+
     public function invoiceRecipientSnapshots(): HasMany
     {
         return $this->hasMany(InvoiceRecipient::class);

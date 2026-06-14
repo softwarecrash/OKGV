@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Enums\BillingPeriodStatus;
 use App\Enums\InvoiceStatus;
 use App\Models\BillingPeriod;
-use App\Models\Invoice;
 use App\Models\User;
 use Closure;
 use Illuminate\Support\Facades\DB;
@@ -20,8 +19,7 @@ final class BillingPeriodManager
         array $data,
         ?BillingPeriod $period = null,
         ?User $actor = null,
-    ): BillingPeriod
-    {
+    ): BillingPeriod {
         return DB::transaction(function () use ($data, $period, $actor): BillingPeriod {
             BillingPeriod::query()->lockForUpdate()->get();
 

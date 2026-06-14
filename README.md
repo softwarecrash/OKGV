@@ -29,6 +29,10 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Reproduzierbare Rechnungen aus Flächen-, Verbrauchs- und Festkosten
 - Gemeinsame Rechnungen für Haupt- und Mitpächter mit historischen Empfängerdaten
 - Freigabeschutz für Rechnungen und serverseitige PDF-Ausgabe
+- Konfigurierbare Preisvorlagen für wiederkehrende Kostenarten
+- Verschlüsselte SEPA-Mandate und Vereinsbankdaten
+- Sammellastschriften als pain.008.001.08-XML
+- Zahlungsstatus und historisierte Rücklastschriften
 
 Freigegebene Rechnungen sind unveränderbar. Pächterwechsel innerhalb einer
 Periode werden bis zum vollständigen Übergabeprozess bewusst nicht automatisch
@@ -69,7 +73,9 @@ Für die Frontend-Entwicklung kann parallel `npm run dev` gestartet werden.
 
 Die frühe Entwicklung erfolgt direkt im Linux-LXC. Docker- und Deployment-Artefakte werden erst nach Fertigstellung der Kernmodule erstellt.
 
-Die verbindliche Reihenfolge und Fachspezifikation stehen in [PROJECT_SPEC.md](PROJECT_SPEC.md), Arbeitsregeln in [AGENTS.md](AGENTS.md) und der aktuelle Fortschritt in [TODO.md](TODO.md).
+Die verbindliche Reihenfolge steht in [PHASE_PLAN.md](PHASE_PLAN.md), die
+Fachspezifikation in [PROJECT_SPEC.md](PROJECT_SPEC.md), Arbeitsregeln in
+[AGENTS.md](AGENTS.md) und der aktuelle Fortschritt in [TODO.md](TODO.md).
 Der projektweite Programmierstil ist in [AGENT_CODE_STYLE.md](AGENT_CODE_STYLE.md) verbindlich dokumentiert.
 
 ## Lizenz

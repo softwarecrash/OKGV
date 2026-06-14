@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.3",
         "dompdf/dompdf": "^3.1",
+        "jschaedl/iban-validation": "^2.5",
         "laravel/framework": "^13.8",
         "laravel/tinker": "^3.0"
     },

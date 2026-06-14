@@ -61,6 +61,16 @@
                                     <a class="nav-link" href="{{ route('invoices.index') }}">Rechnungen</a>
                                 </li>
                             @endcan
+                            @can('viewAny', App\Models\SepaMandate::class)
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">SEPA</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ route('sepa-mandates.index') }}">Mandate</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('payment-batches.index') }}">Sammellastschriften</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('sepa-settings.edit') }}">Einstellungen</a></li>
+                                    </ul>
+                                </li>
+                            @endcan
                             @if (auth()->user()->isAdministrator())
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('user-permissions.index') }}">Benutzerrechte</a>

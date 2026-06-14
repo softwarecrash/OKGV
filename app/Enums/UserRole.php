@@ -52,4 +52,9 @@ enum UserRole: string
     {
         return in_array($this, [self::Administrator, self::Board], true);
     }
+
+    public function canManageSepa(): bool
+    {
+        return in_array($this, [self::Administrator, self::Board, self::Treasurer], true);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\InvoicePaymentStatus;
 use App\Enums\InvoiceStatus;
 use Database\Factories\InvoiceFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -16,11 +17,13 @@ use LogicException;
     'member_id',
     'invoice_number',
     'status',
+    'payment_status',
     'issued_at',
     'due_at',
     'total_amount',
     'approved_at',
     'approved_by',
+    'paid_at',
 ])]
 class Invoice extends Model
 {
@@ -30,7 +33,11 @@ class Invoice extends Model
     protected static function booted(): void
     {
         static::updating(function (Invoice $invoice): void {
-            if ($invoice->getRawOriginal('status') === InvoiceStatus::Approved->value) {
+            $allowedPaymentFields = ['payment_status', 'paid_at', 'updated_at'];
+            $changedFields = array_keys($invoice->getDirty());
+
+            if ($invoice->getRawOriginal('status') === InvoiceStatus::Approved->value
+                && array_diff($changedFields, $allowedPaymentFields) !== []) {
                 throw new LogicException('Approved invoices cannot be changed.');
             }
         });
@@ -46,10 +53,12 @@ class Invoice extends Model
     {
         return [
             'status' => InvoiceStatus::class,
+            'payment_status' => InvoicePaymentStatus::class,
             'issued_at' => 'date',
             'due_at' => 'date',
             'total_amount' => 'decimal:2',
             'approved_at' => 'datetime',
+            'paid_at' => 'datetime',
         ];
     }
 
@@ -76,6 +85,11 @@ class Invoice extends Model
     public function recipients(): HasMany
     {
         return $this->hasMany(InvoiceRecipient::class)->orderBy('position');
+    }
+
+    public function paymentBatchItems(): HasMany
+    {
+        return $this->hasMany(PaymentBatchItem::class);
     }
 
     public function primaryRecipient(): ?InvoiceRecipient

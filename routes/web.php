@@ -13,6 +13,10 @@ use App\Http\Controllers\MeterReadingCorrectionController;
 use App\Http\Controllers\MeterReplacementController;
 use App\Http\Controllers\ParcelController;
 use App\Http\Controllers\ParcelTenantController;
+use App\Http\Controllers\PaymentBatchController;
+use App\Http\Controllers\PaymentReturnController;
+use App\Http\Controllers\SepaMandateController;
+use App\Http\Controllers\SepaSettingController;
 use App\Http\Controllers\UserPermissionController;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +59,24 @@ Route::middleware('auth')->group(function (): void {
     Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf'])
         ->name('invoices.pdf');
     Route::resource('invoices', InvoiceController::class)->only(['index', 'show']);
+    Route::get('sepa-settings', [SepaSettingController::class, 'edit'])
+        ->name('sepa-settings.edit');
+    Route::put('sepa-settings', [SepaSettingController::class, 'update'])
+        ->name('sepa-settings.update');
+    Route::resource('sepa-mandates', SepaMandateController::class)
+        ->except(['show', 'destroy']);
+    Route::post('payment-batches/{payment_batch}/submit', [PaymentBatchController::class, 'submit'])
+        ->name('payment-batches.submit');
+    Route::post('payment-batches/{payment_batch}/settle', [PaymentBatchController::class, 'settle'])
+        ->name('payment-batches.settle');
+    Route::post('payment-batches/{payment_batch}/export', [PaymentBatchController::class, 'export'])
+        ->name('payment-batches.export');
+    Route::resource('payment-batches', PaymentBatchController::class)
+        ->only(['index', 'create', 'store', 'show']);
+    Route::get('payment-batch-items/{payment_batch_item}/return', [PaymentReturnController::class, 'create'])
+        ->name('payment-returns.create');
+    Route::post('payment-batch-items/{payment_batch_item}/return', [PaymentReturnController::class, 'store'])
+        ->name('payment-returns.store');
     Route::patch('members/{member}/archive', [MemberController::class, 'archive'])
         ->name('members.archive');
     Route::resource('members', MemberController::class)->except('destroy');

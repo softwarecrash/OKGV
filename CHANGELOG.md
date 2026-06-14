@@ -2,6 +2,43 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.12] - 2026-06-14
+
+### Phase 4
+
+- Verschlüsselte SEPA-Einstellungen für Gläubiger-ID und Vereinskonto
+  hinzugefügt.
+- Mandatsverwaltung mit Gültigkeit, Status, Einmal- und Folgelastschriften
+  sowie SWIFT-registerbasierter IBAN-Prüfung implementiert.
+- Freigegebene Rechnungen um einen getrennten Zahlungsstatus ergänzt.
+- Sammellastschriften mit verschlüsselten, unveränderlichen Gläubiger-,
+  Mandats- und Rechnungs-Snapshots implementiert.
+- pain.008.001.08-Export für SEPA CORE in EUR mit FRST-, RCUR- und
+  OOFF-Sequenzen hinzugefügt.
+- SHA-256-Prüfsumme, Export-, Einreichungs- und Buchungsstatus sowie
+  vollständige Auditierung ergänzt.
+- XML-Downloads als CSRF-geschützte POST-Aktion umgesetzt und
+  Statusübergänge serverseitig gegen verfrühte Verbuchungen abgesichert.
+- Rücklastschriften mit ISO-Grundcode, Datum und optionaler Erläuterung
+  historisiert; betroffene Rechnungen werden wieder geöffnet.
+- Bankdaten werden in Listen maskiert und sind ausschließlich für
+  Administrator, Vorstand und Kassierer zugänglich.
+- Deutsche, selbsterklärende Oberflächen für Einstellungen, Mandate,
+  Sammellastschriften und Rückgaben hinzugefügt.
+
+### Security
+
+- IBAN, BIC, Kontoinhaber und Banksnapshots werden verschlüsselt gespeichert.
+- Bankdaten und XML-Inhalte werden nicht in Audit-Metadaten geschrieben.
+- Serverseitige Policies schließen Wasserwart, Gartenwart und Pächter von
+  sämtlichen SEPA-Daten aus.
+
+### Tests
+
+- Rollen, Validierung, Verschlüsselung, Maskierung, XML-Inhalt,
+  Zahlungsstatus und Rücklastschriften werden durch Feature-Tests abgedeckt.
+- Entwicklungsstand auf `0.2.0.12` erhöht.
+
 ## [0.2.0.11] - 2026-06-14
 
 ### Added

@@ -34,6 +34,7 @@
                         <dt class="col-6">Rechnungsdatum</dt><dd class="col-6">{{ $invoice->issued_at->format('d.m.Y') }}</dd>
                         <dt class="col-6">Fällig am</dt><dd class="col-6">{{ $invoice->due_at->format('d.m.Y') }}</dd>
                         <dt class="col-6">Status</dt><dd class="col-6">{{ $invoice->status->label() }}</dd>
+                        <dt class="col-6">Zahlungsstatus</dt><dd class="col-6">{{ $invoice->payment_status->label() }}</dd>
                     </dl>
                 </div>
             </div>
