@@ -15,6 +15,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Eine separate SQLite-Testumgebung verhindert, dass Artisan-Testmigrationen
   die lokale MariaDB-Entwicklungsdatenbank berühren.
 - Entwicklungsstand auf `0.2.0.4` erhöht.
+- Entwicklungsstand `0.2.0.4` auf GitHub veröffentlicht.
 
 ## [0.2.0.3] - 2026-06-14
 

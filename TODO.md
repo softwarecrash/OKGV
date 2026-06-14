@@ -69,7 +69,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Entwicklungsstand 0.2.0.3 veröffentlichen
 - [x] Mehrere Vertragsparteien als Rechnungsempfänger historisieren
 - [x] Gemeinsame Rechnungsdarstellung und Empfängerrechte testen
-- [ ] Entwicklungsstand 0.2.0.4 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.4 veröffentlichen
 
 ## Projektweite Standards
 
