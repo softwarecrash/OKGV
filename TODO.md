@@ -316,4 +316,4 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Regressionstests und Projektdokumentation ergänzen
 - [x] Gesamttests, Formatter und Asset-Build ausführen
 - [x] Nachbesserung vollständig prüfen
-- [ ] Entwicklungsstand veröffentlichen
+- [x] Entwicklungsstand veröffentlichen
