@@ -2,6 +2,52 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.27] - 2026-06-14
+
+### Vorgezogene Phase 12
+
+- Phase 12 auf ausdrücklichen Wunsch direkt nach Phase 9 umgesetzt, da
+  Arbeitseinsätze die Datengrundlage der Arbeitsstundenkonten bilden.
+- Terminverwaltung mit Bezeichnung, Ort, Zeitraum, Beschreibung,
+  Abrechnungsperiode und den Status `Geplant`, `Abgeschlossen` und
+  `Abgesagt` ergänzt.
+- Mitglieder können als angemeldet, bestätigt oder abwesend geführt werden.
+- Nur bestätigte Teilnahmen abgeschlossener Einsätze werden automatisch in
+  das Arbeitsstundenkonto übernommen.
+- Manuell anerkannte Stunden und Einsatzstunden werden getrennt gespeichert
+  und als nachvollziehbare Gesamtsumme dargestellt.
+- Korrekturen, Abwesenheit und Absage berechnen betroffene
+  Arbeitsstundenkonten automatisch neu.
+- Fehlende Arbeitsstundenkonten werden ohne erfundene Pflichtstunden oder
+  Strafsätze sicher angelegt.
+- Vergangene, noch geplante Einsätze erzeugen einen rollenabhängigen
+  Aktionspunkt.
+
+### Rechte und Sicherheit
+
+- Eigenständiges Recht `Arbeitseinsätze verwalten` eingeführt; Vorstand und
+  Gartenwart erhalten es standardmäßig, ohne dadurch Finanzrechte zu
+  bekommen.
+- Termine müssen vollständig innerhalb ihrer Abrechnungsperiode liegen;
+  zukünftige Termine können nicht abgeschlossen werden.
+- Teilnahmen können erst nach Abschluss mit einem positiven Stundenwert
+  bestätigt werden.
+- Änderungen an berechneten Zwischenständen verwerfen sicher und auditierbar
+  die noch nicht freigegebenen Rechnungsentwürfe.
+- Arbeitseinsätze und Teilnehmer werden nicht gelöscht. Freigegebene oder
+  archivierte Perioden sind zusätzlich auf Modellebene unveränderlich.
+- Migration vorwärts und rückwärts isoliert geprüft und anschließend
+  ausschließlich mit `php artisan migrate` auf MariaDB angewendet;
+  vorhandene Benutzer-, Mitglieder- und Periodendaten blieben unverändert.
+
+### Tests
+
+- Stundenübernahme, manuelle Zusatzstunden, Abwesenheit, Absage,
+  Kontoerstellung, Zwischenstandsrücksetzung, Rechte, Aktionspunkte und
+  Unveränderlichkeit sind durch Feature-Tests abgedeckt.
+- Insgesamt bestehen 105 Tests mit 592 Assertions.
+- Entwicklungsstand auf `0.2.0.27` erhöht.
+
 ## [0.2.0.26] - 2026-06-14
 
 ### Phase 9

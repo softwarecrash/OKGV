@@ -84,6 +84,11 @@ class Member extends Model
         return $this->hasMany(WorkHour::class);
     }
 
+    public function workEventParticipations(): HasMany
+    {
+        return $this->hasMany(WorkEventParticipant::class);
+    }
+
     public function parcels(): BelongsToMany
     {
         return $this->belongsToMany(Parcel::class, 'parcel_tenants')

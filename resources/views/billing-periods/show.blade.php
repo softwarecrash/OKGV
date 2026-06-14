@@ -16,6 +16,9 @@
                     <a class="btn btn-outline-primary" href="{{ route('billing-periods.edit', $billingPeriod) }}">Bearbeiten</a>
                     <a class="btn btn-primary" href="{{ route('billing-periods.billing-rates.create', $billingPeriod) }}">Preis aus Vorlage</a>
                     <a class="btn btn-outline-primary" href="{{ route('billing-periods.work-hours.create', $billingPeriod) }}">Arbeitsstunden erfassen</a>
+                    @can('create', App\Models\WorkEvent::class)
+                        <a class="btn btn-outline-primary" href="{{ route('billing-periods.work-events.create', $billingPeriod) }}">Arbeitseinsatz anlegen</a>
+                    @endcan
                 @endcan
                 @can('calculate', $billingPeriod)
                     <form method="POST" action="{{ route('billing-periods.calculate', $billingPeriod) }}" onsubmit="return confirm('Abrechnung jetzt neu berechnen? Vorhandene Entwürfe dieser Periode werden durch die aktuelle Berechnung ersetzt.')">
@@ -150,7 +153,9 @@
                     <tr>
                         <th>Mitglied</th>
                         <th>Pflicht</th>
-                        <th>Geleistet</th>
+                        <th>Manuell</th>
+                        <th>Aus Einsätzen</th>
+                        <th>Gesamt</th>
                         <th>Fehlend</th>
                         <th>Je Fehlstunde</th>
                         <th>Strafzahlung</th>
@@ -162,6 +167,8 @@
                         <tr>
                             <td>{{ $workHour->member->full_name }}</td>
                             <td>{{ number_format((float) $workHour->hours_required, 2, ',', '.') }} Std.</td>
+                            <td>{{ number_format((float) $workHour->manual_hours_done, 2, ',', '.') }} Std.</td>
+                            <td>{{ number_format((float) $workHour->event_hours_done, 2, ',', '.') }} Std.</td>
                             <td>{{ number_format((float) $workHour->hours_done, 2, ',', '.') }} Std.</td>
                             <td>
                                 @if ((float) $workHour->hours_missing > 0)
@@ -180,7 +187,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center py-4">
+                            <td colspan="9" class="text-center py-4">
                                 <strong>Noch keine Arbeitsstunden erfasst.</strong><br>
                                 <span class="text-secondary">Ohne Arbeitsstundenkonto entsteht für ein Mitglied keine Fehlstundenposition.</span>
                             </td>

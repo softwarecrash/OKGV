@@ -15,6 +15,8 @@ use LogicException;
     'member_id',
     'hours_required',
     'hours_done',
+    'manual_hours_done',
+    'event_hours_done',
     'hours_missing',
     'penalty_rate',
     'penalty_amount',
@@ -50,6 +52,8 @@ class WorkHour extends Model
         return [
             'hours_required' => 'decimal:2',
             'hours_done' => 'decimal:2',
+            'manual_hours_done' => 'decimal:2',
+            'event_hours_done' => 'decimal:2',
             'hours_missing' => 'decimal:2',
             'penalty_rate' => 'decimal:2',
             'penalty_amount' => 'decimal:2',

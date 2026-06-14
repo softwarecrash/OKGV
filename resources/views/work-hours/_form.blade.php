@@ -48,7 +48,7 @@
         <div class="form-text">Die laut Vereinsregelung zu leistenden Stunden.</div>
     </div>
     <div class="col-md-4">
-        <label class="form-label" for="hours_done">Geleistete Stunden</label>
+        <label class="form-label" for="hours_done">Zusätzlich manuell anerkannte Stunden</label>
         <div class="input-group">
             <input class="form-control @error('hours_done') is-invalid @enderror"
                    id="hours_done"
@@ -56,12 +56,12 @@
                    type="number"
                    min="0"
                    step="0.25"
-                   value="{{ old('hours_done', $workHour->hours_done) }}"
+                   value="{{ old('hours_done', $workHour->manual_hours_done ?? $workHour->hours_done) }}"
                    required>
             <span class="input-group-text">Std.</span>
             @error('hours_done')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
-        <div class="form-text">Alle für diese Periode anerkannten Arbeitsstunden.</div>
+        <div class="form-text">Nur Stunden eintragen, die nicht bereits aus einem Arbeitseinsatz übernommen wurden.</div>
     </div>
     <div class="col-md-4">
         <label class="form-label" for="penalty_rate">Betrag je Fehlstunde</label>

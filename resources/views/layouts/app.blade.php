@@ -42,6 +42,7 @@
                                 $canViewTemplates = auth()->user()->can('viewAny', App\Models\BillingRateTemplate::class);
                                 $canViewInvoices = auth()->user()->can('viewAny', App\Models\Invoice::class);
                                 $canViewWorkHours = auth()->user()->can('viewAny', App\Models\WorkHour::class);
+                                $canViewWorkEvents = auth()->user()->can('viewAny', App\Models\WorkEvent::class);
                                 $canViewSepa = auth()->user()->can('viewAny', App\Models\SepaMandate::class);
                                 $canViewCommunication = auth()->user()->can('viewAny', App\Models\MailCampaign::class);
                                 $canViewDocuments = auth()->user()->can('viewAny', App\Models\Document::class);
@@ -101,11 +102,11 @@
                                     </ul>
                                 </li>
                             @endif
-                            @if ($canViewBilling || $canViewTemplates || $canViewInvoices || $canViewWorkHours || $canViewSepa)
+                            @if ($canViewBilling || $canViewTemplates || $canViewInvoices || $canViewWorkHours || $canViewWorkEvents || $canViewSepa)
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                         Finanzen
-                                        <x-action-indicator :count="$actionIndicators['finance_group']" label="offene Rechnungen" />
+                                        <x-action-indicator :count="$actionIndicators['finance_group']" label="offene Aufgaben im Finanzbereich" />
                                     </a>
                                     <ul class="dropdown-menu">
                                         @if ($canViewBilling)
@@ -119,6 +120,14 @@
                                                 <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('work-hours.index') }}">
                                                     Arbeitsstunden
                                                     <x-action-indicator :count="$actionIndicators['work_hours']" label="offene Fehlstunden" />
+                                                </a>
+                                            </li>
+                                        @endif
+                                        @if ($canViewWorkEvents)
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('work-events.index') }}">
+                                                    Arbeitseinsätze
+                                                    <x-action-indicator :count="$actionIndicators['work_events']" label="überfällige Arbeitseinsätze" />
                                                 </a>
                                             </li>
                                         @endif

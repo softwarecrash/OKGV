@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\Enums\WorkEventParticipantStatus;
+use App\Enums\WorkEventStatus;
 use App\Models\BillingPeriod;
 use App\Models\User;
+use App\Models\WorkEventParticipant;
 use App\Models\WorkHour;
 
 final class WorkHourManager
@@ -31,31 +34,18 @@ final class WorkHourManager
                     : new WorkHour;
                 $wasRecentlyCreated = ! $record->exists;
                 $before = $record->exists
-                    ? $record->only(['hours_required', 'hours_done', 'penalty_rate'])
+                    ? $record->only(['hours_required', 'manual_hours_done', 'event_hours_done', 'penalty_rate'])
                     : null;
-
-                $difference = bcsub(
-                    (string) $data['hours_required'],
-                    (string) $data['hours_done'],
-                    2,
-                );
-                $missing = bccomp($difference, '0.00', 2) > 0
-                    ? $difference
-                    : '0.00';
-                $penaltyAmount = $this->roundMoney(
-                    bcmul($missing, (string) $data['penalty_rate'], 8),
-                );
 
                 $record->fill([
                     'billing_period_id' => $lockedPeriod->id,
                     'member_id' => $data['member_id'],
                     'hours_required' => $data['hours_required'],
-                    'hours_done' => $data['hours_done'],
-                    'hours_missing' => $missing,
+                    'manual_hours_done' => $data['hours_done'],
                     'penalty_rate' => $data['penalty_rate'],
-                    'penalty_amount' => $penaltyAmount,
                     'notes' => $data['notes'] ?? null,
-                ])->save();
+                ]);
+                $this->recalculate($record, $lockedPeriod);
 
                 AuditLogger::log(
                     action: $wasRecentlyCreated ? 'work_hours.created' : 'work_hours.updated',
@@ -74,6 +64,77 @@ final class WorkHourManager
                 return $record->refresh();
             },
         );
+    }
+
+    public function synchronizeMember(
+        BillingPeriod $period,
+        int $memberId,
+        User $actor,
+    ): WorkHour {
+        $record = WorkHour::query()
+            ->where('billing_period_id', $period->id)
+            ->where('member_id', $memberId)
+            ->lockForUpdate()
+            ->first();
+
+        if (! $record) {
+            $record = new WorkHour([
+                'billing_period_id' => $period->id,
+                'member_id' => $memberId,
+                'hours_required' => '0.00',
+                'manual_hours_done' => '0.00',
+                'penalty_rate' => '0.00',
+            ]);
+        }
+
+        $before = $record->exists
+            ? $record->only(['hours_done', 'event_hours_done', 'hours_missing', 'penalty_amount'])
+            : null;
+        $this->recalculate($record, $period);
+
+        AuditLogger::log(
+            action: 'work_hours.event_hours_synchronized',
+            actor: $actor,
+            subject: $record,
+            metadata: [
+                'before' => $before,
+                'hours_done' => $record->hours_done,
+                'event_hours_done' => $record->event_hours_done,
+                'hours_missing' => $record->hours_missing,
+                'penalty_amount' => $record->penalty_amount,
+            ],
+        );
+
+        return $record->refresh();
+    }
+
+    private function recalculate(WorkHour $record, BillingPeriod $period): void
+    {
+        $eventHours = WorkEventParticipant::query()
+            ->where('member_id', $record->member_id)
+            ->where('status', WorkEventParticipantStatus::Confirmed)
+            ->whereHas('workEvent', fn ($query) => $query
+                ->where('billing_period_id', $period->id)
+                ->where('status', WorkEventStatus::Completed))
+            ->sum('hours');
+        $hoursDone = bcadd(
+            (string) ($record->manual_hours_done ?? '0.00'),
+            (string) $eventHours,
+            2,
+        );
+        $difference = bcsub((string) $record->hours_required, $hoursDone, 2);
+        $missing = bccomp($difference, '0.00', 2) > 0
+            ? $difference
+            : '0.00';
+
+        $record->fill([
+            'event_hours_done' => $eventHours,
+            'hours_done' => $hoursDone,
+            'hours_missing' => $missing,
+            'penalty_amount' => $this->roundMoney(
+                bcmul($missing, (string) $record->penalty_rate, 8),
+            ),
+        ])->save();
     }
 
     private function roundMoney(string $value): string

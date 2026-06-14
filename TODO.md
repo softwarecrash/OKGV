@@ -231,3 +231,21 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
 - [x] Gesamttests, Formatter und Asset-Build ausführen
 - [x] Phase 9 vollständig prüfen und veröffentlichen
+
+## Vorgezogene Phase 12: Arbeitseinsätze
+
+- [x] Vorziehen von Phase 12 direkt nach Phase 9 dokumentieren
+- [x] Datenmodell, Status und Rechtekonzept spezifizieren
+- [x] Granulares Recht für Arbeitseinsätze ergänzen
+- [x] Terminverwaltung innerhalb einer Abrechnungsperiode implementieren
+- [x] Teilnehmerstatus und bestätigte Stunden implementieren
+- [x] Manuelle und automatisch übernommene Stunden getrennt speichern
+- [x] Arbeitsstundenkonten bei Änderungen sicher neu berechnen
+- [x] Absagen und Abwesenheiten ohne Löschen historisieren
+- [x] Auditlogs und Aktionshinweise ergänzen
+- [x] Bedienhinweise und Navigation ergänzen
+- [x] Feature- und Rechtetests ergänzen
+- [x] Migration vorwärts und rückwärts isoliert prüfen
+- [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
+- [x] Gesamttests, Formatter und Asset-Build ausführen
+- [ ] Vorgezogene Phase 12 vollständig prüfen und veröffentlichen

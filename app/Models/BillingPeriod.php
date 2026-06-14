@@ -52,6 +52,11 @@ class BillingPeriod extends Model
         return $this->hasMany(WorkHour::class);
     }
 
+    public function workEvents(): HasMany
+    {
+        return $this->hasMany(WorkEvent::class);
+    }
+
     public function isEditable(): bool
     {
         return in_array($this->status, [

@@ -714,10 +714,68 @@ nachvollziehbare Änderungen und werden auditiert.
 Offene Fehlstunden in Entwurfsperioden erzeugen für berechtigte Finanzkonten
 einen Aktionshinweis.
 
-### Phase 10 bis 18
+### Vorgezogene Phase 12: Arbeitseinsätze
 
-Warteliste, Inventar, Arbeitseinsätze, CSV-Import und -Export, DSGVO,
-Vereinseinstellungen, Nummernkreise, Pächterwechsel und später ein Lageplan.
+Phase 12 wird auf ausdrücklichen Wunsch direkt nach Phase 9 umgesetzt, weil
+bestätigte Teilnahmen die Datengrundlage der Arbeitsstundenkonten bilden.
+Phase 10 und 11 bleiben fachlich unverändert offen und werden anschließend
+bearbeitet.
+
+#### Termine
+
+Ein Arbeitseinsatz gehört genau zu einer Abrechnungsperiode und speichert
+Bezeichnung, Beschreibung, Ort, Beginn, Ende, internen Hinweis, Ersteller und
+Status. Beginn und Ende müssen vollständig innerhalb der Periode liegen.
+
+Status:
+
+- `planned`: Termin geplant, Teilnahmen können vorgemerkt werden,
+- `completed`: Termin beendet, geleistete Stunden können bestätigt werden,
+- `cancelled`: Termin abgesagt, seine Stunden zählen nicht.
+
+Ein zukünftiger Termin kann nicht abgeschlossen werden. Abgesagte Einsätze
+bleiben historisch erhalten und können nicht gelöscht werden.
+
+#### Teilnehmer und Stundenübernahme
+
+Jedes Mitglied kann einem Einsatz höchstens einmal zugeordnet werden.
+Teilnahmen besitzen den Status `registered`, `confirmed` oder `absent`.
+Nur `confirmed` mit einem positiven Stundenwert und nur bei einem
+abgeschlossenen Einsatz wird in das Arbeitsstundenkonto übernommen.
+
+Das Arbeitsstundenkonto trennt:
+
+- zusätzlich manuell anerkannte Stunden,
+- bestätigte Stunden aus Arbeitseinsätzen,
+- die daraus berechnete Gesamtsumme.
+
+Korrektur, Abwesenheit oder Absage berechnen den automatischen Anteil neu.
+Existiert noch kein Arbeitsstundenkonto, wird eines mit null Pflichtstunden
+und null Strafsatz angelegt; Pflichtstunden und Strafsatz werden weiterhin
+von der Finanzverwaltung festgelegt. Dadurch werden keine fachlichen
+Standardwerte erfunden.
+
+#### Rechte, Historie und Aktionshinweise
+
+Das eigene granulare Recht `Arbeitseinsätze verwalten` erlaubt Termine,
+Teilnehmer und Bestätigungen, aber keinen Zugriff auf Preise, Rechnungen oder
+SEPA. Administrator und Vorstand erhalten das Recht standardmäßig; außerdem
+erhält es der Gartenwart. Individuelle Rechtevorlagen können davon abweichen.
+
+Änderungen sind ausschließlich in Entwurfsperioden und berechneten
+Zwischenständen möglich. Abrechnungsrelevante Änderungen verwerfen
+vorhandene Rechnungsentwürfe über den bestehenden sicheren
+Zwischenstandsmechanismus. Freigegebene und archivierte Perioden sind auch
+auf Modellebene unveränderlich. Anlage, Änderung, Teilnahmebestätigung und
+Stundenübernahme werden auditiert.
+
+Vergangene, weiterhin geplante Einsätze erzeugen für berechtigte Konten einen
+Aktionshinweis, damit Abschluss oder Absage nicht vergessen werden.
+
+### Phase 10, 11 und 13 bis 18
+
+Warteliste, Inventar, CSV-Import und -Export, DSGVO, Vereinseinstellungen,
+Nummernkreise, Pächterwechsel und später ein Lageplan.
 
 ## Versionen
 

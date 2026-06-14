@@ -23,6 +23,8 @@ class WorkHourFactory extends Factory
             'billing_period_id' => BillingPeriod::factory(),
             'member_id' => Member::factory(),
             'hours_required' => number_format($required, 2, '.', ''),
+            'manual_hours_done' => number_format($done, 2, '.', ''),
+            'event_hours_done' => '0.00',
             'hours_done' => number_format($done, 2, '.', ''),
             'hours_missing' => number_format($missing, 2, '.', ''),
             'penalty_rate' => number_format($rate, 2, '.', ''),

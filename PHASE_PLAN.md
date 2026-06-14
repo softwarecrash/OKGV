@@ -120,9 +120,10 @@ vorherigen Phase geprüft sein.
 
 ## Phase 12: Arbeitseinsätze
 
-- [ ] Arbeitseinsätze
-- [ ] Terminverwaltung
-- [ ] Stundenübernahme
+- [x] Auf ausdrücklichen Wunsch direkt nach Phase 9 vorgezogen
+- [x] Arbeitseinsätze
+- [x] Terminverwaltung
+- [x] Stundenübernahme
 
 ## Phase 13: CSV-Import
 
@@ -163,5 +164,5 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 9 sind abgeschlossen. Als Nächstes folgt Phase 10:
-Warteliste.
+Die Phasen 0 bis 9 sowie die fachlich zu Phase 9 gehörende, vorgezogene
+Phase 12 sind abgeschlossen. Als Nächstes folgt Phase 10: Warteliste.

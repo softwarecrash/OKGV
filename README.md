@@ -61,6 +61,9 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Arbeitsstundenkonten je Mitglied und Abrechnungsperiode
 - Automatisch berechnete Fehlstunden und Strafzahlungen
 - Historische Fehlstundenpositionen auf Einzel- und Gemeinschaftsrechnungen
+- Arbeitseinsatztermine mit Teilnehmer- und Anwesenheitsstatus
+- Automatische Übernahme bestätigter Einsatzstunden in das Jahreskonto
+- Eigenständiges Arbeitseinsatzrecht für Vorstand und Gartenwart
 
 Freigegebene Rechnungen sind unveränderbar. Pächterwechsel innerhalb einer
 Periode werden bis zum vollständigen Übergabeprozess bewusst nicht automatisch
@@ -73,6 +76,14 @@ und Strafbetrag berechnet OKGV automatisch. Bei der nächsten
 Zwischenberechnung erscheinen positive Beträge als eigene Rechnungsposition;
 Änderungen an einem bereits berechneten Zwischenstand verwerfen dessen
 Entwürfe und erfordern eine erneute Berechnung.
+
+Arbeitseinsätze werden ebenfalls unter `Finanzen` innerhalb einer
+Abrechnungsperiode angelegt. Nach dem Termin wird der Einsatz abgeschlossen
+und die tatsächliche Teilnahme mit den geleisteten Stunden bestätigt. Nur
+bestätigte Stunden abgeschlossener Einsätze fließen automatisch in das
+Arbeitsstundenkonto ein. Manuell anerkannte Zusatzstunden bleiben separat
+sichtbar. Eine spätere Korrektur oder Absage berechnet das Konto erneut und
+löscht keine Historie.
 
 ## Voraussetzungen
 

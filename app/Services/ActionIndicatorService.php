@@ -9,11 +9,13 @@ use App\Enums\MailCampaignStatus;
 use App\Enums\MeterReadingSubmissionStatus;
 use App\Enums\RegistrationRequestStatus;
 use App\Enums\UserRole;
+use App\Enums\WorkEventStatus;
 use App\Models\Invoice;
 use App\Models\MailCampaign;
 use App\Models\MeterReadingSubmission;
 use App\Models\RegistrationRequest;
 use App\Models\User;
+use App\Models\WorkEvent;
 use App\Models\WorkHour;
 
 final class ActionIndicatorService
@@ -24,6 +26,7 @@ final class ActionIndicatorService
      *     meter_readings: int,
      *     invoices: int,
      *     work_hours: int,
+     *     work_events: int,
      *     members_group: int,
      *     meters_group: int,
      *     finance_group: int,
@@ -76,6 +79,12 @@ final class ActionIndicatorService
                     ->where('status', BillingPeriodStatus::Draft))
                 ->count()
             : 0;
+        $workEvents = $user->canManageWorkEvents()
+            ? WorkEvent::query()
+                ->where('status', WorkEventStatus::Planned)
+                ->where('ends_at', '<', now())
+                ->count()
+            : 0;
 
         $failedCampaigns = $user->canManageCommunication()
             ? MailCampaign::query()->where('status', MailCampaignStatus::Failed)->count()
@@ -86,12 +95,13 @@ final class ActionIndicatorService
             'meter_readings' => $meterReadings,
             'invoices' => $invoices,
             'work_hours' => $workHours,
+            'work_events' => $workEvents,
             'members_group' => $registrations,
             'meters_group' => $meterReadings,
-            'finance_group' => $invoices + $workHours,
+            'finance_group' => $invoices + $workHours + $workEvents,
             'communication_group' => $failedCampaigns,
             'dunning_notices' => $dunningNotices,
-            'total' => $registrations + $meterReadings + $invoices + $workHours + $failedCampaigns,
+            'total' => $registrations + $meterReadings + $invoices + $workHours + $workEvents + $failedCampaigns,
         ];
     }
 

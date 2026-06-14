@@ -165,6 +165,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasPermission(UserPermission::ManageDocuments);
     }
 
+    public function canManageWorkEvents(): bool
+    {
+        return $this->hasPermission(UserPermission::ManageWorkEvents);
+    }
+
     public function sendEmailVerificationNotification(): void
     {
         $this->notify(new VerifyEmailNotification);

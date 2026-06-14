@@ -39,7 +39,9 @@
                         <th>Periode</th>
                         <th>Mitglied</th>
                         <th>Pflicht</th>
-                        <th>Geleistet</th>
+                        <th>Manuell</th>
+                        <th>Einsätze</th>
+                        <th>Gesamt</th>
                         <th>Fehlend</th>
                         <th>Strafzahlung</th>
                         <th></th>
@@ -55,6 +57,8 @@
                             </td>
                             <td>{{ $workHour->member->full_name }}</td>
                             <td>{{ number_format((float) $workHour->hours_required, 2, ',', '.') }} Std.</td>
+                            <td>{{ number_format((float) $workHour->manual_hours_done, 2, ',', '.') }} Std.</td>
+                            <td>{{ number_format((float) $workHour->event_hours_done, 2, ',', '.') }} Std.</td>
                             <td>{{ number_format((float) $workHour->hours_done, 2, ',', '.') }} Std.</td>
                             <td>
                                 @if ((float) $workHour->hours_missing > 0)
@@ -72,7 +76,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center py-4">
+                            <td colspan="9" class="text-center py-4">
                                 <strong>Noch keine Arbeitsstunden erfasst.</strong><br>
                                 <span class="text-secondary">Arbeitsstunden werden direkt in einer Abrechnungsperiode angelegt.</span>
                             </td>

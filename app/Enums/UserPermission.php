@@ -16,6 +16,7 @@ enum UserPermission: string
     case ReviewMeterReadingSubmissions = 'review_meter_reading_submissions';
     case ManageCommunication = 'manage_communication';
     case ManageDocuments = 'manage_documents';
+    case ManageWorkEvents = 'manage_work_events';
 
     public function label(): string
     {
@@ -32,6 +33,7 @@ enum UserPermission: string
             self::ReviewMeterReadingSubmissions => 'Zählerstandsmeldungen prüfen',
             self::ManageCommunication => 'Kommunikation verwalten',
             self::ManageDocuments => 'Dokumente verwalten',
+            self::ManageWorkEvents => 'Arbeitseinsätze verwalten',
         };
     }
 
@@ -50,6 +52,7 @@ enum UserPermission: string
             self::ReviewMeterReadingSubmissions => 'Erlaubt die Prüfung gemeldeter Zählerstände und Fotos.',
             self::ManageCommunication => 'Erlaubt Serienmails, Versandhistorie und allgemeine PDF-Briefe.',
             self::ManageDocuments => 'Erlaubt private Uploads, Dateiversionen, Freigaben und die zentrale Dokumentenverwaltung.',
+            self::ManageWorkEvents => 'Erlaubt Termine, Teilnehmer und bestätigte Arbeitsstunden zu verwalten.',
         };
     }
 

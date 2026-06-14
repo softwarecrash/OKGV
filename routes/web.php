@@ -32,6 +32,8 @@ use App\Http\Controllers\SepaSettingController;
 use App\Http\Controllers\TenantPortalController;
 use App\Http\Controllers\TenantRegistrationController;
 use App\Http\Controllers\UserPermissionController;
+use App\Http\Controllers\WorkEventController;
+use App\Http\Controllers\WorkEventParticipantController;
 use App\Http\Controllers\WorkHourController;
 use Illuminate\Support\Facades\Route;
 
@@ -138,6 +140,22 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         ->name('work-hours.edit');
     Route::put('work-hours/{work_hour}', [WorkHourController::class, 'update'])
         ->name('work-hours.update');
+    Route::get('work-events', [WorkEventController::class, 'index'])
+        ->name('work-events.index');
+    Route::get('billing-periods/{billing_period}/work-events/create', [WorkEventController::class, 'create'])
+        ->name('billing-periods.work-events.create');
+    Route::post('billing-periods/{billing_period}/work-events', [WorkEventController::class, 'store'])
+        ->name('billing-periods.work-events.store');
+    Route::get('work-events/{work_event}', [WorkEventController::class, 'show'])
+        ->name('work-events.show');
+    Route::get('work-events/{work_event}/edit', [WorkEventController::class, 'edit'])
+        ->name('work-events.edit');
+    Route::put('work-events/{work_event}', [WorkEventController::class, 'update'])
+        ->name('work-events.update');
+    Route::post('work-events/{work_event}/participants', [WorkEventParticipantController::class, 'store'])
+        ->name('work-events.participants.store');
+    Route::put('work-event-participants/{work_event_participant}', [WorkEventParticipantController::class, 'update'])
+        ->name('work-event-participants.update');
     Route::resource('billing-periods.billing-rates', BillingRateController::class)
         ->only(['create', 'store', 'edit', 'update', 'destroy'])
         ->parameters(['billing-rates' => 'billing_rate']);
