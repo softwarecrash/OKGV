@@ -76,5 +76,108 @@
             @endforelse
         </div>
     </div>
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <span>Arbeitsstunden</span>
+            @if (auth()->user()->role === App\Enums\UserRole::Tenant)
+                <a class="btn btn-sm btn-outline-success" href="{{ route('work-hour-submissions.create', ['parcel_id' => $parcel->id]) }}">
+                    Arbeitsstunden melden
+                </a>
+            @endif
+        </div>
+        @if ($parcel->workHours->isEmpty() && $availableWorkHourPeriods->isEmpty())
+            <div class="card-body">
+                <strong>Noch kein Arbeitsstundenkonto vorhanden.</strong>
+                <div class="text-secondary">Konten werden je Parzelle und Abrechnungsperiode geführt.</div>
+            </div>
+        @else
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Abrechnungsperiode</th>
+                            <th>Pflicht</th>
+                            <th>Manuell</th>
+                            <th>Arbeitseinsätze</th>
+                            <th>Pächtermeldungen</th>
+                            <th>Geleistet</th>
+                            <th>Fehlend</th>
+                            <th>Fehlbetrag</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($parcel->workHours as $workHour)
+                            <tr>
+                                <td>
+                                    @can('view', $workHour->billingPeriod)
+                                        <a href="{{ route('billing-periods.show', $workHour->billingPeriod) }}">
+                                            {{ $workHour->billingPeriod->name }}
+                                        </a>
+                                    @else
+                                        {{ $workHour->billingPeriod->name }}
+                                    @endcan
+                                    <div class="small text-secondary">{{ $workHour->billingPeriod->status->label() }}</div>
+                                </td>
+                                <td>{{ number_format((float) $workHour->hours_required, 2, ',', '.') }} Std.</td>
+                                <td>
+                                    @can('update', $workHour)
+                                        <form class="d-flex align-items-center gap-2" method="POST" action="{{ route('work-hours.update', $workHour) }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="parcel_id" value="{{ $workHour->parcel_id }}">
+                                            <input type="hidden" name="hours_required" value="{{ $workHour->hours_required }}">
+                                            <input type="hidden" name="penalty_rate" value="{{ $workHour->penalty_rate }}">
+                                            <input type="hidden" name="notes" value="{{ $workHour->notes }}">
+                                            <input type="hidden" name="return_to" value="parcel">
+                                            <input class="form-control form-control-sm"
+                                                   aria-label="Manuell anerkannte Stunden für {{ $workHour->billingPeriod->name }}"
+                                                   name="hours_done"
+                                                   type="number"
+                                                   min="0"
+                                                   step="0.25"
+                                                   value="{{ $workHour->manual_hours_done }}"
+                                                   required
+                                                   style="min-width: 6rem">
+                                            <button class="btn btn-sm btn-primary">Speichern</button>
+                                        </form>
+                                    @else
+                                        {{ number_format((float) $workHour->manual_hours_done, 2, ',', '.') }} Std.
+                                    @endcan
+                                </td>
+                                <td>{{ number_format((float) $workHour->event_hours_done, 2, ',', '.') }} Std.</td>
+                                <td>{{ number_format((float) $workHour->submission_hours_done, 2, ',', '.') }} Std.</td>
+                                <td><strong>{{ number_format((float) $workHour->hours_done, 2, ',', '.') }} Std.</strong></td>
+                                <td>{{ number_format((float) $workHour->hours_missing, 2, ',', '.') }} Std.</td>
+                                <td>{{ number_format((float) $workHour->penalty_amount, 2, ',', '.') }} €</td>
+                                <td class="text-end">
+                                    @can('update', $workHour)
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('work-hours.edit', $workHour) }}">Details</a>
+                                    @endcan
+                                </td>
+                            </tr>
+                        @endforeach
+                        @foreach ($availableWorkHourPeriods as $period)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('billing-periods.show', $period) }}">{{ $period->name }}</a>
+                                    <div class="small text-secondary">{{ $period->status->label() }}</div>
+                                </td>
+                                <td colspan="7" class="text-secondary">Für diese Parzelle wurde noch kein Arbeitsstundenkonto angelegt.</td>
+                                <td class="text-end">
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('billing-periods.work-hours.create', ['billing_period' => $period, 'parcel_id' => $parcel->id, 'return_to' => 'parcel']) }}">
+                                        Konto anlegen
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer text-secondary small">
+                Arbeitseinsätze und bestätigte Pächtermeldungen werden automatisch addiert. Das Eingabefeld verändert nur zusätzlich manuell anerkannte Stunden.
+            </div>
+        @endif
+    </div>
 </div>
 @endsection

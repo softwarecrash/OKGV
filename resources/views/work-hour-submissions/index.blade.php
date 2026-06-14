@@ -13,9 +13,9 @@
                 @endif
             </p>
         </div>
-        @can('create', App\Models\WorkHourSubmission::class)
+        @if (auth()->user()->role === App\Enums\UserRole::Tenant && auth()->user()->member)
             <a class="btn btn-primary" href="{{ route('work-hour-submissions.create') }}">Arbeitsstunden melden</a>
-        @endcan
+        @endif
     </div>
     <div class="card border-0 shadow-sm">
         <div class="table-responsive">

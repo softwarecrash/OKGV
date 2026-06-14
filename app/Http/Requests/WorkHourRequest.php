@@ -35,6 +35,7 @@ class WorkHourRequest extends FormRequest
             'hours_done' => ['required', 'numeric', 'decimal:0,2', 'min:0', 'max:999999.99'],
             'penalty_rate' => ['required', 'numeric', 'decimal:0,2', 'min:0', 'max:99999999.99'],
             'notes' => ['nullable', 'string', 'max:10000'],
+            'return_to' => ['nullable', Rule::in(['parcel'])],
         ];
     }
 

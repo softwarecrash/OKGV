@@ -108,6 +108,7 @@ vorherigen Phase geprüft sein.
 - [x] Parzellenbezogene Konten statt Einzelkonten je Mitpächter
 - [x] Globale Vereinsvorgaben und Sammelvorbereitung
 - [x] Prüfpflichtige Pächtermeldungen mit optionalem Foto
+- [x] Arbeitsstundenübersicht und Direkterfassung in der Parzellendetailansicht
 
 ## Phase 10: Warteliste
 

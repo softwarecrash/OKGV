@@ -22,6 +22,27 @@ class WorkHourSubmissionWorkflowTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_non_tenant_is_redirected_from_tenant_submission_form(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+
+        $this->actingAs($administrator)
+            ->get(route('work-hour-submissions.create'))
+            ->assertRedirect(route('work-hours.index'))
+            ->assertSessionHasErrors('work_hours');
+    }
+
+    public function test_tenant_without_assigned_parcel_sees_an_explanation(): void
+    {
+        $tenant = User::factory()->create(['role' => UserRole::Tenant]);
+        Member::factory()->create(['user_id' => $tenant->id]);
+
+        $this->actingAs($tenant)
+            ->get(route('work-hour-submissions.create'))
+            ->assertOk()
+            ->assertSee('aktuell keine Parzelle zugeordnet');
+    }
+
     public function test_period_accounts_are_initialized_for_parcels_from_global_defaults(): void
     {
         $administrator = User::factory()->administrator()->create();

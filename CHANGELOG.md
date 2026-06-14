@@ -2,6 +2,37 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.29] - 2026-06-14
+
+### Parzellendetail
+
+- Arbeitsstundenkonten aller Abrechnungsperioden in die
+  Parzellendetailansicht aufgenommen.
+- Pflichtstunden, manuelle Stunden, bestätigte Arbeitseinsätze,
+  Pächtermeldungen, Gesamtstunden, Fehlstunden und Fehlbetrag werden getrennt
+  und nachvollziehbar dargestellt.
+- Berechtigte Finanzkonten können manuell anerkannte Stunden direkt in der
+  Parzellenansicht speichern.
+- Fehlende Konten bearbeitbarer Perioden lassen sich mit vorausgewählter
+  Parzelle anlegen und übernehmen die globalen Vereinsvorgaben.
+- Pächter gelangen von ihrer Parzelle und aus dem Portal mit vorausgewählter
+  Parzelle zur Arbeitsstundenmeldung.
+
+### Fehlerbehebung
+
+- `/arbeitsstunden-melden` erzeugt bei Administratoren oder anderen Konten
+  ohne passende Pächterverknüpfung keinen Serverfehler mehr.
+- Nicht passende Konten werden mit einem verständlichen Hinweis zur
+  Arbeitsstundenverwaltung weitergeleitet.
+- Pächter ohne aktuell zugeordnete Parzelle erhalten auf der Meldeseite eine
+  verständliche Erklärung statt eines nicht nutzbaren Formulars.
+- Die Meldeschaltfläche wird nur für tatsächlich verknüpfte Pächterkonten
+  angeboten.
+- Parzellenansicht, direkte Erfassung, sichere Weiterleitung und leere
+  Zuordnungen sind durch Feature-Tests abgedeckt.
+- Insgesamt bestehen 113 Tests mit 636 Assertions.
+- Entwicklungsstand auf `0.2.0.29` erhöht.
+
 ## [0.2.0.28] - 2026-06-14
 
 ### Arbeitsstunden je Parzelle

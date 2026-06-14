@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Enums\ParcelStatus;
 use App\Http\Requests\ParcelRequest;
+use App\Models\BillingPeriod;
 use App\Models\Parcel;
+use App\Models\WorkHour;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -76,10 +78,29 @@ class ParcelController extends Controller
                 )
                 ->with('member')
                 ->latest('starts_at'),
+            'workHours' => fn ($query) => $query
+                ->with('billingPeriod')
+                ->latest(
+                    BillingPeriod::query()
+                        ->select('ends_at')
+                        ->whereColumn('billing_periods.id', 'work_hours.billing_period_id'),
+                ),
         ]);
+
+        $assignedPeriodIds = $parcel->workHours->pluck('billing_period_id');
 
         return view('parcels.show', [
             'parcel' => $parcel,
+            'availableWorkHourPeriods' => request()->user()->can('create', WorkHour::class)
+                ? BillingPeriod::query()
+                    ->whereNotIn('id', $assignedPeriodIds)
+                    ->whereIn('status', ['draft', 'calculated'])
+                    ->latest('starts_at')
+                    ->get()
+                    ->filter(fn (BillingPeriod $period) => $parcel->tenancies()
+                        ->activeOn($period->ends_at)
+                        ->exists())
+                : collect(),
         ]);
     }
 

@@ -7,13 +7,18 @@
     <form class="card card-body border-0 shadow-sm" method="POST" enctype="multipart/form-data" action="{{ route('work-hour-submissions.store') }}">
         @csrf
         <x-validation-errors />
-        <div class="alert alert-info">Beschreibe die Tätigkeit nachvollziehbar. Ein Foto ist optional und bleibt ausschließlich für berechtigte Prüfer sichtbar.</div>
-        <div class="row g-3">
+        @if ($parcels->isEmpty())
+            <div class="alert alert-warning mb-0">
+                Deinem Mitgliedskonto ist aktuell keine Parzelle zugeordnet. Bitte wende dich an den Vorstand, bevor du Arbeitsstunden meldest.
+            </div>
+        @else
+            <div class="alert alert-info">Beschreibe die Tätigkeit nachvollziehbar. Ein Foto ist optional und bleibt ausschließlich für berechtigte Prüfer sichtbar.</div>
+            <div class="row g-3">
             <div class="col-md-4">
                 <label class="form-label" for="parcel_id">Parzelle</label>
                 <select class="form-select" id="parcel_id" name="parcel_id" required>
                     @foreach ($parcels as $parcel)
-                        <option value="{{ $parcel->id }}" @selected((int) old('parcel_id') === $parcel->id)>Parzelle {{ $parcel->parcel_number }}</option>
+                        <option value="{{ $parcel->id }}" @selected((int) old('parcel_id', $selectedParcelId) === $parcel->id)>Parzelle {{ $parcel->parcel_number }}</option>
                     @endforeach
                 </select>
             </div>
@@ -37,11 +42,12 @@
                 <input class="form-control" id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp">
                 <div class="form-text">JPEG, PNG oder WebP, höchstens 8 MiB. Keine Personen ohne deren Einwilligung fotografieren.</div>
             </div>
-        </div>
-        <div class="d-flex gap-2 mt-4">
-            <button class="btn btn-primary">Zur Prüfung einreichen</button>
-            <a class="btn btn-outline-secondary" href="{{ route('tenant-portal.index') }}">Abbrechen</a>
-        </div>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+                <button class="btn btn-primary">Zur Prüfung einreichen</button>
+                <a class="btn btn-outline-secondary" href="{{ route('tenant-portal.index') }}">Abbrechen</a>
+            </div>
+        @endif
     </form>
 </div>
 @endsection

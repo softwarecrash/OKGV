@@ -72,7 +72,10 @@ Periode werden bis zum vollständigen Übergabeprozess bewusst nicht automatisch
 abgerechnet.
 
 Konten mit dem Recht `Abrechnungen und Rechnungen verwalten` finden unter
-`Finanzen` die Arbeitsstundenübersicht. Pflichtstunden, geleistete Stunden und
+`Finanzen` die Arbeitsstundenübersicht. Zusätzlich zeigt jede
+Parzellendetailansicht die periodischen Arbeitsstundenkonten; berechtigte
+Konten können dort manuell anerkannte Stunden direkt pflegen. Pflichtstunden,
+geleistete Stunden und
 der Betrag je Fehlstunde werden pro Parzelle und Periode geführt. Die globale
 Konfiguration stellt Vereinsvorgaben bereit, aus denen alle vergebenen
 Parzellen einer Periode gesammelt vorbereitet werden können. Fehlstunden und

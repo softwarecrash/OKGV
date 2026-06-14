@@ -266,3 +266,15 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Migration ausschließlich nicht löschend auf MariaDB anwenden
 - [x] Gesamttests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen und veröffentlichen
+
+## Nachbesserung Phase 9: Parzellendetail und Meldeseite
+
+- [x] Arbeitsstundenkonten in der Parzellendetailansicht darstellen
+- [x] Manuell anerkannte Stunden dort direkt bearbeitbar machen
+- [x] Fehlende Konten mit vorausgewählter Parzelle anlegen
+- [x] Pächter zur vorausgewählten Arbeitsstundenmeldung führen
+- [x] Meldeseite gegen Konten ohne Mitgliedsverknüpfung absichern
+- [x] Leere Parzellenzuordnung verständlich erklären
+- [x] Regressionstests ergänzen
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [ ] Nachbesserung vollständig prüfen und veröffentlichen

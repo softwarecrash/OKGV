@@ -38,18 +38,35 @@ class WorkHourSubmissionController extends Controller
         ]);
     }
 
-    public function create(Request $request): View
+    public function create(Request $request): View|RedirectResponse
     {
+        $member = $request->user()->member;
+
+        if ($request->user()->role !== UserRole::Tenant || ! $member) {
+            $route = $request->user()->canManageBilling()
+                ? 'work-hours.index'
+                : 'home';
+
+            return redirect()->route($route)->withErrors([
+                'work_hours' => 'Arbeitsstunden melden Pächter über ihr verknüpftes Mitgliedskonto. Für direkte Verwaltung nutze bitte die Arbeitsstundenkonten der Parzellen.',
+            ]);
+        }
+
         $this->authorize('create', WorkHourSubmission::class);
-        $parcelIds = $request->user()->member->parcelTenancies()
+        $parcelIds = $member->parcelTenancies()
             ->activeOn()
             ->pluck('parcel_id');
+        $parcels = Parcel::query()
+            ->whereIn('id', $parcelIds)
+            ->orderBy('parcel_number')
+            ->get();
+        $selectedParcelId = $request->integer('parcel_id');
 
         return view('work-hour-submissions.create', [
-            'parcels' => Parcel::query()
-                ->whereIn('id', $parcelIds)
-                ->orderBy('parcel_number')
-                ->get(),
+            'parcels' => $parcels,
+            'selectedParcelId' => $parcels->contains('id', $selectedParcelId)
+                ? $selectedParcelId
+                : null,
         ]);
     }
 

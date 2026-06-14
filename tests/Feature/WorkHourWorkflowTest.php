@@ -26,6 +26,46 @@ class WorkHourWorkflowTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_parcel_detail_shows_and_updates_work_hour_account_directly(): void
+    {
+        [$administrator, $period, $member, $parcel] = $this->billingScenario();
+        $workHour = WorkHour::factory()->create([
+            'billing_period_id' => $period->id,
+            'parcel_id' => $parcel->id,
+            'hours_required' => '10.00',
+            'manual_hours_done' => '2.00',
+            'event_hours_done' => '1.00',
+            'submission_hours_done' => '0.50',
+            'hours_done' => '3.50',
+            'hours_missing' => '6.50',
+            'penalty_rate' => '20.00',
+            'penalty_amount' => '130.00',
+        ]);
+
+        $this->actingAs($administrator)
+            ->get(route('parcels.show', $parcel))
+            ->assertOk()
+            ->assertSee('Arbeitsstunden')
+            ->assertSee($period->name)
+            ->assertSee('Pächtermeldungen')
+            ->assertSee('130,00 €');
+
+        $this->actingAs($administrator)
+            ->put(route('work-hours.update', $workHour), [
+                'parcel_id' => $parcel->id,
+                'hours_required' => '10.00',
+                'hours_done' => '4.00',
+                'penalty_rate' => '20.00',
+                'return_to' => 'parcel',
+            ])
+            ->assertRedirect(route('parcels.show', $parcel));
+
+        $workHour = $workHour->fresh();
+        $this->assertSame('4.00', $workHour->manual_hours_done);
+        $this->assertSame('4.00', $workHour->hours_done);
+        $this->assertSame('6.00', $workHour->hours_missing);
+    }
+
     public function test_work_hours_are_calculated_server_side_and_audited(): void
     {
         $administrator = User::factory()->administrator()->create();

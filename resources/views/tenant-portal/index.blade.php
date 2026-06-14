@@ -28,7 +28,7 @@
                                 <strong>Parzelle {{ $tenancy->parcel->parcel_number }}</strong>
                                 <span class="text-secondary"> · {{ number_format((float) $tenancy->parcel->area_sqm, 2, ',', '.') }} m²</span>
                                 <div class="mt-2 d-flex flex-wrap gap-2">
-                                    <a class="btn btn-sm btn-outline-success" href="{{ route('work-hour-submissions.create') }}">
+                                    <a class="btn btn-sm btn-outline-success" href="{{ route('work-hour-submissions.create', ['parcel_id' => $tenancy->parcel_id]) }}">
                                         Arbeitsstunden melden
                                     </a>
                                     @forelse ($tenancy->parcel->meters as $meter)

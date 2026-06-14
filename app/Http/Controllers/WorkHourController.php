@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\WorkHourRequest;
+use App\Models\ApplicationSetting;
 use App\Models\BillingPeriod;
 use App\Models\Parcel;
 use App\Models\WorkHour;
@@ -40,21 +41,37 @@ class WorkHourController extends Controller
         ]);
     }
 
-    public function create(BillingPeriod $billingPeriod): View
+    public function create(Request $request, BillingPeriod $billingPeriod): View
     {
         $this->authorize('create', WorkHour::class);
         abort_unless($billingPeriod->isEditable(), 403);
 
         $assignedParcelIds = $billingPeriod->workHours()->pluck('parcel_id');
+        $parcels = Parcel::query()
+            ->whereNotIn('id', $assignedParcelIds)
+            ->whereHas('tenancies', fn ($query) => $query->activeOn($billingPeriod->ends_at))
+            ->orderBy('parcel_number')
+            ->get();
+        $selectedParcelId = $request->integer('parcel_id');
+        $settings = ApplicationSetting::current();
+        $workHour = new WorkHour([
+            'hours_required' => $settings->default_work_hours_required,
+            'manual_hours_done' => '0.00',
+            'penalty_rate' => $settings->default_work_hour_penalty_rate,
+        ]);
+
+        if ($selectedParcelId && $parcels->contains('id', $selectedParcelId)) {
+            $workHour->parcel_id = $selectedParcelId;
+        }
 
         return view('work-hours.create', [
             'billingPeriod' => $billingPeriod,
-            'workHour' => new WorkHour,
-            'parcels' => Parcel::query()
-                ->whereNotIn('id', $assignedParcelIds)
-                ->whereHas('tenancies', fn ($query) => $query->activeOn($billingPeriod->ends_at))
-                ->orderBy('parcel_number')
-                ->get(),
+            'workHour' => $workHour,
+            'parcels' => $parcels,
+            'returnTo' => $workHour->parcel_id
+                && $request->string('return_to')->toString() === 'parcel'
+                ? 'parcel'
+                : null,
         ]);
     }
 
@@ -62,13 +79,17 @@ class WorkHourController extends Controller
         WorkHourRequest $request,
         BillingPeriod $billingPeriod,
     ): RedirectResponse {
-        $this->workHourManager->save(
+        $workHour = $this->workHourManager->save(
             $billingPeriod,
             $request->validated(),
             $request->user(),
         );
 
-        return redirect()->route('billing-periods.show', $billingPeriod)
+        $redirect = $request->validated('return_to') === 'parcel'
+            ? redirect()->route('parcels.show', $workHour->parcel_id)
+            : redirect()->route('billing-periods.show', $billingPeriod);
+
+        return $redirect
             ->with('status', 'Arbeitsstundenkonto wurde angelegt.');
     }
 
@@ -81,6 +102,7 @@ class WorkHourController extends Controller
             'billingPeriod' => $workHour->billingPeriod,
             'workHour' => $workHour->load('parcel'),
             'parcels' => collect([$workHour->parcel]),
+            'returnTo' => null,
         ]);
     }
 
@@ -96,7 +118,11 @@ class WorkHourController extends Controller
             $workHour,
         );
 
-        return redirect()->route('billing-periods.show', $period)
+        $redirect = $request->validated('return_to') === 'parcel'
+            ? redirect()->route('parcels.show', $workHour->parcel_id)
+            : redirect()->route('billing-periods.show', $period);
+
+        return $redirect
             ->with('status', 'Arbeitsstundenkonto wurde aktualisiert.');
     }
 

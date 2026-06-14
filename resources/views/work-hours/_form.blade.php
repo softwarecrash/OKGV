@@ -2,6 +2,9 @@
 @if ($workHour->exists)
     @method('PUT')
 @endif
+@if ($returnTo ?? null)
+    <input type="hidden" name="return_to" value="{{ $returnTo }}">
+@endif
 
 <div class="alert alert-info">
     Fehlstunden und Strafzahlung werden automatisch berechnet. Mehr geleistete als geforderte Stunden führen nicht zu einem negativen Betrag.
@@ -94,5 +97,5 @@
 
 <div class="d-flex gap-2 mt-4">
     <button class="btn btn-primary">{{ $workHour->exists ? 'Änderungen speichern' : 'Arbeitsstundenkonto anlegen' }}</button>
-    <a class="btn btn-outline-secondary" href="{{ route('billing-periods.show', $billingPeriod) }}">Abbrechen</a>
+    <a class="btn btn-outline-secondary" href="{{ ($returnTo ?? null) === 'parcel' ? route('parcels.show', $workHour->parcel_id) : route('billing-periods.show', $billingPeriod) }}">Abbrechen</a>
 </div>

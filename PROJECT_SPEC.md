@@ -694,6 +694,14 @@ Betrag je Fehlstunde. Beim Sammelvorbereiten einer Abrechnungsperiode werden
 für alle zum Periodenende vergebenen Parzellen fehlende Konten mit diesen
 Werten angelegt. Die Werte werden als historischer Periodenstand kopiert.
 
+Die Parzellendetailansicht zeigt die Arbeitsstundenkonten aller Perioden mit
+Pflichtstunden, manuell anerkannten Stunden, Arbeitseinsätzen,
+Pächtermeldungen, Gesamtleistung, Fehlstunden und Fehlbetrag. Berechtigte
+Finanzkonten können manuell anerkannte Stunden direkt dort ändern. Fehlende
+Konten bearbeitbarer Perioden können mit vorausgewählter Parzelle angelegt
+werden. Pächter gelangen von ihrer Parzelle mit vorausgewählter Parzelle zur
+eigenen Arbeitsstundenmeldung.
+
 #### Abrechnung
 
 Bei der Berechnung einer Abrechnungsperiode werden positive Strafbeträge als
