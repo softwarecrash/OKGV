@@ -25,6 +25,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Wiederholte Berechnung sowie das sichere Zurücksetzen nach Preisänderungen
   werden durch Feature-Tests abgedeckt.
 - Entwicklungsstand auf `0.2.0.9` erhöht.
+- Entwicklungsstand `0.2.0.9` auf GitHub veröffentlicht.
 
 ## [0.2.0.8] - 2026-06-14
 
