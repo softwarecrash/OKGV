@@ -6,13 +6,43 @@
 <x-validation-errors />
 
 <div class="alert alert-info">
-    Ein Preis beschreibt eine Rechnungsposition. Berechnungsart und Geltungsbereich bestimmen gemeinsam, für wen und in welcher Menge sie berechnet wird.
+    @if ($selectedTemplate ?? false)
+        Die Vorlage wird als eigenständiger Preis in diese Abrechnungsperiode kopiert. Spätere Änderungen an der Vorlage verändern diesen Preis nicht.
+    @else
+        Ein Preis beschreibt eine Rechnungsposition. Berechnungsart und Geltungsbereich bestimmen gemeinsam, für wen und in welcher Menge sie berechnet wird.
+    @endif
     @if ($billingPeriod->status === App\Enums\BillingPeriodStatus::Calculated)
         Beim Speichern wird der bisherige Zwischenstand verworfen. Anschließend muss die Periode neu berechnet werden.
     @endif
 </div>
 
 <div class="row g-3">
+    @if ($selectedTemplate ?? false)
+        <input type="hidden" name="billing_rate_template_id" value="{{ $selectedTemplate->id }}">
+        <input type="hidden" name="code" value="{{ $selectedTemplate->code }}">
+        <input type="hidden" name="name" value="{{ $selectedTemplate->name }}">
+        <input type="hidden" name="calculation_type" value="{{ $selectedTemplate->calculation_type->value }}">
+        <input type="hidden" name="scope" value="{{ $selectedTemplate->scope->value }}">
+        <input type="hidden" name="description" value="{{ $selectedTemplate->description }}">
+        <input type="hidden" name="is_active" value="1">
+
+        <div class="col-md-6">
+            <div class="border rounded p-3 h-100">
+                <div class="small text-secondary">Kostenart</div>
+                <strong>{{ $selectedTemplate->name }}</strong>
+                <div class="mt-2">{{ $selectedTemplate->calculation_type->label() }} · {{ $selectedTemplate->scope->label() }}</div>
+                @if ($selectedTemplate->description)
+                    <div class="small text-secondary mt-2">{{ $selectedTemplate->description }}</div>
+                @endif
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" for="amount">Betrag für diese Periode in Euro</label>
+            <input class="form-control" type="number" id="amount" name="amount" min="0" step="0.0001" required autofocus
+                   value="{{ old('amount', $billingRate->amount) }}">
+            <div class="form-text">Der Betrag gilt nur für {{ $billingPeriod->name }}. Die Vorlage bleibt unverändert.</div>
+        </div>
+    @else
     <div class="col-md-4">
         <label class="form-label" for="code">Interner Schlüssel</label>
         <input class="form-control text-uppercase" id="code" name="code" maxlength="100" required
@@ -64,9 +94,13 @@
             <div class="form-text">Inaktive Preise bleiben dokumentiert, werden aber nicht in neue Berechnungen aufgenommen.</div>
         </div>
     </div>
+    @endif
 </div>
 
 <div class="d-flex gap-2 mt-4">
     <button class="btn btn-primary">Speichern</button>
+    @if ($selectedTemplate ?? false)
+        <a class="btn btn-outline-primary" href="{{ route('billing-periods.billing-rates.create', $billingPeriod) }}">Andere Vorlage wählen</a>
+    @endif
     <a class="btn btn-outline-secondary" href="{{ route('billing-periods.show', $billingPeriod) }}">Abbrechen</a>
 </div>

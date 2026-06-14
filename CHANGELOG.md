@@ -2,6 +2,36 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.11] - 2026-06-14
+
+### Added
+
+- Konfigurierbare Preisvorlagen für wiederkehrende Kostenarten hinzugefügt.
+- Administrator und Vorstand können Vorlagen mit Schlüssel, Bezeichnung,
+  Berechnungsart, Geltungsbereich, Beschreibung und optionalem
+  Vorschlagsbetrag verwalten.
+- Finanzrollen können aktive Vorlagen beim Anlegen eines Periodenpreises
+  auswählen und müssen anschließend nur den aktuellen Betrag prüfen oder
+  ändern.
+- Vorlagen können deaktiviert werden, ohne bereits verwendete Preise zu
+  beeinflussen.
+- Anlage und Änderung von Vorlagen werden im Auditlog dokumentiert.
+
+### Security
+
+- Vorlagenwerte werden bei der Übernahme serverseitig geladen; manipulierte
+  Formularwerte können Berechnungsart oder Geltungsbereich nicht verändern.
+- Jede Übernahme erzeugt einen eigenständigen historischen Snapshot in der
+  Abrechnungsperiode. Spätere Vorlagenänderungen verändern keine bestehenden
+  Preise oder Rechnungen.
+
+### Tests
+
+- Rollenrechte, Codenormalisierung, sichere Vorlagenübernahme,
+  periodenspezifische Beträge und Historienstabilität werden durch
+  Feature-Tests abgedeckt.
+- Entwicklungsstand auf `0.2.0.11` erhöht.
+
 ## [0.2.0.10] - 2026-06-14
 
 ### Documentation

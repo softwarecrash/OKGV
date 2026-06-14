@@ -4,49 +4,38 @@ namespace App\Http\Requests;
 
 use App\Enums\BillingRateScope;
 use App\Enums\BillingRateType;
-use App\Models\BillingRate;
 use App\Models\BillingRateTemplate;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
-class BillingRateRequest extends FormRequest
+class BillingRateTemplateRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $rate = $this->route('billing_rate');
+        $template = $this->route('billing_rate_template');
 
-        return $rate instanceof BillingRate
-            ? $this->user()->can('update', $rate)
-            : $this->user()->can('create', BillingRate::class);
+        return $template instanceof BillingRateTemplate
+            ? $this->user()->can('update', $template)
+            : $this->user()->can('create', BillingRateTemplate::class);
     }
 
     public function rules(): array
     {
-        $period = $this->route('billing_period');
-        $rate = $this->route('billing_rate');
-
         return [
-            'billing_rate_template_id' => [
-                'nullable',
-                'integer',
-                Rule::exists('billing_rate_templates', 'id')
-                    ->where('is_active', true),
-            ],
             'code' => [
                 'required',
                 'string',
                 'max:100',
                 'regex:/^[A-Z][A-Z0-9_]*$/',
-                Rule::unique('billing_rates', 'code')
-                    ->where('billing_period_id', $period->id)
-                    ->ignore($rate),
+                Rule::unique('billing_rate_templates', 'code')
+                    ->ignore($this->route('billing_rate_template')),
             ],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:10000'],
             'calculation_type' => ['required', Rule::enum(BillingRateType::class)],
             'scope' => ['required', Rule::enum(BillingRateScope::class)],
-            'amount' => ['required', 'numeric', 'decimal:0,4', 'min:0'],
+            'default_amount' => ['nullable', 'numeric', 'decimal:0,4', 'min:0'],
             'is_active' => ['sometimes', 'boolean'],
         ];
     }
@@ -86,24 +75,10 @@ class BillingRateRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $template = BillingRateTemplate::query()
-            ->whereKey($this->integer('billing_rate_template_id'))
-            ->where('is_active', true)
-            ->first();
         $code = strtoupper(trim((string) $this->input('code')));
 
-        if ($template) {
-            $code = $template->code;
-        }
-
         $this->merge([
-            'billing_rate_template_id' => $template?->id,
             'code' => preg_replace('/\s+/', '_', $code),
-            'name' => $template?->name ?? $this->input('name'),
-            'description' => $template?->description ?? $this->input('description'),
-            'calculation_type' => $template?->calculation_type->value
-                ?? $this->input('calculation_type'),
-            'scope' => $template?->scope->value ?? $this->input('scope'),
             'is_active' => $this->boolean('is_active'),
         ]);
     }

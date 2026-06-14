@@ -7,6 +7,7 @@ use App\Enums\BillingRateType;
 use App\Http\Requests\BillingRateRequest;
 use App\Models\BillingPeriod;
 use App\Models\BillingRate;
+use App\Models\BillingRateTemplate;
 use App\Services\AuditLogger;
 use App\Services\BillingPeriodManager;
 use Illuminate\Http\RedirectResponse;
@@ -24,9 +25,33 @@ class BillingRateController extends Controller
         $this->authorize('create', BillingRate::class);
         abort_unless($billingPeriod->isEditable(), 403);
 
+        $selectedTemplate = BillingRateTemplate::query()
+            ->whereKey(request()->integer('template'))
+            ->where('is_active', true)
+            ->first();
+
+        $billingRate = new BillingRate(['is_active' => true]);
+
+        if ($selectedTemplate) {
+            $billingRate->forceFill([
+                'billing_rate_template_id' => $selectedTemplate->id,
+                'code' => $selectedTemplate->code,
+                'name' => $selectedTemplate->name,
+                'description' => $selectedTemplate->description,
+                'calculation_type' => $selectedTemplate->calculation_type,
+                'scope' => $selectedTemplate->scope,
+                'amount' => $selectedTemplate->default_amount,
+            ]);
+        }
+
         return view('billing-rates.create', [
             'billingPeriod' => $billingPeriod,
-            'billingRate' => new BillingRate(['is_active' => true]),
+            'billingRate' => $billingRate,
+            'selectedTemplate' => $selectedTemplate,
+            'templates' => BillingRateTemplate::query()
+                ->where('is_active', true)
+                ->orderBy('name')
+                ->get(),
             'types' => BillingRateType::cases(),
             'scopes' => BillingRateScope::cases(),
         ]);
@@ -63,6 +88,7 @@ class BillingRateController extends Controller
         return view('billing-rates.edit', [
             'billingPeriod' => $billingPeriod,
             'billingRate' => $billingRate,
+            'selectedTemplate' => null,
             'types' => BillingRateType::cases(),
             'scopes' => BillingRateScope::cases(),
         ]);
@@ -79,7 +105,9 @@ class BillingRateController extends Controller
             $request->user(),
             'billing_rate_updated',
             function () use ($billingRate, $request): void {
-                $billingRate->update($request->validated());
+                $billingRate->update(
+                    $request->safe()->except('billing_rate_template_id'),
+                );
                 AuditLogger::log('billing.rate.updated', $request->user(), $billingRate);
             },
         );

@@ -3,6 +3,7 @@
 use App\Http\Controllers\BillingPeriodController;
 use App\Http\Controllers\BillingRateAssignmentController;
 use App\Http\Controllers\BillingRateController;
+use App\Http\Controllers\BillingRateTemplateController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MemberController;
@@ -45,6 +46,8 @@ Route::middleware('auth')->group(function (): void {
     Route::resource('billing-periods.billing-rates', BillingRateController::class)
         ->only(['create', 'store', 'edit', 'update', 'destroy'])
         ->parameters(['billing-rates' => 'billing_rate']);
+    Route::resource('billing-rate-templates', BillingRateTemplateController::class)
+        ->only(['index', 'create', 'store', 'edit', 'update']);
     Route::post('billing-rates/{billing_rate}/assignments', [BillingRateAssignmentController::class, 'store'])
         ->name('billing-rate-assignments.store');
     Route::delete('billing-rate-assignments/{billing_rate_assignment}', [BillingRateAssignmentController::class, 'destroy'])

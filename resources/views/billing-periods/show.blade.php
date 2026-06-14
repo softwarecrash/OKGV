@@ -14,7 +14,7 @@
             @if ($billingPeriod->isEditable())
                 @can('update', $billingPeriod)
                     <a class="btn btn-outline-primary" href="{{ route('billing-periods.edit', $billingPeriod) }}">Bearbeiten</a>
-                    <a class="btn btn-primary" href="{{ route('billing-periods.billing-rates.create', $billingPeriod) }}">Preis anlegen</a>
+                    <a class="btn btn-primary" href="{{ route('billing-periods.billing-rates.create', $billingPeriod) }}">Preis aus Vorlage</a>
                 @endcan
                 @can('calculate', $billingPeriod)
                     <form method="POST" action="{{ route('billing-periods.calculate', $billingPeriod) }}" onsubmit="return confirm('Abrechnung jetzt neu berechnen? Vorhandene Entwürfe dieser Periode werden durch die aktuelle Berechnung ersetzt.')">

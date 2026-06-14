@@ -47,6 +47,7 @@ vorherigen Phase geprüft sein.
 - [x] Umlagen
 - [x] Versicherungen
 - [x] PDF-Rechnungen
+- [x] Konfigurierbare Preisvorlagen
 
 ## Phase 4: SEPA
 

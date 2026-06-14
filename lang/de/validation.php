@@ -37,12 +37,14 @@ return [
 
     'attributes' => [
         'amount' => 'Betrag',
+        'billing_rate_template_id' => 'Preisvorlage',
         'calculation_type' => 'Berechnungsart',
         'can_correct_meter_readings' => 'Korrekturrecht',
         'city' => 'Ort',
         'code' => 'interner Schlüssel',
         'corrected_value' => 'korrigierter Zählerstand',
         'description' => 'Beschreibung',
+        'default_amount' => 'Vorschlagsbetrag',
         'due_at' => 'Fälligkeit',
         'email' => 'E-Mail-Adresse',
         'end_reading' => 'Endstand',

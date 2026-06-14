@@ -205,6 +205,19 @@ Preise, Zuordnungen und Rechnungen dauerhaft unveränderbar.
 Preisänderung erfolgt ausschließlich in einer neuen Periode und verändert
 keine historische Rechnung.
 
+Wiederkehrende Kostenarten können in `billing_rate_templates` als
+konfigurierbare Preisvorlagen verwaltet werden. Administrator und Vorstand
+dürfen Vorlagen anlegen und bearbeiten; Kassierer dürfen aktive Vorlagen für
+Abrechnungsperioden verwenden. Eine Vorlage enthält internen Schlüssel,
+Bezeichnung, Beschreibung, Berechnungsart, Geltungsbereich, optionalen
+Vorschlagsbetrag und Aktivstatus.
+
+Beim Übernehmen einer Vorlage wird ein eigenständiger `billing_rates`-Snapshot
+für die gewählte Abrechnungsperiode erstellt. Die fachlichen Regeln stammen
+serverseitig aus der Vorlage, während der Betrag für die Periode bestätigt
+oder geändert wird. Spätere Änderungen oder die Deaktivierung einer Vorlage
+verändern bereits übernommene Preise und Rechnungen niemals.
+
 Jeder Preis besitzt:
 
 - einen innerhalb der Periode eindeutigen technischen Code
@@ -291,6 +304,7 @@ werden sichtbar als solche gekennzeichnet.
   Empfängersnapshot sie als Vertragspartei enthalten sind; die
   Portaloberfläche dafür wird in Phase 5 umgesetzt.
 - Jede Berechnung und Freigabe wird im Auditlog protokolliert.
+- Anlage und Änderung von Preisvorlagen werden im Auditlog protokolliert.
 
 ### Phase 4: SEPA
 

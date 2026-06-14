@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable([
     'billing_period_id',
+    'billing_rate_template_id',
     'code',
     'name',
     'description',
@@ -39,6 +40,11 @@ class BillingRate extends Model
     public function billingPeriod(): BelongsTo
     {
         return $this->belongsTo(BillingPeriod::class);
+    }
+
+    public function template(): BelongsTo
+    {
+        return $this->belongsTo(BillingRateTemplate::class, 'billing_rate_template_id');
     }
 
     public function assignments(): HasMany

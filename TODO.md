@@ -86,6 +86,13 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Abrechnung erst mit der Rechnungsfreigabe dauerhaft sperren
 - [x] Wiederholte Berechnung und Rücksetzung durch Tests absichern
 - [x] Entwicklungsstand 0.2.0.9 veröffentlichen
+- [x] Konfigurierbare Preisvorlagen spezifizieren
+- [x] Vorlagenverwaltung für Administrator und Vorstand implementieren
+- [x] Aktive Vorlagen für Finanzrollen auswählbar machen
+- [x] Periodenpreis als unveränderlichen Snapshot der Vorlage übernehmen
+- [x] Betrag bei der Übernahme periodenspezifisch anpassbar machen
+- [x] Rechte, Manipulationsschutz und Historienstabilität testen
+- [x] Entwicklungsstand 0.2.0.11 veröffentlichen
 
 ## Projektweite Standards
 

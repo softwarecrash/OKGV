@@ -47,4 +47,9 @@ enum UserRole: string
     {
         return in_array($this, [self::Administrator, self::Board, self::Treasurer], true);
     }
+
+    public function canManageBillingTemplates(): bool
+    {
+        return in_array($this, [self::Administrator, self::Board], true);
+    }
 }
