@@ -230,4 +230,4 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Migration vorwärts und rückwärts isoliert prüfen
 - [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
 - [x] Gesamttests, Formatter und Asset-Build ausführen
-- [ ] Phase 9 vollständig prüfen und veröffentlichen
+- [x] Phase 9 vollständig prüfen und veröffentlichen
