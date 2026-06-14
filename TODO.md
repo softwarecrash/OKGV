@@ -280,7 +280,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Schutz vorhandener Entwicklungsdaten im Seed-Purge-Seed-Zyklus prüfen
 - [x] Demo-Zugänge lokal dokumentieren
 - [x] Gesamttests, Formatter, Build und Audits ausführen
-- [ ] Demo-Bestand vollständig prüfen und veröffentlichen
+- [x] Demo-Bestand vollständig prüfen und veröffentlichen
 
 ## Nachbesserung Phase 9: Parzellendetail und Meldeseite
 
