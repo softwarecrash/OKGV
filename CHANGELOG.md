@@ -26,6 +26,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
   gegen die neue Datenbank validiert.
 - Insgesamt bestehen 120 Tests mit 727 Assertions.
 - Entwicklungsstand auf `0.2.0.33` erhöht.
+- Entwicklungsstand `0.2.0.33` auf GitHub veröffentlicht.
 
 ## [0.2.0.32] - 2026-06-14
 
