@@ -1,0 +1,60 @@
+# OKGV
+
+**Open Kleingarten Verwaltung**
+
+Die freie Verwaltungssoftware für Kleingartenvereine.
+
+OKGV ist eine moderne, sichere und selbsthostbare Laravel-Anwendung. Eine Installation verwaltet genau einen Verein und besitzt eine eigene Datenbank, Benutzerbasis und Dateablage.
+
+## Aktueller Stand
+
+Version `0.1.0` enthält die technische Projektbasis:
+
+- Laravel 13 und PHP 8.3+
+- Bootstrap 5 und Alpine.js
+- Login, Logout und Passwort-Reset
+- Rollen- und Policy-Grundlage
+- Auditlog-Basis
+- Security-Header
+- MariaDB-Unterstützung
+
+## Voraussetzungen
+
+- PHP 8.3 oder neuer mit MySQL-, XML-, Mbstring-, Curl-, Zip-, Bcmath- und Intl-Erweiterung
+- Composer
+- MariaDB
+- Node.js 20 oder neuer
+- npm
+
+## Lokale Installation
+
+```bash
+git clone https://github.com/softwarecrash/OKGV.git
+cd OKGV
+composer install
+cp .env.example .env
+php artisan key:generate
+npm install
+npm run build
+```
+
+Eine MariaDB-Datenbank und einen eigenen Datenbankbenutzer anlegen, anschließend die Werte in `.env` eintragen:
+
+```bash
+php artisan migrate
+php artisan okgv:create-admin
+php artisan serve
+```
+
+Die Anwendung ist danach standardmäßig unter `http://127.0.0.1:8000` erreichbar.
+Für die Frontend-Entwicklung kann parallel `npm run dev` gestartet werden.
+
+## Entwicklung
+
+Die frühe Entwicklung erfolgt direkt im Linux-LXC. Docker- und Deployment-Artefakte werden erst nach Fertigstellung der Kernmodule erstellt.
+
+Die verbindliche Reihenfolge und Fachspezifikation stehen in [PROJECT_SPEC.md](PROJECT_SPEC.md), Arbeitsregeln in [AGENTS.md](AGENTS.md) und der aktuelle Fortschritt in [TODO.md](TODO.md).
+
+## Lizenz
+
+OKGV ist Open Source und steht unter der MIT-Lizenz.
