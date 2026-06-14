@@ -9,11 +9,20 @@ use App\Models\User;
 
 class DocumentPolicy
 {
+    public function viewAny(User $user): bool
+    {
+        return $user->canManageDocuments();
+    }
+
     public function view(User $user, Document $document): bool
     {
+        if ($user->canManageDocuments()) {
+            return true;
+        }
+
         if ($user->role !== UserRole::Tenant
             || $document->visibility !== DocumentVisibility::Tenant
-            || $document->published_at === null) {
+            || ! $document->isPublished()) {
             return false;
         }
 
@@ -32,5 +41,20 @@ class DocumentPolicy
                 ->activeOn()
                 ->where('parcel_id', $document->parcel_id)
                 ->exists();
+    }
+
+    public function create(User $user): bool
+    {
+        return $user->canManageDocuments();
+    }
+
+    public function update(User $user, Document $document): bool
+    {
+        return $user->canManageDocuments() && $document->archived_at === null;
+    }
+
+    public function archive(User $user, Document $document): bool
+    {
+        return $user->canManageDocuments() && $document->archived_at === null;
     }
 }

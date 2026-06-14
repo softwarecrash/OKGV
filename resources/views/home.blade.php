@@ -38,6 +38,9 @@
                         @can('viewAny', App\Models\MailCampaign::class)
                             <div class="col-md-6"><a class="btn btn-outline-primary w-100" href="{{ route('mail-campaigns.index') }}">Kommunikation verwalten</a></div>
                         @endcan
+                        @can('viewAny', App\Models\Document::class)
+                            <div class="col-md-6"><a class="btn btn-outline-primary w-100" href="{{ route('documents.index') }}">Dokumente verwalten</a></div>
+                        @endcan
                     </div>
                 </div>
             </div>

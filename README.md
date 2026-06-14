@@ -48,6 +48,11 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Verschlüsselte SMTP-Konfiguration mit Testversand
 - Allgemeine PDF-Briefe mit dauerhaftem Anschriften-Snapshot
 - PDF-Zahlungserinnerungen für fällige offene Rechnungen
+- Zentrale Dokumentenverwaltung für Verträge, Protokolle, Satzungen, Belege und Fotos
+- Private Uploads mit unveränderlicher Dateiversionshistorie
+- Granulare interne, Pächter- und öffentliche Dokumentfreigaben
+- Nicht erratbare öffentliche Freigabelinks mit sofortiger Widerrufsmöglichkeit
+- Suche, Filter und revisionsfreundliche Dokumentarchivierung
 
 Freigegebene Rechnungen sind unveränderbar. Pächterwechsel innerhalb einer
 Periode werden bis zum vollständigen Übergabeprozess bewusst nicht automatisch
@@ -117,6 +122,13 @@ SMTP-Einstellungen bereit. Eine Zahlungserinnerung erscheint an einer
 Rechnung erst nach überschrittener Fälligkeit und verändert weder
 Zahlungsstatus noch Mahnstufe. Mahngebühren und Mahnstufen folgen erst in
 Phase 8.
+
+Konten mit dem Recht `Dokumente verwalten` können Dateien unter `Dokumente`
+hochladen, Mitgliedern oder Parzellen zuordnen und gezielt veröffentlichen.
+Erlaubt sind PDF, JPEG, PNG, WebP, TXT, DOCX und XLSX bis 20 MiB. Beim
+Ersetzen einer Datei bleibt jede ältere Version erhalten. Archivieren löscht
+weder Metadaten noch Dateien, beendet aber sämtliche Freigaben. Freigegebene
+Rechnungen erscheinen dort als unveränderliche Systemdokumente.
 
 ## Entwicklung
 

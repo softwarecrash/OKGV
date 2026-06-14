@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\DocumentType;
 use App\Enums\DocumentVisibility;
 use App\Enums\InvoiceStatus;
 use App\Enums\MeterReadingSource;
@@ -368,7 +369,7 @@ class TenantPortalTest extends TestCase
             'parcel_id' => $parcel?->id,
             'uploaded_by' => $uploader->id,
             'title' => $title,
-            'type' => 'Sonstiges',
+            'type' => DocumentType::Other,
             'visibility' => $visibility,
             'file_path' => $path,
             'original_name' => basename($path),

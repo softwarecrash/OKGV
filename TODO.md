@@ -178,3 +178,18 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Feature- und Sicherheitstests ergänzen
 - [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
 - [x] Phase 7 vollständig prüfen und veröffentlichen
+
+## Phase 6: Dokumentenverwaltung
+
+- [x] Phase 6 nach der vorgezogenen Phase 7 wieder aufnehmen
+- [x] Datenmodell, Dateiversionierung und Rechtekonzept spezifizieren
+- [x] Granulares Dokumentenrecht ergänzen
+- [x] Dokumenttypen, Suche und Filter implementieren
+- [x] Sichere private Uploads und unveränderliche Dateiversionen implementieren
+- [x] Mitglieder-, Parzellen- und Sichtbarkeitszuordnung implementieren
+- [x] Veröffentlichung, öffentliche Freigabelinks und Archivierung implementieren
+- [x] Rechnungen in der Dokumentenübersicht verlinken
+- [x] Auditlogs und deutschsprachige Bedienhinweise ergänzen
+- [x] Feature-, Rechte- und Uploadtests ergänzen
+- [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
+- [ ] Phase 6 vollständig prüfen und veröffentlichen

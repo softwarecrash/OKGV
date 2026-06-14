@@ -2,6 +2,48 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.18] - 2026-06-14
+
+### Phase 6
+
+- Zentrale Dokumentenverwaltung für Pachtverträge, Übergabeprotokolle,
+  Kündigungen, Rechnungsbelege, Satzungen, Protokolle, Fotos und sonstige
+  Dokumente umgesetzt.
+- Suche sowie Filter nach Dokumenttyp, Sichtbarkeit und Archivstatus ergänzt.
+- Dokumente können Mitgliedern und Parzellen zugeordnet und intern, für
+  Pächter oder über einen nicht erratbaren öffentlichen Link freigegeben
+  werden.
+- Jede ersetzte Datei erzeugt eine unveränderliche Version; ältere Dateien
+  bleiben abrufbar und werden niemals überschrieben.
+- Archivierung beendet sämtliche Freigaben, erhält aber Metadaten und alle
+  Dateiversionen.
+- Freigegebene Rechnungen werden als unveränderliche Systemdokumente in der
+  Dokumentenübersicht verlinkt.
+
+### Security
+
+- Eigenständiges, granular zuweisbares Recht `Dokumente verwalten`
+  eingeführt.
+- Uploads liegen im privaten Storage, verwenden serverseitig erzeugte
+  Dateinamen und sind auf erlaubte Endungen, MIME-Typen und 20 MiB begrenzt.
+- Ausführbare Dateien, HTML, SVG und makrofähige Office-Dateien sind
+  ausgeschlossen.
+- Öffentliche Freigaben verwenden zufällige 64-stellige Tokens, werden nicht
+  indexiert und erlöschen beim Widerruf oder Archivieren sofort.
+- Erstellung, Änderung, neue Dateiversionen und Archivierung werden ohne
+  Dateiinhalte im Auditlog protokolliert.
+- Migrationen wurden vorwärts und rückwärts isoliert geprüft und anschließend
+  ausschließlich mit `php artisan migrate` auf MariaDB angewendet; vorhandene
+  Bestandszahlen blieben unverändert.
+
+### Tests
+
+- Rechteisolation, sichere Uploadprüfung, Pächterzuordnung,
+  Versionsbeständigkeit, öffentliche Links und Archivierungswiderruf werden
+  durch Feature-Tests abgedeckt.
+- Insgesamt bestehen 83 Tests mit 448 Assertions.
+- Entwicklungsstand auf `0.2.0.18` erhöht.
+
 ## [0.2.0.17] - 2026-06-14
 
 ### Phase 7

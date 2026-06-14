@@ -6,6 +6,7 @@ use App\Http\Controllers\BillingRateAssignmentController;
 use App\Http\Controllers\BillingRateController;
 use App\Http\Controllers\BillingRateTemplateController;
 use App\Http\Controllers\CommunicationSettingController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LetterController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\PaymentReminderController;
 use App\Http\Controllers\PaymentReturnController;
 use App\Http\Controllers\PermissionProfileController;
 use App\Http\Controllers\PortalDocumentController;
+use App\Http\Controllers\PublicDocumentController;
 use App\Http\Controllers\RegistrationRequestController;
 use App\Http\Controllers\SepaMandateController;
 use App\Http\Controllers\SepaSettingController;
@@ -49,6 +51,11 @@ Route::middleware('guest')->group(function (): void {
         ->middleware('throttle:5,10')
         ->name('tenant-registration.store');
 });
+
+Route::get('freigabe/dokument/{token}', [PublicDocumentController::class, 'download'])
+    ->where('token', '[A-Za-z0-9]{64}')
+    ->middleware('throttle:30,1')
+    ->name('documents.public');
 
 Route::get('/dashboard', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -106,6 +113,14 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         ->name('letters.pdf');
     Route::resource('letters', LetterController::class)
         ->only(['index', 'create', 'store', 'show']);
+    Route::get('documents/{document}/download', [DocumentController::class, 'download'])
+        ->name('documents.download');
+    Route::get('documents/{document}/versions/{version}', [DocumentController::class, 'downloadVersion'])
+        ->name('documents.versions.download');
+    Route::patch('documents/{document}/archive', [DocumentController::class, 'archive'])
+        ->name('documents.archive');
+    Route::resource('documents', DocumentController::class)
+        ->except(['destroy']);
     Route::post('billing-periods/{billing_period}/calculate', [BillingPeriodController::class, 'calculate'])
         ->name('billing-periods.calculate');
     Route::post('billing-periods/{billing_period}/approve', [BillingPeriodController::class, 'approve'])

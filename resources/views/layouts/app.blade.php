@@ -43,6 +43,7 @@
                                 $canViewInvoices = auth()->user()->can('viewAny', App\Models\Invoice::class);
                                 $canViewSepa = auth()->user()->can('viewAny', App\Models\SepaMandate::class);
                                 $canViewCommunication = auth()->user()->can('viewAny', App\Models\MailCampaign::class);
+                                $canViewDocuments = auth()->user()->can('viewAny', App\Models\Document::class);
                             @endphp
                             @if (auth()->user()->role === App\Enums\UserRole::Tenant)
                                 <li class="nav-item">
@@ -146,6 +147,11 @@
                                         <li><a class="dropdown-item" href="{{ route('letters.index') }}">PDF-Briefe</a></li>
                                         <li><a class="dropdown-item" href="{{ route('communication-settings.edit') }}">SMTP-Einstellungen</a></li>
                                     </ul>
+                                </li>
+                            @endif
+                            @if ($canViewDocuments)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('documents.index') }}">Dokumente</a>
                                 </li>
                             @endif
                         @endauth

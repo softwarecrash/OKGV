@@ -486,9 +486,69 @@ werden. Ohne gespeicherte Auswahl wird die Systemeinstellung verwendet.
 
 ### Phase 6: Dokumentenverwaltung
 
-Die vollständige Dokumentenverwaltung ist ausdrücklich aufgeschoben. Das
-bereits in Phase 5 angelegte Lesemodell und die privaten Downloads bleiben
-unverändert bestehen.
+#### Dokumenttypen
+
+Die zentrale Dokumentenverwaltung unterstützt:
+
+- Pachtvertrag,
+- Übergabeprotokoll,
+- Kündigung,
+- Rechnung und Rechnungsbeleg,
+- Satzung,
+- Protokoll,
+- Foto,
+- Sonstiges.
+
+Ein Dokument besitzt Titel, optionale Beschreibung, Dokumenttyp,
+Sichtbarkeit, optionalen Mitglieder- und Parzellenbezug sowie
+Veröffentlichungs- und Archivierungszeitpunkte. Die Oberfläche bietet Suche
+und Filter nach Typ, Sichtbarkeit und Archivstatus.
+
+#### Dateien und Versionen
+
+Dateien liegen ausschließlich im privaten Storage und erhalten serverseitig
+erzeugte Namen. Erlaubt sind PDF, JPEG, PNG, WebP, reine Textdateien sowie
+DOCX und XLSX bis 20 MiB. Dateiendung und vom Server erkannter MIME-Typ müssen
+zu einem erlaubten Format passen. Ausführbare, HTML-, SVG- und
+makrofähige Office-Dateien sind ausgeschlossen.
+
+Eine hochgeladene Datei wird niemals überschrieben. Beim Ersetzen entsteht
+eine neue unveränderliche Dateiversion; ältere Versionen bleiben für
+berechtigte Verwalter abrufbar. Metadatenänderungen, Veröffentlichung,
+Archivierung und jede neue Version werden auditiert. Dokumente werden nicht
+hart gelöscht.
+
+#### Sichtbarkeit und Zuordnung
+
+- `internal`: ausschließlich Benutzer mit Dokumentenrecht,
+- `tenant`: veröffentlichte Dokumente für das zugeordnete Mitglied oder
+  aktuelle Pächter der zugeordneten Parzelle,
+- `public`: veröffentlichte Dokumente über einen nicht erratbaren
+  Freigabelink ohne Indexierung.
+
+Pächterdokumente benötigen mindestens einen Mitglieder- oder Parzellenbezug.
+Die Zuordnung zu einem Mitglied bleibt dauerhaft persönlich; ein
+Parzellenbezug gewährt Portalzugriff nur während einer aktuellen Pacht.
+Öffentliche Links werden bei Rücknahme der Veröffentlichung oder
+Archivierung sofort unwirksam.
+
+#### Rechte
+
+Dokumentenverwaltung besitzt ein eigenes granulares Recht. Administratoren
+besitzen es immer. Vorstandsmitglieder erhalten es ausdrücklich oder über
+eine Rechtevorlage. Nur dieses Recht erlaubt interne Dokumente, Uploads,
+Metadatenänderungen, Dateiversionen, Veröffentlichung und Archivierung.
+Pächter behalten ausschließlich den bereits in Phase 5 definierten
+lesenden Zugriff.
+
+#### Rechnungen
+
+Freigegebene Rechnungen bleiben unveränderliche, aus den historischen
+Rechnungssnapshots erzeugte Systemdokumente. Sie werden in der zentralen
+Dokumentenübersicht verlinkt, aber nicht als veränderbare Datei dupliziert.
+Zusätzliche Rechnungsbelege können als eigener Dokumenttyp hochgeladen
+werden. Der Zugriff auf Systemrechnungen setzt weiterhin das
+Abrechnungsrecht voraus.
 
 ### Phase 7: Kommunikation
 

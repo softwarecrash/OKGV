@@ -15,6 +15,7 @@ enum UserPermission: string
     case ReviewTenantRegistrations = 'review_tenant_registrations';
     case ReviewMeterReadingSubmissions = 'review_meter_reading_submissions';
     case ManageCommunication = 'manage_communication';
+    case ManageDocuments = 'manage_documents';
 
     public function label(): string
     {
@@ -30,6 +31,7 @@ enum UserPermission: string
             self::ReviewTenantRegistrations => 'Registrierungsanfragen bearbeiten',
             self::ReviewMeterReadingSubmissions => 'Zählerstandsmeldungen prüfen',
             self::ManageCommunication => 'Kommunikation verwalten',
+            self::ManageDocuments => 'Dokumente verwalten',
         };
     }
 
@@ -47,6 +49,7 @@ enum UserPermission: string
             self::ReviewTenantRegistrations => 'Erlaubt die Freigabe oder Ablehnung neuer Pächterkonten.',
             self::ReviewMeterReadingSubmissions => 'Erlaubt die Prüfung gemeldeter Zählerstände und Fotos.',
             self::ManageCommunication => 'Erlaubt Serienmails, Versandhistorie, SMTP-Tests und allgemeine PDF-Briefe.',
+            self::ManageDocuments => 'Erlaubt private Uploads, Dateiversionen, Freigaben und die zentrale Dokumentenverwaltung.',
         };
     }
 

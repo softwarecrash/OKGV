@@ -41,6 +41,7 @@ enum UserRole: string
                 UserPermission::ReviewTenantRegistrations->value,
                 UserPermission::ReviewMeterReadingSubmissions->value,
                 UserPermission::ManageCommunication->value,
+                UserPermission::ManageDocuments->value,
             ],
             self::Treasurer => [
                 UserPermission::ViewAllMasterData->value,

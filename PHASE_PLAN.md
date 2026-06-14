@@ -80,13 +80,13 @@ vorherigen Phase geprüft sein.
 
 ## Phase 6: Dokumentenverwaltung
 
-- [ ] Auf ausdrücklichen Wunsch zugunsten von Phase 7 aufgeschoben
-- [ ] Dokumentenverwaltung
-- [ ] Verträge
-- [ ] Übergabeprotokolle
-- [ ] Satzungen
-- [ ] Rechnungen
-- [ ] Fotos
+- [x] Nach der vorgezogenen Phase 7 wieder aufgenommen
+- [x] Dokumentenverwaltung
+- [x] Verträge
+- [x] Übergabeprotokolle
+- [x] Satzungen
+- [x] Rechnungen
+- [x] Fotos
 
 ## Phase 7: Kommunikation
 
@@ -163,6 +163,5 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 5 und Phase 7 sind abgeschlossen. Phase 6 wurde auf
-ausdrücklichen Wunsch aufgeschoben. Vor Beginn der nächsten Produktphase ist
-festzulegen, ob Phase 6 nachgeholt oder mit Phase 8 fortgefahren wird.
+Die Phasen 0 bis 7 sind abgeschlossen. Als Nächstes folgt Phase 8:
+Mahnwesen.
