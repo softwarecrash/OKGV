@@ -66,7 +66,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Auditlog für Berechnung und Freigabe ergänzen
 - [x] Feature- und Unit-Tests ergänzen
 - [x] Sicherheitsprüfungen und Asset-Build ausführen
-- [ ] Entwicklungsstand 0.2.0.3 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.3 veröffentlichen
 
 ## Projektweite Standards
 

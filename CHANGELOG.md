@@ -39,6 +39,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Statussperren werden unabhängig vom globalen Administratorrecht direkt an
   den Änderungsendpunkten durchgesetzt
 - Entwicklungsstand auf `0.2.0.3` erhöht
+- Entwicklungsstand `0.2.0.3` auf GitHub veröffentlicht
 
 ## [0.2.0.2] - 2026-06-14
 
