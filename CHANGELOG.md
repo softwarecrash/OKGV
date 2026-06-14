@@ -2,6 +2,16 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.7] - 2026-06-14
+
+### Documentation
+
+- `AGENTS.md` verpflichtet alle Mitwirkenden zu selbsterklärenden deutschen
+  Oberflächen, automatischer Eingabehilfe und verständlichen Fehlermeldungen.
+- `AGENT_CODE_STYLE.md` beschreibt verbindliche UX-Regeln für Hilfetexte,
+  Formatnormalisierung, riskante Aktionen, leere Zustände und UX-Tests.
+- Entwicklungsstand auf `0.2.0.7` erhöht.
+
 ## [0.2.0.6] - 2026-06-14
 
 ### Fixed

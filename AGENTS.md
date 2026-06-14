@@ -22,6 +22,15 @@
 - Verwende Form Requests für fachliche Schreiboperationen.
 - Schreibe technische Kommentare auf Englisch.
 - Halte sichtbare Benutzeroberflächen deutsch.
+- Gestalte die Oberfläche für nichttechnische Vereinsmitglieder
+  selbsterklärend; technisches Vorwissen darf nicht vorausgesetzt werden.
+- Sichere erwartbare Fehleingaben bereits während der Eingabe ab und
+  normalisiere technische Formate automatisch, sofern dadurch keine
+  Mehrdeutigkeit entsteht.
+- Ergänze bei erklärungsbedürftigen Feldern, Statuswechseln und Fachabläufen
+  kurze deutsche Hilfetexte mit konkreten Beispielen oder Auswirkungen.
+- Formuliere Validierungsfehler fachlich verständlich und nenne nach
+  Möglichkeit direkt die erforderliche Korrektur.
 - Erstelle in frühen Entwicklungsphasen keine Docker- oder Deployment-Artefakte.
 
 ## Entwicklungsreihenfolge
@@ -41,3 +50,5 @@
 - Migrationen müssen vorwärts und rückwärts ausführbar sein.
 - Historische Fachwerte dürfen nicht überschrieben werden.
 - Sensible Uploads gehören in private Storage-Verzeichnisse.
+- Neue Formulare müssen auch ohne technisches Wissen verständlich bedienbar
+  sein und erwartbare Fehleingaben serverseitig absichern.

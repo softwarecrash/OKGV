@@ -118,6 +118,37 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 ## Blade und Benutzeroberfläche
 
 - Sichtbare Oberfläche und Meldungen sind deutsch.
+- Die primären Nutzer sind häufig nichttechnische Vorstände und Pächter.
+  Verwende keine unerklärten technischen Begriffe, Codes oder internen
+  Statuswerte.
+- Formulare müssen möglichst selbsterklärend sein. Ergänze bei Feldern mit
+  Formatvorgaben, fachlichen Folgen oder ungewöhnlichen Begriffen einen kurzen
+  `.form-text`-Hinweis.
+- Zeige bei technischen Bezeichnern ein konkretes Beispiel und erkläre
+  erlaubte Zeichen oder automatische Umwandlungen.
+- Fange erwartbare Eingabefehler möglichst bereits clientseitig ab, etwa durch
+  geeignete Eingabetypen, `min`, `max`, `step`, `maxlength`, Auswahlfelder
+  oder kleine Alpine.js-Normalisierungen.
+- Normalisiere eindeutige technische Formate während der Eingabe, wenn dies
+  verlustfrei möglich ist, beispielsweise Leerzeichen zu Unterstrichen oder
+  Codes zu Großbuchstaben.
+- Clientseitige Eingabehilfe ersetzt niemals die identische serverseitige
+  Normalisierung und Validierung im Form Request.
+- Verwirf Benutzereingaben nicht stillschweigend. Automatische Änderungen
+  müssen im Feld sichtbar werden oder durch einen Hilfetext erklärt sein.
+- Validierungsfehler nennen das betroffene Fachproblem und möglichst die
+  konkrete Lösung. Vermeide rohe Datenbank-, Regex-, Enum- oder
+  Frameworkmeldungen.
+- Deaktiviere oder verstecke nicht verfügbare Aktionen nicht kommentarlos,
+  wenn der Grund für Nutzer relevant ist. Zeige dann einen kurzen Status- oder
+  Erklärungstext.
+- Riskante oder irreversible Fachaktionen benötigen eine verständliche
+  Beschreibung ihrer Folgen und, sofern ein Fehlklick realistisch ist, eine
+  Bestätigung.
+- Leere Listen und Erstzustände enthalten einen verständlichen Hinweis und,
+  falls berechtigt, einen klaren nächsten Handlungsschritt.
+- Erfolgreiche Schreiboperationen bestätigen in Alltagssprache, was
+  gespeichert oder verändert wurde.
 - Verwende Bootstrap-5-Komponenten und die vorhandenen OKGV-Farben.
 - Halte Ansichten responsiv und verwende Tabellen in `.table-responsive`.
 - Verwende gemeinsame Partials oder Blade-Komponenten für wiederkehrende Formbereiche und Fehlerausgabe.
@@ -127,6 +158,17 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 - Falls Zeilenumbrüche dargestellt werden, verwende das bestehende Muster `{!! nl2br(e($value)) !!}`.
 - Verwende keine Inline-Skripte für Fachlogik. Alpine.js ist für kleine UI-Zustände vorgesehen.
 - Halte interne Notizen für Pächter unsichtbar.
+
+### UX-Prüfung
+
+- Prüfe neue oder geänderte Formulare aus Sicht eines Nutzers ohne
+  Programmier- oder Datenbankkenntnisse.
+- Teste automatische Normalisierung zusätzlich serverseitig mit direkten
+  Requests, damit die Funktion auch ohne JavaScript sicher arbeitet.
+- Ergänze Feature-Tests für fachlich wichtige Hilfsmechanismen,
+  Validierungsgrenzen und verständliche Fehlerzustände.
+- Achte bei mobilen Ansichten darauf, dass Hilfetexte, Fehlermeldungen und
+  Aktionsschaltflächen ohne horizontales Scrollen verständlich bleiben.
 
 ## Routen und Benennung
 
