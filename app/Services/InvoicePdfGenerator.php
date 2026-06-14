@@ -10,7 +10,7 @@ final class InvoicePdfGenerator
 {
     public function render(Invoice $invoice): string
     {
-        $invoice->loadMissing(['member', 'billingPeriod', 'items.parcel']);
+        $invoice->loadMissing(['member', 'recipients', 'billingPeriod', 'items.parcel']);
 
         $options = new Options;
         $options->set('isRemoteEnabled', false);

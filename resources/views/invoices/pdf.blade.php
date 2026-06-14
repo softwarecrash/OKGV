@@ -31,9 +31,14 @@
         <tr>
             <td>
                 <strong>Rechnung an</strong><br>
-                {{ $invoice->member->full_name }}<br>
-                {{ $invoice->member->street }}<br>
-                {{ $invoice->member->zip }} {{ $invoice->member->city }}
+                @foreach ($invoice->recipients as $recipient)
+                    {{ $recipient->full_name }}<br>
+                @endforeach
+                @php($primaryRecipient = $invoice->primaryRecipient())
+                @if ($primaryRecipient)
+                    {{ $primaryRecipient->street }}<br>
+                    {{ $primaryRecipient->zip }} {{ $primaryRecipient->city }}
+                @endif
             </td>
             <td>
                 <strong>Rechnungsnummer:</strong> {{ $invoice->invoice_number }}<br>

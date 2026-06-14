@@ -21,8 +21,12 @@ class InvoiceController extends Controller
             ->when(
                 ! $request->user()->role->canManageBilling(),
                 fn ($query) => $query
-                    ->whereHas('member', fn ($query) => $query
-                        ->where('user_id', $request->user()->id))
+                    ->where(function ($query) use ($request): void {
+                        $query->whereHas('recipients.member', fn ($query) => $query
+                            ->where('user_id', $request->user()->id))
+                            ->orWhereHas('member', fn ($query) => $query
+                                ->where('user_id', $request->user()->id));
+                    })
                     ->where('status', 'approved'),
             )
             ->latest('issued_at')
@@ -34,7 +38,7 @@ class InvoiceController extends Controller
     public function show(Invoice $invoice): View
     {
         $this->authorize('view', $invoice);
-        $invoice->load(['member', 'billingPeriod', 'items.parcel', 'approver']);
+        $invoice->load(['member', 'recipients', 'billingPeriod', 'items.parcel', 'approver']);
 
         return view('invoices.show', compact('invoice'));
     }

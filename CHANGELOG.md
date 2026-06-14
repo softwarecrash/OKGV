@@ -2,6 +2,20 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.4] - 2026-06-14
+
+### Fixed
+
+- Mehrere aktive Haupt- und Mitpächter einer Parzelle werden als gemeinsame,
+  historisierte Rechnungsempfänger modelliert.
+- Rechnungserzeugung, HTML-Ansicht, PDF und Pächterrechte berücksichtigen alle
+  aktiven Vertragsparteien der abgerechneten Parzellen.
+- Bestehende Rechnungen erhalten bei der Migration automatisch einen Snapshot
+  ihres bisherigen Hauptempfängers.
+- Eine separate SQLite-Testumgebung verhindert, dass Artisan-Testmigrationen
+  die lokale MariaDB-Entwicklungsdatenbank berühren.
+- Entwicklungsstand auf `0.2.0.4` erhöht.
+
 ## [0.2.0.3] - 2026-06-14
 
 ### Phase 3

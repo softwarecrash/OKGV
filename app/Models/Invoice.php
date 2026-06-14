@@ -72,4 +72,15 @@ class Invoice extends Model
     {
         return $this->hasMany(InvoiceItem::class);
     }
+
+    public function recipients(): HasMany
+    {
+        return $this->hasMany(InvoiceRecipient::class)->orderBy('position');
+    }
+
+    public function primaryRecipient(): ?InvoiceRecipient
+    {
+        return $this->recipients->firstWhere('is_primary', true)
+            ?? $this->recipients->first();
+    }
 }

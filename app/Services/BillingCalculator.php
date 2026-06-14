@@ -45,6 +45,7 @@ final class BillingCalculator
             $this->ensureNoTenantChanges($period);
             $period->invoices()->each(function (Invoice $invoice): void {
                 $invoice->items()->delete();
+                $invoice->recipients()->delete();
                 $invoice->delete();
             });
 
@@ -66,7 +67,18 @@ final class BillingCalculator
             foreach ($tenancies as $memberTenancies) {
                 $member = $memberTenancies->first()->member;
                 $parcels = $memberTenancies->pluck('parcel')->unique('id')->values();
-                $this->createInvoice($period, $member, $parcels, $rates);
+                $contractParties = ParcelTenant::query()
+                    ->whereIn('parcel_id', $parcels->pluck('id'))
+                    ->activeOn($period->ends_at)
+                    ->with('member')
+                    ->orderByDesc('is_primary')
+                    ->orderBy('starts_at')
+                    ->get()
+                    ->pluck('member')
+                    ->unique('id')
+                    ->values();
+
+                $this->createInvoice($period, $member, $contractParties, $parcels, $rates);
             }
 
             if ($period->invoices()->doesntExist()) {
@@ -115,11 +127,13 @@ final class BillingCalculator
 
     /**
      * @param  Collection<int, Parcel>  $parcels
+     * @param  Collection<int, Member>  $contractParties
      * @param  Collection<int, BillingRate>  $rates
      */
     private function createInvoice(
         BillingPeriod $period,
         Member $member,
+        Collection $contractParties,
         Collection $parcels,
         Collection $rates,
     ): void {
@@ -132,6 +146,24 @@ final class BillingCalculator
             'due_at' => $period->due_at,
             'total_amount' => '0.00',
         ]);
+
+        $orderedRecipients = $contractParties
+            ->sortByDesc(fn (Member $contractParty): bool => $contractParty->is($member))
+            ->values();
+
+        foreach ($orderedRecipients as $position => $contractParty) {
+            $invoice->recipients()->create([
+                'member_id' => $contractParty->id,
+                'member_number' => $contractParty->member_number,
+                'first_name' => $contractParty->first_name,
+                'last_name' => $contractParty->last_name,
+                'street' => $contractParty->street,
+                'zip' => $contractParty->zip,
+                'city' => $contractParty->city,
+                'is_primary' => $contractParty->is($member),
+                'position' => $position,
+            ]);
+        }
 
         $total = '0.00';
 

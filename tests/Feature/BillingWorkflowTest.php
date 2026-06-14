@@ -136,6 +136,55 @@ class BillingWorkflowTest extends TestCase
         $invoice->update(['total_amount' => '1.00']);
     }
 
+    public function test_all_contract_parties_are_snapshotted_on_the_shared_invoice(): void
+    {
+        [$administrator, $period, $primaryMember, $parcel] = $this->billingScenario();
+        $coTenantUser = User::factory()->create();
+        $coTenant = Member::factory()->create([
+            'user_id' => $coTenantUser->id,
+            'first_name' => 'Erika',
+            'last_name' => 'Mitpächterin',
+            'street' => 'Andere Straße 9',
+            'zip' => '54321',
+            'city' => 'Nebenstadt',
+        ]);
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $coTenant->id,
+            'starts_at' => '2021-01-01',
+            'ends_at' => null,
+            'is_primary' => false,
+        ]);
+        BillingRate::factory()->create([
+            'billing_period_id' => $period->id,
+            'code' => 'LEASE_PER_SQM',
+            'calculation_type' => BillingRateType::PerSquareMeter,
+            'scope' => BillingRateScope::Parcel,
+            'amount' => '0.5000',
+        ]);
+
+        app(BillingCalculator::class)->calculate($period, $administrator);
+        app(BillingPeriodManager::class)->approve($period->fresh(), $administrator);
+
+        $invoice = Invoice::query()->with('recipients')->firstOrFail();
+        $this->assertCount(2, $invoice->recipients);
+        $this->assertSame($primaryMember->id, $invoice->primaryRecipient()?->member_id);
+        $this->assertSame(
+            [$primaryMember->full_name, 'Erika Mitpächterin'],
+            $invoice->recipients->pluck('full_name')->all(),
+        );
+
+        $coTenant->update(['first_name' => 'Geänderter Name']);
+
+        $this->actingAs($coTenantUser)
+            ->get(route('invoices.show', $invoice))
+            ->assertOk()
+            ->assertSee('Erika Mitpächterin')
+            ->assertDontSee('Geänderter Name')
+            ->assertSee($primaryMember->street)
+            ->assertDontSee('Andere Straße 9');
+    }
+
     public function test_calculation_rejects_tenant_change_within_period(): void
     {
         $administrator = User::factory()->administrator()->create();

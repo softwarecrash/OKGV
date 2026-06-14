@@ -26,6 +26,7 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Atomare Zählerwechsel und Verbrauch über mehrere Zählersegmente
 - Abrechnungsperioden mit historischen Preisen und Zusatzkosten
 - Reproduzierbare Rechnungen aus Flächen-, Verbrauchs- und Festkosten
+- Gemeinsame Rechnungen für Haupt- und Mitpächter mit historischen Empfängerdaten
 - Freigabeschutz für Rechnungen und serverseitige PDF-Ausgabe
 
 Freigegebene Rechnungen sind unveränderbar. Pächterwechsel innerhalb einer

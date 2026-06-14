@@ -15,9 +15,14 @@
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header">Empfänger</div>
                 <div class="card-body">
-                    <strong>{{ $invoice->member->full_name }}</strong><br>
-                    {{ $invoice->member->street }}<br>
-                    {{ $invoice->member->zip }} {{ $invoice->member->city }}
+                    @foreach ($invoice->recipients as $recipient)
+                        <strong>{{ $recipient->full_name }}</strong>@if (! $loop->last)<br>@endif
+                    @endforeach
+                    @php($primaryRecipient = $invoice->primaryRecipient())
+                    @if ($primaryRecipient)
+                        <br>{{ $primaryRecipient->street }}<br>
+                        {{ $primaryRecipient->zip }} {{ $primaryRecipient->city }}
+                    @endif
                 </div>
             </div>
         </div>

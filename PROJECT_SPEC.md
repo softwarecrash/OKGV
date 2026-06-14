@@ -81,7 +81,7 @@ Die Tabelle `parcels` enthält eine eindeutige `parcel_number`, `area_sqm`, opti
 
 #### Pächterhistorie
 
-`parcel_tenants` verknüpft Parzellen und Mitglieder mit `starts_at`, optionalem `ends_at`, `is_primary` und optionalen Notizen. Historische Einträge werden nicht überschrieben oder gelöscht. `ends_at` darf nicht vor `starts_at` liegen. Aktive Zeiträume derselben Parzelle und desselben Mitglieds dürfen sich nicht überschneiden. Pro Parzelle ist höchstens ein aktiver Hauptpächter zulässig.
+`parcel_tenants` verknüpft Parzellen und Mitglieder mit `starts_at`, optionalem `ends_at`, `is_primary` und optionalen Notizen. Historische Einträge werden nicht überschrieben oder gelöscht. `ends_at` darf nicht vor `starts_at` liegen. Aktive Zeiträume derselben Parzelle und desselben Mitglieds dürfen sich nicht überschneiden. Pro Parzelle ist höchstens ein aktiver Hauptpächter zulässig. Zusätzlich dürfen beliebig viele aktive Mitpächter derselben Parzelle zugeordnet sein. Haupt- und Mitpächter gelten gemeinsam als Vertragsparteien des Pachtvertrags.
 
 #### Rechte in Phase 1
 
@@ -206,9 +206,11 @@ gleichzeitig Mitglied und Parzelle referenzieren.
 
 Eine Abrechnung wird für Mitglieder erzeugt, die am Ende der Periode
 Hauptpächter mindestens einer Parzelle sind. Die Parzellen dieses Mitglieds
-werden in einer gemeinsamen Rechnung zusammengefasst. Mitgliedsbezogene
-Kosten werden einmal, parzellenbezogene Kosten für jede zugeordnete Parzelle
-berechnet.
+werden in einer gemeinsamen Rechnung zusammengefasst. Alle am Periodenende
+aktiven Haupt- und Mitpächter dieser Parzellen werden als gemeinsame
+Rechnungsempfänger übernommen. Mitgliedsbezogene Kosten werden einmal für den
+verantwortlichen Hauptpächter, parzellenbezogene Kosten für jede zugeordnete
+Parzelle berechnet.
 
 Automatisch berechenbare Positionen:
 
@@ -232,6 +234,12 @@ Eine Rechnung besitzt mindestens Abrechnungsperiode, Mitglied, eindeutige
 Rechnungsnummer, Status `draft` oder `approved`, Rechnungsdatum,
 Fälligkeitsdatum, Gesamtbetrag, Freigabezeitpunkt und freigebenden Benutzer.
 
+`invoice_recipients` speichert für jede Vertragspartei einen unveränderlichen
+Snapshot aus Mitgliedsnummer, Vorname, Nachname und Anschrift. Der
+Hauptpächter bleibt als verantwortlicher Hauptempfänger gekennzeichnet. Auf
+der Rechnung werden alle Vertragsparteien namentlich aufgeführt; die
+Zustellanschrift stammt aus dem Snapshot des Hauptempfängers.
+
 Rechnungspositionen speichern unveränderliche Snapshots von Code,
 Bezeichnung, Berechnungsart, Menge, Einzelpreis und Positionssumme. Sie
 referenzieren Preis und Parzelle nur ergänzend. Historische Rechnungen bleiben
@@ -251,7 +259,8 @@ werden sichtbar als solche gekennzeichnet.
 - Wasserwart darf abrechnungsrelevante Zähler- und Verbrauchsdaten einsehen,
   aber keine Preise oder Rechnungen ändern.
 - Gartenwart erhält keinen Zugriff auf Finanzdaten.
-- Pächter dürfen ausschließlich eigene freigegebene Rechnungen einsehen; die
+- Pächter dürfen ausschließlich freigegebene Rechnungen einsehen, in deren
+  Empfängersnapshot sie als Vertragspartei enthalten sind; die
   Portaloberfläche dafür wird in Phase 5 umgesetzt.
 - Jede Berechnung und Freigabe wird im Auditlog protokolliert.
 

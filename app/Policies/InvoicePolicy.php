@@ -20,6 +20,11 @@ class InvoicePolicy
         }
 
         return $invoice->status === InvoiceStatus::Approved
-            && $invoice->member->user_id === $user->id;
+            && (
+                $invoice->recipients()
+                    ->whereHas('member', fn ($query) => $query->where('user_id', $user->id))
+                    ->exists()
+                || $invoice->member->user_id === $user->id
+            );
     }
 }
