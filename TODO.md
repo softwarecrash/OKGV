@@ -302,4 +302,4 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Sicheren Abbrechen-Link für Gartenwarte ergänzen
 - [x] Administrator- und Gartenwartzugriff testen
 - [x] Gesamttests, Formatter, Build und Audits ausführen
-- [ ] Nachbesserung vollständig prüfen und veröffentlichen
+- [x] Nachbesserung vollständig prüfen und veröffentlichen
