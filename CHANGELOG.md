@@ -16,6 +16,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Sichtbarkeit des Benutzernamens und Maskierung des Passworts werden durch
   einen Feature-Test abgesichert.
 - Entwicklungsstand auf `0.2.0.22` erhöht.
+- Entwicklungsstand `0.2.0.22` auf GitHub veröffentlicht.
 
 ## [0.2.0.21] - 2026-06-14
 
