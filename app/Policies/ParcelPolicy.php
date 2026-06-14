@@ -19,6 +19,7 @@ class ParcelPolicy
         }
 
         return $parcel->tenancies()
+            ->activeOn()
             ->whereHas('member', fn ($query) => $query->where('user_id', $user->id))
             ->exists();
     }

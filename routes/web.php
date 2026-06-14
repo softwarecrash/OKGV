@@ -10,13 +10,18 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MeterController;
 use App\Http\Controllers\MeterReadingController;
 use App\Http\Controllers\MeterReadingCorrectionController;
+use App\Http\Controllers\MeterReadingSubmissionController;
 use App\Http\Controllers\MeterReplacementController;
 use App\Http\Controllers\ParcelController;
 use App\Http\Controllers\ParcelTenantController;
 use App\Http\Controllers\PaymentBatchController;
 use App\Http\Controllers\PaymentReturnController;
+use App\Http\Controllers\PortalDocumentController;
+use App\Http\Controllers\RegistrationRequestController;
 use App\Http\Controllers\SepaMandateController;
 use App\Http\Controllers\SepaSettingController;
+use App\Http\Controllers\TenantPortalController;
+use App\Http\Controllers\TenantRegistrationController;
 use App\Http\Controllers\UserPermissionController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,11 +36,45 @@ Auth::routes([
     'verify' => false,
 ]);
 
+Route::middleware('guest')->group(function (): void {
+    Route::get('paechter-registrierung', [TenantRegistrationController::class, 'create'])
+        ->name('tenant-registration.create');
+    Route::post('paechter-registrierung', [TenantRegistrationController::class, 'store'])
+        ->middleware('throttle:5,10')
+        ->name('tenant-registration.store');
+});
+
 Route::get('/dashboard', [HomeController::class, 'index'])
     ->middleware('auth')
     ->name('home');
 
 Route::middleware('auth')->group(function (): void {
+    Route::get('paechterportal', [TenantPortalController::class, 'index'])
+        ->name('tenant-portal.index');
+    Route::get('paechterportal/dokumente', [PortalDocumentController::class, 'index'])
+        ->name('tenant-portal.documents');
+    Route::get('paechterportal/dokumente/{document}', [PortalDocumentController::class, 'download'])
+        ->name('tenant-portal.documents.download');
+    Route::get('registrierungsanfragen', [RegistrationRequestController::class, 'index'])
+        ->name('registration-requests.index');
+    Route::get('registrierungsanfragen/{registration_request}', [RegistrationRequestController::class, 'show'])
+        ->name('registration-requests.show');
+    Route::post('registrierungsanfragen/{registration_request}/freigeben', [RegistrationRequestController::class, 'approve'])
+        ->name('registration-requests.approve');
+    Route::post('registrierungsanfragen/{registration_request}/ablehnen', [RegistrationRequestController::class, 'reject'])
+        ->name('registration-requests.reject');
+    Route::get('zaehlerstandsmeldungen', [MeterReadingSubmissionController::class, 'index'])
+        ->name('meter-reading-submissions.index');
+    Route::get('zaehler/{meter}/stand-melden', [MeterReadingSubmissionController::class, 'create'])
+        ->name('meter-reading-submissions.create');
+    Route::post('zaehler/{meter}/stand-melden', [MeterReadingSubmissionController::class, 'store'])
+        ->name('meter-reading-submissions.store');
+    Route::get('zaehlerstandsmeldungen/{meter_reading_submission}/foto', [MeterReadingSubmissionController::class, 'photo'])
+        ->name('meter-reading-submissions.photo');
+    Route::post('zaehlerstandsmeldungen/{meter_reading_submission}/freigeben', [MeterReadingSubmissionController::class, 'approve'])
+        ->name('meter-reading-submissions.approve');
+    Route::post('zaehlerstandsmeldungen/{meter_reading_submission}/ablehnen', [MeterReadingSubmissionController::class, 'reject'])
+        ->name('meter-reading-submissions.reject');
     Route::get('user-permissions', [UserPermissionController::class, 'index'])
         ->name('user-permissions.index');
     Route::put('user-permissions/{user}', [UserPermissionController::class, 'update'])

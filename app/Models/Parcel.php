@@ -58,6 +58,11 @@ class Parcel extends Model
         return $this->hasMany(InvoiceItem::class);
     }
 
+    public function documents(): HasMany
+    {
+        return $this->hasMany(Document::class);
+    }
+
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
         return $query->when($search, function (Builder $query, string $search): void {

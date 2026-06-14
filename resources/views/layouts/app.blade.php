@@ -31,6 +31,11 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         @auth
+                            @if (auth()->user()->role === App\Enums\UserRole::Tenant)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('tenant-portal.index') }}">Mein Portal</a>
+                                </li>
+                            @endif
                             @can('viewAny', App\Models\Member::class)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('members.index') }}">Mitglieder</a>
@@ -69,6 +74,16 @@
                                         <li><a class="dropdown-item" href="{{ route('payment-batches.index') }}">Sammellastschriften</a></li>
                                         <li><a class="dropdown-item" href="{{ route('sepa-settings.edit') }}">Einstellungen</a></li>
                                     </ul>
+                                </li>
+                            @endcan
+                            @can('viewAny', App\Models\RegistrationRequest::class)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('registration-requests.index') }}">Registrierungen</a>
+                                </li>
+                            @endcan
+                            @can('viewAny', App\Models\MeterReadingSubmission::class)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('meter-reading-submissions.index') }}">Zählerstandsmeldungen</a>
                                 </li>
                             @endcan
                             @if (auth()->user()->isAdministrator())

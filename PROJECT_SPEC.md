@@ -370,7 +370,65 @@ Lastschrift-Snapshot bleibt erhalten.
 
 ### Phase 5: Pächterportal
 
-Eigene Daten, Parzellen, Dokumente, Rechnungen und Zähler sowie Zählerstandsmeldungen mit Foto und Freigabe.
+Eigene Daten, Parzellen, Dokumente, Rechnungen und Zähler sowie
+Zählerstandsmeldungen mit Foto und Freigabe.
+
+#### Registrierung und Freigabe
+
+Pächter können öffentlich eine Registrierungsanfrage mit Vorname, Nachname,
+E-Mail-Adresse, Parzellennummer und Passwort stellen. Eine Anfrage erzeugt
+noch kein aktives Benutzerkonto. Das Passwort wird ausschließlich gehasht
+gespeichert. Die öffentliche Route wird rate-limitiert und liefert keine
+internen Mitglieds- oder Pächterdaten aus.
+
+Administrator oder Vorstand prüfen die Anfrage und wählen eines der aktuell
+eingetragenen, noch nicht mit einem Benutzerkonto verbundenen Mitglieder der
+angegebenen Parzelle aus. Erst die Freigabe erzeugt ein Benutzerkonto mit der
+Rolle `tenant` und verknüpft es mit diesem Mitglied. Freigabe und Ablehnung
+werden mit Bearbeiter, Zeitpunkt und optionaler Begründung historisiert und
+auditiert. Kassierer, Wasserwart und Gartenwart dürfen Registrierungsanfragen
+nicht bearbeiten.
+
+#### Portalzugriff
+
+Das Pächterportal zeigt ausschließlich:
+
+- den eigenen Mitgliedsdatensatz ohne interne Notizen,
+- aktuell gepachtete Parzellen und deren Zähler,
+- freigegebene Rechnungen, bei denen das Mitglied als Empfänger
+  historisiert ist,
+- für das Mitglied oder seine aktuellen Parzellen freigegebene private
+  Dokumente,
+- eigene Zählerstandsmeldungen und deren Prüfstatus.
+
+Historische oder fremde Pächterzuordnungen erweitern den Portalzugriff nicht.
+Rechnungszugriff bleibt wegen der historischen Empfängersnapshots auch nach
+einem späteren Pächterwechsel erhalten.
+
+#### Dokumente im Portal
+
+Phase 5 stellt das lesende Dokumentenmodell und geschützte Downloads bereit.
+Dokumente können einem Mitglied oder einer Parzelle zugeordnet und mit der
+Sichtbarkeit `tenant` freigegeben werden. Dateien liegen ausschließlich im
+privaten Storage. Anlage, Bearbeitung, Dokumenttypen und allgemeine
+Dokumentenverwaltung folgen in Phase 6.
+
+#### Zählerstandsmeldungen
+
+Ein Pächter darf für aktive Zähler seiner aktuell gepachteten Parzellen einen
+Stand mit Ablesedatum, optionaler Notiz und optionalem Foto melden. Erlaubt
+sind JPEG, PNG und WebP bis 8 MiB. Uploads werden anhand von MIME-Typ und
+Größe geprüft, erhalten serverseitig erzeugte Dateinamen und liegen im
+privaten Storage.
+
+Eine Meldung ist zunächst `pending` und verändert die abrechnungsrelevante
+Zählerhistorie nicht. Administrator, Vorstand oder Wasserwart können sie
+bestätigen oder mit Begründung ablehnen. Bei Bestätigung prüft dieselbe
+Geschäftslogik wie bei einer manuellen Erfassung Laufzeit, Reihenfolge und
+Plausibilität und erzeugt anschließend einen Zählerstand mit Quelle
+`tenant`. Meldung, Prüfung und erzeugter Zählerstand bleiben dauerhaft
+verknüpft und werden auditiert. Pächter können Meldungen nach dem Absenden
+nicht verändern oder löschen.
 
 ### Phase 6: Dokumente und Kommunikation
 

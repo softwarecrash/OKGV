@@ -2,6 +2,43 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.13] - 2026-06-14
+
+### Phase 5
+
+- Rate-limitierte Pächterregistrierung mit Parzellennummer hinzugefügt.
+- Freigabe- und Ablehnungsworkflow für Administrator und Vorstand
+  implementiert.
+- Pächterkonten werden erst nach Prüfung gegen einen aktiven Pachtvertrag
+  erstellt und mit genau einem Mitglied verknüpft.
+- Pächterportal für eigene Mitgliedsdaten, aktuelle Parzellen, aktive Zähler,
+  freigegebene Rechnungen und Dokumente hinzugefügt.
+- Zählerstandsmeldungen mit optionalem Foto und Prüfstatus implementiert.
+- Bestätigung und Ablehnung durch Administrator, Vorstand oder Wasserwart
+  ergänzt; erst bestätigte Meldungen erzeugen einen offiziellen Zählerstand.
+- Lesendes Dokumentenmodell als Grundlage für die Verwaltung in Phase 6
+  hinzugefügt.
+
+### Security
+
+- Registrierungskennwörter werden gehasht und nach Bearbeitung der Anfrage
+  aus dem Anfragedatensatz entfernt.
+- Ehemalige Pächter verlieren den Zugriff auf Parzellen und Zähler mit Ende
+  ihrer Pächterzuordnung.
+- Zählerfotos und Dokumente liegen im privaten Storage und werden nur über
+  Policy-geschützte Download-Routen ausgeliefert.
+- Foto-Uploads sind auf JPEG, PNG und WebP bis 8 MiB beschränkt;
+  ausführbare Uploads werden abgewiesen.
+- Registrierungen, Freigaben, Ablehnungen und Zählerstandsmeldungen werden
+  auditiert, ohne Passwörter oder Dateiinhalte zu protokollieren.
+
+### Tests
+
+- Registrierung, Rollenrechte, aktive Pachtzuordnung, Fremdzugriff,
+  Dokumentisolation, Uploadprüfung und Ablesefreigabe werden durch
+  Feature-Tests abgedeckt.
+- Entwicklungsstand auf `0.2.0.13` erhöht.
+
 ## [0.2.0.12] - 2026-06-14
 
 ### Phase 4

@@ -55,6 +55,26 @@ class User extends Authenticatable
         return $this->hasMany(MeterReadingCorrection::class, 'corrected_by');
     }
 
+    public function meterReadingSubmissions(): HasMany
+    {
+        return $this->hasMany(MeterReadingSubmission::class, 'submitted_by');
+    }
+
+    public function reviewedMeterReadingSubmissions(): HasMany
+    {
+        return $this->hasMany(MeterReadingSubmission::class, 'reviewed_by');
+    }
+
+    public function reviewedRegistrationRequests(): HasMany
+    {
+        return $this->hasMany(RegistrationRequest::class, 'reviewed_by');
+    }
+
+    public function uploadedDocuments(): HasMany
+    {
+        return $this->hasMany(Document::class, 'uploaded_by');
+    }
+
     public function canCorrectMeterReadings(): bool
     {
         return in_array($this->role, [UserRole::Administrator, UserRole::Board], true)

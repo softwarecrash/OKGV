@@ -20,8 +20,11 @@ class ParcelController extends Controller
             ->when(
                 ! $request->user()->role->canViewAllMasterData(),
                 fn ($query) => $query->whereHas(
-                    'tenancies.member',
-                    fn ($query) => $query->where('user_id', $request->user()->id),
+                    'tenancies',
+                    fn ($query) => $query
+                        ->activeOn()
+                        ->whereHas('member', fn ($query) => $query
+                            ->where('user_id', $request->user()->id)),
                 ),
             )
             ->search($request->string('q')->trim()->toString())

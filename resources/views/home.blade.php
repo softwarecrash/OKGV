@@ -17,6 +17,9 @@
                     <h1 class="h4">Willkommen bei OKGV</h1>
                     <p class="text-secondary">Wähle den Bereich aus, in dem du arbeiten möchtest. Angezeigte Funktionen richten sich nach deinen Berechtigungen.</p>
                     <div class="row g-3">
+                        @if (auth()->user()->role === App\Enums\UserRole::Tenant)
+                            <div class="col-12"><a class="btn btn-primary w-100" href="{{ route('tenant-portal.index') }}">Mein Pächterportal öffnen</a></div>
+                        @endif
                         @can('viewAny', App\Models\Member::class)
                             <div class="col-md-6"><a class="btn btn-primary w-100" href="{{ route('members.index') }}">Mitglieder verwalten</a></div>
                         @endcan

@@ -26,8 +26,11 @@ class MeterController extends Controller
             ->when(
                 ! $request->user()->role->canViewAllMeters(),
                 fn ($query) => $query->whereHas(
-                    'parcel.tenancies.member',
-                    fn ($query) => $query->where('user_id', $request->user()->id),
+                    'parcel.tenancies',
+                    fn ($query) => $query
+                        ->activeOn()
+                        ->whereHas('member', fn ($query) => $query
+                            ->where('user_id', $request->user()->id)),
                 ),
             )
             ->search($request->string('q')->trim()->toString())

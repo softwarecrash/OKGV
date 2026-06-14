@@ -57,4 +57,14 @@ enum UserRole: string
     {
         return in_array($this, [self::Administrator, self::Board, self::Treasurer], true);
     }
+
+    public function canReviewTenantRegistrations(): bool
+    {
+        return in_array($this, [self::Administrator, self::Board], true);
+    }
+
+    public function canReviewMeterReadingSubmissions(): bool
+    {
+        return in_array($this, [self::Administrator, self::Board, self::WaterManager], true);
+    }
 }

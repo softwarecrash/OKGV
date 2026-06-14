@@ -50,6 +50,11 @@ class Meter extends Model
         return $this->hasMany(MeterReading::class);
     }
 
+    public function readingSubmissions(): HasMany
+    {
+        return $this->hasMany(MeterReadingSubmission::class);
+    }
+
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
         return $query->when($search, function (Builder $query, string $search): void {

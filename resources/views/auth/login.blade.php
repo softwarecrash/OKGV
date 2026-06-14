@@ -69,6 +69,11 @@
                             </div>
                         </div>
                     </form>
+                    <hr>
+                    <p class="mb-0 text-center">
+                        Noch kein Pächterkonto?
+                        <a href="{{ route('tenant-registration.create') }}">Zugang mit Parzellennummer beantragen</a>
+                    </p>
                 </div>
             </div>
         </div>

@@ -58,11 +58,13 @@ vorherigen Phase geprüft sein.
 
 ## Phase 5: Pächterportal
 
-- [ ] Pächterportal
-- [ ] Eigene Rechnungen
-- [ ] Eigene Dokumente
-- [ ] Eigene Zählerstände
-- [ ] Zählerstände mit Foto melden
+- [x] Pächterportal
+- [x] Pächter können sich mit ihrer Parzellennummer registrieren
+- [x] Zuordnung muss durch Vorstand oder Administrator bestätigt werden
+- [x] Eigene Rechnungen
+- [x] Eigene Dokumente
+- [x] Eigene Zählerstände
+- [x] Zählerstände mit Foto melden
 
 ## Phase 6: Dokumentenverwaltung
 
@@ -146,5 +148,5 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 4 sind abgeschlossen. Als nächste Produktphase wird
-ausschließlich Phase 5: Pächterportal geplant und umgesetzt.
+Die Phasen 0 bis 5 sind abgeschlossen. Als nächste Produktphase wird
+ausschließlich Phase 6: Dokumentenverwaltung geplant und umgesetzt.

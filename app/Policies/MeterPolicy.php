@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Enums\MeterStatus;
+use App\Enums\UserRole;
 use App\Models\Meter;
 use App\Models\User;
 
@@ -19,6 +21,7 @@ class MeterPolicy
         }
 
         return $meter->parcel->tenancies()
+            ->activeOn()
             ->whereHas('member', fn ($query) => $query->where('user_id', $user->id))
             ->exists();
     }
@@ -36,5 +39,17 @@ class MeterPolicy
     public function replace(User $user, Meter $meter): bool
     {
         return $user->role->canManageMeters();
+    }
+
+    public function submitReading(User $user, Meter $meter): bool
+    {
+        if ($user->role !== UserRole::Tenant || $meter->status !== MeterStatus::Active) {
+            return false;
+        }
+
+        return $meter->parcel->tenancies()
+            ->activeOn()
+            ->whereHas('member', fn ($query) => $query->where('user_id', $user->id))
+            ->exists();
     }
 }

@@ -33,6 +33,10 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Verschlüsselte SEPA-Mandate und Vereinsbankdaten
 - Sammellastschriften als pain.008.001.08-XML
 - Zahlungsstatus und historisierte Rücklastschriften
+- Pächterregistrierung mit verbindlicher Freigabe durch Vorstand oder Administrator
+- Isoliertes Pächterportal für eigene Daten, Parzellen und Rechnungen
+- Private Dokumentdownloads für Mitglieder und aktuelle Parzellen
+- Prüfpflichtige Zählerstandsmeldungen mit optionalem privatem Foto
 
 Freigegebene Rechnungen sind unveränderbar. Pächterwechsel innerhalb einer
 Periode werden bis zum vollständigen Übergabeprozess bewusst nicht automatisch
@@ -68,6 +72,11 @@ php artisan serve
 
 Die Anwendung ist danach standardmäßig unter `http://127.0.0.1:8000` erreichbar.
 Für die Frontend-Entwicklung kann parallel `npm run dev` gestartet werden.
+
+Pächter beantragen ihren Zugang über `/paechter-registrierung`. Ein
+Administrator oder Vorstandsmitglied muss die Anfrage anschließend unter
+`/registrierungsanfragen` einem aktuell eingetragenen Mitglied zuordnen und
+freigeben.
 
 ## Entwicklung
 

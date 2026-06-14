@@ -130,3 +130,20 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Migration vorwärts und rückwärts prüfen
 - [x] Phase 4 vollständig prüfen
 - [x] Entwicklungsstand 0.2.0.12 veröffentlichen
+
+## Phase 5: Pächterportal
+
+- [x] Datenmodell und Rechtekonzept vollständig spezifizieren
+- [x] Öffentliche, rate-limitierte Registrierungsanfragen implementieren
+- [x] Freigabe und Ablehnung durch Administrator oder Vorstand implementieren
+- [x] Sichere Benutzer- und Mitgliedszuordnung gegen aktive Pachtverträge prüfen
+- [x] Pächterdashboard für eigene Daten und aktuelle Parzellen implementieren
+- [x] Eigene freigegebene Rechnungen in das Portal integrieren
+- [x] Lesenden Dokumentenzugriff mit privaten Downloads vorbereiten
+- [x] Zählerstandsmeldungen mit privatem Foto-Upload implementieren
+- [x] Bestätigung und Ablehnung durch Vorstand oder Wasserwart implementieren
+- [x] Auditlogs für Registrierung und Zählerstandsmeldungen ergänzen
+- [x] Fremdzugriff, Uploads und Statusübergänge testen
+- [x] Migration vorwärts und rückwärts prüfen
+- [x] Phase 5 vollständig prüfen
+- [x] Entwicklungsstand 0.2.0.13 veröffentlichen
