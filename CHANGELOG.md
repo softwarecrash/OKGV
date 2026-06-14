@@ -37,6 +37,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Navigationsgruppen, Rollenfilter, Aktionszahlen, Rechteverwaltung und
   Theme-Schalter werden durch Feature-Tests abgedeckt.
 - Entwicklungsstand auf `0.2.0.14` erhöht.
+- Entwicklungsstand `0.2.0.14` auf GitHub veröffentlicht.
 
 ## [0.2.0.13] - 2026-06-14
 
