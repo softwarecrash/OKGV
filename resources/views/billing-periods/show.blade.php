@@ -11,7 +11,7 @@
             </span>
         </div>
         <div class="d-flex flex-wrap gap-2">
-            @if ($billingPeriod->isMutable())
+            @if ($billingPeriod->isEditable())
                 @can('update', $billingPeriod)
                     <a class="btn btn-outline-primary" href="{{ route('billing-periods.edit', $billingPeriod) }}">Bearbeiten</a>
                     <a class="btn btn-primary" href="{{ route('billing-periods.billing-rates.create', $billingPeriod) }}">Preis anlegen</a>
@@ -19,7 +19,9 @@
                 @can('calculate', $billingPeriod)
                     <form method="POST" action="{{ route('billing-periods.calculate', $billingPeriod) }}" onsubmit="return confirm('Abrechnung jetzt neu berechnen? Vorhandene Entwürfe dieser Periode werden durch die aktuelle Berechnung ersetzt.')">
                         @csrf
-                        <button class="btn btn-success">Abrechnung berechnen</button>
+                        <button class="btn btn-success">
+                            {{ $billingPeriod->status === App\Enums\BillingPeriodStatus::Calculated ? 'Zwischenstand neu berechnen' : 'Zwischenstand berechnen' }}
+                        </button>
                     </form>
                 @endcan
             @endif
@@ -42,6 +44,16 @@
         </div>
     </div>
 
+    @if ($billingPeriod->status === App\Enums\BillingPeriodStatus::Draft)
+        <div class="alert alert-info">
+            Preise und Zuordnungen können noch geändert werden. „Zwischenstand berechnen“ erzeugt prüfbare Rechnungsentwürfe und ist beliebig oft wiederholbar.
+        </div>
+    @elseif ($billingPeriod->status === App\Enums\BillingPeriodStatus::Calculated)
+        <div class="alert alert-warning">
+            <strong>Prüfbarer Zwischenstand:</strong> Die Rechnungen sind noch nicht endgültig. Eine Änderung an Zeitraum, Preisen oder Zuordnungen verwirft diese Entwürfe automatisch; danach kann neu berechnet werden. Erst „Rechnungen freigeben“ ist endgültig.
+        </div>
+    @endif
+
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header">Preise</div>
         <div class="table-responsive">
@@ -56,7 +68,7 @@
                             <td>{{ $rate->scope->label() }}</td>
                             <td>{{ number_format((float) $rate->amount, 4, ',', '.') }} €</td>
                             <td class="text-end">
-                                @if ($billingPeriod->isMutable())
+                                @if ($billingPeriod->isEditable())
                                     @can('update', $rate)
                                         <a class="btn btn-sm btn-outline-primary" href="{{ route('billing-periods.billing-rates.edit', [$billingPeriod, $rate]) }}">Bearbeiten</a>
                                     @endcan
@@ -85,7 +97,7 @@
                                         <p class="text-secondary mb-0 mt-2">Noch keine Zuordnung. Dieser Preis erzeugt erst eine Position, nachdem unten ein Mitglied oder eine Parzelle gewählt wurde.</p>
                                     @endforelse
 
-                                    @if ($billingPeriod->isMutable())
+                                    @if ($billingPeriod->isEditable())
                                         <form class="row g-2 mt-2" method="POST" action="{{ route('billing-rate-assignments.store', $rate) }}">
                                             @csrf
                                             <div class="col-md-4">
@@ -141,7 +153,7 @@
                             <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ route('invoices.show', $invoice) }}">Öffnen</a></td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="text-center py-4"><strong>Noch keine Rechnungen berechnet.</strong><br><span class="text-secondary">Im Entwurf kannst du Preise prüfen und anschließend über „Abrechnung berechnen“ Rechnungsvorschläge erzeugen.</span></td></tr>
+                        <tr><td colspan="5" class="text-center py-4"><strong>Noch keine Rechnungen berechnet.</strong><br><span class="text-secondary">Im Entwurf kannst du Preise prüfen und anschließend über „Zwischenstand berechnen“ Rechnungsvorschläge erzeugen.</span></td></tr>
                     @endforelse
                 </tbody>
             </table>

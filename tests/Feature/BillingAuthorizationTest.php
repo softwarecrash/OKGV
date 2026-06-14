@@ -79,7 +79,7 @@ class BillingAuthorizationTest extends TestCase
         $this->assertDatabaseCount('billing_periods', 1);
     }
 
-    public function test_administrator_cannot_change_rates_after_period_calculation(): void
+    public function test_changing_rate_after_calculation_discards_drafts_and_returns_to_draft(): void
     {
         $administrator = User::factory()->administrator()->create();
         $period = BillingPeriod::factory()->create([
@@ -90,10 +90,14 @@ class BillingAuthorizationTest extends TestCase
             'billing_period_id' => $period->id,
             'code' => 'MEMBER_FEE',
         ]);
+        $invoice = Invoice::factory()->create([
+            'billing_period_id' => $period->id,
+            'status' => InvoiceStatus::Draft,
+        ]);
 
         $this->actingAs($administrator)
             ->get(route('billing-periods.billing-rates.edit', [$period, $rate]))
-            ->assertForbidden();
+            ->assertOk();
 
         $this->actingAs($administrator)
             ->put(route('billing-periods.billing-rates.update', [$period, $rate]), [
@@ -104,9 +108,16 @@ class BillingAuthorizationTest extends TestCase
                 'amount' => '1.0000',
                 'is_active' => '1',
             ])
-            ->assertForbidden();
+            ->assertRedirect(route('billing-periods.show', $period));
 
-        $this->assertSame('MEMBER_FEE', $rate->fresh()->code);
+        $this->assertSame('CHANGED', $rate->fresh()->code);
+        $this->assertSame(BillingPeriodStatus::Draft, $period->fresh()->status);
+        $this->assertNull($period->fresh()->calculated_at);
+        $this->assertModelMissing($invoice);
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'billing.period.calculation_discarded',
+            'subject_id' => $period->id,
+        ]);
     }
 
     public function test_billing_rate_code_replaces_whitespace_with_underscores(): void

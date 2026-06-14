@@ -7,6 +7,9 @@
 
 <div class="alert alert-info">
     Ein Preis beschreibt eine Rechnungsposition. Berechnungsart und Geltungsbereich bestimmen gemeinsam, für wen und in welcher Menge sie berechnet wird.
+    @if ($billingPeriod->status === App\Enums\BillingPeriodStatus::Calculated)
+        Beim Speichern wird der bisherige Zwischenstand verworfen. Anschließend muss die Periode neu berechnet werden.
+    @endif
 </div>
 
 <div class="row g-3">

@@ -24,12 +24,12 @@ class BillingPeriodPolicy
 
     public function update(User $user, BillingPeriod $period): bool
     {
-        return $user->role->canManageBilling() && $period->isMutable();
+        return $user->role->canManageBilling() && $period->isEditable();
     }
 
     public function calculate(User $user, BillingPeriod $period): bool
     {
-        return $user->role->canManageBilling() && $period->isMutable();
+        return $user->role->canManageBilling() && $period->canBeCalculated();
     }
 
     public function approve(User $user, BillingPeriod $period): bool

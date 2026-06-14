@@ -2,6 +2,30 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.9] - 2026-06-14
+
+### Changed
+
+- „Zwischenstand berechnen“ kann vor der Rechnungsfreigabe beliebig oft
+  ausgeführt werden.
+- Abrechnungsperioden, Preise und Preiszuordnungen bleiben im berechneten
+  Zwischenstand bearbeitbar.
+- Änderungen an einem berechneten Zwischenstand verwerfen ausschließlich
+  dessen nicht freigegebene Rechnungsentwürfe und setzen die Periode auf
+  `draft` zurück.
+- Das Verwerfen eines Zwischenstands wird mit Anlass und Anzahl der
+  betroffenen Entwürfe im Auditlog dokumentiert.
+- Oberfläche und PDF kennzeichnen nicht freigegebene Rechnungen eindeutig als
+  veränderlichen Zwischenstand.
+- Erst die Rechnungsfreigabe sperrt Periode, Preise, Zuordnungen und
+  Rechnungssnapshots dauerhaft.
+
+### Tests
+
+- Wiederholte Berechnung sowie das sichere Zurücksetzen nach Preisänderungen
+  werden durch Feature-Tests abgedeckt.
+- Entwicklungsstand auf `0.2.0.9` erhöht.
+
 ## [0.2.0.8] - 2026-06-14
 
 ### Changed

@@ -136,6 +136,34 @@ class BillingWorkflowTest extends TestCase
         $invoice->update(['total_amount' => '1.00']);
     }
 
+    public function test_calculated_intermediate_result_can_be_recalculated(): void
+    {
+        [$administrator, $period] = $this->billingScenario();
+        BillingRate::factory()->create([
+            'billing_period_id' => $period->id,
+            'code' => 'MEMBER_FEE',
+            'calculation_type' => BillingRateType::Fixed,
+            'scope' => BillingRateScope::Member,
+            'amount' => '25.0000',
+        ]);
+
+        app(BillingCalculator::class)->calculate($period, $administrator);
+        $firstInvoice = Invoice::query()->firstOrFail();
+
+        app(BillingCalculator::class)->calculate($period->fresh(), $administrator);
+
+        $this->assertSame(BillingPeriodStatus::Calculated, $period->fresh()->status);
+        $this->assertDatabaseCount('invoices', 1);
+        $this->assertModelMissing($firstInvoice);
+        $this->assertSame(
+            2,
+            \App\Models\AuditLog::query()
+                ->where('action', 'billing.period.calculated')
+                ->where('subject_id', $period->id)
+                ->count(),
+        );
+    }
+
     public function test_all_contract_parties_are_snapshotted_on_the_shared_invoice(): void
     {
         [$administrator, $period, $primaryMember, $parcel] = $this->billingScenario();

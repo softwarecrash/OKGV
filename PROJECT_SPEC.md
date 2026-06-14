@@ -183,10 +183,17 @@ Enddatum, ein Fälligkeitsdatum und einen Status: `draft`, `calculated`,
 `approved` oder `archived`. Berechnung, Freigabe und Archivierung werden mit
 eigenen Zeitstempeln dokumentiert.
 
-Abrechnungsperioden dürfen sich zeitlich nicht überschneiden. Preise und
-Zuordnungen dürfen nur im Status `draft` geändert werden. Die Berechnung
-erzeugt reproduzierbare Rechnungsentwürfe. Eine Freigabe ist nur nach einer
-erfolgreichen Berechnung möglich.
+Abrechnungsperioden dürfen sich zeitlich nicht überschneiden. Preise,
+Zuordnungen und Periodendaten dürfen in den Status `draft` und `calculated`
+geändert werden. Die Berechnung erzeugt einen reproduzierbaren,
+beliebig oft erneuerbaren Zwischenstand aus Rechnungsentwürfen.
+
+Wird ein bereits berechneter Zwischenstand geändert, werden ausschließlich
+die noch nicht freigegebenen Rechnungsentwürfe samt Positionen und
+Empfängersnapshots verworfen. Die Periode wechselt auditierbar zurück auf
+`draft` und muss anschließend neu berechnet werden. Eine Freigabe ist nur
+nach einer erfolgreichen Berechnung möglich. Ab `approved` sind Periode,
+Preise, Zuordnungen und Rechnungen dauerhaft unveränderbar.
 
 #### Historische Preise
 

@@ -69,7 +69,7 @@ class BillingPeriodController extends Controller
     public function edit(BillingPeriod $billingPeriod): View
     {
         $this->authorize('update', $billingPeriod);
-        abort_unless($billingPeriod->isMutable(), 403);
+        abort_unless($billingPeriod->isEditable(), 403);
 
         return view('billing-periods.edit', compact('billingPeriod'));
     }
@@ -78,7 +78,11 @@ class BillingPeriodController extends Controller
         BillingPeriodRequest $request,
         BillingPeriod $billingPeriod,
     ): RedirectResponse {
-        $period = $this->periodManager->save($request->validated(), $billingPeriod);
+        $period = $this->periodManager->save(
+            $request->validated(),
+            $billingPeriod,
+            $request->user(),
+        );
         AuditLogger::log('billing.period.updated', $request->user(), $period);
 
         return redirect()->route('billing-periods.show', $period)
@@ -92,7 +96,7 @@ class BillingPeriodController extends Controller
         $this->authorize('calculate', $billingPeriod);
         $this->billingCalculator->calculate($billingPeriod, $request->user());
 
-        return back()->with('status', 'Abrechnungsperiode wurde berechnet.');
+        return back()->with('status', 'Zwischenstand wurde berechnet. Die Rechnungsentwürfe können geprüft und bei Bedarf neu berechnet werden.');
     }
 
     public function approve(

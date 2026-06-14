@@ -77,6 +77,11 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Entwicklungsstand 0.2.0.4 veröffentlichen
 - [x] Technische Preiscodes bei der Eingabe automatisch normalisieren
 - [x] Entwicklungsstand 0.2.0.6 veröffentlichen
+- [x] Wiederholbare Rechnungszwischenstände ermöglichen
+- [x] Veraltete Rechnungsentwürfe bei Änderungen sicher und auditierbar verwerfen
+- [x] Abrechnung erst mit der Rechnungsfreigabe dauerhaft sperren
+- [x] Wiederholte Berechnung und Rücksetzung durch Tests absichern
+- [x] Entwicklungsstand 0.2.0.9 veröffentlichen
 
 ## Projektweite Standards
 

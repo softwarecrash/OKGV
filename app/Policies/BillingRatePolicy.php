@@ -14,7 +14,7 @@ class BillingRatePolicy
 
     public function update(User $user, BillingRate $rate): bool
     {
-        return $user->role->canManageBilling() && $rate->billingPeriod->isMutable();
+        return $user->role->canManageBilling() && $rate->billingPeriod->isEditable();
     }
 
     public function delete(User $user, BillingRate $rate): bool

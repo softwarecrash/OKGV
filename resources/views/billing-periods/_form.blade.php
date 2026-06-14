@@ -6,7 +6,7 @@
 <x-validation-errors />
 
 <div class="alert alert-info">
-    Eine Abrechnungsperiode umfasst einen eindeutigen Zeitraum. Nach der Freigabe sind Zeitraum, Preise und Rechnungen nicht mehr veränderbar.
+    Eine Abrechnungsperiode umfasst einen eindeutigen Zeitraum. Änderungen an einem bereits berechneten Zwischenstand verwerfen die bisherigen Rechnungsentwürfe automatisch. Nach der Freigabe ist keine Änderung mehr möglich.
 </div>
 
 <div class="mb-3">

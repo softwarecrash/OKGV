@@ -5,7 +5,9 @@ namespace App\Services;
 use App\Enums\BillingPeriodStatus;
 use App\Enums\InvoiceStatus;
 use App\Models\BillingPeriod;
+use App\Models\Invoice;
 use App\Models\User;
+use Closure;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -14,14 +16,22 @@ final class BillingPeriodManager
     /**
      * @param  array<string, mixed>  $data
      */
-    public function save(array $data, ?BillingPeriod $period = null): BillingPeriod
+    public function save(
+        array $data,
+        ?BillingPeriod $period = null,
+        ?User $actor = null,
+    ): BillingPeriod
     {
-        return DB::transaction(function () use ($data, $period): BillingPeriod {
+        return DB::transaction(function () use ($data, $period, $actor): BillingPeriod {
             BillingPeriod::query()->lockForUpdate()->get();
 
-            if ($period && ! $period->isMutable()) {
+            if ($period) {
+                $period = BillingPeriod::query()->lockForUpdate()->findOrFail($period->id);
+            }
+
+            if ($period && ! $period->isEditable()) {
                 throw ValidationException::withMessages([
-                    'status' => 'Nur Abrechnungsperioden im Entwurf dürfen geändert werden.',
+                    'status' => 'Nur Entwürfe und berechnete Zwischenstände dürfen geändert werden.',
                 ]);
             }
 
@@ -40,7 +50,40 @@ final class BillingPeriodManager
             $period ??= new BillingPeriod;
             $period->fill($data)->save();
 
+            if ($period->status === BillingPeriodStatus::Calculated) {
+                $this->discardCalculation(
+                    $period,
+                    $actor,
+                    'billing_period_updated',
+                );
+            }
+
             return $period;
+        });
+    }
+
+    public function changeCalculationInputs(
+        BillingPeriod $period,
+        User $actor,
+        string $reason,
+        Closure $change,
+    ): mixed {
+        return DB::transaction(function () use ($period, $actor, $reason, $change): mixed {
+            $period = BillingPeriod::query()->lockForUpdate()->findOrFail($period->id);
+
+            if (! $period->isEditable()) {
+                throw ValidationException::withMessages([
+                    'status' => 'Freigegebene oder archivierte Abrechnungen können nicht mehr geändert werden.',
+                ]);
+            }
+
+            $result = $change($period);
+
+            if ($period->status === BillingPeriodStatus::Calculated) {
+                $this->discardCalculation($period, $actor, $reason);
+            }
+
+            return $result;
         });
     }
 
@@ -116,5 +159,45 @@ final class BillingPeriodManager
 
             return $period;
         });
+    }
+
+    private function discardCalculation(
+        BillingPeriod $period,
+        ?User $actor,
+        string $reason,
+    ): void {
+        if ($period->invoices()->where('status', InvoiceStatus::Approved)->exists()) {
+            throw ValidationException::withMessages([
+                'status' => 'Die Periode enthält bereits freigegebene Rechnungen und kann nicht zurückgesetzt werden.',
+            ]);
+        }
+
+        $drafts = $period->invoices()
+            ->where('status', InvoiceStatus::Draft)
+            ->lockForUpdate()
+            ->get();
+
+        foreach ($drafts as $invoice) {
+            $invoice->items()->delete();
+            $invoice->recipients()->delete();
+            $invoice->delete();
+        }
+
+        $period->update([
+            'status' => BillingPeriodStatus::Draft,
+            'calculated_at' => null,
+        ]);
+
+        if ($actor) {
+            AuditLogger::log(
+                action: 'billing.period.calculation_discarded',
+                actor: $actor,
+                subject: $period,
+                metadata: [
+                    'invoice_count' => $drafts->count(),
+                    'reason' => $reason,
+                ],
+            );
+        }
     }
 }

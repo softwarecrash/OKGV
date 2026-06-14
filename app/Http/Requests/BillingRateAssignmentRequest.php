@@ -37,10 +37,10 @@ class BillingRateAssignmentRequest extends FormRequest
                     );
                 }
 
-                if (! $rate->billingPeriod->isMutable()) {
+                if (! $rate->billingPeriod->isEditable()) {
                     $validator->errors()->add(
                         'billing_rate',
-                        'Zuordnungen können nur im Entwurf geändert werden.',
+                        'Zuordnungen können nur vor der Rechnungsfreigabe geändert werden.',
                     );
                 }
 

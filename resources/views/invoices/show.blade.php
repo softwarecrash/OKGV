@@ -41,7 +41,7 @@
     </div>
 
     @if ($invoice->status === App\Enums\InvoiceStatus::Draft)
-        <div class="alert alert-warning"><strong>Noch nicht freigegeben:</strong> Dieser Entwurf kann durch eine erneute Berechnung ersetzt werden und darf noch nicht als endgültige Rechnung versendet werden.</div>
+        <div class="alert alert-warning"><strong>Noch nicht freigegeben:</strong> Dieser Zwischenstand kann beliebig oft neu berechnet oder durch Änderungen an Preisen und Zuordnungen verworfen werden. Er darf noch nicht als endgültige Rechnung versendet werden.</div>
     @endif
 
     <div class="card border-0 shadow-sm">

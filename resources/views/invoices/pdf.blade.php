@@ -21,7 +21,7 @@
 </head>
 <body>
     @if ($invoice->status === App\Enums\InvoiceStatus::Draft)
-        <div class="draft">ENTWURF – NICHT FREIGEGEBEN</div>
+        <div class="draft">ZWISCHENSTAND – NICHT FREIGEGEBEN</div>
     @endif
 
     <h1>OKGV</h1>

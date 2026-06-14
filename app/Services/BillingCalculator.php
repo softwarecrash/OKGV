@@ -30,9 +30,9 @@ final class BillingCalculator
         return DB::transaction(function () use ($period, $actor): BillingPeriod {
             $period = BillingPeriod::query()->lockForUpdate()->findOrFail($period->id);
 
-            if ($period->status !== BillingPeriodStatus::Draft) {
+            if (! $period->canBeCalculated()) {
                 throw ValidationException::withMessages([
-                    'status' => 'Nur eine Abrechnungsperiode im Entwurf kann berechnet werden.',
+                    'status' => 'Freigegebene oder archivierte Abrechnungen können nicht neu berechnet werden.',
                 ]);
             }
 

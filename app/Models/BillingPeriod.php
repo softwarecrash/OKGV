@@ -47,8 +47,16 @@ class BillingPeriod extends Model
         return $this->hasMany(Invoice::class);
     }
 
-    public function isMutable(): bool
+    public function isEditable(): bool
     {
-        return $this->status === BillingPeriodStatus::Draft;
+        return in_array($this->status, [
+            BillingPeriodStatus::Draft,
+            BillingPeriodStatus::Calculated,
+        ], true);
+    }
+
+    public function canBeCalculated(): bool
+    {
+        return $this->isEditable();
     }
 }

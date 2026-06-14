@@ -15,6 +15,6 @@ class BillingRateAssignmentPolicy
     public function delete(User $user, BillingRateAssignment $assignment): bool
     {
         return $user->role->canManageBilling()
-            && $assignment->billingRate->billingPeriod->isMutable();
+            && $assignment->billingRate->billingPeriod->isEditable();
     }
 }
