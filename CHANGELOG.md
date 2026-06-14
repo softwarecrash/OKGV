@@ -9,6 +9,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Verbindliche projektweite Stilrichtlinie `AGENT_CODE_STYLE.md` hinzugefügt
 - Regeln für PHP, Laravel-Schichten, Datenbank, Historien, Sicherheit, Blade, Tests und Veröffentlichung dokumentiert
 - `AGENTS.md` verpflichtet alle Agents zur Anwendung und Pflege der Stilrichtlinie
+- Entwicklungsstand `0.2.0.2` auf GitHub veröffentlicht
 
 ## [0.2.0.1] - 2026-06-14
 
