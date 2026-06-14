@@ -25,13 +25,15 @@
 
 ## Phase 1: Stammdaten
 
-- [ ] Datenmodell für Mitglieder, Parzellen und Pächterhistorie spezifizieren
-- [ ] Rechtekonzept der Stammdaten vollständig prüfen
-- [ ] Migrationen erstellen
-- [ ] Models und Beziehungen erstellen
-- [ ] Policies und Form Requests erstellen
-- [ ] CRUD-Oberflächen erstellen
-- [ ] Suche und Archivierung erstellen
-- [ ] Tests erstellen
+- [x] Datenmodell für Mitglieder, Parzellen und Pächterhistorie spezifizieren
+- [x] Rechtekonzept der Stammdaten vollständig prüfen
+- [x] Migrationen erstellen
+- [x] Models und Beziehungen erstellen
+- [x] Policies und Form Requests erstellen
+- [x] CRUD-Oberflächen erstellen
+- [x] Suche und Archivierung erstellen
+- [x] Tests erstellen
+- [x] Phase 1 vollständig prüfen
+- [ ] Version 0.2.0 auf GitHub veröffentlichen
 
 Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.

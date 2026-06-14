@@ -2,12 +2,19 @@
 
 namespace App\Providers;
 
+use App\Models\Member;
+use App\Models\Parcel;
+use App\Models\ParcelTenant;
 use App\Models\User;
+use App\Policies\MemberPolicy;
+use App\Policies\ParcelPolicy;
+use App\Policies\ParcelTenantPolicy;
 use App\Policies\UserPolicy;
 use App\Services\AuditLogger;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -27,7 +34,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::useBootstrapFive();
+
         Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(Member::class, MemberPolicy::class);
+        Gate::policy(Parcel::class, ParcelPolicy::class);
+        Gate::policy(ParcelTenant::class, ParcelTenantPolicy::class);
         Gate::before(fn (User $user) => $user->isAdministrator() ? true : null);
 
         Event::listen(Login::class, fn (Login $event) => AuditLogger::log(

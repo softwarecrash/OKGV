@@ -2,6 +2,22 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0] - 2026-06-14
+
+### Phase 1
+
+- Datenmodell für Mitglieder, Parzellen und dauerhafte Pächterhistorie präzisiert
+- Reversible Archivierung und eindeutige Verknüpfung von Pächterkonten mit Mitgliedern festgelegt
+- Rollenabhängige Lese-, Schreib- und Archivrechte für Stammdaten festgelegt
+- Migrationen für Mitglieder, Parzellen und indexierte Pächterhistorie hinzugefügt
+- Status-Enums, Models, Factories und Beziehungen für Phase-1-Stammdaten hinzugefügt
+- Rollenbasierte Policies und validierende Form Requests einschließlich Zeitraumkonflikten hinzugefügt
+- Deutsche CRUD-Oberflächen für Mitglieder, Parzellen und Pächterhistorie hinzugefügt
+- Suche, Statusfilter und reversible Mitgliederarchivierung hinzugefügt
+- Auditlogs für Änderungen an Mitgliedern, Parzellen und Pächterzuordnungen ergänzt
+- Feature-Tests für CRUD, Rollenrechte, Suche, Archivierung, Auditlogs, Historienkonflikte und Pächterisolation ergänzt
+- Parzellenbezogene Transaktionssperren verhindern konkurrierende, überschneidende Pächterzuordnungen
+
 ## [0.1.0] - 2026-06-14
 
 ### Hinzugefügt

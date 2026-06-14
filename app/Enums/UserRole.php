@@ -22,4 +22,14 @@ enum UserRole: string
             self::Tenant => 'Pächter',
         };
     }
+
+    public function canManageMasterData(): bool
+    {
+        return in_array($this, [self::Administrator, self::Board], true);
+    }
+
+    public function canViewAllMasterData(): bool
+    {
+        return $this !== self::Tenant;
+    }
 }

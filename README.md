@@ -8,7 +8,7 @@ OKGV ist eine moderne, sichere und selbsthostbare Laravel-Anwendung. Eine Instal
 
 ## Aktueller Stand
 
-Version `0.1.0` enthält die technische Projektbasis:
+Version `0.2.0` enthält die technische Projektbasis und Stammdatenverwaltung:
 
 - Laravel 13 und PHP 8.3+
 - Bootstrap 5 und Alpine.js
@@ -17,6 +17,10 @@ Version `0.1.0` enthält die technische Projektbasis:
 - Auditlog-Basis
 - Security-Header
 - MariaDB-Unterstützung
+- Mitgliederverwaltung mit Suche und reversibler Archivierung
+- Parzellenverwaltung mit Status und Flächenangaben
+- Dauerhafte Pächterhistorie mit Konfliktprüfung
+- Rollenabhängige Lese- und Schreibrechte
 
 ## Voraussetzungen
 

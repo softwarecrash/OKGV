@@ -15,7 +15,15 @@
                     @endif
 
                     <h1 class="h4">Willkommen bei OKGV</h1>
-                    <p class="mb-0">Die technische Projektbasis ist eingerichtet. Fachmodule werden phasenweise ergänzt.</p>
+                    <p>Die Stammdatenverwaltung für Mitglieder und Parzellen ist verfügbar.</p>
+                    <div class="d-flex gap-2">
+                        @can('viewAny', App\Models\Member::class)
+                            <a class="btn btn-primary" href="{{ route('members.index') }}">Mitglieder</a>
+                        @endcan
+                        @can('viewAny', App\Models\Parcel::class)
+                            <a class="btn btn-outline-primary" href="{{ route('parcels.index') }}">Parzellen</a>
+                        @endcan
+                    </div>
                 </div>
             </div>
         </div>

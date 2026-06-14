@@ -30,7 +30,18 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        @auth
+                            @can('viewAny', App\Models\Member::class)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('members.index') }}">Mitglieder</a>
+                                </li>
+                            @endcan
+                            @can('viewAny', App\Models\Parcel::class)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('parcels.index') }}">Parzellen</a>
+                                </li>
+                            @endcan
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -68,6 +79,11 @@
         </nav>
 
         <main class="py-4">
+            @if (session('status'))
+                <div class="container">
+                    <div class="alert alert-success" role="alert">{{ session('status') }}</div>
+                </div>
+            @endif
             @yield('content')
         </main>
     </div>

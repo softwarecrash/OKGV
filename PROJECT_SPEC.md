@@ -61,6 +61,37 @@ Laravel, Git, Bootstrap, Alpine.js, Login, Logout, Passwort-Reset, Dashboard, Ro
 
 Mitglieder, Parzellen und dauerhafte Pächterhistorie einschließlich CRUD, Archivierung und Suche.
 
+#### Mitglieder
+
+Die Tabelle `members` enthält:
+
+- optionales, eindeutiges `user_id` zur serverseitigen Zuordnung eines Pächterkontos
+- eindeutige `member_number`
+- `first_name`, `last_name`, `street`, `zip`, `city`
+- optionale Werte `phone`, `mobile`, `email`, `left_at` und `notes`
+- `joined_at`
+- Status `active`, `inactive`, `resigned` oder `archived`
+- optionales `archived_at`
+
+Archivierung ist reversibel und löscht keine Mitgliedsdaten. Ein Pächterkonto darf nur den eindeutig über `user_id` zugeordneten Mitgliedsdatensatz sehen.
+
+#### Parzellen
+
+Die Tabelle `parcels` enthält eine eindeutige `parcel_number`, `area_sqm`, optionale Lagebeschreibung und Notizen sowie einen der Status `free`, `assigned`, `reserved`, `terminated` oder `blocked`. Parzellen werden in Phase 1 nicht gelöscht.
+
+#### Pächterhistorie
+
+`parcel_tenants` verknüpft Parzellen und Mitglieder mit `starts_at`, optionalem `ends_at`, `is_primary` und optionalen Notizen. Historische Einträge werden nicht überschrieben oder gelöscht. `ends_at` darf nicht vor `starts_at` liegen. Aktive Zeiträume derselben Parzelle und desselben Mitglieds dürfen sich nicht überschneiden. Pro Parzelle ist höchstens ein aktiver Hauptpächter zulässig.
+
+#### Rechte in Phase 1
+
+- Administrator und Vorstand dürfen Mitglieder, Parzellen und Pächterzuordnungen lesen und bearbeiten.
+- Kassierer dürfen Mitglieder und deren Parzellenzuordnungen lesen, jedoch keine Stammdaten verändern.
+- Wasserwart und Gartenwart dürfen Mitglieder und Parzellen einschließlich Pächterhistorie lesen, jedoch in Phase 1 nicht verändern.
+- Pächter dürfen ausschließlich den eigenen Mitgliedsdatensatz, aktuell oder historisch selbst zugeordnete Parzellen und die dazugehörigen eigenen Zuordnungen lesen.
+- Archivierung ist Administrator und Vorstand vorbehalten.
+- Stammdaten werden nicht physisch gelöscht.
+
 ### Phase 2: Zähler
 
 Wasser- und Stromzähler, Zählerstände und vollständig historisierte Zählerwechsel. Verbrauch muss mehrere Zähler pro Abrechnungsjahr berücksichtigen.
