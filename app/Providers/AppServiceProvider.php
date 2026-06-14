@@ -7,8 +7,11 @@ use App\Models\BillingPeriod;
 use App\Models\BillingRate;
 use App\Models\BillingRateAssignment;
 use App\Models\BillingRateTemplate;
+use App\Models\CommunicationSetting;
 use App\Models\Document;
 use App\Models\Invoice;
+use App\Models\Letter;
+use App\Models\MailCampaign;
 use App\Models\Member;
 use App\Models\Meter;
 use App\Models\MeterReading;
@@ -27,8 +30,11 @@ use App\Policies\BillingPeriodPolicy;
 use App\Policies\BillingRateAssignmentPolicy;
 use App\Policies\BillingRatePolicy;
 use App\Policies\BillingRateTemplatePolicy;
+use App\Policies\CommunicationSettingPolicy;
 use App\Policies\DocumentPolicy;
 use App\Policies\InvoicePolicy;
+use App\Policies\LetterPolicy;
+use App\Policies\MailCampaignPolicy;
 use App\Policies\MemberPolicy;
 use App\Policies\MeterPolicy;
 use App\Policies\MeterReadingPolicy;
@@ -95,6 +101,7 @@ class AppServiceProvider extends ServiceProvider
                         'members_group' => 0,
                         'meters_group' => 0,
                         'finance_group' => 0,
+                        'communication_group' => 0,
                         'total' => 0,
                     ],
             );
@@ -106,7 +113,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(BillingRate::class, BillingRatePolicy::class);
         Gate::policy(BillingRateTemplate::class, BillingRateTemplatePolicy::class);
         Gate::policy(BillingRateAssignment::class, BillingRateAssignmentPolicy::class);
+        Gate::policy(CommunicationSetting::class, CommunicationSettingPolicy::class);
         Gate::policy(Invoice::class, InvoicePolicy::class);
+        Gate::policy(Letter::class, LetterPolicy::class);
+        Gate::policy(MailCampaign::class, MailCampaignPolicy::class);
         Gate::policy(Member::class, MemberPolicy::class);
         Gate::policy(Meter::class, MeterPolicy::class);
         Gate::policy(MeterReading::class, MeterReadingPolicy::class);

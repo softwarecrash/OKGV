@@ -40,6 +40,7 @@ enum UserRole: string
                 UserPermission::ManageSepa->value,
                 UserPermission::ReviewTenantRegistrations->value,
                 UserPermission::ReviewMeterReadingSubmissions->value,
+                UserPermission::ManageCommunication->value,
             ],
             self::Treasurer => [
                 UserPermission::ViewAllMasterData->value,

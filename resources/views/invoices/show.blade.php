@@ -7,7 +7,12 @@
             <h1 class="h2 mb-1">Rechnung {{ $invoice->invoice_number }}</h1>
             <span class="text-secondary">{{ $invoice->status->label() }} · {{ $invoice->billingPeriod->name }}</span>
         </div>
-        <a class="btn btn-primary" href="{{ route('invoices.pdf', $invoice) }}">PDF herunterladen</a>
+        <div class="d-flex flex-wrap gap-2">
+            @can('reminder', $invoice)
+                <a class="btn btn-outline-primary" href="{{ route('invoices.payment-reminder', $invoice) }}">Zahlungserinnerung als PDF</a>
+            @endcan
+            <a class="btn btn-primary" href="{{ route('invoices.pdf', $invoice) }}">PDF herunterladen</a>
+        </div>
     </div>
 
     <div class="row g-4 mb-4">
@@ -43,6 +48,12 @@
 
     @if ($invoice->status === App\Enums\InvoiceStatus::Draft)
         <div class="alert alert-warning"><strong>Noch nicht freigegeben:</strong> Dieser Zwischenstand kann beliebig oft neu berechnet oder durch Änderungen an Preisen und Zuordnungen verworfen werden. Er darf noch nicht als endgültige Rechnung versendet werden.</div>
+    @endif
+
+    @if ($invoice->status === App\Enums\InvoiceStatus::Approved && $invoice->due_at->isPast() && in_array($invoice->payment_status, [App\Enums\InvoicePaymentStatus::Open, App\Enums\InvoicePaymentStatus::Returned], true))
+        <div class="alert alert-info">
+            Die Rechnung ist fällig und noch offen. Berechtigte Finanzkonten können eine sachliche Zahlungserinnerung ohne Mahnstufe oder Mahngebühr erzeugen.
+        </div>
     @endif
 
     <div class="card border-0 shadow-sm">

@@ -218,6 +218,10 @@ npm audit --audit-level=high
 ```
 
 - Neue Migrationen werden zusätzlich mit Rollback und erneutem Migrate geprüft.
+- Rollback- und Neuaufbauprüfungen dürfen niemals gegen die lokale
+  Entwicklungsdatenbank laufen. Verwende dafür ausschließlich die
+  isolierte Testdatenbank; auf der Entwicklungsdatenbank ist nur das
+  vorwärtsgerichtete `php artisan migrate` zulässig.
 
 ## Dokumentation und Veröffentlichung
 

@@ -2,6 +2,46 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.17] - 2026-06-14
+
+### Phase 7
+
+- Phase 6 auf ausdrücklichen Wunsch aufgeschoben und Phase 7 Kommunikation
+  vollständig umgesetzt.
+- Serienmails für aktive Mitglieder, aktuelle Pächter, Vorstand, Empfänger
+  offener Rechnungen und fehlende Zählerstände ergänzt.
+- Empfänger werden vor Versand dedupliziert und mit Name, E-Mail-Adresse,
+  Mitgliedsbezug und Zustellstatus historisiert.
+- Versand pro Empfänger als Queue-Job umgesetzt, damit größere Verteiler den
+  Webrequest nicht blockieren.
+- Verschlüsselte SMTP-Konfiguration mit SMTP/STARTTLS oder SMTPS,
+  Absenderdaten und rate-limitiertem Testversand ergänzt.
+- Allgemeine PDF-Briefe mit dauerhaftem Empfänger- und Anschriften-Snapshot
+  hinzugefügt.
+- PDF-Zahlungserinnerungen für fällige offene oder zurückgegebene Rechnungen
+  ergänzt, ohne Mahnstufe, Mahngebühr oder Rechnungsänderung.
+
+### Security
+
+- Eigenständiges, granular zuweisbares Recht `Kommunikation verwalten`
+  eingeführt.
+- SMTP-Benutzername und Passwort werden verschlüsselt gespeichert, nicht
+  vorausgefüllt und nicht im Auditlog protokolliert.
+- Zahlungserinnerungen setzen zusätzlich das Abrechnungsrecht und eine
+  tatsächlich überschrittene Fälligkeit voraus.
+- Verbindliche Agent-Regel ergänzt, die `migrate:fresh`, `migrate:refresh`,
+  `db:wipe` und vergleichbare Befehle auf der Entwicklungsdatenbank verbietet.
+- Neue Tabellen wurden ausschließlich mit vorwärtsgerichtetem
+  `php artisan migrate` ergänzt; vorhandene Bestandszahlen blieben unverändert.
+
+### Tests
+
+- SMTP-Verschlüsselung, Rechteisolation, Empfänger-Deduplizierung,
+  Versandhistorie, Brief-Snapshots und Zahlungserinnerungen werden durch
+  Feature-Tests abgedeckt.
+- Insgesamt bestehen 78 Tests mit 413 Assertions.
+- Entwicklungsstand auf `0.2.0.17` erhöht.
+
 ## [0.2.0.16] - 2026-06-14
 
 ### Changed

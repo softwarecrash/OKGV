@@ -5,8 +5,11 @@ use App\Http\Controllers\BillingPeriodController;
 use App\Http\Controllers\BillingRateAssignmentController;
 use App\Http\Controllers\BillingRateController;
 use App\Http\Controllers\BillingRateTemplateController;
+use App\Http\Controllers\CommunicationSettingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\LetterController;
+use App\Http\Controllers\MailCampaignController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MeterController;
 use App\Http\Controllers\MeterReadingController;
@@ -16,6 +19,7 @@ use App\Http\Controllers\MeterReplacementController;
 use App\Http\Controllers\ParcelController;
 use App\Http\Controllers\ParcelTenantController;
 use App\Http\Controllers\PaymentBatchController;
+use App\Http\Controllers\PaymentReminderController;
 use App\Http\Controllers\PaymentReturnController;
 use App\Http\Controllers\PermissionProfileController;
 use App\Http\Controllers\PortalDocumentController;
@@ -87,6 +91,21 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         ->name('application-settings.update');
     Route::resource('permission-profiles', PermissionProfileController::class)
         ->only(['index', 'create', 'store', 'edit', 'update']);
+    Route::get('communication-settings', [CommunicationSettingController::class, 'edit'])
+        ->name('communication-settings.edit');
+    Route::put('communication-settings', [CommunicationSettingController::class, 'update'])
+        ->name('communication-settings.update');
+    Route::post('communication-settings/test', [CommunicationSettingController::class, 'test'])
+        ->middleware('throttle:3,10')
+        ->name('communication-settings.test');
+    Route::post('mail-campaigns/{mail_campaign}/send', [MailCampaignController::class, 'send'])
+        ->name('mail-campaigns.send');
+    Route::resource('mail-campaigns', MailCampaignController::class)
+        ->only(['index', 'create', 'store', 'show']);
+    Route::get('letters/{letter}/pdf', [LetterController::class, 'pdf'])
+        ->name('letters.pdf');
+    Route::resource('letters', LetterController::class)
+        ->only(['index', 'create', 'store', 'show']);
     Route::post('billing-periods/{billing_period}/calculate', [BillingPeriodController::class, 'calculate'])
         ->name('billing-periods.calculate');
     Route::post('billing-periods/{billing_period}/approve', [BillingPeriodController::class, 'approve'])
@@ -105,6 +124,8 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         ->name('billing-rate-assignments.destroy');
     Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf'])
         ->name('invoices.pdf');
+    Route::get('invoices/{invoice}/payment-reminder', [PaymentReminderController::class, 'pdf'])
+        ->name('invoices.payment-reminder');
     Route::resource('invoices', InvoiceController::class)->only(['index', 'show']);
     Route::get('sepa-settings', [SepaSettingController::class, 'edit'])
         ->name('sepa-settings.edit');

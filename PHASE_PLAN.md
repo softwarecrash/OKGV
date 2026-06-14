@@ -80,6 +80,7 @@ vorherigen Phase geprüft sein.
 
 ## Phase 6: Dokumentenverwaltung
 
+- [ ] Auf ausdrücklichen Wunsch zugunsten von Phase 7 aufgeschoben
 - [ ] Dokumentenverwaltung
 - [ ] Verträge
 - [ ] Übergabeprotokolle
@@ -89,10 +90,12 @@ vorherigen Phase geprüft sein.
 
 ## Phase 7: Kommunikation
 
-- [ ] Serienmails
-- [ ] SMTP
-- [ ] PDF-Briefe
-- [ ] PDF-Mahnungen
+- [x] Datenmodell und Rechtekonzept vollständig spezifizieren
+- [x] Serienmails mit Empfängergruppen und Versandhistorie
+- [x] Verschlüsselte SMTP-Konfiguration und Testversand
+- [x] PDF-Briefe mit Empfänger-Snapshot
+- [x] PDF-Zahlungserinnerungen ohne Mahnstufe oder Mahngebühr
+- [x] Auditlogs, Tests und Bedienhinweise
 
 ## Phase 8: Mahnwesen
 
@@ -160,5 +163,6 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 5 sind abgeschlossen. Als nächste Produktphase wird
-ausschließlich Phase 6: Dokumentenverwaltung geplant und umgesetzt.
+Die Phasen 0 bis 5 und Phase 7 sind abgeschlossen. Phase 6 wurde auf
+ausdrücklichen Wunsch aufgeschoben. Vor Beginn der nächsten Produktphase ist
+festzulegen, ob Phase 6 nachgeholt oder mit Phase 8 fortgefahren wird.

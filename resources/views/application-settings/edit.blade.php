@@ -44,10 +44,12 @@
                 </div>
             </div>
 
-            <div class="alert alert-info mt-4 mb-0">
-                SMTP-Zugangsdaten bleiben bis zur Kommunikationsphase sicher in der <code>.env</code>.
-                E-Mail-Bestätigungen verwenden bereits den dort konfigurierten Laravel-Mailer.
-            </div>
+            @can('viewAny', App\Models\CommunicationSetting::class)
+                <div class="alert alert-info mt-4 mb-0">
+                    SMTP wird im Bereich Kommunikation getrennt und verschlüsselt verwaltet.
+                    <a href="{{ route('communication-settings.edit') }}">SMTP-Einstellungen öffnen</a>
+                </div>
+            @endcan
         </div>
         <div class="card-footer bg-body border-0">
             <button class="btn btn-primary">Konfiguration speichern</button>

@@ -35,6 +35,9 @@
                         @can('viewAny', App\Models\Invoice::class)
                             <div class="col-md-6"><a class="btn btn-outline-primary w-100" href="{{ route('invoices.index') }}">Rechnungen ansehen</a></div>
                         @endcan
+                        @can('viewAny', App\Models\MailCampaign::class)
+                            <div class="col-md-6"><a class="btn btn-outline-primary w-100" href="{{ route('mail-campaigns.index') }}">Kommunikation verwalten</a></div>
+                        @endcan
                     </div>
                 </div>
             </div>

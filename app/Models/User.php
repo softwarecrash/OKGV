@@ -155,6 +155,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasPermission(UserPermission::ReviewMeterReadingSubmissions);
     }
 
+    public function canManageCommunication(): bool
+    {
+        return $this->hasPermission(UserPermission::ManageCommunication);
+    }
+
     public function sendEmailVerificationNotification(): void
     {
         $this->notify(new VerifyEmailNotification);

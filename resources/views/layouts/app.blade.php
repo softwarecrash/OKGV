@@ -42,6 +42,7 @@
                                 $canViewTemplates = auth()->user()->can('viewAny', App\Models\BillingRateTemplate::class);
                                 $canViewInvoices = auth()->user()->can('viewAny', App\Models\Invoice::class);
                                 $canViewSepa = auth()->user()->can('viewAny', App\Models\SepaMandate::class);
+                                $canViewCommunication = auth()->user()->can('viewAny', App\Models\MailCampaign::class);
                             @endphp
                             @if (auth()->user()->role === App\Enums\UserRole::Tenant)
                                 <li class="nav-item">
@@ -126,6 +127,24 @@
                                             <li><a class="dropdown-item" href="{{ route('payment-batches.index') }}">Sammellastschriften</a></li>
                                             <li><a class="dropdown-item" href="{{ route('sepa-settings.edit') }}">SEPA-Einstellungen</a></li>
                                         @endif
+                                    </ul>
+                                </li>
+                            @endif
+                            @if ($canViewCommunication)
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                        Kommunikation
+                                        <x-action-indicator :count="$actionIndicators['communication_group']" label="fehlgeschlagene Serienmails" />
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('mail-campaigns.index') }}">
+                                                Serienmails
+                                                <x-action-indicator :count="$actionIndicators['communication_group']" label="fehlgeschlagene Serienmails" />
+                                            </a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="{{ route('letters.index') }}">PDF-Briefe</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('communication-settings.edit') }}">SMTP-Einstellungen</a></li>
                                     </ul>
                                 </li>
                             @endif

@@ -36,6 +36,10 @@
 - Formuliere Validierungsfehler fachlich verständlich und nenne nach
   Möglichkeit direkt die erforderliche Korrektur.
 - Erstelle in frühen Entwicklungsphasen keine Docker- oder Deployment-Artefakte.
+- Führe auf der lokalen Entwicklungsdatenbank niemals `migrate:fresh`,
+  `migrate:refresh`, `db:wipe` oder gleichwertige löschende Datenbankbefehle
+  aus. Solche Prüfungen dürfen ausschließlich gegen eine eindeutig separate
+  Testdatenbank erfolgen.
 
 ## Entwicklungsreihenfolge
 

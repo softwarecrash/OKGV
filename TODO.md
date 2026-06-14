@@ -164,3 +164,17 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Migration vorwärts und rückwärts prüfen
 - [x] Phase 5 vollständig prüfen
 - [x] Entwicklungsstand 0.2.0.13 veröffentlichen
+
+## Phase 7: Kommunikation
+
+- [x] Phase 6 auf ausdrücklichen Wunsch als aufgeschoben dokumentieren
+- [x] Datenmodell und Rechtekonzept der Kommunikation spezifizieren
+- [x] Granulares Kommunikationsrecht ergänzen
+- [x] Verschlüsselte SMTP-Konfiguration und Testversand implementieren
+- [x] Serienmails und Empfängergruppen implementieren
+- [x] Versandhistorie und Auditlogs implementieren
+- [x] Allgemeine PDF-Briefe implementieren
+- [x] PDF-Zahlungserinnerungen ohne Mahnstufen implementieren
+- [x] Feature- und Sicherheitstests ergänzen
+- [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
+- [ ] Phase 7 vollständig prüfen und veröffentlichen

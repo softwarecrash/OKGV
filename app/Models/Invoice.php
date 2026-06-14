@@ -97,4 +97,14 @@ class Invoice extends Model
         return $this->recipients->firstWhere('is_primary', true)
             ?? $this->recipients->first();
     }
+
+    public function canReceivePaymentReminder(): bool
+    {
+        return $this->status === InvoiceStatus::Approved
+            && $this->due_at->isPast()
+            && in_array($this->payment_status, [
+                InvoicePaymentStatus::Open,
+                InvoicePaymentStatus::Returned,
+            ], true);
+    }
 }

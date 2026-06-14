@@ -44,6 +44,10 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Kompakte Navigationsgruppen für Mitglieder, Zähler und Finanzen
 - Rollenabhängige Aktionspunkte für Vorgänge mit notwendiger Bearbeitung
 - Persistenter heller und dunkler Darstellungsmodus
+- Granular berechtigte Serienmails mit Empfängergruppen und Versandhistorie
+- Verschlüsselte SMTP-Konfiguration mit Testversand
+- Allgemeine PDF-Briefe mit dauerhaftem Anschriften-Snapshot
+- PDF-Zahlungserinnerungen für fällige offene Rechnungen
 
 Freigegebene Rechnungen sind unveränderbar. Pächterwechsel innerhalb einer
 Periode werden bis zum vollständigen Übergabeprozess bewusst nicht automatisch
@@ -80,22 +84,39 @@ php artisan serve
 Die Anwendung ist danach standardmäßig unter `http://127.0.0.1:8000` erreichbar.
 Für die Frontend-Entwicklung kann parallel `npm run dev` gestartet werden.
 
+Für Serienmails muss zusätzlich ein Queue-Worker laufen:
+
+```bash
+php artisan queue:work --queue=default
+```
+
+Der Worker verarbeitet jeden Empfänger getrennt. Dadurch blockieren größere
+Serienmails nicht den Webrequest und erfolgreiche sowie fehlgeschlagene
+Zustellungen bleiben einzeln nachvollziehbar.
+
 Pächter beantragen ihren Zugang über `/paechter-registrierung`. Ein
 Administrator oder Vorstandsmitglied muss die Anfrage anschließend unter
 `/registrierungsanfragen` einem aktuell eingetragenen Mitglied zuordnen und
 freigeben.
 
 Nach der Freigabe erhält der Pächter einen zeitlich begrenzten
-Bestätigungslink. Für echten E-Mail-Versand müssen in `.env` mindestens
-`MAIL_MAILER=smtp`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`,
-`MAIL_PASSWORD` und `MAIL_FROM_ADDRESS` gesetzt sein. Mit dem voreingestellten
+Bestätigungslink. Bis zur Einrichtung im Bereich `SMTP-Einstellungen`
+verwendet Laravel die Werte aus `.env`. Mit dem voreingestellten
 `MAIL_MAILER=log` wird die Nachricht nur in `storage/logs/laravel.log`
-geschrieben.
+geschrieben. Sobald die verschlüsselte SMTP-Konfiguration aktiviert ist,
+verwenden Bestätigungsmails und Serienmails diese Einstellungen.
 
 Administratoren finden unter ihrem Benutzermenü die `Rechteverwaltung` und
 die `Globale Konfiguration`. Dort können registrierte Konten zum Vorstand
 hochgestuft, einzelne Rechte oder Vorlagen vergeben und der sichtbare
 Systemname angepasst werden.
+
+Konten mit dem Recht `Kommunikation verwalten` finden in der Hauptnavigation
+den Bereich `Kommunikation`. Dort stehen Serienmails, PDF-Briefe und die
+SMTP-Einstellungen bereit. Eine Zahlungserinnerung erscheint an einer
+Rechnung erst nach überschrittener Fälligkeit und verändert weder
+Zahlungsstatus noch Mahnstufe. Mahngebühren und Mahnstufen folgen erst in
+Phase 8.
 
 ## Entwicklung
 

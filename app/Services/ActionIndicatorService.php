@@ -4,10 +4,12 @@ namespace App\Services;
 
 use App\Enums\InvoicePaymentStatus;
 use App\Enums\InvoiceStatus;
+use App\Enums\MailCampaignStatus;
 use App\Enums\MeterReadingSubmissionStatus;
 use App\Enums\RegistrationRequestStatus;
 use App\Enums\UserRole;
 use App\Models\Invoice;
+use App\Models\MailCampaign;
 use App\Models\MeterReadingSubmission;
 use App\Models\RegistrationRequest;
 use App\Models\User;
@@ -22,6 +24,7 @@ final class ActionIndicatorService
      *     members_group: int,
      *     meters_group: int,
      *     finance_group: int,
+     *     communication_group: int,
      *     total: int
      * }
      */
@@ -60,6 +63,10 @@ final class ActionIndicatorService
                 ->count()
             : 0;
 
+        $failedCampaigns = $user->canManageCommunication()
+            ? MailCampaign::query()->where('status', MailCampaignStatus::Failed)->count()
+            : 0;
+
         return [
             'registrations' => $registrations,
             'meter_readings' => $meterReadings,
@@ -67,7 +74,8 @@ final class ActionIndicatorService
             'members_group' => $registrations,
             'meters_group' => $meterReadings,
             'finance_group' => $invoices,
-            'total' => $registrations + $meterReadings + $invoices,
+            'communication_group' => $failedCampaigns,
+            'total' => $registrations + $meterReadings + $invoices + $failedCampaigns,
         ];
     }
 }

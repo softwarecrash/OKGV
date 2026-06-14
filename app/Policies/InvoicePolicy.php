@@ -27,4 +27,10 @@ class InvoicePolicy
                 || $invoice->member->user_id === $user->id
             );
     }
+
+    public function reminder(User $user, Invoice $invoice): bool
+    {
+        return $user->canManageBilling()
+            && $invoice->canReceivePaymentReminder();
+    }
 }

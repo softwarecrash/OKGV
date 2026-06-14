@@ -484,11 +484,66 @@ Die Auswahl wird lokal im Browser gespeichert, gilt bereits vor dem
 Seitenaufbau und kann jederzeit über einen Schalter im Benutzermenü geändert
 werden. Ohne gespeicherte Auswahl wird die Systemeinstellung verwendet.
 
-### Phase 6: Dokumente und Kommunikation
+### Phase 6: Dokumentenverwaltung
 
-Private Dokumentverwaltung mit Sichtbarkeiten, Serienmail, Versandhistorie sowie Brief- und PDF-Erzeugung.
+Die vollständige Dokumentenverwaltung ist ausdrücklich aufgeschoben. Das
+bereits in Phase 5 angelegte Lesemodell und die privaten Downloads bleiben
+unverändert bestehen.
 
-### Phase 7 bis 18
+### Phase 7: Kommunikation
+
+#### Rechte
+
+Kommunikation erhält ein eigenes Benutzerrecht. Es erlaubt Serienmails,
+Versandhistorie, SMTP-Test und allgemeine PDF-Briefe. Administratoren besitzen
+dieses Recht immer. Vorstandsmitglieder erhalten es nur ausdrücklich oder
+über eine Rechtevorlage. Zahlungserinnerungen setzen zusätzlich das
+Abrechnungsrecht voraus, da sie Rechnungs- und Zahlungsdaten enthalten.
+
+#### SMTP
+
+SMTP-Host, Port, Schema, Benutzername, Passwort, Absenderadresse und
+Absendername sind global konfigurierbar. Benutzername und Passwort werden mit
+Laravel verschlüsselt gespeichert und niemals im Auditlog ausgegeben. Ein
+Testversand geht ausschließlich an das angemeldete Administratorkonto. Die
+Konfiguration verwendet `smtp` mit STARTTLS-Unterstützung oder `smtps`.
+
+#### Serienmails
+
+Eine Serienmail besitzt Betreff, Nachricht, Empfängergruppe, Ersteller,
+Status, Zeitpunkte und Zähler für erfolgreiche oder fehlgeschlagene
+Zustellungen. Unterstützte Empfängergruppen sind:
+
+- aktive Mitglieder,
+- aktuelle Pächter,
+- Administratoren und Vorstandsmitglieder,
+- Empfänger offener oder zurückgegebener Rechnungen,
+- aktuelle Pächter von aktiven Zählern ohne Stand im laufenden Kalenderjahr.
+
+Vor dem Versand werden Name, E-Mail-Adresse und optionaler Mitgliedsbezug je
+Empfänger als Snapshot gespeichert. Doppelte E-Mail-Adressen werden innerhalb
+einer Kampagne zusammengeführt. Datensätze ohne E-Mail-Adresse werden nicht
+angeschrieben. Ein Versand wird je Empfänger mit Status, Zeitpunkt und
+verständlicher Fehlerangabe historisiert. Passwörter und SMTP-Geheimnisse
+werden weder in der Kampagne noch im Auditlog gespeichert.
+
+#### PDF-Briefe
+
+Ein allgemeiner Brief speichert Mitgliedsbezug, vollständige
+Empfängeranschrift, Betreff, Inhalt und Ersteller als dauerhaften Snapshot.
+Die PDF-Ausgabe verändert den Brief nicht. Briefe werden in Phase 7 nicht
+automatisch in die aufgeschobene Dokumentenverwaltung übernommen.
+
+#### PDF-Zahlungserinnerungen
+
+Für freigegebene, bereits fällige Rechnungen mit Zahlungsstatus `open` oder
+`returned` kann eine PDF-Zahlungserinnerung erzeugt werden. Sie enthält
+Rechnungsnummer, Fälligkeit, Betrag und historische Rechnungsempfänger.
+Dieser Vorgang setzt keine Mahnstufe, berechnet keine Gebühr und verändert die
+Rechnung nicht. Mahnstufen, Fristen und Mahngebühren bleiben Phase 8
+vorbehalten.
+
+### Phase 8 bis 18
 
 Mahnwesen, Arbeitsstunden, Warteliste, Inventar, Arbeitseinsätze, CSV-Import und -Export, DSGVO, Vereinseinstellungen, Nummernkreise, Pächterwechsel und später ein Lageplan.
 
