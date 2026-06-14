@@ -38,6 +38,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
   Dokumentisolation, Uploadprüfung und Ablesefreigabe werden durch
   Feature-Tests abgedeckt.
 - Entwicklungsstand auf `0.2.0.13` erhöht.
+- Entwicklungsstand `0.2.0.13` auf GitHub veröffentlicht.
 
 ## [0.2.0.12] - 2026-06-14
 
