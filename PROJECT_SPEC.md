@@ -53,6 +53,10 @@ Pächter dürfen ausschließlich eigene Daten sehen. Berechtigungen werden serve
 
 ## Phasen
 
+Die verbindliche Reihenfolge und aktuelle Phasenzuordnung stehen in
+`PHASE_PLAN.md`. Die folgenden Abschnitte beschreiben die fachlichen
+Anforderungen; bei abweichender Nummerierung gilt `PHASE_PLAN.md`.
+
 ### Phase 0: Projektbasis
 
 Laravel, Git, Bootstrap, Alpine.js, Login, Logout, Passwort-Reset, Dashboard, Rollenmodell, Policies, Security-Header und Auditlog-Basis.

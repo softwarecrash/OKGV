@@ -1,5 +1,9 @@
 # TODO
 
+Der verbindliche Gesamtfahrplan mit den Phasen 0 bis 20 steht in
+`PHASE_PLAN.md`. In dieser Datei werden die jeweils aktive Phase und
+projektweite Einzelaufgaben detailliert geführt.
+
 ## Phase 0: Projektbasis
 
 - [x] Entwicklungsumgebung prüfen
@@ -97,3 +101,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Leere Zustände mit einer klaren nächsten Handlung ergänzen
 - [x] Projektweite UX-Regeln durch Feature-Tests absichern
 - [x] Entwicklungsstand 0.2.0.8 veröffentlichen
+- [x] Verbindlichen Phasenplan 0 bis 20 als eigene Arbeitsdatei anlegen
+- [x] Abgeschlossene Phasen 0 bis 3 im Phasenplan markieren
+- [x] Phasenplan in den Agent-Arbeitsregeln verankern
+- [x] Entwicklungsstand 0.2.0.10 veröffentlichen

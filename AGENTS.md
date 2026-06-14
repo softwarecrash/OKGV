@@ -8,7 +8,11 @@
 
 ## Arbeitsregeln
 
-- Arbeite strikt phasenweise nach `PROJECT_SPEC.md` und `TODO.md`.
+- Lies vor jeder neuen Produktphase `PHASE_PLAN.md`.
+- Arbeite strikt phasenweise nach `PHASE_PLAN.md`, `PROJECT_SPEC.md` und
+  `TODO.md`.
+- `PHASE_PLAN.md` bestimmt Reihenfolge und Phasennummer. `PROJECT_SPEC.md`
+  enthält die fachlichen Details.
 - Beginne keine neue Phase, bevor Datenmodell und Rechtekonzept der vorherigen Phase geprüft sind.
 - Dokumentiere jede Änderung in `CHANGELOG.md`.
 - Aktualisiere `TODO.md` unmittelbar nach Abschluss einer Aufgabe.

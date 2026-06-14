@@ -2,6 +2,19 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.10] - 2026-06-14
+
+### Documentation
+
+- `PHASE_PLAN.md` als verbindlichen Entwicklungsfahrplan mit den Phasen 0 bis
+  20 hinzugefügt.
+- Bereits umgesetzte Phasen 0 bis 3 vollständig als abgeschlossen markiert.
+- SEPA als nächste, ausschließlich zu bearbeitende Produktphase festgelegt.
+- `AGENTS.md` und `TODO.md` mit dem neuen Phasenplan verknüpft.
+- Deployment, Docker, Backupstrategie und Produktionsdokumentation bleiben
+  ausdrücklich bis Phase 20 zurückgestellt.
+- Entwicklungsstand auf `0.2.0.10` erhöht.
+
 ## [0.2.0.9] - 2026-06-14
 
 ### Changed
