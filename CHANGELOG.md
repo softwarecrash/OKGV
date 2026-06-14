@@ -23,6 +23,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Rollback der ursprünglichen Rollen-Migration entfernt den Rollenindex nun
   vor der Spalte.
 - Entwicklungsstand auf `0.2.0.5` erhöht.
+- Entwicklungsstand `0.2.0.5` auf GitHub veröffentlicht.
 
 ## [0.2.0.4] - 2026-06-14
 

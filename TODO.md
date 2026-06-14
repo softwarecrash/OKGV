@@ -55,7 +55,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Append-only Korrekturhistorie und effektive Werte implementieren
 - [x] Rechteverwaltung und Korrekturoberfläche ergänzen
 - [x] Korrekturworkflow und Verbrauchsberechnung testen
-- [ ] Entwicklungsstand 0.2.0.5 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.5 veröffentlichen
 
 ## Phase 3: Abrechnung
 
