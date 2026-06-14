@@ -95,7 +95,7 @@
                         <div class="form-text">Leer lassen, um den gespeicherten Benutzernamen beizubehalten.</div>
                     </div>
                     <div class="col-lg-6">
-                        <label class="form-label" for="smtp_password">Neues Passwort</label>
+                        <label class="form-label" for="smtp_password">Passwort</label>
                         <input class="form-control" id="smtp_password" name="smtp_password" type="password" maxlength="255"
                                autocomplete="new-password">
                         <div class="form-text">Leer lassen, um das vorhandene Passwort beizubehalten.</div>

@@ -2,6 +2,14 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.20] - 2026-06-14
+
+### Changed
+
+- Feldbezeichnung `Neues Passwort` in der SMTP-Konfiguration verständlicher
+  zu `Passwort` geändert.
+- Entwicklungsstand auf `0.2.0.20` erhöht.
+
 ## [0.2.0.19] - 2026-06-14
 
 ### Changed
