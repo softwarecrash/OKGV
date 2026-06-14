@@ -79,8 +79,10 @@ class BillingRateRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        $code = strtoupper(trim((string) $this->input('code')));
+
         $this->merge([
-            'code' => strtoupper(trim((string) $this->input('code'))),
+            'code' => preg_replace('/\s+/', '_', $code),
             'is_active' => $this->boolean('is_active'),
         ]);
     }

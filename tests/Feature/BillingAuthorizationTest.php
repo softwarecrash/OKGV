@@ -108,4 +108,26 @@ class BillingAuthorizationTest extends TestCase
 
         $this->assertSame('MEMBER_FEE', $rate->fresh()->code);
     }
+
+    public function test_billing_rate_code_replaces_whitespace_with_underscores(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $period = BillingPeriod::factory()->create();
+
+        $this->actingAs($administrator)
+            ->post(route('billing-periods.billing-rates.store', $period), [
+                'code' => '  Pacht   pro qm  ',
+                'name' => 'Pacht pro Quadratmeter',
+                'calculation_type' => 'per_sqm',
+                'scope' => 'parcel',
+                'amount' => '0.5000',
+                'is_active' => '1',
+            ])
+            ->assertRedirect(route('billing-periods.show', $period));
+
+        $this->assertDatabaseHas('billing_rates', [
+            'billing_period_id' => $period->id,
+            'code' => 'PACHT_PRO_QM',
+        ]);
+    }
 }

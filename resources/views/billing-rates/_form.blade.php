@@ -9,7 +9,9 @@
     <div class="col-md-4">
         <label class="form-label" for="code">Technischer Code</label>
         <input class="form-control text-uppercase" id="code" name="code" maxlength="100" required
-               value="{{ old('code', $billingRate->code) }}" placeholder="LEASE_PER_SQM">
+               value="{{ old('code', $billingRate->code) }}" placeholder="LEASE_PER_SQM"
+               x-on:input="$el.value = $el.value.toUpperCase().replace(/\s+/g, '_')">
+        <div class="form-text">Leerzeichen werden automatisch durch Unterstriche ersetzt.</div>
     </div>
     <div class="col-md-8">
         <label class="form-label" for="name">Bezeichnung</label>

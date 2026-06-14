@@ -2,6 +2,14 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.6] - 2026-06-14
+
+### Fixed
+
+- Leerzeichen im technischen Code eines Abrechnungspreises werden während der
+  Eingabe und serverseitig automatisch durch Unterstriche ersetzt.
+- Entwicklungsstand auf `0.2.0.6` erhöht.
+
 ## [0.2.0.5] - 2026-06-14
 
 ### Added
