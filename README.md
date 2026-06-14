@@ -201,7 +201,10 @@ Der Bestand enthält vier Pächterkonten, ein Vorstandsmitglied, Wasser- und
 Stromzähler, einen historischen Zählerwechsel, Zählerstände,
 Abrechnungsperioden, Preise, Arbeitsstunden, Arbeitseinsätze und
 Pächtermeldungen. Erneutes Ausführen ersetzt ausschließlich den vorhandenen
-Demo-Bestand.
+Demo-Bestand. Existiert für 2024, 2025 oder 2026 bereits eine andere
+Abrechnungsperiode, wird der Vorgang vor jeder Änderung mit einem
+verständlichen Hinweis abgebrochen. Abrechnungsperioden dürfen auch im
+Demo-Bestand niemals zeitlich überlappen.
 
 Alle mit `DEMO-` markierten Testdaten können vollständig entfernt werden:
 

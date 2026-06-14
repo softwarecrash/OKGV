@@ -39,6 +39,10 @@ historische Preise, Arbeitsstundenkonten, Arbeitseinsätze und
 Pächtermeldungen. Ein eigener Löschbefehl entfernt ausschließlich anhand
 eindeutiger Demo-Kennzeichen ermittelte Datensätze. Normale Vereinsdaten
 dürfen weder beim erneuten Anlegen noch beim Entfernen verändert werden.
+Der Demo-Seeder prüft vor jeder Änderung, ob für 2024 bis 2026 bereits
+andere Abrechnungsperioden existieren. Bei einer zeitlichen Überschneidung
+bricht er ohne Anlage von Demo-Daten ab. Damit gilt das Verbot
+überschneidender Abrechnungsperioden auch für Entwicklungsdaten.
 
 ## Gestaltung
 

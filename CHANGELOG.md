@@ -2,6 +2,31 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.33] - 2026-06-14
+
+### Demo-Daten
+
+- Der Demo-Seeder prüft vor jeder Änderung, ob seine Perioden 2024 bis 2026
+  eine vorhandene, nicht zum Demo-Bestand gehörende Abrechnungsperiode
+  überschneiden.
+- Bei einer Überschneidung bricht der Seed mit einem verständlichen Fehler
+  ab und legt keine Demo-Daten an.
+- Die Anmeldung des Vorstands- und aller vier Pächterkonten wird über das
+  echte Web-Loginformular als Regressionstest geprüft.
+
+### Lokaler Datenreset
+
+- Die Entwicklungsdatenbank wurde auf ausdrücklichen Wunsch vollständig neu
+  migriert; der bestehende Administrator blieb mit ID und Passwort-Hash
+  unverändert erhalten.
+- Der neue Bestand enthält ausschließlich einen Administrator, fünf
+  Demo-Konten, fünf Demo-Parzellen und je eine nicht überlappende
+  Abrechnungsperiode für 2024, 2025 und 2026.
+- Alle dokumentierten Administrator- und Demo-Zugangsdaten wurden direkt
+  gegen die neue Datenbank validiert.
+- Insgesamt bestehen 120 Tests mit 727 Assertions.
+- Entwicklungsstand auf `0.2.0.33` erhöht.
+
 ## [0.2.0.32] - 2026-06-14
 
 ### Arbeitsstundenkonten

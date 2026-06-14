@@ -317,3 +317,16 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Gesamttests, Formatter und Asset-Build ausführen
 - [x] Nachbesserung vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
+
+## Nachbesserung Demo-Bestand: Perioden und Anmeldung
+
+- [x] Überschneidende echte und Demo-Abrechnungsperioden als Ursache bestätigen
+- [x] Demo-Seed vor Überschneidungen mit bestehenden Perioden schützen
+- [x] Web-Anmeldung aller fünf Demo-Konten automatisiert prüfen
+- [x] Administrator vor dem lokalen Datenbankreset unverändert sichern
+- [x] Entwicklungsdatenbank frisch migrieren und Administrator wiederherstellen
+- [x] Demo-Bestand mit genau einer Periode je Jahr neu erzeugen
+- [x] Rollen, Parzellenzuordnungen, Passwörter und Periodenüberschneidungen prüfen
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen

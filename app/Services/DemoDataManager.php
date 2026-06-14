@@ -45,6 +45,7 @@ final class DemoDataManager
             );
         }
 
+        $this->ensurePeriodsDoNotOverlapExistingData();
         $this->purge();
 
         return DB::transaction(function () use ($password): array {
@@ -318,6 +319,23 @@ final class DemoDataManager
         }
 
         return $periods;
+    }
+
+    private function ensurePeriodsDoNotOverlapExistingData(): void
+    {
+        foreach ([2024, 2025, 2026] as $year) {
+            $overlapExists = DB::table('billing_periods')
+                ->where('name', 'not like', self::PERIOD_PREFIX.'%')
+                ->whereDate('starts_at', '<=', "{$year}-12-31")
+                ->whereDate('ends_at', '>=', "{$year}-01-01")
+                ->exists();
+
+            if ($overlapExists) {
+                throw new RuntimeException(
+                    "Demo-Daten können nicht angelegt werden: Für {$year} existiert bereits eine überschneidende Abrechnungsperiode.",
+                );
+            }
+        }
     }
 
     /**

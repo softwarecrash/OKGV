@@ -54,6 +54,44 @@ class DemoDataCommandTest extends TestCase
         $this->assertDatabaseCount('billing_rates', 12);
     }
 
+    public function test_all_demo_accounts_can_log_in_through_the_web_form(): void
+    {
+        $this->artisan('okgv:demo-seed', ['--force' => true])->assertSuccessful();
+
+        foreach ([
+            'vorstand.demo@okgv.test',
+            'paechter1.demo@okgv.test',
+            'paechter2.demo@okgv.test',
+            'paechter3.demo@okgv.test',
+            'paechter4.demo@okgv.test',
+        ] as $email) {
+            $this->post(route('login'), [
+                'email' => $email,
+                'password' => 'Demo1234!',
+            ])->assertRedirect('/dashboard');
+
+            $this->assertAuthenticatedAs(User::query()->where('email', $email)->firstOrFail());
+            $this->post(route('logout'))->assertRedirect('/');
+            $this->assertGuest();
+        }
+    }
+
+    public function test_demo_seed_rejects_overlapping_real_billing_period(): void
+    {
+        BillingPeriod::factory()->create([
+            'name' => 'Abrechnung 2026',
+            'starts_at' => '2026-01-01',
+            'ends_at' => '2026-12-31',
+        ]);
+
+        $this->artisan('okgv:demo-seed', ['--force' => true])
+            ->expectsOutputToContain('Für 2026 existiert bereits eine überschneidende Abrechnungsperiode.')
+            ->assertFailed();
+
+        $this->assertDatabaseCount('billing_periods', 1);
+        $this->assertDatabaseMissing('users', ['email' => 'vorstand.demo@okgv.test']);
+    }
+
     public function test_demo_purge_removes_only_marked_demo_data(): void
     {
         Storage::fake('local');
