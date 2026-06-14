@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CommunicationSettingRequest;
+use App\Http\Requests\SmtpTestRequest;
+use App\Mail\SmtpTestMessage;
 use App\Models\CommunicationSetting;
 use App\Services\AuditLogger;
 use App\Services\CommunicationMailConfigurator;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class CommunicationSettingController extends Controller
@@ -53,22 +54,21 @@ class CommunicationSettingController extends Controller
             ->with('status', 'SMTP-Einstellungen wurden gespeichert.');
     }
 
-    public function test(Request $request): RedirectResponse
+    public function test(SmtpTestRequest $request): RedirectResponse
     {
-        $this->authorize('test', CommunicationSetting::class);
         $this->configurator->apply();
+        $recipient = $request->validated('test_email');
 
-        Mail::mailer('okgv_smtp')->raw(
-            'Der SMTP-Test war erfolgreich. Diese Nachricht wurde von der Kommunikationsverwaltung versendet.',
-            fn ($message) => $message
-                ->to($request->user()->email, $request->user()->name)
-                ->subject('SMTP-Test '.config('app.name', 'OKGV')),
-        );
+        Mail::mailer('okgv_smtp')
+            ->to($recipient)
+            ->send(new SmtpTestMessage);
 
-        AuditLogger::log('communication.smtp.tested', $request->user());
+        AuditLogger::log('communication.smtp.tested', $request->user(), metadata: [
+            'recipient' => $recipient,
+        ]);
 
         return redirect()
             ->route('application-settings.edit', ['section' => 'smtp'])
-            ->with('status', "Testmail wurde an {$request->user()->email} versendet.");
+            ->with('status', "Testmail wurde an {$recipient} versendet.");
     }
 }

@@ -116,7 +116,7 @@ Administratoren finden unter ihrem Benutzermenü die `Rechteverwaltung` und
 die `Globale Konfiguration`. Dort können registrierte Konten zum Vorstand
 hochgestuft, einzelne Rechte oder Vorlagen vergeben, der sichtbare
 Systemname angepasst und die verschlüsselte SMTP-Verbindung eingerichtet
-oder getestet werden.
+oder mit einer frei wählbaren Zieladresse getestet werden.
 
 Konten mit dem Recht `Kommunikation verwalten` finden in der Hauptnavigation
 den Bereich `Kommunikation`. Dort stehen Serienmails, PDF-Briefe und die

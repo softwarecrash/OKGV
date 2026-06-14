@@ -568,8 +568,10 @@ SMTP-Host, Port, Schema, Benutzername, Passwort, Absenderadresse und
 Absendername werden im SMTP-Abschnitt der globalen Konfiguration verwaltet.
 Benutzername und Passwort werden mit Laravel verschlüsselt gespeichert und
 niemals im Auditlog ausgegeben. Nur Administratoren dürfen diese Werte ändern
-oder einen Testversand an das eigene Administratorkonto auslösen. Die
-Konfiguration verwendet `smtp` mit STARTTLS-Unterstützung oder `smtps`.
+oder einen Testversand an eine frei eingegebene, serverseitig validierte
+Zieladresse auslösen. Die Zieladresse wird auditiert, aber nicht als
+Systemeinstellung gespeichert. Die Konfiguration verwendet `smtp` mit
+STARTTLS-Unterstützung oder `smtps`.
 
 #### Serienmails
 

@@ -2,6 +2,28 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.21] - 2026-06-14
+
+### Changed
+
+- Zieladresse für SMTP-Testmails kann in der globalen Konfiguration frei
+  eingegeben werden.
+- Das Feld wird serverseitig als E-Mail-Adresse validiert und mit der
+  Administratoradresse sinnvoll vorausgefüllt.
+
+### Security
+
+- Die Testadresse wird im Auditlog nachvollziehbar gespeichert, aber nicht
+  als globale Einstellung übernommen.
+- Rate-Limit und ausschließliches Administratorrecht bleiben unverändert.
+
+### Tests
+
+- Freie Zieladresse, erfolgreicher Testversand und Ablehnung ungültiger
+  Adressen werden durch Feature-Tests abgedeckt.
+- Insgesamt bestehen 84 Tests mit 460 Assertions.
+- Entwicklungsstand auf `0.2.0.21` erhöht.
+
 ## [0.2.0.20] - 2026-06-14
 
 ### Changed

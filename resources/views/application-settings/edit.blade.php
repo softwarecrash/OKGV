@@ -125,10 +125,21 @@
             </div>
         </form>
 
-        <form method="POST" action="{{ route('communication-settings.test') }}" class="mt-3"
-              onsubmit="return confirm('Testmail an deine eigene Konto-E-Mail-Adresse senden?')">
+        <form method="POST" action="{{ route('communication-settings.test') }}" class="card border-0 shadow-sm mt-3"
+              onsubmit="return confirm('Testmail an die eingegebene Zieladresse senden?')">
             @csrf
-            <button class="btn btn-outline-primary">Testmail an {{ auth()->user()->email }} senden</button>
+            <div class="card-body">
+                <label class="form-label" for="test_email">Zieladresse für Testmail</label>
+                <div class="input-group">
+                    <input class="form-control @error('test_email') is-invalid @enderror"
+                           id="test_email" name="test_email" type="email" required maxlength="255"
+                           value="{{ old('test_email', auth()->user()->email) }}"
+                           placeholder="empfaenger@example.de">
+                    <button class="btn btn-outline-primary">Testmail senden</button>
+                    @error('test_email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+                <div class="form-text">Die Adresse wird nur für diesen Testversand verwendet und nicht als Systemeinstellung gespeichert.</div>
+            </div>
         </form>
     </section>
 </div>

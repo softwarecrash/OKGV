@@ -10,6 +10,7 @@ use App\Enums\MailRecipientStatus;
 use App\Enums\UserPermission;
 use App\Enums\UserRole;
 use App\Mail\CampaignMessage;
+use App\Mail\SmtpTestMessage;
 use App\Models\CommunicationSetting;
 use App\Models\Invoice;
 use App\Models\InvoiceRecipient;
@@ -59,6 +60,43 @@ class CommunicationWorkflowTest extends TestCase
             ->assertSee('SMTP-Einstellungen')
             ->assertDontSee('mailer@example.test')
             ->assertDontSee('VerySecretPassword');
+    }
+
+    public function test_administrator_can_send_smtp_test_to_custom_validated_address(): void
+    {
+        Mail::fake();
+        $administrator = User::factory()->administrator()->create();
+        CommunicationSetting::create([
+            'smtp_enabled' => true,
+            'smtp_scheme' => 'smtp',
+            'smtp_host' => 'smtp.example.test',
+            'smtp_port' => 587,
+            'from_address' => 'verein@example.test',
+            'from_name' => 'KGV Test',
+        ]);
+
+        $this->actingAs($administrator)
+            ->post(route('communication-settings.test'), [
+                'test_email' => 'extern@example.test',
+            ])
+            ->assertRedirect(route('application-settings.edit', ['section' => 'smtp']))
+            ->assertSessionHas('status', 'Testmail wurde an extern@example.test versendet.');
+
+        Mail::assertSent(SmtpTestMessage::class, fn ($mail) => $mail->hasTo('extern@example.test'));
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'communication.smtp.tested',
+            'user_id' => $administrator->id,
+        ]);
+
+        $this->actingAs($administrator)
+            ->from(route('application-settings.edit'))
+            ->post(route('communication-settings.test'), [
+                'test_email' => 'keine-adresse',
+            ])
+            ->assertRedirect(route('application-settings.edit'))
+            ->assertSessionHasErrors('test_email');
+
+        Mail::assertSent(SmtpTestMessage::class, 1);
     }
 
     public function test_campaign_deduplicates_recipients_and_records_delivery_history(): void
