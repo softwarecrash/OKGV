@@ -76,7 +76,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Gemeinsame Rechnungsdarstellung und Empfängerrechte testen
 - [x] Entwicklungsstand 0.2.0.4 veröffentlichen
 - [x] Technische Preiscodes bei der Eingabe automatisch normalisieren
-- [ ] Entwicklungsstand 0.2.0.6 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.6 veröffentlichen
 
 ## Projektweite Standards
 
