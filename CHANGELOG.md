@@ -17,6 +17,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Auditlogs für Änderungen an Mitgliedern, Parzellen und Pächterzuordnungen ergänzt
 - Feature-Tests für CRUD, Rollenrechte, Suche, Archivierung, Auditlogs, Historienkonflikte und Pächterisolation ergänzt
 - Parzellenbezogene Transaktionssperren verhindern konkurrierende, überschneidende Pächterzuordnungen
+- Version `0.2.0` auf GitHub veröffentlicht
 
 ## [0.1.0] - 2026-06-14
 

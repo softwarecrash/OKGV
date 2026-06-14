@@ -34,6 +34,6 @@
 - [x] Suche und Archivierung erstellen
 - [x] Tests erstellen
 - [x] Phase 1 vollständig prüfen
-- [ ] Version 0.2.0 auf GitHub veröffentlichen
+- [x] Version 0.2.0 auf GitHub veröffentlichen
 
 Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
