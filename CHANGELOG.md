@@ -31,6 +31,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Feature-Tests sichern Hilfetexte, Historienhinweise und deutsche
   Validierungsfehler ab.
 - Entwicklungsstand auf `0.2.0.8` erhöht.
+- Entwicklungsstand `0.2.0.8` auf GitHub veröffentlicht.
 
 ## [0.2.0.7] - 2026-06-14
 
