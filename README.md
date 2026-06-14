@@ -177,6 +177,38 @@ Ersetzen einer Datei bleibt jede ältere Version erhalten. Archivieren löscht
 weder Metadaten noch Dateien, beendet aber sämtliche Freigaben. Freigegebene
 Rechnungen erscheinen dort als unveränderliche Systemdokumente.
 
+## Löschbare Demo-Daten
+
+Für manuelle Oberflächentests steht ein eigener, eindeutig markierter
+Demo-Bestand bereit. Vor dem ersten Anlegen muss lokal in `.env` ein
+gemeinsames Testpasswort gesetzt werden:
+
+```dotenv
+OKGV_DEMO_PASSWORD=
+```
+
+Danach werden fünf Konten mit fünf Parzellen sowie Daten für die Jahre 2024
+bis 2026 angelegt:
+
+```bash
+php artisan okgv:demo-seed
+```
+
+Der Bestand enthält vier Pächterkonten, ein Vorstandsmitglied, Wasser- und
+Stromzähler, einen historischen Zählerwechsel, Zählerstände,
+Abrechnungsperioden, Preise, Arbeitsstunden, Arbeitseinsätze und
+Pächtermeldungen. Erneutes Ausführen ersetzt ausschließlich den vorhandenen
+Demo-Bestand.
+
+Alle mit `DEMO-` markierten Testdaten können vollständig entfernt werden:
+
+```bash
+php artisan okgv:demo-purge
+```
+
+Normale Vereinsdaten werden von diesem Befehl nicht verändert. Der gewöhnliche
+Befehl `php artisan db:seed` legt bewusst keine Beispieldaten an.
+
 ## Entwicklung
 
 Die frühe Entwicklung erfolgt direkt im Linux-LXC. Docker- und Deployment-Artefakte werden erst nach Fertigstellung der Kernmodule erstellt.

@@ -25,6 +25,21 @@ Domain: `okgv.de`
 - MariaDB
 - Node.js und npm
 
+## Entwicklungs- und Demo-Daten
+
+Der gewöhnliche Datenbank-Seeder erzeugt keine Benutzer oder Fachdaten
+automatisch. Für manuelle Oberflächentests steht ein ausdrücklich
+aufzurufender Demo-Seeder bereit. Er erzeugt fünf mit `DEMO-` markierte
+Parzellen mit vier Pächterkonten und einem Vorstandsmitglied sowie
+zusammenhängende Testdaten für 2024 bis 2026.
+
+Der Demo-Bestand umfasst Wasser- und Stromzähler, einen Zählerwechsel,
+Zählerstände, eine offene Zählerstandsmeldung, Abrechnungsperioden,
+historische Preise, Arbeitsstundenkonten, Arbeitseinsätze und
+Pächtermeldungen. Ein eigener Löschbefehl entfernt ausschließlich anhand
+eindeutiger Demo-Kennzeichen ermittelte Datensätze. Normale Vereinsdaten
+dürfen weder beim erneuten Anlegen noch beim Entfernen verändert werden.
+
 ## Gestaltung
 
 - Primary: `#2E7D32`

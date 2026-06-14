@@ -2,6 +2,37 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.30] - 2026-06-14
+
+### Löschbarer Demo-Bestand
+
+- Expliziten Befehl `php artisan okgv:demo-seed` für einen wiederholbaren,
+  zusammenhängenden Testbestand ergänzt.
+- Vier Pächterkonten und ein Vorstandsmitglied mit jeweils eigener
+  `DEMO-`-Parzelle angelegt.
+- Für 2024 bis 2026 Abrechnungsperioden, historische Preise,
+  Arbeitsstundenkonten, Arbeitseinsätze und Pächtermeldungen ergänzt.
+- Wasser- und Stromzähler mit fortlaufenden Zählerständen, historischem
+  Zählerwechsel und offener Zählerstandsmeldung angelegt.
+- Das gemeinsame Demo-Passwort wird ausschließlich aus der lokalen
+  `OKGV_DEMO_PASSWORD`-Konfiguration gelesen und nicht veröffentlicht.
+
+### Sichere Entfernung
+
+- `php artisan okgv:demo-purge` entfernt ausschließlich über eindeutige
+  Demo-Kennzeichen ermittelte Konten und Fachdaten.
+- Erneutes Anlegen ersetzt nur den bestehenden Demo-Bestand und erzeugt
+  keine Duplikate.
+- Der Standardbefehl `php artisan db:seed` legt bewusst keine Benutzer oder
+  Beispieldaten mehr an.
+- Ein Seed-Purge-Seed-Zyklus auf MariaDB bestätigte, dass vorhandene
+  Benutzer-, Mitglieder-, Parzellen-, Zähler-, Zählerstands- und
+  Periodendaten unverändert bleiben.
+- Wiederholbarkeit, selektive Löschung, abgeleitete Rechnungs-, Mahn- und
+  Dokumentdaten sowie private Dateien sind durch Feature-Tests abgedeckt.
+- Insgesamt bestehen 115 Tests mit 663 Assertions.
+- Entwicklungsstand auf `0.2.0.30` erhöht.
+
 ## [0.2.0.29] - 2026-06-14
 
 ### Parzellendetail

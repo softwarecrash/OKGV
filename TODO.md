@@ -267,6 +267,21 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Gesamttests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen und veröffentlichen
 
+## Entwicklungswerkzeug: Löschbarer Demo-Bestand
+
+- [x] Vier Pächterkonten und ein Vorstandsmitglied anlegen
+- [x] Fünf eindeutig markierte Demo-Parzellen zuordnen
+- [x] Drei Jahre Abrechnungsperioden und historische Preise anlegen
+- [x] Wasser- und Stromzähler mit Ständen und Zählerwechsel anlegen
+- [x] Arbeitsstunden, Arbeitseinsätze und Pächtermeldungen anlegen
+- [x] Offene Zählerstandsmeldung für den Prüfablauf anlegen
+- [x] Wiederholbaren Seed-Befehl implementieren
+- [x] Selektive vollständige Löschroutine implementieren
+- [x] Schutz vorhandener Entwicklungsdaten im Seed-Purge-Seed-Zyklus prüfen
+- [x] Demo-Zugänge lokal dokumentieren
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [ ] Demo-Bestand vollständig prüfen und veröffentlichen
+
 ## Nachbesserung Phase 9: Parzellendetail und Meldeseite
 
 - [x] Arbeitsstundenkonten in der Parzellendetailansicht darstellen

@@ -22,6 +22,7 @@ vorherigen Phase geprüft sein.
 - [x] Hellen und dunklen Darstellungsmodus bereitstellen
 - [x] Vorstandsrechte granular und über konfigurierbare Vorlagen vergeben
 - [x] Globalen Systemnamen konfigurierbar machen
+- [x] Wiederholbaren und vollständig löschbaren Demo-Datenbestand bereitstellen
 
 ## Phase 0: Projektbasis
 
