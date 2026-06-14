@@ -8,7 +8,7 @@
                 <div class="card-header">Neues Passwort festlegen</div>
 
                 <div class="card-body">
-                    <p class="text-secondary">Lege ein neues, nur für OKGV verwendetes Passwort fest und wiederhole es zur Kontrolle.</p>
+                    <p class="text-secondary">Lege ein neues, nur für dieses System verwendetes Passwort fest und wiederhole es zur Kontrolle.</p>
                     <form method="POST" action="{{ route('password.update') }}">
                         @csrf
 

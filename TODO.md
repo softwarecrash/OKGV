@@ -118,6 +118,14 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Persistenten Hell-/Dunkelmodus implementieren
 - [x] Navigation, Aktionshinweise und Theme-Umschaltung testen
 - [x] Entwicklungsstand 0.2.0.14 veröffentlichen
+- [x] Granulare Berechtigungsschlüssel für Vorstandsmitglieder einführen
+- [x] Aufstufung freigegebener Pächterkonten zum Vorstand ermöglichen
+- [x] Konfigurierbare Rechtevorlagen mit sicherem Snapshot-Verhalten ergänzen
+- [x] Globale Konfiguration für Systemname und Standardvorlage ergänzen
+- [x] E-Mail-Verifizierung nach Freigabe einer Registrierung aktivieren
+- [x] Bestehende Policies auf benutzerspezifische Rechte umstellen
+- [x] Rollen-, Vorlagen-, Branding- und Verifizierungstests ergänzen
+- [ ] Entwicklungsstand 0.2.0.15 veröffentlichen
 
 ## Phase 4: SEPA
 

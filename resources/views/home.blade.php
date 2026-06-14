@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    <h1 class="h4">Willkommen bei OKGV</h1>
+                    <h1 class="h4">Willkommen bei {{ config('app.name', 'OKGV') }}</h1>
                     <p class="text-secondary">Wähle den Bereich aus, in dem du arbeiten möchtest. Angezeigte Funktionen richten sich nach deinen Berechtigungen.</p>
                     <div class="row g-3">
                         @if (auth()->user()->role === App\Enums\UserRole::Tenant)

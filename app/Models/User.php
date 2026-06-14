@@ -2,20 +2,32 @@
 
 namespace App\Models;
 
+use App\Enums\UserPermission;
 use App\Enums\UserRole;
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\VerifyEmailNotification;
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role', 'can_correct_meter_readings'])]
+#[Fillable([
+    'name',
+    'email',
+    'password',
+    'role',
+    'can_correct_meter_readings',
+    'permissions',
+    'permission_profile_id',
+    'email_verified_at',
+])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -32,6 +44,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'role' => UserRole::class,
             'can_correct_meter_readings' => 'boolean',
+            'permissions' => 'array',
         ];
     }
 
@@ -43,6 +56,11 @@ class User extends Authenticatable
     public function member(): HasOne
     {
         return $this->hasOne(Member::class);
+    }
+
+    public function permissionProfile(): BelongsTo
+    {
+        return $this->belongsTo(PermissionProfile::class);
     }
 
     public function approvedInvoices(): HasMany
@@ -77,7 +95,68 @@ class User extends Authenticatable
 
     public function canCorrectMeterReadings(): bool
     {
+        if ($this->permissions !== null) {
+            return $this->hasPermission(UserPermission::CorrectMeterReadings);
+        }
+
         return in_array($this->role, [UserRole::Administrator, UserRole::Board], true)
             && $this->can_correct_meter_readings;
+    }
+
+    public function hasPermission(UserPermission $permission): bool
+    {
+        $permissions = $this->permissions ?? $this->role->defaultPermissions();
+
+        return in_array($permission->value, $permissions, true);
+    }
+
+    public function canViewAllMasterData(): bool
+    {
+        return $this->hasPermission(UserPermission::ViewAllMasterData);
+    }
+
+    public function canManageMasterData(): bool
+    {
+        return $this->hasPermission(UserPermission::ManageMasterData);
+    }
+
+    public function canViewAllMeters(): bool
+    {
+        return $this->hasPermission(UserPermission::ViewAllMeters);
+    }
+
+    public function canManageMeters(): bool
+    {
+        return $this->hasPermission(UserPermission::ManageMeters);
+    }
+
+    public function canManageBilling(): bool
+    {
+        return $this->hasPermission(UserPermission::ManageBilling);
+    }
+
+    public function canManageBillingTemplates(): bool
+    {
+        return $this->hasPermission(UserPermission::ManageBillingTemplates);
+    }
+
+    public function canManageSepa(): bool
+    {
+        return $this->hasPermission(UserPermission::ManageSepa);
+    }
+
+    public function canReviewTenantRegistrations(): bool
+    {
+        return $this->hasPermission(UserPermission::ReviewTenantRegistrations);
+    }
+
+    public function canReviewMeterReadingSubmissions(): bool
+    {
+        return $this->hasPermission(UserPermission::ReviewMeterReadingSubmissions);
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new VerifyEmailNotification);
     }
 }

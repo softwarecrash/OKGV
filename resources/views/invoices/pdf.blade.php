@@ -24,7 +24,7 @@
         <div class="draft">ZWISCHENSTAND – NICHT FREIGEGEBEN</div>
     @endif
 
-    <h1>OKGV</h1>
+    <h1>{{ config('app.name', 'OKGV') }}</h1>
     <div class="muted">Open Kleingarten Verwaltung</div>
 
     <table class="columns">
@@ -75,7 +75,7 @@
     </table>
 
     <div class="footer">
-        OKGV · Die freie Verwaltungssoftware für Kleingartenvereine.
+        {{ config('app.name', 'OKGV') }} · Die freie Verwaltungssoftware für Kleingartenvereine.
     </div>
 </body>
 </html>

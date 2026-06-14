@@ -9,16 +9,16 @@ class BillingRateTemplatePolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->role->canManageBilling();
+        return $user->canManageBilling();
     }
 
     public function create(User $user): bool
     {
-        return $user->role->canManageBillingTemplates();
+        return $user->canManageBillingTemplates();
     }
 
     public function update(User $user, BillingRateTemplate $template): bool
     {
-        return $user->role->canManageBillingTemplates();
+        return $user->canManageBillingTemplates();
     }
 }

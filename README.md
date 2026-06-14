@@ -34,6 +34,10 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Sammellastschriften als pain.008.001.08-XML
 - Zahlungsstatus und historisierte Rücklastschriften
 - Pächterregistrierung mit verbindlicher Freigabe durch Vorstand oder Administrator
+- E-Mail-Verifizierung nach Freigabe eines neuen Kontos
+- Aufstufung freigegebener Pächterkonten zu Vorstandsmitgliedern
+- Granulare Vorstandsrechte mit konfigurierbaren Rechtevorlagen
+- Globale Konfiguration des sichtbaren Systemnamens
 - Isoliertes Pächterportal für eigene Daten, Parzellen und Rechnungen
 - Private Dokumentdownloads für Mitglieder und aktuelle Parzellen
 - Prüfpflichtige Zählerstandsmeldungen mit optionalem privatem Foto
@@ -80,6 +84,18 @@ Pächter beantragen ihren Zugang über `/paechter-registrierung`. Ein
 Administrator oder Vorstandsmitglied muss die Anfrage anschließend unter
 `/registrierungsanfragen` einem aktuell eingetragenen Mitglied zuordnen und
 freigeben.
+
+Nach der Freigabe erhält der Pächter einen zeitlich begrenzten
+Bestätigungslink. Für echten E-Mail-Versand müssen in `.env` mindestens
+`MAIL_MAILER=smtp`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`,
+`MAIL_PASSWORD` und `MAIL_FROM_ADDRESS` gesetzt sein. Mit dem voreingestellten
+`MAIL_MAILER=log` wird die Nachricht nur in `storage/logs/laravel.log`
+geschrieben.
+
+Administratoren finden unter ihrem Benutzermenü die `Rechteverwaltung` und
+die `Globale Konfiguration`. Dort können registrierte Konten zum Vorstand
+hochgestuft, einzelne Rechte oder Vorlagen vergeben und der sichtbare
+Systemname angepasst werden.
 
 ## Entwicklung
 

@@ -13,18 +13,18 @@ class MeterReadingSubmissionPolicy
     {
         return $user->role === UserRole::Tenant
             ? $user->member()->exists()
-            : $user->role->canReviewMeterReadingSubmissions();
+            : $user->canReviewMeterReadingSubmissions();
     }
 
     public function view(User $user, MeterReadingSubmission $submission): bool
     {
         return $submission->submitted_by === $user->id
-            || $user->role->canReviewMeterReadingSubmissions();
+            || $user->canReviewMeterReadingSubmissions();
     }
 
     public function review(User $user, MeterReadingSubmission $submission): bool
     {
-        return $user->role->canReviewMeterReadingSubmissions()
+        return $user->canReviewMeterReadingSubmissions()
             && $submission->status === MeterReadingSubmissionStatus::Pending;
     }
 

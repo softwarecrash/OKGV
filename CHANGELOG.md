@@ -2,6 +2,48 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.15] - 2026-06-14
+
+### Added
+
+- Freigegebene Pächterkonten können durch Administratoren zu
+  Vorstandsmitgliedern hochgestuft werden.
+- Granulare Benutzerrechte für Stammdaten, Zähler, Abrechnung, Preisvorlagen,
+  SEPA, Registrierungsprüfung und Zählerstandprüfung ergänzt.
+- Konfigurierbare Rechtevorlagen mit zurückhaltender Standardvorlage für
+  Vorstandsmitglieder hinzugefügt.
+- Globale Konfiguration für den sichtbaren Systemnamen und die
+  Standard-Rechtevorlage ergänzt.
+- Deutsche E-Mail-Verifizierung mit signiertem, zeitlich begrenztem Link nach
+  Freigabe einer Registrierungsanfrage aktiviert.
+
+### Changed
+
+- Sämtliche bestehenden Policies und Aktionshinweise prüfen nun
+  benutzerspezifische Rechte statt pauschaler Vorstandsrechte.
+- Systemname wird in Navigation, Anmeldung, Dashboard, Rechnungs-PDFs und
+  Transaktionsmails dynamisch verwendet.
+- Bestehende Konten werden bei Einführung der E-Mail-Pflicht einmalig als
+  bestätigt übernommen, damit kein bestehender Zugang gesperrt wird.
+
+### Security
+
+- SEPA- und Abrechnungszugriff werden Vorstandsmitgliedern nicht mehr
+  automatisch durch die Rolle gewährt.
+- Rechtevorlagen werden bei der Zuweisung als Snapshot gespeichert; spätere
+  Vorlagenänderungen erweitern bestehende Konten nicht unbemerkt.
+- Unbestätigte Konten können ausschließlich die Verifizierungsstrecke und
+  Abmeldung verwenden.
+- Rollen- und Rechteänderungen sowie globale Konfigurationsänderungen werden
+  auditiert.
+
+### Tests
+
+- Aufstufung, Rechteisolation, Vorlagen-Snapshots, Systemname,
+  Verifizierungsversand und Zugriffssperre werden durch Feature-Tests
+  abgedeckt.
+- Entwicklungsstand auf `0.2.0.15` erhöht.
+
 ## [0.2.0.14] - 2026-06-14
 
 ### Changed

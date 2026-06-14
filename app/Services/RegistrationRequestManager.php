@@ -18,7 +18,7 @@ final class RegistrationRequestManager
         User $actor,
         ?string $reviewNote = null,
     ): User {
-        return DB::transaction(function () use ($registrationRequest, $member, $actor, $reviewNote): User {
+        $user = DB::transaction(function () use ($registrationRequest, $member, $actor, $reviewNote): User {
             $registrationRequest = RegistrationRequest::query()
                 ->lockForUpdate()
                 ->findOrFail($registrationRequest->id);
@@ -76,6 +76,10 @@ final class RegistrationRequestManager
 
             return $user;
         });
+
+        $user->sendEmailVerificationNotification();
+
+        return $user;
     }
 
     public function reject(

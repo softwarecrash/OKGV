@@ -9,22 +9,22 @@ class ParcelTenantPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->role->canViewAllMasterData() || $user->member()->exists();
+        return $user->canViewAllMasterData() || $user->member()->exists();
     }
 
     public function view(User $user, ParcelTenant $parcelTenant): bool
     {
-        return $user->role->canViewAllMasterData()
+        return $user->canViewAllMasterData()
             || $parcelTenant->member()->where('user_id', $user->id)->exists();
     }
 
     public function create(User $user): bool
     {
-        return $user->role->canManageMasterData();
+        return $user->canManageMasterData();
     }
 
     public function update(User $user, ParcelTenant $parcelTenant): bool
     {
-        return $user->role->canManageMasterData();
+        return $user->canManageMasterData();
     }
 }

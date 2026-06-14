@@ -23,7 +23,7 @@
         <nav class="navbar navbar-expand-lg bg-body shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    OKGV
+                    {{ config('app.name', 'OKGV') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Navigation umschalten">
                     <span class="navbar-toggler-icon"></span>
@@ -162,6 +162,9 @@
                                     @can('viewAny', App\Models\User::class)
                                         <a class="dropdown-item" href="{{ route('user-permissions.index') }}">
                                             Rechteverwaltung
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('application-settings.edit') }}">
+                                            Globale Konfiguration
                                         </a>
                                         <div class="dropdown-divider"></div>
                                     @endcan

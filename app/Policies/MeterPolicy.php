@@ -11,12 +11,12 @@ class MeterPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->role->canViewAllMeters() || $user->member()->exists();
+        return $user->canViewAllMeters() || $user->member()->exists();
     }
 
     public function view(User $user, Meter $meter): bool
     {
-        if ($user->role->canViewAllMeters()) {
+        if ($user->canViewAllMeters()) {
             return true;
         }
 
@@ -28,17 +28,17 @@ class MeterPolicy
 
     public function create(User $user): bool
     {
-        return $user->role->canManageMeters();
+        return $user->canManageMeters();
     }
 
     public function update(User $user, Meter $meter): bool
     {
-        return $user->role->canManageMeters();
+        return $user->canManageMeters();
     }
 
     public function replace(User $user, Meter $meter): bool
     {
-        return $user->role->canManageMeters();
+        return $user->canManageMeters();
     }
 
     public function submitReading(User $user, Meter $meter): bool

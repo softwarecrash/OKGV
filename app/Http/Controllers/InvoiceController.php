@@ -19,7 +19,7 @@ class InvoiceController extends Controller
         $invoices = Invoice::query()
             ->with(['member', 'billingPeriod'])
             ->when(
-                ! $request->user()->role->canManageBilling(),
+                ! $request->user()->canManageBilling(),
                 fn ($query) => $query
                     ->where(function ($query) use ($request): void {
                         $query->whereHas('recipients.member', fn ($query) => $query

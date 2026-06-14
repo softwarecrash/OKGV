@@ -20,7 +20,7 @@ class MemberController extends Controller
 
         $members = Member::query()
             ->when(
-                ! $request->user()->role->canViewAllMasterData(),
+                ! $request->user()->canViewAllMasterData(),
                 fn ($query) => $query->where('user_id', $request->user()->id),
             )
             ->search($request->string('q')->trim()->toString())

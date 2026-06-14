@@ -75,7 +75,14 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 
 - Alle Berechtigungen werden serverseitig geprüft.
 - Verwende `viewAny`, `view`, `create`, `update` und fachliche Fähigkeiten wie `archive` oder `replace`.
-- Kapsle wiederkehrende Rollenentscheidungen als Methoden am `UserRole`-Enum.
+- Hinterlege sichere Standardrechte je Rolle am `UserRole`-Enum.
+- Prüfe fachliche Zugriffe über Berechtigungsmethoden am `User`; eine Rolle
+  allein darf einem Vorstandsmitglied keine sensiblen Rechte eröffnen.
+- Neue sensible Fachbereiche erhalten einen eigenen, verständlich
+  beschrifteten Berechtigungsschlüssel und werden nicht stillschweigend an
+  bestehende Sammelrechte angehängt.
+- Rechtevorlagen werden bei Zuweisung als Snapshot gespeichert. Änderungen an
+  einer Vorlage dürfen bestehende Benutzerrechte nicht unbemerkt verändern.
 - Pächterzugriffe werden immer über die eindeutige Benutzer-Mitglied-Zuordnung und die zugehörigen Fachdaten eingeschränkt.
 - Ein ausgeblendeter Button ersetzt niemals eine Policy.
 
@@ -105,6 +112,8 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 - Private Uploads gehören in private Storage-Verzeichnisse.
 - Neue Uploadfunktionen benötigen MIME-, Größen- und Dateitypprüfung.
 - Öffentliche Schreibendpunkte benötigen Rate Limiting, sobald sie eingeführt werden.
+- Neue öffentlich beantragte Konten müssen ihre E-Mail-Adresse bestätigen,
+  bevor sie geschützte Anwendungsbereiche verwenden dürfen.
 
 ## Historische Daten
 

@@ -9,12 +9,12 @@ class ParcelPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->role->canViewAllMasterData() || $user->member()->exists();
+        return $user->canViewAllMasterData() || $user->member()->exists();
     }
 
     public function view(User $user, Parcel $parcel): bool
     {
-        if ($user->role->canViewAllMasterData()) {
+        if ($user->canViewAllMasterData()) {
             return true;
         }
 
@@ -26,11 +26,11 @@ class ParcelPolicy
 
     public function create(User $user): bool
     {
-        return $user->role->canManageMasterData();
+        return $user->canManageMasterData();
     }
 
     public function update(User $user, Parcel $parcel): bool
     {
-        return $user->role->canManageMasterData();
+        return $user->canManageMasterData();
     }
 }

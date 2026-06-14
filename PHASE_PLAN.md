@@ -20,6 +20,8 @@ vorherigen Phase geprüft sein.
 - [x] Aktionspunkte in zukünftigen Phasen für jeden notwendigen Benutzer-
   oder Vorstandsschritt ergänzen
 - [x] Hellen und dunklen Darstellungsmodus bereitstellen
+- [x] Vorstandsrechte granular und über konfigurierbare Vorlagen vergeben
+- [x] Globalen Systemnamen konfigurierbar machen
 
 ## Phase 0: Projektbasis
 
@@ -73,6 +75,8 @@ vorherigen Phase geprüft sein.
 - [x] Eigene Dokumente
 - [x] Eigene Zählerstände
 - [x] Zählerstände mit Foto melden
+- [x] Neue Konten nach Freigabe per E-Mail verifizieren
+- [x] Freigegebene Pächterkonten administrativ zum Vorstand hochstufen
 
 ## Phase 6: Dokumentenverwaltung
 

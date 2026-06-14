@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\ApplicationSetting;
 use App\Models\BillingPeriod;
 use App\Models\BillingRate;
 use App\Models\BillingRateAssignment;
@@ -16,10 +17,12 @@ use App\Models\Parcel;
 use App\Models\ParcelTenant;
 use App\Models\PaymentBatch;
 use App\Models\PaymentBatchItem;
+use App\Models\PermissionProfile;
 use App\Models\RegistrationRequest;
 use App\Models\SepaMandate;
 use App\Models\SepaSetting;
 use App\Models\User;
+use App\Policies\ApplicationSettingPolicy;
 use App\Policies\BillingPeriodPolicy;
 use App\Policies\BillingRateAssignmentPolicy;
 use App\Policies\BillingRatePolicy;
@@ -34,6 +37,7 @@ use App\Policies\ParcelPolicy;
 use App\Policies\ParcelTenantPolicy;
 use App\Policies\PaymentBatchItemPolicy;
 use App\Policies\PaymentBatchPolicy;
+use App\Policies\PermissionProfilePolicy;
 use App\Policies\RegistrationRequestPolicy;
 use App\Policies\SepaMandatePolicy;
 use App\Policies\SepaSettingPolicy;
@@ -46,6 +50,7 @@ use Illuminate\Auth\Events\Logout;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -66,6 +71,17 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
 
+        if (Schema::hasTable('application_settings')) {
+            $systemName = ApplicationSetting::query()->value('system_name');
+
+            if ($systemName) {
+                config([
+                    'app.name' => $systemName,
+                    'mail.from.name' => $systemName,
+                ]);
+            }
+        }
+
         View::composer('layouts.app', function ($view): void {
             $user = auth()->user();
             $view->with(
@@ -85,6 +101,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(ApplicationSetting::class, ApplicationSettingPolicy::class);
         Gate::policy(BillingPeriod::class, BillingPeriodPolicy::class);
         Gate::policy(BillingRate::class, BillingRatePolicy::class);
         Gate::policy(BillingRateTemplate::class, BillingRateTemplatePolicy::class);
@@ -98,6 +115,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(ParcelTenant::class, ParcelTenantPolicy::class);
         Gate::policy(PaymentBatch::class, PaymentBatchPolicy::class);
         Gate::policy(PaymentBatchItem::class, PaymentBatchItemPolicy::class);
+        Gate::policy(PermissionProfile::class, PermissionProfilePolicy::class);
         Gate::policy(Document::class, DocumentPolicy::class);
         Gate::policy(RegistrationRequest::class, RegistrationRequestPolicy::class);
         Gate::policy(SepaMandate::class, SepaMandatePolicy::class);

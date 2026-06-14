@@ -10,12 +10,12 @@ class InvoicePolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->role->canManageBilling() || $user->member()->exists();
+        return $user->canManageBilling() || $user->member()->exists();
     }
 
     public function view(User $user, Invoice $invoice): bool
     {
-        if ($user->role->canManageBilling()) {
+        if ($user->canManageBilling()) {
             return true;
         }
 

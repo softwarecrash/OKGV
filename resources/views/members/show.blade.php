@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-        @if (auth()->user()->role->canViewAllMasterData())
+        @if (auth()->user()->canViewAllMasterData())
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-header">Interne Notizen</div>

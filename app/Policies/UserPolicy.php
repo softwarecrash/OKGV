@@ -26,6 +26,11 @@ class UserPolicy
         return $user->isAdministrator() || $user->is($subject);
     }
 
+    public function updateAccess(User $user, User $subject): bool
+    {
+        return $user->isAdministrator() && ! $user->is($subject);
+    }
+
     public function delete(User $user, User $subject): bool
     {
         return $user->isAdministrator() && ! $user->is($subject);

@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Bei OKGV anmelden</div>
+                <div class="card-header">Bei {{ config('app.name', 'OKGV') }} anmelden</div>
 
                 <div class="card-body">
                     <p class="text-secondary">Melde dich mit der E-Mail-Adresse und dem Passwort deines Vereinskonto an.</p>
@@ -17,7 +17,7 @@
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                                <div class="form-text">Verwende die E-Mail-Adresse, die deinem OKGV-Konto zugeordnet ist.</div>
+                                <div class="form-text">Verwende die E-Mail-Adresse, die deinem {{ config('app.name', 'OKGV') }}-Konto zugeordnet ist.</div>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">

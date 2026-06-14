@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationSettingController;
 use App\Http\Controllers\BillingPeriodController;
 use App\Http\Controllers\BillingRateAssignmentController;
 use App\Http\Controllers\BillingRateController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\ParcelController;
 use App\Http\Controllers\ParcelTenantController;
 use App\Http\Controllers\PaymentBatchController;
 use App\Http\Controllers\PaymentReturnController;
+use App\Http\Controllers\PermissionProfileController;
 use App\Http\Controllers\PortalDocumentController;
 use App\Http\Controllers\RegistrationRequestController;
 use App\Http\Controllers\SepaMandateController;
@@ -33,7 +35,7 @@ Route::get('/', function () {
 
 Auth::routes([
     'register' => false,
-    'verify' => false,
+    'verify' => true,
 ]);
 
 Route::middleware('guest')->group(function (): void {
@@ -45,10 +47,10 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::get('/dashboard', [HomeController::class, 'index'])
-    ->middleware('auth')
+    ->middleware(['auth', 'verified'])
     ->name('home');
 
-Route::middleware('auth')->group(function (): void {
+Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::get('paechterportal', [TenantPortalController::class, 'index'])
         ->name('tenant-portal.index');
     Route::get('paechterportal/dokumente', [PortalDocumentController::class, 'index'])
@@ -79,6 +81,12 @@ Route::middleware('auth')->group(function (): void {
         ->name('user-permissions.index');
     Route::put('user-permissions/{user}', [UserPermissionController::class, 'update'])
         ->name('user-permissions.update');
+    Route::get('globale-konfiguration', [ApplicationSettingController::class, 'edit'])
+        ->name('application-settings.edit');
+    Route::put('globale-konfiguration', [ApplicationSettingController::class, 'update'])
+        ->name('application-settings.update');
+    Route::resource('permission-profiles', PermissionProfileController::class)
+        ->only(['index', 'create', 'store', 'edit', 'update']);
     Route::post('billing-periods/{billing_period}/calculate', [BillingPeriodController::class, 'calculate'])
         ->name('billing-periods.calculate');
     Route::post('billing-periods/{billing_period}/approve', [BillingPeriodController::class, 'approve'])

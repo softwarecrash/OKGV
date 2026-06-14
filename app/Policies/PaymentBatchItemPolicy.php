@@ -11,7 +11,7 @@ class PaymentBatchItemPolicy
 {
     public function return(User $user, PaymentBatchItem $item): bool
     {
-        return $user->role->canManageSepa()
+        return $user->canManageSepa()
             && $item->status !== PaymentBatchItemStatus::Returned
             && in_array($item->batch->status, [
                 PaymentBatchStatus::Submitted,

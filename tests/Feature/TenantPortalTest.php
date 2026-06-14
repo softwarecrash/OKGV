@@ -18,9 +18,11 @@ use App\Models\Parcel;
 use App\Models\ParcelTenant;
 use App\Models\RegistrationRequest;
 use App\Models\User;
+use App\Notifications\VerifyEmailNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -58,6 +60,8 @@ class TenantPortalTest extends TestCase
 
     public function test_board_can_approve_only_an_active_tenant_of_requested_parcel(): void
     {
+        Notification::fake();
+
         $board = User::factory()->create(['role' => UserRole::Board]);
         $waterManager = User::factory()->create(['role' => UserRole::WaterManager]);
         $parcel = Parcel::factory()->create(['parcel_number' => 'B-08']);
@@ -87,6 +91,8 @@ class TenantPortalTest extends TestCase
 
         $user = User::query()->where('email', 'tenant@example.test')->firstOrFail();
         $this->assertSame(UserRole::Tenant, $user->role);
+        $this->assertFalse($user->hasVerifiedEmail());
+        Notification::assertSentTo($user, VerifyEmailNotification::class);
         $this->assertSame($user->id, $member->fresh()->user_id);
         $this->assertNull($registrationRequest->fresh()->password);
         $this->assertSame(

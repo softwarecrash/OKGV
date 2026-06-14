@@ -18,7 +18,7 @@ class ParcelController extends Controller
 
         $parcels = Parcel::query()
             ->when(
-                ! $request->user()->role->canViewAllMasterData(),
+                ! $request->user()->canViewAllMasterData(),
                 fn ($query) => $query->whereHas(
                     'tenancies',
                     fn ($query) => $query
@@ -68,7 +68,7 @@ class ParcelController extends Controller
         $parcel->load([
             'tenancies' => fn ($query) => $query
                 ->when(
-                    ! request()->user()->role->canViewAllMasterData(),
+                    ! request()->user()->canViewAllMasterData(),
                     fn ($query) => $query->whereHas(
                         'member',
                         fn ($query) => $query->where('user_id', request()->user()->id),

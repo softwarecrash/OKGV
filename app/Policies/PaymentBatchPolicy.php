@@ -10,22 +10,22 @@ class PaymentBatchPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->role->canManageSepa();
+        return $user->canManageSepa();
     }
 
     public function view(User $user, PaymentBatch $batch): bool
     {
-        return $user->role->canManageSepa();
+        return $user->canManageSepa();
     }
 
     public function create(User $user): bool
     {
-        return $user->role->canManageSepa();
+        return $user->canManageSepa();
     }
 
     public function export(User $user, PaymentBatch $batch): bool
     {
-        return $user->role->canManageSepa()
+        return $user->canManageSepa()
             && in_array($batch->status, [
                 PaymentBatchStatus::Draft,
                 PaymentBatchStatus::Exported,
@@ -34,13 +34,13 @@ class PaymentBatchPolicy
 
     public function submit(User $user, PaymentBatch $batch): bool
     {
-        return $user->role->canManageSepa()
+        return $user->canManageSepa()
             && $batch->status === PaymentBatchStatus::Exported;
     }
 
     public function settle(User $user, PaymentBatch $batch): bool
     {
-        return $user->role->canManageSepa()
+        return $user->canManageSepa()
             && in_array($batch->status, [
                 PaymentBatchStatus::Submitted,
                 PaymentBatchStatus::PartiallyReturned,

@@ -4,7 +4,7 @@
 @endif
 <x-validation-errors />
 <div class="alert alert-info">
-    Das schriftlich oder elektronisch erteilte Mandat bleibt die rechtliche Grundlage. OKGV speichert die für den Einzug erforderlichen Angaben verschlüsselt; das Originaldokument wird später in der Dokumentenverwaltung hinterlegt.
+    Das schriftlich oder elektronisch erteilte Mandat bleibt die rechtliche Grundlage. {{ config('app.name', 'OKGV') }} speichert die für den Einzug erforderlichen Angaben verschlüsselt; das Originaldokument wird später in der Dokumentenverwaltung hinterlegt.
 </div>
 <div class="row g-3">
     <div class="col-md-6">

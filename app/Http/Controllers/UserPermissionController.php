@@ -2,49 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserPermission;
 use App\Enums\UserRole;
-use App\Http\Requests\UserMeterReadingPermissionRequest;
+use App\Http\Requests\UserAccessRequest;
+use App\Models\ApplicationSetting;
+use App\Models\PermissionProfile;
 use App\Models\User;
-use App\Services\AuditLogger;
+use App\Services\UserAccessManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class UserPermissionController extends Controller
 {
+    public function __construct(private readonly UserAccessManager $manager) {}
+
     public function index(Request $request): View
     {
         abort_unless($request->user()->isAdministrator(), 403);
 
         return view('user-permissions.index', [
             'users' => User::query()
-                ->whereIn('role', [UserRole::Administrator, UserRole::Board])
                 ->orderBy('name')
                 ->get(),
+            'profiles' => PermissionProfile::query()
+                ->where('is_active', true)
+                ->orderBy('name')
+                ->get(),
+            'permissions' => UserPermission::cases(),
+            'defaultProfileId' => ApplicationSetting::current()
+                ->default_board_permission_profile_id,
+            'assignableRoles' => [
+                UserRole::Board,
+                UserRole::Treasurer,
+                UserRole::WaterManager,
+                UserRole::GardenManager,
+                UserRole::Tenant,
+            ],
         ]);
     }
 
     public function update(
-        UserMeterReadingPermissionRequest $request,
+        UserAccessRequest $request,
         User $user,
     ): RedirectResponse {
-        abort_unless($request->user()->isAdministrator(), 403);
-        abort_unless(
-            in_array($user->role, [UserRole::Administrator, UserRole::Board], true),
-            422,
-        );
+        $validated = $request->validated();
+        $profile = isset($validated['permission_profile_id'])
+            ? PermissionProfile::query()->findOrFail($validated['permission_profile_id'])
+            : null;
 
-        $user->update($request->validated());
-
-        AuditLogger::log(
-            action: 'user.meter_reading_correction_permission.updated',
-            actor: $request->user(),
+        $this->manager->update(
             subject: $user,
-            metadata: [
-                'enabled' => $user->can_correct_meter_readings,
-            ],
+            role: UserRole::from($validated['role']),
+            permissions: $validated['permissions'] ?? [],
+            profile: $profile,
+            actor: $request->user(),
         );
 
-        return back()->with('status', 'Korrekturrecht wurde aktualisiert.');
+        return back()->with('status', 'Rolle und Zugriffsrechte wurden aktualisiert.');
     }
 }

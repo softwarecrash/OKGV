@@ -10,17 +10,17 @@ class RegistrationRequestPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->role->canReviewTenantRegistrations();
+        return $user->canReviewTenantRegistrations();
     }
 
     public function view(User $user, RegistrationRequest $registrationRequest): bool
     {
-        return $user->role->canReviewTenantRegistrations();
+        return $user->canReviewTenantRegistrations();
     }
 
     public function review(User $user, RegistrationRequest $registrationRequest): bool
     {
-        return $user->role->canReviewTenantRegistrations()
+        return $user->canReviewTenantRegistrations()
             && $registrationRequest->status === RegistrationRequestStatus::Pending;
     }
 }

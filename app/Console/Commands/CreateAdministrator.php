@@ -44,6 +44,7 @@ class CreateAdministrator extends Command
             'email' => $email,
             'password' => Hash::make($password),
             'role' => UserRole::Administrator,
+            'email_verified_at' => now(),
         ]);
 
         $this->info('Administrator wurde erstellt.');

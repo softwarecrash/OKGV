@@ -14,6 +14,6 @@ class MeterReadingPolicy
 
     public function create(User $user): bool
     {
-        return $user->role->canManageMeters();
+        return $user->canManageMeters();
     }
 }

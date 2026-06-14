@@ -9,12 +9,12 @@ class BillingRatePolicy
 {
     public function create(User $user): bool
     {
-        return $user->role->canManageBilling();
+        return $user->canManageBilling();
     }
 
     public function update(User $user, BillingRate $rate): bool
     {
-        return $user->role->canManageBilling() && $rate->billingPeriod->isEditable();
+        return $user->canManageBilling() && $rate->billingPeriod->isEditable();
     }
 
     public function delete(User $user, BillingRate $rate): bool

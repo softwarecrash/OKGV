@@ -28,7 +28,7 @@
                         <dt class="col-sm-5">Lage</dt><dd class="col-sm-7">{{ $parcel->location_description ?: '–' }}</dd>
                         <dt class="col-sm-5">Status</dt><dd class="col-sm-7">{{ $parcel->status->label() }}</dd>
                     </dl>
-                    @if (auth()->user()->role->canViewAllMasterData())
+                    @if (auth()->user()->canViewAllMasterData())
                         <hr>
                         <strong>Interne Notizen</strong>
                         <p class="mb-0 mt-2">{!! nl2br(e($parcel->notes ?: 'Keine Notizen.')) !!}</p>

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\MeterReadingSource;
 use App\Enums\MeterType;
+use App\Enums\UserPermission;
 use App\Enums\UserRole;
 use App\Models\Meter;
 use App\Models\MeterReading;
@@ -114,7 +115,7 @@ class MeterReadingCorrectionTest extends TestCase
         $this->assertSame('100.0000', $reading->fresh()->reading_value);
     }
 
-    public function test_only_administrator_can_assign_permission_to_eligible_roles(): void
+    public function test_only_administrator_can_assign_meter_correction_permission(): void
     {
         $administrator = User::factory()->administrator()->create();
         $board = User::factory()->create(['role' => UserRole::Board]);
@@ -123,26 +124,29 @@ class MeterReadingCorrectionTest extends TestCase
 
         $this->actingAs($board)
             ->put(route('user-permissions.update', $otherBoard), [
-                'can_correct_meter_readings' => true,
+                'role' => UserRole::Board->value,
+                'permissions' => [UserPermission::CorrectMeterReadings->value],
             ])
             ->assertForbidden();
 
         $this->actingAs($administrator)
             ->put(route('user-permissions.update', $waterManager), [
-                'can_correct_meter_readings' => true,
+                'role' => UserRole::WaterManager->value,
+                'permissions' => [UserPermission::CorrectMeterReadings->value],
             ])
-            ->assertSessionHasErrors('can_correct_meter_readings');
+            ->assertRedirect();
 
         $this->actingAs($administrator)
             ->put(route('user-permissions.update', $board), [
-                'can_correct_meter_readings' => true,
+                'role' => UserRole::Board->value,
+                'permissions' => [UserPermission::CorrectMeterReadings->value],
             ])
             ->assertRedirect();
 
         $this->assertTrue($board->fresh()->canCorrectMeterReadings());
         $this->assertFalse($waterManager->fresh()->canCorrectMeterReadings());
         $this->assertDatabaseHas('audit_logs', [
-            'action' => 'user.meter_reading_correction_permission.updated',
+            'action' => 'user.access.updated',
             'subject_id' => $board->id,
         ]);
     }

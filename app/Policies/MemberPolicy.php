@@ -9,26 +9,26 @@ class MemberPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->role->canViewAllMasterData() || $user->member()->exists();
+        return $user->canViewAllMasterData() || $user->member()->exists();
     }
 
     public function view(User $user, Member $member): bool
     {
-        return $user->role->canViewAllMasterData() || $member->user_id === $user->id;
+        return $user->canViewAllMasterData() || $member->user_id === $user->id;
     }
 
     public function create(User $user): bool
     {
-        return $user->role->canManageMasterData();
+        return $user->canManageMasterData();
     }
 
     public function update(User $user, Member $member): bool
     {
-        return $user->role->canManageMasterData();
+        return $user->canManageMasterData();
     }
 
     public function archive(User $user, Member $member): bool
     {
-        return $user->role->canManageMasterData();
+        return $user->canManageMasterData();
     }
 }

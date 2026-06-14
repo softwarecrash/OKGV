@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\ApplicationSettingRequest;
+use App\Models\ApplicationSetting;
+use App\Models\PermissionProfile;
+use App\Services\AuditLogger;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class ApplicationSettingController extends Controller
+{
+    public function edit(Request $request): View
+    {
+        $this->authorize('viewAny', ApplicationSetting::class);
+
+        return view('application-settings.edit', [
+            'settings' => ApplicationSetting::current(),
+            'profiles' => PermissionProfile::query()->orderBy('name')->get(),
+        ]);
+    }
+
+    public function update(ApplicationSettingRequest $request): RedirectResponse
+    {
+        $settings = ApplicationSetting::current();
+        $settings->update($request->validated());
+        config([
+            'app.name' => $settings->system_name,
+            'mail.from.name' => $settings->system_name,
+        ]);
+
+        AuditLogger::log('application.settings.updated', $request->user(), $settings, [
+            'changed_fields' => array_keys($settings->getChanges()),
+        ]);
+
+        return back()->with('status', 'Globale Konfiguration wurde gespeichert.');
+    }
+}

@@ -49,7 +49,28 @@ Auditpflicht besteht insbesondere für Anmeldung, Benutzer-, Mitglieder- und Par
 - Gartenwart
 - Pächter
 
-Pächter dürfen ausschließlich eigene Daten sehen. Berechtigungen werden serverseitig geprüft. Bankdaten sind nur für Administrator, Vorstand und Kassierer zugänglich.
+Pächter dürfen ausschließlich eigene Daten sehen. Berechtigungen werden
+serverseitig geprüft. Administratorkonten besitzen vollständigen Zugriff.
+Vorstandsmitglieder erhalten keine pauschalen Vollrechte, sondern
+ausdrücklich zugewiesene Berechtigungen. Bankdaten sind nur für
+Administratoren sowie Konten mit dem gesonderten SEPA-Recht zugänglich.
+
+### Globale Konfiguration und Rechtevorlagen
+
+Administratoren können den sichtbaren Systemnamen ändern. Der Name ersetzt
+`OKGV` in Navigation, Seitentitel, Rechnungs-PDFs und Transaktionsmails.
+
+Administratoren verwalten wiederverwendbare Rechtevorlagen für
+Vorstandsmitglieder. Eine Vorlage enthält eine fachlich verständliche Auswahl
+einzelner Rechte, insbesondere Stammdaten, Zähler, Abrechnung, Preisvorlagen,
+SEPA, Registrierungsprüfung und Zählerstandprüfung. Bei Zuweisung wird ein
+Snapshot der Vorlage am Benutzerkonto gespeichert. Spätere Änderungen einer
+Vorlage verändern bestehende Konten nicht automatisch.
+
+Ein freigegebenes Pächterkonto kann durch einen Administrator zum
+Vorstandsmitglied hochgestuft werden. Administratorkonten dürfen in der
+Oberfläche nicht herabgestuft werden. Rollen- und Rechteänderungen werden
+auditiert.
 
 ## Phasen
 
@@ -89,7 +110,8 @@ Die Tabelle `parcels` enthält eine eindeutige `parcel_number`, `area_sqm`, opti
 
 #### Rechte in Phase 1
 
-- Administrator und Vorstand dürfen Mitglieder, Parzellen und Pächterzuordnungen lesen und bearbeiten.
+- Administratoren sowie Vorstandsmitglieder mit Stammdatenrechten dürfen
+  Mitglieder, Parzellen und Pächterzuordnungen lesen oder bearbeiten.
 - Kassierer dürfen Mitglieder und deren Parzellenzuordnungen lesen, jedoch keine Stammdaten verändern.
 - Wasserwart und Gartenwart dürfen Mitglieder und Parzellen einschließlich Pächterhistorie lesen, jedoch in Phase 1 nicht verändern.
 - Pächter dürfen ausschließlich den eigenen Mitgliedsdatensatz, aktuell oder historisch selbst zugeordnete Parzellen und die dazugehörigen eigenen Zuordnungen lesen.
@@ -361,8 +383,9 @@ Lastschrift-Snapshot bleibt erhalten.
 
 #### Rechte in Phase 4
 
-- Administrator, Vorstand und Kassierer dürfen SEPA-Einstellungen, Mandate,
-  Sammler, Exporte, Zahlungsstatus und Rücklastschriften verwalten.
+- Administratoren sowie Konten mit dem ausdrücklichen SEPA-Recht dürfen
+  SEPA-Einstellungen, Mandate, Sammler, Exporte, Zahlungsstatus und
+  Rücklastschriften verwalten.
 - Wasserwart, Gartenwart und Pächter erhalten keinen Zugriff auf Bankdaten
   oder SEPA-Verwaltung.
 - Listen zeigen IBANs nur maskiert mit den letzten vier Stellen.
@@ -388,6 +411,14 @@ Rolle `tenant` und verknüpft es mit diesem Mitglied. Freigabe und Ablehnung
 werden mit Bearbeiter, Zeitpunkt und optionaler Begründung historisiert und
 auditiert. Kassierer, Wasserwart und Gartenwart dürfen Registrierungsanfragen
 nicht bearbeiten.
+
+Nach der Freigabe wird über den in `.env` konfigurierten Laravel-Mailer eine
+deutsche Bestätigungsnachricht versendet. Das neue Konto bleibt bis zur
+Bestätigung der signierten, zeitlich begrenzten E-Mail-Adresse für alle
+geschützten Anwendungsbereiche gesperrt. Ein neuer Bestätigungslink kann
+rate-limitiert angefordert werden. Bereits vor Einführung dieser Pflicht
+bestehende Konten gelten bei der Migration als bestätigt, damit kein
+Administrator ausgesperrt wird.
 
 #### Portalzugriff
 
@@ -437,7 +468,8 @@ Die Hauptnavigation wird fachlich gruppiert:
 - `Mitglieder` enthält Mitgliederverwaltung und Registrierungsanfragen.
 - `Zähler` enthält Zählerverwaltung und Zählerstandsmeldungen.
 - `Finanzen` enthält Abrechnung, Preisvorlagen, Rechnungen und SEPA.
-- Die Rechteverwaltung befindet sich ausschließlich im Benutzermenü.
+- Rechteverwaltung und globale Konfiguration befinden sich ausschließlich im
+  Benutzermenü.
 
 Ein zentraler Aktionshinweis zeigt als leuchtender Punkt an, wenn die
 angemeldete Person in einem Bereich handeln muss. Der Punkt erscheint nur,

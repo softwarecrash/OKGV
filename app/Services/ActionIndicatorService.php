@@ -27,14 +27,14 @@ final class ActionIndicatorService
      */
     public function forUser(User $user): array
     {
-        $registrations = $user->role->canReviewTenantRegistrations()
+        $registrations = $user->canReviewTenantRegistrations()
             ? RegistrationRequest::query()
                 ->where('status', RegistrationRequestStatus::Pending)
                 ->count()
             : 0;
 
         $meterReadings = match (true) {
-            $user->role->canReviewMeterReadingSubmissions() => MeterReadingSubmission::query()
+            $user->canReviewMeterReadingSubmissions() => MeterReadingSubmission::query()
                 ->where('status', MeterReadingSubmissionStatus::Pending)
                 ->count(),
             $user->role === UserRole::Tenant => MeterReadingSubmission::query()

@@ -9,36 +9,36 @@ class BillingPeriodPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->role->canManageBilling();
+        return $user->canManageBilling();
     }
 
     public function view(User $user, BillingPeriod $period): bool
     {
-        return $user->role->canManageBilling();
+        return $user->canManageBilling();
     }
 
     public function create(User $user): bool
     {
-        return $user->role->canManageBilling();
+        return $user->canManageBilling();
     }
 
     public function update(User $user, BillingPeriod $period): bool
     {
-        return $user->role->canManageBilling() && $period->isEditable();
+        return $user->canManageBilling() && $period->isEditable();
     }
 
     public function calculate(User $user, BillingPeriod $period): bool
     {
-        return $user->role->canManageBilling() && $period->canBeCalculated();
+        return $user->canManageBilling() && $period->canBeCalculated();
     }
 
     public function approve(User $user, BillingPeriod $period): bool
     {
-        return $user->role->canManageBilling();
+        return $user->canManageBilling();
     }
 
     public function archive(User $user, BillingPeriod $period): bool
     {
-        return $user->role->canManageBilling();
+        return $user->canManageBilling();
     }
 }
