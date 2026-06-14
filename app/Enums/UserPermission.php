@@ -48,7 +48,7 @@ enum UserPermission: string
             self::ManageSepa => 'Erlaubt den Zugriff auf sensible Bankdaten, Mandate und Sammellastschriften.',
             self::ReviewTenantRegistrations => 'Erlaubt die Freigabe oder Ablehnung neuer Pächterkonten.',
             self::ReviewMeterReadingSubmissions => 'Erlaubt die Prüfung gemeldeter Zählerstände und Fotos.',
-            self::ManageCommunication => 'Erlaubt Serienmails, Versandhistorie, SMTP-Tests und allgemeine PDF-Briefe.',
+            self::ManageCommunication => 'Erlaubt Serienmails, Versandhistorie und allgemeine PDF-Briefe.',
             self::ManageDocuments => 'Erlaubt private Uploads, Dateiversionen, Freigaben und die zentrale Dokumentenverwaltung.',
         };
     }

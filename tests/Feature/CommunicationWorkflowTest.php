@@ -54,8 +54,9 @@ class CommunicationWorkflowTest extends TestCase
         $this->assertSame('mailer@example.test', CommunicationSetting::current()->smtp_username);
 
         $this->actingAs($administrator)
-            ->get(route('communication-settings.edit'))
+            ->get(route('application-settings.edit'))
             ->assertOk()
+            ->assertSee('SMTP-Einstellungen')
             ->assertDontSee('mailer@example.test')
             ->assertDontSee('VerySecretPassword');
     }
@@ -116,7 +117,20 @@ class CommunicationWorkflowTest extends TestCase
 
         $this->actingAs($board)->get(route('mail-campaigns.index'))->assertForbidden();
         $this->actingAs($board)->get(route('letters.index'))->assertForbidden();
-        $this->actingAs($board)->get(route('communication-settings.edit'))->assertForbidden();
+        $this->actingAs($board)->get(route('application-settings.edit'))->assertForbidden();
+        $this->actingAs($board)
+            ->put(route('communication-settings.update'), [
+                'smtp_enabled' => false,
+                'smtp_scheme' => 'smtp',
+                'smtp_host' => 'smtp.example.test',
+                'smtp_port' => 587,
+                'smtp_username' => null,
+                'smtp_password' => null,
+                'clear_credentials' => false,
+                'from_address' => 'verein@example.test',
+                'from_name' => 'Verein',
+            ])
+            ->assertForbidden();
     }
 
     public function test_dynamic_recipient_groups_find_current_tenants_open_invoices_and_missing_readings(): void

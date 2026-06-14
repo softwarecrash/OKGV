@@ -98,11 +98,9 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         ->name('application-settings.update');
     Route::resource('permission-profiles', PermissionProfileController::class)
         ->only(['index', 'create', 'store', 'edit', 'update']);
-    Route::get('communication-settings', [CommunicationSettingController::class, 'edit'])
-        ->name('communication-settings.edit');
-    Route::put('communication-settings', [CommunicationSettingController::class, 'update'])
+    Route::put('globale-konfiguration/smtp', [CommunicationSettingController::class, 'update'])
         ->name('communication-settings.update');
-    Route::post('communication-settings/test', [CommunicationSettingController::class, 'test'])
+    Route::post('globale-konfiguration/smtp/test', [CommunicationSettingController::class, 'test'])
         ->middleware('throttle:3,10')
         ->name('communication-settings.test');
     Route::post('mail-campaigns/{mail_campaign}/send', [MailCampaignController::class, 'send'])

@@ -9,22 +9,12 @@ use App\Services\CommunicationMailConfigurator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\View\View;
 
 class CommunicationSettingController extends Controller
 {
     public function __construct(
         private readonly CommunicationMailConfigurator $configurator,
     ) {}
-
-    public function edit(): View
-    {
-        $this->authorize('viewAny', CommunicationSetting::class);
-
-        return view('communication-settings.edit', [
-            'settings' => CommunicationSetting::current(),
-        ]);
-    }
 
     public function update(CommunicationSettingRequest $request): RedirectResponse
     {
@@ -58,7 +48,9 @@ class CommunicationSettingController extends Controller
                 || $request->filled('smtp_password'),
         ]);
 
-        return back()->with('status', 'SMTP-Einstellungen wurden gespeichert.');
+        return redirect()
+            ->route('application-settings.edit', ['section' => 'smtp'])
+            ->with('status', 'SMTP-Einstellungen wurden gespeichert.');
     }
 
     public function test(Request $request): RedirectResponse
@@ -75,6 +67,8 @@ class CommunicationSettingController extends Controller
 
         AuditLogger::log('communication.smtp.tested', $request->user());
 
-        return back()->with('status', "Testmail wurde an {$request->user()->email} versendet.");
+        return redirect()
+            ->route('application-settings.edit', ['section' => 'smtp'])
+            ->with('status', "Testmail wurde an {$request->user()->email} versendet.");
     }
 }

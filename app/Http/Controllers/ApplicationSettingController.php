@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ApplicationSettingRequest;
 use App\Models\ApplicationSetting;
+use App\Models\CommunicationSetting;
 use App\Models\PermissionProfile;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
@@ -18,6 +19,7 @@ class ApplicationSettingController extends Controller
 
         return view('application-settings.edit', [
             'settings' => ApplicationSetting::current(),
+            'communicationSettings' => CommunicationSetting::current(),
             'profiles' => PermissionProfile::query()->orderBy('name')->get(),
         ]);
     }

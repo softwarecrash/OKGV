@@ -193,3 +193,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Feature-, Rechte- und Uploadtests ergänzen
 - [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
 - [x] Phase 6 vollständig prüfen und veröffentlichen
+
+## Globale Konfiguration
+
+- [x] SMTP-Einstellungen aus Kommunikation in die globale Konfiguration verschieben
+- [x] Berechtigungen, Navigation und Tests der SMTP-Integration prüfen
+- [ ] Entwicklungsstand veröffentlichen

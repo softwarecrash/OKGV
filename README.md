@@ -105,7 +105,8 @@ Administrator oder Vorstandsmitglied muss die Anfrage anschließend unter
 freigeben.
 
 Nach der Freigabe erhält der Pächter einen zeitlich begrenzten
-Bestätigungslink. Bis zur Einrichtung im Bereich `SMTP-Einstellungen`
+Bestätigungslink. Bis zur Einrichtung im Abschnitt `SMTP-Einstellungen` der
+`Globalen Konfiguration`
 verwendet Laravel die Werte aus `.env`. Mit dem voreingestellten
 `MAIL_MAILER=log` wird die Nachricht nur in `storage/logs/laravel.log`
 geschrieben. Sobald die verschlüsselte SMTP-Konfiguration aktiviert ist,
@@ -113,15 +114,15 @@ verwenden Bestätigungsmails und Serienmails diese Einstellungen.
 
 Administratoren finden unter ihrem Benutzermenü die `Rechteverwaltung` und
 die `Globale Konfiguration`. Dort können registrierte Konten zum Vorstand
-hochgestuft, einzelne Rechte oder Vorlagen vergeben und der sichtbare
-Systemname angepasst werden.
+hochgestuft, einzelne Rechte oder Vorlagen vergeben, der sichtbare
+Systemname angepasst und die verschlüsselte SMTP-Verbindung eingerichtet
+oder getestet werden.
 
 Konten mit dem Recht `Kommunikation verwalten` finden in der Hauptnavigation
 den Bereich `Kommunikation`. Dort stehen Serienmails, PDF-Briefe und die
-SMTP-Einstellungen bereit. Eine Zahlungserinnerung erscheint an einer
-Rechnung erst nach überschrittener Fälligkeit und verändert weder
-Zahlungsstatus noch Mahnstufe. Mahngebühren und Mahnstufen folgen erst in
-Phase 8.
+Versandhistorie bereit. Eine Zahlungserinnerung erscheint an einer Rechnung
+erst nach überschrittener Fälligkeit und verändert weder Zahlungsstatus noch
+Mahnstufe. Mahngebühren und Mahnstufen folgen erst in Phase 8.
 
 Konten mit dem Recht `Dokumente verwalten` können Dateien unter `Dokumente`
 hochladen, Mitgliedern oder Parzellen zuordnen und gezielt veröffentlichen.

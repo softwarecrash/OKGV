@@ -2,6 +2,30 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.19] - 2026-06-14
+
+### Changed
+
+- SMTP-Einstellungen und Testversand als eigenen Abschnitt in die globale
+  Konfiguration verschoben.
+- Separaten SMTP-Menüpunkt aus dem Bereich Kommunikation entfernt.
+- Das Kommunikationsrecht umfasst weiterhin Serienmails, Versandhistorie und
+  PDF-Briefe, aber keine Änderung globaler Serverzugangsdaten.
+
+### Security
+
+- SMTP-Konfiguration und Testversand sind ausschließlich Administratoren
+  zugänglich.
+- Verschlüsselte Zugangsdaten werden weiterhin weder vorausgefüllt noch im
+  Auditlog ausgegeben.
+
+### Tests
+
+- Einbindung in die globale Konfiguration, Geheimnismaskierung und
+  Administratorzugriff werden durch Feature-Tests abgedeckt.
+- Insgesamt bestehen 83 Tests mit 450 Assertions.
+- Entwicklungsstand auf `0.2.0.19` erhöht.
+
 ## [0.2.0.18] - 2026-06-14
 
 ### Phase 6

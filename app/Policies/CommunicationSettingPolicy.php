@@ -8,16 +8,16 @@ class CommunicationSettingPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->canManageCommunication();
+        return $user->isAdministrator();
     }
 
     public function update(User $user): bool
     {
-        return $user->canManageCommunication();
+        return $user->isAdministrator();
     }
 
     public function test(User $user): bool
     {
-        return $user->canManageCommunication();
+        return $user->isAdministrator();
     }
 }

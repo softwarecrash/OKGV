@@ -555,17 +555,20 @@ Abrechnungsrecht voraus.
 #### Rechte
 
 Kommunikation erhält ein eigenes Benutzerrecht. Es erlaubt Serienmails,
-Versandhistorie, SMTP-Test und allgemeine PDF-Briefe. Administratoren besitzen
-dieses Recht immer. Vorstandsmitglieder erhalten es nur ausdrücklich oder
-über eine Rechtevorlage. Zahlungserinnerungen setzen zusätzlich das
-Abrechnungsrecht voraus, da sie Rechnungs- und Zahlungsdaten enthalten.
+Versandhistorie und allgemeine PDF-Briefe. Administratoren besitzen dieses
+Recht immer. Vorstandsmitglieder erhalten es nur ausdrücklich oder über eine
+Rechtevorlage. Die SMTP-Konfiguration einschließlich Testversand gehört zur
+globalen Konfiguration und bleibt Administratoren vorbehalten.
+Zahlungserinnerungen setzen zusätzlich das Abrechnungsrecht voraus, da sie
+Rechnungs- und Zahlungsdaten enthalten.
 
 #### SMTP
 
 SMTP-Host, Port, Schema, Benutzername, Passwort, Absenderadresse und
-Absendername sind global konfigurierbar. Benutzername und Passwort werden mit
-Laravel verschlüsselt gespeichert und niemals im Auditlog ausgegeben. Ein
-Testversand geht ausschließlich an das angemeldete Administratorkonto. Die
+Absendername werden im SMTP-Abschnitt der globalen Konfiguration verwaltet.
+Benutzername und Passwort werden mit Laravel verschlüsselt gespeichert und
+niemals im Auditlog ausgegeben. Nur Administratoren dürfen diese Werte ändern
+oder einen Testversand an das eigene Administratorkonto auslösen. Die
 Konfiguration verwendet `smtp` mit STARTTLS-Unterstützung oder `smtps`.
 
 #### Serienmails

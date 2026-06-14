@@ -145,7 +145,6 @@
                                             </a>
                                         </li>
                                         <li><a class="dropdown-item" href="{{ route('letters.index') }}">PDF-Briefe</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('communication-settings.edit') }}">SMTP-Einstellungen</a></li>
                                     </ul>
                                 </li>
                             @endif
