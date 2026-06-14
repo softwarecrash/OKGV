@@ -293,3 +293,13 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Regressionstests ergänzen
 - [x] Gesamttests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen und veröffentlichen
+
+## Nachbesserung Phase 12: Arbeitseinsatz anlegen
+
+- [x] Anlegebutton in der Arbeitseinsatzübersicht ergänzen
+- [x] Bearbeitbare Abrechnungsperiode auswählbar machen
+- [x] Zustand ohne bearbeitbare Periode erklären
+- [x] Sicheren Abbrechen-Link für Gartenwarte ergänzen
+- [x] Administrator- und Gartenwartzugriff testen
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [ ] Nachbesserung vollständig prüfen und veröffentlichen

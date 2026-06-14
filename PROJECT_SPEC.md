@@ -767,6 +767,12 @@ bearbeitet.
 
 #### Termine
 
+Die Arbeitseinsatzübersicht bietet für berechtigte Konten einen direkten
+Anlegezugang. Vor dem Öffnen des Formulars wird eine bearbeitbare
+Abrechnungsperiode ausgewählt. Freigegebene und archivierte Perioden werden
+nicht angeboten. Ist keine bearbeitbare Periode vorhanden, erklärt die
+Übersicht den fehlenden Anlegezugang verständlich.
+
 Ein Arbeitseinsatz gehört genau zu einer Abrechnungsperiode und speichert
 Bezeichnung, Beschreibung, Ort, Beginn, Ende, internen Hinweis, Ersteller und
 Status. Beginn und Ende müssen vollständig innerhalb der Periode liegen.

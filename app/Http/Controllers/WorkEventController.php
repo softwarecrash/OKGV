@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BillingPeriodStatus;
 use App\Enums\WorkEventParticipantStatus;
 use App\Enums\WorkEventStatus;
 use App\Http\Requests\WorkEventRequest;
@@ -36,6 +37,13 @@ class WorkEventController extends Controller
                 ->paginate(25)
                 ->withQueryString(),
             'periods' => BillingPeriod::query()->latest('starts_at')->get(),
+            'editablePeriods' => BillingPeriod::query()
+                ->whereIn('status', [
+                    BillingPeriodStatus::Draft->value,
+                    BillingPeriodStatus::Calculated->value,
+                ])
+                ->latest('starts_at')
+                ->get(),
             'statuses' => WorkEventStatus::cases(),
             'selectedPeriodId' => $periodId,
             'selectedStatus' => $status,
@@ -53,6 +61,7 @@ class WorkEventController extends Controller
                 'status' => WorkEventStatus::Planned,
             ]),
             'statuses' => WorkEventStatus::cases(),
+            'cancelUrl' => route('work-events.index'),
         ]);
     }
 
@@ -100,6 +109,7 @@ class WorkEventController extends Controller
             'billingPeriod' => $workEvent->billingPeriod,
             'workEvent' => $workEvent,
             'statuses' => WorkEventStatus::cases(),
+            'cancelUrl' => route('work-events.show', $workEvent),
         ]);
     }
 

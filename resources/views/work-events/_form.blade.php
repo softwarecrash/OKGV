@@ -69,5 +69,5 @@
 
 <div class="d-flex gap-2 mt-4">
     <button class="btn btn-primary">{{ $workEvent->exists ? 'Änderungen speichern' : 'Arbeitseinsatz anlegen' }}</button>
-    <a class="btn btn-outline-secondary" href="{{ $workEvent->exists ? route('work-events.show', $workEvent) : route('billing-periods.show', $billingPeriod) }}">Abbrechen</a>
+    <a class="btn btn-outline-secondary" href="{{ $cancelUrl }}">Abbrechen</a>
 </div>

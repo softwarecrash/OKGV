@@ -198,13 +198,31 @@ class WorkEventWorkflowTest extends TestCase
 
         $this->actingAs($gardenManager)
             ->get(route('work-events.index'))
-            ->assertOk();
+            ->assertOk()
+            ->assertSee('Arbeitseinsatz anlegen')
+            ->assertSee($period->name)
+            ->assertSee(route('billing-periods.work-events.create', $period));
         $this->actingAs($gardenManager)
             ->get(route('billing-periods.index'))
             ->assertForbidden();
         $this->actingAs($gardenManager)
             ->get(route('billing-periods.work-events.create', $period))
-            ->assertOk();
+            ->assertOk()
+            ->assertSee(route('work-events.index'));
+    }
+
+    public function test_event_overview_explains_when_no_editable_period_exists(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        BillingPeriod::factory()->create([
+            'status' => BillingPeriodStatus::Approved,
+        ]);
+
+        $this->actingAs($administrator)
+            ->get(route('work-events.index'))
+            ->assertOk()
+            ->assertDontSee('Arbeitseinsatz anlegen')
+            ->assertSee('Keine bearbeitbare Abrechnungsperiode vorhanden.');
     }
 
     public function test_overdue_planned_event_has_action_indicator(): void

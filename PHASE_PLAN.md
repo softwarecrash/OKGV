@@ -129,6 +129,8 @@ vorherigen Phase geprüft sein.
 - [x] Arbeitseinsätze
 - [x] Terminverwaltung
 - [x] Stundenübernahme
+- [x] Direkter Anlegezugang aus der Arbeitseinsatzübersicht
+- [x] Bearbeitbare Abrechnungsperiode beim Anlegen auswählen
 
 ## Phase 13: CSV-Import
 

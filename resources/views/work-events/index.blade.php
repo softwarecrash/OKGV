@@ -2,9 +2,32 @@
 
 @section('content')
 <div class="container">
-    <div class="mb-4">
-        <h1 class="h2 mb-1">Arbeitseinsätze</h1>
-        <p class="text-secondary mb-0">Termine, Teilnehmer und bestätigte Stunden verwalten.</p>
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+        <div>
+            <h1 class="h2 mb-1">Arbeitseinsätze</h1>
+            <p class="text-secondary mb-0">Termine, Teilnehmer und bestätigte Stunden verwalten.</p>
+        </div>
+        @can('create', App\Models\WorkEvent::class)
+            @if ($editablePeriods->isNotEmpty())
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Arbeitseinsatz anlegen
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        @foreach ($editablePeriods as $period)
+                            <li>
+                                <a class="dropdown-item" href="{{ route('billing-periods.work-events.create', $period) }}">
+                                    {{ $period->name }}
+                                    <span class="text-secondary">· {{ $period->status->label() }}</span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @else
+                <span class="text-secondary small">Keine bearbeitbare Abrechnungsperiode vorhanden.</span>
+            @endif
+        @endcan
     </div>
 
     <div class="card border-0 shadow-sm mb-4">

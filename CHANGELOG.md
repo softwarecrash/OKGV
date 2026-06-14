@@ -2,6 +2,25 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.31] - 2026-06-14
+
+### Arbeitseinsätze
+
+- Direkten Button `Arbeitseinsatz anlegen` in der
+  Arbeitseinsatzübersicht ergänzt.
+- Beim Anlegen kann eine bearbeitbare Abrechnungsperiode direkt aus einem
+  übersichtlichen Auswahlmenü gewählt werden.
+- Freigegebene und archivierte Perioden werden nicht als Ziel angeboten.
+- Ist keine bearbeitbare Periode vorhanden, zeigt die Übersicht eine
+  verständliche Erklärung.
+- Der Abbrechen-Link im Anlegeformular führt zurück zur
+  Arbeitseinsatzübersicht und funktioniert damit auch für Gartenwarte ohne
+  Abrechnungsrecht.
+- Administrator- und Gartenwartzugriff sowie der Zustand ohne bearbeitbare
+  Periode sind durch Feature-Tests abgedeckt.
+- Insgesamt bestehen 116 Tests mit 670 Assertions.
+- Entwicklungsstand auf `0.2.0.31` erhöht.
+
 ## [0.2.0.30] - 2026-06-14
 
 ### Löschbarer Demo-Bestand
