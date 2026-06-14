@@ -59,16 +59,23 @@ class CommunicationSettingController extends Controller
         $this->configurator->apply();
         $recipient = $request->validated('test_email');
 
-        Mail::mailer('okgv_smtp')
+        $sentMessage = Mail::mailer('okgv_smtp')
             ->to($recipient)
             ->send(new SmtpTestMessage);
+        $messageId = $sentMessage?->getMessageId();
 
         AuditLogger::log('communication.smtp.tested', $request->user(), metadata: [
             'recipient' => $recipient,
+            'message_id' => $messageId,
         ]);
 
         return redirect()
             ->route('application-settings.edit', ['section' => 'smtp'])
-            ->with('status', "Testmail wurde an {$recipient} versendet.");
+            ->with(
+                'status',
+                "Der SMTP-Server hat die Testmail für {$recipient} angenommen. "
+                .'Die endgültige Zustellung kann sich verzögern; prüfe auch den Spamordner.'
+                .($messageId ? " Message-ID: {$messageId}" : ''),
+            );
     }
 }

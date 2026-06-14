@@ -137,7 +137,10 @@
                     <button class="btn btn-outline-primary">Testmail senden</button>
                     @error('test_email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
-                <div class="form-text">Die Adresse wird nur für diesen Testversand verwendet und nicht als Systemeinstellung gespeichert.</div>
+                <div class="form-text">
+                    Die Adresse wird nur für diesen Testversand verwendet und nicht als Systemeinstellung gespeichert.
+                    Eine erfolgreiche Rückmeldung bestätigt die Annahme durch den SMTP-Server, nicht die endgültige Zustellung beim Empfänger.
+                </div>
             </div>
         </form>
     </section>

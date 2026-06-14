@@ -117,6 +117,9 @@ die `Globale Konfiguration`. Dort können registrierte Konten zum Vorstand
 hochgestuft, einzelne Rechte oder Vorlagen vergeben, der sichtbare
 Systemname angepasst und die verschlüsselte SMTP-Verbindung eingerichtet
 oder mit einer frei wählbaren Zieladresse getestet werden.
+Der SMTP-Test bestätigt die Annahme durch den konfigurierten Mailserver und
+zeigt die Message-ID zur Nachverfolgung. Eine endgültige Zustellgarantie beim
+Empfänger kann SMTP technisch nicht geben.
 
 Konten mit dem Recht `Kommunikation verwalten` finden in der Hauptnavigation
 den Bereich `Kommunikation`. Dort stehen Serienmails, PDF-Briefe und die

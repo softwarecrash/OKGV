@@ -2,6 +2,31 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.24] - 2026-06-14
+
+### Fixed
+
+- Erfolgsmeldung des SMTP-Tests unterscheidet nun klar zwischen Annahme durch
+  den SMTP-Server und endgültiger Zustellung beim Empfänger.
+- Hinweis auf mögliche Verzögerung und Spamordner ergänzt.
+- Vom SMTP-Transport zurückgegebene Message-ID wird zur Nachverfolgung beim
+  Mailanbieter im verschlüsselten Auditlog gespeichert und angezeigt.
+
+### Diagnosis
+
+- Für die verwendete Absender-Subdomain `eigene-scholle.okgv.de` fehlen
+  derzeit eigene SPF- und erkennbare DKIM-DNS-Einträge.
+- Die letzten angenommenen Testnachrichten gingen an Gmail; fehlende
+  Absenderauthentifizierung kann dort zu Spam-Einstufung oder Ablehnung nach
+  der SMTP-Annahme führen.
+
+### Tests
+
+- Präzise Annahmemeldung und Audit-Metadaten der Testmail werden durch
+  Feature-Tests abgedeckt.
+- Insgesamt bestehen 85 Tests mit 486 Assertions.
+- Entwicklungsstand auf `0.2.0.24` erhöht.
+
 ## [0.2.0.23] - 2026-06-14
 
 ### Fixed

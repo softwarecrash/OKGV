@@ -11,6 +11,7 @@ use App\Enums\UserPermission;
 use App\Enums\UserRole;
 use App\Mail\CampaignMessage;
 use App\Mail\SmtpTestMessage;
+use App\Models\AuditLog;
 use App\Models\CommunicationSetting;
 use App\Models\Invoice;
 use App\Models\InvoiceRecipient;
@@ -80,13 +81,24 @@ class CommunicationWorkflowTest extends TestCase
                 'test_email' => 'extern@example.test',
             ])
             ->assertRedirect(route('application-settings.edit', ['section' => 'smtp']))
-            ->assertSessionHas('status', 'Testmail wurde an extern@example.test versendet.');
+            ->assertSessionHas(
+                'status',
+                fn (string $status): bool => str_contains(
+                    $status,
+                    'Der SMTP-Server hat die Testmail für extern@example.test angenommen.',
+                ),
+            );
 
         Mail::assertSent(SmtpTestMessage::class, fn ($mail) => $mail->hasTo('extern@example.test'));
         $this->assertDatabaseHas('audit_logs', [
             'action' => 'communication.smtp.tested',
             'user_id' => $administrator->id,
         ]);
+        $auditLog = AuditLog::query()
+            ->where('action', 'communication.smtp.tested')
+            ->latest('id')
+            ->firstOrFail();
+        $this->assertArrayHasKey('message_id', $auditLog->metadata);
 
         $this->actingAs($administrator)
             ->from(route('application-settings.edit'))

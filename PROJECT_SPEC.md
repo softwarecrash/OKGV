@@ -573,7 +573,10 @@ Zieladresse auslösen. Die Zieladresse wird auditiert, aber nicht als
 Systemeinstellung gespeichert. Die Konfiguration verwendet `smtp` mit
 STARTTLS-Unterstützung oder `smtps`. Testversand ist pro Benutzer auf zehn
 Nachrichten pro Minute begrenzt. Bei Überschreitung bleibt die Person auf der
-Konfigurationsseite und erhält eine verständliche deutsche Meldung.
+Konfigurationsseite und erhält eine verständliche deutsche Meldung. Eine
+erfolgreiche Testmeldung bestätigt ausdrücklich nur die Annahme durch den
+SMTP-Server. Die vom Transport zurückgegebene Message-ID wird für die
+Nachverfolgung beim Mailanbieter auditiert.
 
 #### Serienmails
 
