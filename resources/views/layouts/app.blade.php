@@ -46,6 +46,16 @@
                                     <a class="nav-link" href="{{ route('meters.index') }}">Zähler</a>
                                 </li>
                             @endcan
+                            @can('viewAny', App\Models\BillingPeriod::class)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('billing-periods.index') }}">Abrechnung</a>
+                                </li>
+                            @endcan
+                            @can('viewAny', App\Models\Invoice::class)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('invoices.index') }}">Rechnungen</a>
+                                </li>
+                            @endcan
                         @endauth
                     </ul>
 

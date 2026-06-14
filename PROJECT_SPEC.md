@@ -159,6 +159,102 @@ Dadurch werden mehrere Zählerwechsel innerhalb eines Abrechnungsjahres korrekt 
 
 Abrechnungsperioden, historische Preise, flächen-, verbrauchs- und festpreisabhängige Positionen, optionale Kosten, Rechnungen und PDF-Ausgabe. Freigegebene Rechnungen sind unveränderbar.
 
+#### Abrechnungsperioden
+
+Eine Abrechnungsperiode besitzt eine eindeutige Bezeichnung, ein Start- und
+Enddatum, ein Fälligkeitsdatum und einen Status: `draft`, `calculated`,
+`approved` oder `archived`. Berechnung, Freigabe und Archivierung werden mit
+eigenen Zeitstempeln dokumentiert.
+
+Abrechnungsperioden dürfen sich zeitlich nicht überschneiden. Preise und
+Zuordnungen dürfen nur im Status `draft` geändert werden. Die Berechnung
+erzeugt reproduzierbare Rechnungsentwürfe. Eine Freigabe ist nur nach einer
+erfolgreichen Berechnung möglich.
+
+#### Historische Preise
+
+`billing_rates` werden immer einer Abrechnungsperiode zugeordnet. Eine
+Preisänderung erfolgt ausschließlich in einer neuen Periode und verändert
+keine historische Rechnung.
+
+Jeder Preis besitzt:
+
+- einen innerhalb der Periode eindeutigen technischen Code
+- eine deutsche Bezeichnung und optionale Beschreibung
+- eine Berechnungsart: `fixed`, `per_sqm`, `per_kwh`, `per_m3` oder `manual`
+- einen Geltungsbereich: `member`, `parcel` oder `assignment`
+- einen Dezimalbetrag mit vier Nachkommastellen
+- einen Aktivstatus
+
+Vordefinierte Codes sind mindestens `LEASE_PER_SQM`, `WATER_PER_M3`,
+`ELECTRICITY_PER_KWH`, `WATER_BASE_FEE`, `ELECTRICITY_BASE_FEE`,
+`MEMBER_FEE` und `INSURANCE`. Verbrauchspreise werden anhand ihres Codes dem
+passenden Zählertyp zugeordnet.
+
+Der Geltungsbereich steuert die Anwendung:
+
+- `member`: einmal je abrechnungsrelevantem Mitglied
+- `parcel`: einmal je abrechnungsrelevanter Parzelle
+- `assignment`: nur über eine historische Zuordnung zu Mitglied oder Parzelle
+
+Optionale und manuelle Kosten werden über `billing_rate_assignments` genau
+einem Mitglied oder einer Parzelle zugeordnet. Die Zuordnung speichert Menge
+und Notizen innerhalb der Abrechnungsperiode. Eine Zuordnung darf nicht
+gleichzeitig Mitglied und Parzelle referenzieren.
+
+#### Rechnungserzeugung
+
+Eine Abrechnung wird für Mitglieder erzeugt, die am Ende der Periode
+Hauptpächter mindestens einer Parzelle sind. Die Parzellen dieses Mitglieds
+werden in einer gemeinsamen Rechnung zusammengefasst. Mitgliedsbezogene
+Kosten werden einmal, parzellenbezogene Kosten für jede zugeordnete Parzelle
+berechnet.
+
+Automatisch berechenbare Positionen:
+
+- Pacht und Umlagen anhand der Parzellenfläche
+- Strom und Wasser anhand der historischen Zählerstände
+- feste Bereitstellungs- und Mitgliedskosten
+- zugeordnete Versicherungen, Sonderumlagen und Zusatzleistungen
+- manuelle Positionen mit dokumentierter Menge
+
+Pächterwechsel innerhalb einer Abrechnungsperiode werden bis zur Umsetzung
+des vollständigen Übergabeprozesses in Phase 17 nicht automatisch aufgeteilt.
+Die Berechnung muss solche Fälle erkennen und abbrechen, damit keine
+unbeabsichtigte Zuordnung entsteht.
+
+Rechnungsnummern werden bis zur konfigurierbaren Nummernkreisverwaltung aus
+Phase 16 im Format `YYYY-NNNNN` je Kalenderjahr fortlaufend vergeben.
+
+#### Rechnungen und Positionen
+
+Eine Rechnung besitzt mindestens Abrechnungsperiode, Mitglied, eindeutige
+Rechnungsnummer, Status `draft` oder `approved`, Rechnungsdatum,
+Fälligkeitsdatum, Gesamtbetrag, Freigabezeitpunkt und freigebenden Benutzer.
+
+Rechnungspositionen speichern unveränderliche Snapshots von Code,
+Bezeichnung, Berechnungsart, Menge, Einzelpreis und Positionssumme. Sie
+referenzieren Preis und Parzelle nur ergänzend. Historische Rechnungen bleiben
+daher auch bei späteren Stammdatenänderungen vollständig nachvollziehbar.
+
+Freigegebene Rechnungen und ihre Positionen dürfen weder über Oberfläche noch
+über Serviceklassen verändert oder gelöscht werden. Korrekturen erfolgen
+später ausschließlich durch dokumentierte Folgebelege.
+
+PDF-Dateien werden serverseitig aus dem Rechnungssnapshot erzeugt. Entwürfe
+werden sichtbar als solche gekennzeichnet.
+
+#### Rechte in Phase 3
+
+- Administrator, Vorstand und Kassierer dürfen Abrechnungsperioden, Preise,
+  Zuordnungen und Rechnungen verwalten, berechnen und freigeben.
+- Wasserwart darf abrechnungsrelevante Zähler- und Verbrauchsdaten einsehen,
+  aber keine Preise oder Rechnungen ändern.
+- Gartenwart erhält keinen Zugriff auf Finanzdaten.
+- Pächter dürfen ausschließlich eigene freigegebene Rechnungen einsehen; die
+  Portaloberfläche dafür wird in Phase 5 umgesetzt.
+- Jede Berechnung und Freigabe wird im Auditlog protokolliert.
+
 ### Phase 4: SEPA
 
 Mandate, IBAN-Prüfung, Sammellastschriften, pain.008-Export, Rücklastschriften und Zahlungsstatus.

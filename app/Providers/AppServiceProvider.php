@@ -2,12 +2,20 @@
 
 namespace App\Providers;
 
+use App\Models\BillingPeriod;
+use App\Models\BillingRate;
+use App\Models\BillingRateAssignment;
+use App\Models\Invoice;
 use App\Models\Member;
 use App\Models\Meter;
 use App\Models\MeterReading;
 use App\Models\Parcel;
 use App\Models\ParcelTenant;
 use App\Models\User;
+use App\Policies\BillingPeriodPolicy;
+use App\Policies\BillingRateAssignmentPolicy;
+use App\Policies\BillingRatePolicy;
+use App\Policies\InvoicePolicy;
 use App\Policies\MemberPolicy;
 use App\Policies\MeterPolicy;
 use App\Policies\MeterReadingPolicy;
@@ -41,6 +49,10 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrapFive();
 
         Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(BillingPeriod::class, BillingPeriodPolicy::class);
+        Gate::policy(BillingRate::class, BillingRatePolicy::class);
+        Gate::policy(BillingRateAssignment::class, BillingRateAssignmentPolicy::class);
+        Gate::policy(Invoice::class, InvoicePolicy::class);
         Gate::policy(Member::class, MemberPolicy::class);
         Gate::policy(Meter::class, MeterPolicy::class);
         Gate::policy(MeterReading::class, MeterReadingPolicy::class);

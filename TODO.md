@@ -52,6 +52,22 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Phase 2 vollständig prüfen
 - [x] Entwicklungsstand 0.2.0.1 veröffentlichen
 
+## Phase 3: Abrechnung
+
+- [x] Datenmodell und Rechtekonzept spezifizieren
+- [x] Abrechnungsperioden und historische Preise migrieren
+- [x] Optionale Preiszuordnungen migrieren
+- [x] Rechnungen und unveränderliche Positionen migrieren
+- [x] Models, Enums und Beziehungen implementieren
+- [x] Berechnung und Statusübergänge als Services implementieren
+- [x] Policies und Form Requests implementieren
+- [x] Deutsche Verwaltungsoberflächen implementieren
+- [x] PDF-Ausgabe implementieren
+- [x] Auditlog für Berechnung und Freigabe ergänzen
+- [x] Feature- und Unit-Tests ergänzen
+- [x] Sicherheitsprüfungen und Asset-Build ausführen
+- [ ] Entwicklungsstand 0.2.0.3 veröffentlichen
+
 ## Projektweite Standards
 
 - [x] Verbindliche Code-Style-Richtlinie für Agents erstellen

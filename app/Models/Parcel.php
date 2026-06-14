@@ -48,6 +48,16 @@ class Parcel extends Model
         return $this->hasMany(Meter::class);
     }
 
+    public function billingRateAssignments(): HasMany
+    {
+        return $this->hasMany(BillingRateAssignment::class);
+    }
+
+    public function invoiceItems(): HasMany
+    {
+        return $this->hasMany(InvoiceItem::class);
+    }
+
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
         return $query->when($search, function (Builder $query, string $search): void {

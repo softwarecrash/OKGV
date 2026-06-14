@@ -24,6 +24,13 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Wasser- und Stromzähler mit dauerhaftem Lebenszyklus
 - Unveränderliche, plausibilitätsgeprüfte Zählerstände
 - Atomare Zählerwechsel und Verbrauch über mehrere Zählersegmente
+- Abrechnungsperioden mit historischen Preisen und Zusatzkosten
+- Reproduzierbare Rechnungen aus Flächen-, Verbrauchs- und Festkosten
+- Freigabeschutz für Rechnungen und serverseitige PDF-Ausgabe
+
+Freigegebene Rechnungen sind unveränderbar. Pächterwechsel innerhalb einer
+Periode werden bis zum vollständigen Übergabeprozess bewusst nicht automatisch
+abgerechnet.
 
 ## Voraussetzungen
 

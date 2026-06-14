@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\BillingPeriodController;
+use App\Http\Controllers\BillingRateAssignmentController;
+use App\Http\Controllers\BillingRateController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MeterController;
 use App\Http\Controllers\MeterReadingController;
@@ -25,6 +29,23 @@ Route::get('/dashboard', [HomeController::class, 'index'])
     ->name('home');
 
 Route::middleware('auth')->group(function (): void {
+    Route::post('billing-periods/{billing_period}/calculate', [BillingPeriodController::class, 'calculate'])
+        ->name('billing-periods.calculate');
+    Route::post('billing-periods/{billing_period}/approve', [BillingPeriodController::class, 'approve'])
+        ->name('billing-periods.approve');
+    Route::post('billing-periods/{billing_period}/archive', [BillingPeriodController::class, 'archive'])
+        ->name('billing-periods.archive');
+    Route::resource('billing-periods', BillingPeriodController::class)->except('destroy');
+    Route::resource('billing-periods.billing-rates', BillingRateController::class)
+        ->only(['create', 'store', 'edit', 'update', 'destroy'])
+        ->parameters(['billing-rates' => 'billing_rate']);
+    Route::post('billing-rates/{billing_rate}/assignments', [BillingRateAssignmentController::class, 'store'])
+        ->name('billing-rate-assignments.store');
+    Route::delete('billing-rate-assignments/{billing_rate_assignment}', [BillingRateAssignmentController::class, 'destroy'])
+        ->name('billing-rate-assignments.destroy');
+    Route::get('invoices/{invoice}/pdf', [InvoiceController::class, 'pdf'])
+        ->name('invoices.pdf');
+    Route::resource('invoices', InvoiceController::class)->only(['index', 'show']);
     Route::patch('members/{member}/archive', [MemberController::class, 'archive'])
         ->name('members.archive');
     Route::resource('members', MemberController::class)->except('destroy');

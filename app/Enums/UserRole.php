@@ -42,4 +42,9 @@ enum UserRole: string
     {
         return $this !== self::Tenant;
     }
+
+    public function canManageBilling(): bool
+    {
+        return in_array($this, [self::Administrator, self::Board, self::Treasurer], true);
+    }
 }

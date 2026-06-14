@@ -54,6 +54,16 @@ class Member extends Model
         return $this->hasMany(ParcelTenant::class);
     }
 
+    public function billingRateAssignments(): HasMany
+    {
+        return $this->hasMany(BillingRateAssignment::class);
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     public function parcels(): BelongsToMany
     {
         return $this->belongsToMany(Parcel::class, 'parcel_tenants')

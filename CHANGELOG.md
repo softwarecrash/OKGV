@@ -2,6 +2,44 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.3] - 2026-06-14
+
+### Phase 3
+
+- Datenmodell für Abrechnungsperioden, historische Preise, optionale
+  Zuordnungen, Rechnungen und unveränderliche Rechnungssnapshots spezifiziert
+- Berechnungsregeln, Schutz historischer Daten und Rollenrechte festgelegt
+- Phase 3 in einzeln prüfbare Umsetzungsschritte aufgeteilt
+- Reversible Migrationen für Abrechnungsperioden, Preise, Preiszuordnungen,
+  Rechnungen und Rechnungssnapshot-Positionen hinzugefügt
+- Typisierte Status-, Berechnungs- und Geltungsbereich-Enums sowie Models,
+  Factories und Beziehungen für die Abrechnung ergänzt
+- Änderungen und Löschungen freigegebener Rechnungen und ihrer Positionen auf
+  Model-Ebene gesperrt
+- Transaktionale Periodenverwaltung mit Überschneidungsprüfung, Berechnung,
+  Freigabe und Archivierung implementiert
+- Rechnungsberechnung für Mitglieds-, Flächen-, Verbrauchs- und
+  Zuordnungskosten mit exakter Dezimalarithmetik ergänzt
+- Pächterwechsel innerhalb einer Periode blockieren die automatische
+  Abrechnung und Berechnung sowie Freigabe werden auditiert
+- Policies und Form Requests für Finanzrollen, Pächterisolation,
+  Periodenzeiträume, Preise und exklusive Mitglied-/Parzellenzuordnungen
+  ergänzt
+- Controller und geschützte Routen für Perioden, Preise, Zuordnungen,
+  Berechnung, Freigabe, Archivierung und Rechnungen hinzugefügt
+- Responsive deutsche Verwaltungsoberflächen für Abrechnungsperioden, Preise,
+  Zuordnungen und Rechnungen in die Hauptnavigation integriert
+- Serverseitige PDF-Erzeugung mit Dompdf 3.1 aus unveränderlichen
+  Rechnungssnapshots ergänzt; Entwürfe werden deutlich gekennzeichnet
+- Tests für Finanzrollen, Pächterisolation, Periodenkonflikte, exakte
+  Rechnungsberechnung, Mehrzählerverbrauch, Pächterwechsel, Unveränderlichkeit,
+  Auditlogs und PDF-Ausgabe ergänzt
+- Entfernen von Preisen und Preiszuordnungen wird ebenfalls im Auditlog
+  dokumentiert
+- Statussperren werden unabhängig vom globalen Administratorrecht direkt an
+  den Änderungsendpunkten durchgesetzt
+- Entwicklungsstand auf `0.2.0.3` erhöht
+
 ## [0.2.0.2] - 2026-06-14
 
 ### Entwicklung
