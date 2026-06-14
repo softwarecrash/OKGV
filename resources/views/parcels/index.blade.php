@@ -42,7 +42,7 @@
                             <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ route('parcels.show', $parcel) }}">Öffnen</a></td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="text-center py-4">Keine Parzellen gefunden.</td></tr>
+                        <tr><td colspan="5" class="text-center py-4"><strong>Keine passenden Parzellen gefunden.</strong><br><span class="text-secondary">Prüfe Suchbegriff und Statusfilter oder lege eine neue Parzelle an.</span></td></tr>
                     @endforelse
                 </tbody>
             </table>

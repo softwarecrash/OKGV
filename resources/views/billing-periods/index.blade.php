@@ -33,7 +33,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="text-center py-4">Keine Abrechnungsperioden vorhanden.</td></tr>
+                        <tr><td colspan="5" class="text-center py-4"><strong>Noch keine Abrechnungsperiode vorhanden.</strong><br><span class="text-secondary">Lege einen Zeitraum an, ergänze darin die Preise und berechne anschließend die Rechnungsentwürfe.</span></td></tr>
                     @endforelse
                 </tbody>
             </table>

@@ -17,7 +17,7 @@
                     <a class="btn btn-primary" href="{{ route('billing-periods.billing-rates.create', $billingPeriod) }}">Preis anlegen</a>
                 @endcan
                 @can('calculate', $billingPeriod)
-                    <form method="POST" action="{{ route('billing-periods.calculate', $billingPeriod) }}">
+                    <form method="POST" action="{{ route('billing-periods.calculate', $billingPeriod) }}" onsubmit="return confirm('Abrechnung jetzt neu berechnen? Vorhandene Entwürfe dieser Periode werden durch die aktuelle Berechnung ersetzt.')">
                         @csrf
                         <button class="btn btn-success">Abrechnung berechnen</button>
                     </form>
@@ -25,7 +25,7 @@
             @endif
             @if ($billingPeriod->status === App\Enums\BillingPeriodStatus::Calculated)
                 @can('approve', $billingPeriod)
-                    <form method="POST" action="{{ route('billing-periods.approve', $billingPeriod) }}">
+                    <form method="POST" action="{{ route('billing-periods.approve', $billingPeriod) }}" onsubmit="return confirm('Alle Rechnungen dieser Periode freigeben? Freigegebene Rechnungen und Positionen können anschließend nicht mehr verändert werden.')">
                         @csrf
                         <button class="btn btn-success">Rechnungen freigeben</button>
                     </form>
@@ -33,7 +33,7 @@
             @endif
             @if ($billingPeriod->status === App\Enums\BillingPeriodStatus::Approved)
                 @can('archive', $billingPeriod)
-                    <form method="POST" action="{{ route('billing-periods.archive', $billingPeriod) }}">
+                    <form method="POST" action="{{ route('billing-periods.archive', $billingPeriod) }}" onsubmit="return confirm('Abrechnungsperiode archivieren? Die Daten bleiben erhalten, die Periode gilt danach als abgeschlossen.')">
                         @csrf
                         <button class="btn btn-outline-secondary">Archivieren</button>
                     </form>
@@ -74,7 +74,7 @@
                                                 · Menge {{ number_format((float) $assignment->quantity, 4, ',', '.') }}
                                             </span>
                                             @can('delete', $assignment)
-                                                <form method="POST" action="{{ route('billing-rate-assignments.destroy', $assignment) }}">
+                                                <form method="POST" action="{{ route('billing-rate-assignments.destroy', $assignment) }}" onsubmit="return confirm('Diese Preiszuordnung entfernen? Sie wird bei der nächsten Berechnung nicht mehr berücksichtigt.')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="btn btn-sm btn-outline-danger">Entfernen</button>
@@ -82,14 +82,15 @@
                                             @endcan
                                         </div>
                                     @empty
-                                        <p class="text-secondary mb-0 mt-2">Noch keine Zuordnung.</p>
+                                        <p class="text-secondary mb-0 mt-2">Noch keine Zuordnung. Dieser Preis erzeugt erst eine Position, nachdem unten ein Mitglied oder eine Parzelle gewählt wurde.</p>
                                     @endforelse
 
                                     @if ($billingPeriod->isMutable())
                                         <form class="row g-2 mt-2" method="POST" action="{{ route('billing-rate-assignments.store', $rate) }}">
                                             @csrf
                                             <div class="col-md-4">
-                                                <select class="form-select" name="member_id">
+                                                <label class="form-label" for="member-{{ $rate->id }}">Mitglied</label>
+                                                <select class="form-select" id="member-{{ $rate->id }}" name="member_id">
                                                     <option value="">Mitglied auswählen</option>
                                                     @foreach ($members as $member)
                                                         <option value="{{ $member->id }}">{{ $member->last_name }}, {{ $member->first_name }}</option>
@@ -97,7 +98,8 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-3">
-                                                <select class="form-select" name="parcel_id">
+                                                <label class="form-label" for="parcel-{{ $rate->id }}">Oder Parzelle</label>
+                                                <select class="form-select" id="parcel-{{ $rate->id }}" name="parcel_id">
                                                     <option value="">oder Parzelle</option>
                                                     @foreach ($parcels as $parcel)
                                                         <option value="{{ $parcel->id }}">{{ $parcel->parcel_number }}</option>
@@ -105,7 +107,8 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-3">
-                                                <input class="form-control" name="quantity" type="number" min="0.0001" step="0.0001" value="1" required aria-label="Menge">
+                                                <label class="form-label" for="quantity-{{ $rate->id }}">Menge</label>
+                                                <input class="form-control" id="quantity-{{ $rate->id }}" name="quantity" type="number" min="0.0001" step="0.0001" value="1" required>
                                             </div>
                                             <div class="col-md-2">
                                                 <button class="btn btn-outline-primary w-100">Zuordnen</button>
@@ -116,7 +119,7 @@
                             </tr>
                         @endif
                     @empty
-                        <tr><td colspan="6" class="text-center py-4">Noch keine Preise angelegt.</td></tr>
+                        <tr><td colspan="6" class="text-center py-4"><strong>Noch keine Preise angelegt.</strong><br><span class="text-secondary">Lege zuerst alle benötigten Kostenarten an, bevor du die Abrechnung berechnest.</span></td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -138,7 +141,7 @@
                             <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ route('invoices.show', $invoice) }}">Öffnen</a></td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="text-center py-4">Noch keine Rechnungen berechnet.</td></tr>
+                        <tr><td colspan="5" class="text-center py-4"><strong>Noch keine Rechnungen berechnet.</strong><br><span class="text-secondary">Im Entwurf kannst du Preise prüfen und anschließend über „Abrechnung berechnen“ Rechnungsvorschläge erzeugen.</span></td></tr>
                     @endforelse
                 </tbody>
             </table>

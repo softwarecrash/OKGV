@@ -8,6 +8,9 @@
             Das Sonderrecht erlaubt revisionssichere Zählerstandkorrekturen.
             Originalwerte bleiben immer erhalten.
         </p>
+        <div class="alert alert-warning mt-3 mb-0">
+            Vergib dieses Recht nur an Personen, die gemeldete Werte fachlich prüfen dürfen. Jede Korrektur benötigt eine Begründung und wird mit Konto und Zeitpunkt protokolliert.
+        </div>
     </div>
 
     <div class="card border-0 shadow-sm">
@@ -29,7 +32,8 @@
                             </td>
                             <td>{{ $user->role->label() }}</td>
                             <td>
-                                <form class="d-flex align-items-center gap-3" method="POST" action="{{ route('user-permissions.update', $user) }}">
+                                <form class="d-flex align-items-center gap-3" method="POST" action="{{ route('user-permissions.update', $user) }}"
+                                      onsubmit="return confirm('Korrekturrecht für {{ addslashes($user->name) }} wie ausgewählt speichern? Die Änderung betrifft zukünftige Zählerstandkorrekturen.')">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="can_correct_meter_readings" value="0">
@@ -47,7 +51,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="3" class="text-center py-4">Keine geeigneten Konten vorhanden.</td></tr>
+                        <tr><td colspan="3" class="text-center py-4"><strong>Keine geeigneten Konten vorhanden.</strong><br><span class="text-secondary">Das Sonderrecht kann nur Administrator- und Vorstandskonten zugewiesen werden.</span></td></tr>
                     @endforelse
                 </tbody>
             </table>

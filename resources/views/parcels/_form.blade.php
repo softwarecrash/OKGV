@@ -1,8 +1,10 @@
 <x-validation-errors />
+<div class="alert alert-info">Die Parzellennummer muss eindeutig sein. Pächter werden nach dem Speichern separat und mit einem gültigen Vertragszeitraum zugeordnet.</div>
 <div class="row g-3">
     <div class="col-md-4">
         <label class="form-label" for="parcel_number">Parzellennummer</label>
         <input class="form-control" id="parcel_number" name="parcel_number" value="{{ old('parcel_number', $parcel->parcel_number) }}" required>
+        <div class="form-text">Die im Verein gebräuchliche Nummer oder Bezeichnung.</div>
     </div>
     <div class="col-md-4">
         <label class="form-label" for="area_sqm">Fläche in m²</label>
@@ -15,14 +17,17 @@
                 <option value="{{ $status->value }}" @selected(old('status', $parcel->status?->value ?? 'free') === $status->value)>{{ $status->label() }}</option>
             @endforeach
         </select>
+        <div class="form-text">Der Status beschreibt die aktuelle Nutzbarkeit; die Pächterhistorie wird unabhängig davon geführt.</div>
     </div>
     <div class="col-12">
         <label class="form-label" for="location_description">Lagebeschreibung</label>
         <input class="form-control" id="location_description" name="location_description" value="{{ old('location_description', $parcel->location_description) }}">
+        <div class="form-text">Optional, zum Beispiel „Nordweg, dritte Parzelle links“.</div>
     </div>
     <div class="col-12">
         <label class="form-label" for="notes">Interne Notizen</label>
         <textarea class="form-control" id="notes" name="notes" rows="4">{{ old('notes', $parcel->notes) }}</textarea>
+        <div class="form-text">Nur für berechtigte Vereinskonten sichtbar.</div>
     </div>
 </div>
 <div class="d-flex gap-2 mt-4">

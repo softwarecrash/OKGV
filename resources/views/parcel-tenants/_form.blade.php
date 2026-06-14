@@ -1,4 +1,7 @@
 <x-validation-errors />
+<div class="alert alert-info">
+    Jede Person im Pachtvertrag erhält eine eigene Zuordnung. Mehrere Mitglieder können gleichzeitig derselben Parzelle zugeordnet sein und erscheinen dadurch gemeinsam auf der Rechnung.
+</div>
 <div class="row g-3">
     <div class="col-md-6">
         <label class="form-label" for="parcel_id">Parzelle</label>
@@ -23,17 +26,20 @@
     <div class="col-md-4">
         <label class="form-label" for="ends_at">Ende</label>
         <input class="form-control" type="date" id="ends_at" name="ends_at" value="{{ old('ends_at', $parcelTenant->ends_at?->format('Y-m-d')) }}">
+        <div class="form-text">Leer lassen, solange die Person aktuell im Pachtvertrag steht.</div>
     </div>
     <div class="col-md-4 d-flex align-items-end">
         <div class="form-check mb-2">
             <input type="hidden" name="is_primary" value="0">
             <input class="form-check-input" type="checkbox" id="is_primary" name="is_primary" value="1" @checked(old('is_primary', $parcelTenant->is_primary))>
             <label class="form-check-label" for="is_primary">Hauptpächter</label>
+            <div class="form-text">Pro Zeitraum kann genau eine Person Hauptpächter sein. Weitere Vertragsparteien werden als Mitpächter angelegt.</div>
         </div>
     </div>
     <div class="col-12">
         <label class="form-label" for="notes">Interne Notizen</label>
         <textarea class="form-control" id="notes" name="notes" rows="3">{{ old('notes', $parcelTenant->notes) }}</textarea>
+        <div class="form-text">Nur vereinsintern sichtbar; die historische Zuordnung bleibt dauerhaft erhalten.</div>
     </div>
 </div>
 <div class="d-flex gap-2 mt-4">

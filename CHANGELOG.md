@@ -2,6 +2,36 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.8] - 2026-06-14
+
+### Changed
+
+- Bestehende Formulare für Authentifizierung, Mitglieder, Parzellen,
+  Pächterzuordnungen, Zähler, Ablesungen und Abrechnung um verständliche
+  Hinweise, Beispiele und Angaben zur Sichtbarkeit ergänzt.
+- Technische Formularbegriffe in der Abrechnung verständlicher benannt und
+  Berechnungsarten sowie Geltungsbereiche direkt an der Eingabe erklärt.
+- Leere Listen und Historien zeigen nun eine sinnvolle nächste Handlung.
+- Dashboard um direkte, berechtigungsabhängige Zugänge zu allen vorhandenen
+  Modulen erweitert.
+
+### Security
+
+- Zählerwechsel, Rechnungsfreigabe, Neuberechnung, Archivierung,
+  Preiszuordnungen und Sonderrechte zeigen ihre Folgen vor dem Speichern an.
+- Zähler- und Rechnungshistorien erklären deutlich, welche Originalwerte
+  unveränderlich bleiben.
+
+### Fixed
+
+- Zentrale deutsche Validierungsmeldungen verwenden verständliche Feldnamen
+  statt technischer Laravel-Bezeichner.
+- Deutsch ist auch ohne lokale Umgebungsdatei und in der Testumgebung die
+  verbindliche Standardsprache.
+- Feature-Tests sichern Hilfetexte, Historienhinweise und deutsche
+  Validierungsfehler ab.
+- Entwicklungsstand auf `0.2.0.8` erhöht.
+
 ## [0.2.0.7] - 2026-06-14
 
 ### Documentation

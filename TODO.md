@@ -85,3 +85,10 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Entwicklungsstand 0.2.0.2 veröffentlichen
 - [x] Verbindliche Regeln für selbsterklärende und fehlertolerante Formulare ergänzen
 - [x] Entwicklungsstand 0.2.0.7 veröffentlichen
+- [x] Bestehende Authentifizierungs- und Verwaltungsoberflächen auf verständliche Hilfetexte prüfen
+- [x] Formulare für Stammdaten, Zähler und Abrechnung selbsterklärend überarbeiten
+- [x] Deutsche, feldbezogene Validierungsmeldungen zentral ergänzen
+- [x] Riskante Aktionen mit verständlichen Folgen und Bestätigungen absichern
+- [x] Leere Zustände mit einer klaren nächsten Handlung ergänzen
+- [x] Projektweite UX-Regeln durch Feature-Tests absichern
+- [x] Entwicklungsstand 0.2.0.8 veröffentlichen

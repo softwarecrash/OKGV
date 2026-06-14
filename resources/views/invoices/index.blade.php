@@ -18,7 +18,7 @@
                             <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ route('invoices.show', $invoice) }}">Öffnen</a></td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="text-center py-4">Keine Rechnungen vorhanden.</td></tr>
+                        <tr><td colspan="6" class="text-center py-4"><strong>Noch keine Rechnungen vorhanden.</strong><br><span class="text-secondary">Rechnungen entstehen durch die Berechnung einer Abrechnungsperiode.</span></td></tr>
                     @endforelse
                 </tbody>
             </table>

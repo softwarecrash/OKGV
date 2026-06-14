@@ -54,7 +54,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="text-center py-4">Keine Mitglieder gefunden.</td></tr>
+                        <tr><td colspan="5" class="text-center py-4"><strong>Keine passenden Mitglieder gefunden.</strong><br><span class="text-secondary">Prüfe Suchbegriff und Statusfilter oder lege ein neues Mitglied an.</span></td></tr>
                     @endforelse
                 </tbody>
             </table>

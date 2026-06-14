@@ -64,6 +64,7 @@
                                value="{{ old('corrected_value', $meterReading->effective_reading_value) }}" required>
                         <span class="input-group-text">{{ $meterReading->meter->type->unit() }}</span>
                     </div>
+                    <div class="form-text">Dieser Wert wird künftig für Anzeige und Verbrauchsberechnung verwendet. Der Originalwert bleibt erhalten.</div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="reason">Begründung</label>

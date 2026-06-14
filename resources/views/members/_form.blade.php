@@ -1,9 +1,14 @@
 <x-validation-errors />
 
+<div class="alert alert-info">
+    Pflichtfelder sind mit den bereits sichtbaren Feldbezeichnungen eindeutig beschrieben. Interne Notizen und Kontoverknüpfungen sind für Pächter nicht einsehbar.
+</div>
+
 <div class="row g-3">
     <div class="col-md-4">
         <label class="form-label" for="member_number">Mitgliedsnummer</label>
         <input class="form-control" id="member_number" name="member_number" value="{{ old('member_number', $member->member_number) }}" required maxlength="50">
+        <div class="form-text">Eindeutige vereinsinterne Nummer, zum Beispiel M-0123.</div>
     </div>
     <div class="col-md-4">
         <label class="form-label" for="first_name">Vorname</label>
@@ -44,6 +49,7 @@
     <div class="col-md-3">
         <label class="form-label" for="left_at">Austritt</label>
         <input class="form-control" type="date" id="left_at" name="left_at" value="{{ old('left_at', $member->left_at?->format('Y-m-d')) }}">
+        <div class="form-text">Leer lassen, solange die Mitgliedschaft besteht.</div>
     </div>
     <div class="col-md-3">
         <label class="form-label" for="status">Status</label>
@@ -52,6 +58,7 @@
                 <option value="{{ $status->value }}" @selected(old('status', $member->status?->value ?? 'active') === $status->value)>{{ $status->label() }}</option>
             @endforeach
         </select>
+        <div class="form-text">„Archiviert“ blendet das Mitglied in der Standardsuche aus; Historien bleiben erhalten.</div>
     </div>
     <div class="col-md-3">
         <label class="form-label" for="user_id">Pächterkonto</label>
@@ -61,10 +68,12 @@
                 <option value="{{ $user->id }}" @selected((string) old('user_id', $member->user_id) === (string) $user->id)>{{ $user->name }} ({{ $user->email }})</option>
             @endforeach
         </select>
+        <div class="form-text">Optional. Verknüpft dieses Mitglied mit einem vorhandenen Login für das spätere Pächterportal.</div>
     </div>
     <div class="col-12">
         <label class="form-label" for="notes">Interne Notizen</label>
         <textarea class="form-control" id="notes" name="notes" rows="4">{{ old('notes', $member->notes) }}</textarea>
+        <div class="form-text">Nur für berechtigte Vereinskonten sichtbar. Keine unnötigen sensiblen Daten eintragen.</div>
     </div>
 </div>
 

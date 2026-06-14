@@ -5,9 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
+                <div class="card-header">Neues Passwort festlegen</div>
 
                 <div class="card-body">
+                    <p class="text-secondary">Lege ein neues, nur für OKGV verwendetes Passwort fest und wiederhole es zur Kontrolle.</p>
                     <form method="POST" action="{{ route('password.update') }}">
                         @csrf
 
@@ -32,6 +33,7 @@
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                <div class="form-text">Verwende ein langes Passwort, das du nicht bei anderen Diensten einsetzt.</div>
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -46,6 +48,7 @@
 
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                <div class="form-text">Gib dasselbe Passwort erneut ein.</div>
                             </div>
                         </div>
 

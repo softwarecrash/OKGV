@@ -13,7 +13,7 @@
             @endcan
             @can('archive', $member)
                 @if ($member->status !== App\Enums\MemberStatus::Archived)
-                    <form method="POST" action="{{ route('members.archive', $member) }}" onsubmit="return confirm('Mitglied wirklich archivieren?')">
+                    <form method="POST" action="{{ route('members.archive', $member) }}" onsubmit="return confirm('Mitglied archivieren? Es wird in der Standardsuche ausgeblendet. Verträge, Rechnungen und Historien bleiben vollständig erhalten.')">
                         @csrf
                         @method('PATCH')
                         <button class="btn btn-outline-danger" type="submit">Archivieren</button>

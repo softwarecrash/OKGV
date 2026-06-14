@@ -5,9 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+                <div class="card-header">Bei OKGV anmelden</div>
 
                 <div class="card-body">
+                    <p class="text-secondary">Melde dich mit der E-Mail-Adresse und dem Passwort deines Vereinskonto an.</p>
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -16,6 +17,7 @@
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                <div class="form-text">Verwende die E-Mail-Adresse, die deinem OKGV-Konto zugeordnet ist.</div>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -30,6 +32,7 @@
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                <div class="form-text">Das Passwort wird verdeckt eingegeben und nicht im Klartext gespeichert.</div>
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -47,6 +50,7 @@
                                     <label class="form-check-label" for="remember">
                                         {{ __('Remember Me') }}
                                     </label>
+                                    <div class="form-text">Nur auf einem persönlichen Gerät verwenden.</div>
                                 </div>
                             </div>
                         </div>

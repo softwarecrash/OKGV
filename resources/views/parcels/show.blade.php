@@ -55,7 +55,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="4" class="text-center py-4">Keine Pächterzuordnung vorhanden.</td></tr>
+                                <tr><td colspan="4" class="text-center py-4"><strong>Noch keine Vertragspartei zugeordnet.</strong><br><span class="text-secondary">Lege für jede im Pachtvertrag genannte Person eine eigene Zuordnung an.</span></td></tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -72,7 +72,7 @@
                     <span class="text-secondary">({{ $meter->status->label() }})</span>
                 </a>
             @empty
-                <div class="card-body">Keine Zähler vorhanden.</div>
+                <div class="card-body"><strong>Noch keine Zähler vorhanden.</strong><div class="text-secondary">Zähler werden mit Einbaudatum und Startstand angelegt.</div></div>
             @endforelse
         </div>
     </div>
