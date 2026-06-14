@@ -96,6 +96,65 @@ Die Tabelle `parcels` enthält eine eindeutige `parcel_number`, `area_sqm`, opti
 
 Wasser- und Stromzähler, Zählerstände und vollständig historisierte Zählerwechsel. Verbrauch muss mehrere Zähler pro Abrechnungsjahr berücksichtigen.
 
+#### Zähler
+
+Die Tabelle `meters` enthält:
+
+- `parcel_id`
+- Typ `water` oder `electricity`
+- global eindeutige `meter_number`
+- `installed_at` und optionales `removed_at`
+- nichtnegative `start_reading` und optionales `end_reading` mit vier Nachkommastellen
+- Status `active`, `replaced`, `removed` oder `defective`
+- optionale interne Notizen
+
+Pro Parzelle und Zählertyp ist höchstens ein aktiver Zähler zulässig. Ein Ausbau darf nicht vor dem Einbau liegen. Der Endstand darf nicht kleiner als der Startstand sein.
+
+#### Zählerstände
+
+Die Tabelle `meter_readings` enthält:
+
+- `meter_id`
+- nichtnegativen `reading_value` mit vier Nachkommastellen
+- `reading_date`
+- Quelle `board`, `tenant` oder `import`
+- optionalen privaten `photo_path`
+- optionale interne Notizen
+
+Zählerstände sind append-only: Bestehende Werte werden weder bearbeitet noch gelöscht. Korrekturen werden als neuer, nachvollziehbarer Datensatz erfasst. Pro Zähler und Datum ist höchstens ein Stand zulässig. Ein Stand muss innerhalb der Einbau- und Ausbauzeit des Zählers liegen und darf chronologisch nicht kleiner als der vorherige Stand oder größer als ein bereits vorhandener späterer Stand sein.
+
+#### Zählerwechsel
+
+Ein Zählerwechsel wird in einer Datenbanktransaktion ausgeführt:
+
+1. Der alte Zähler erhält `removed_at`, `end_reading` und den Status `replaced`.
+2. Der neue Zähler wird mit `installed_at`, `start_reading` und Status `active` angelegt.
+3. Das Wechseldatum darf nicht vor dem Einbaudatum des alten Zählers liegen.
+4. Alter und neuer Zähler müssen dieselbe Parzelle und denselben Typ besitzen.
+5. Der Vorgang wird im Auditlog protokolliert.
+
+Historische Zähler werden nicht gelöscht.
+
+#### Verbrauch
+
+Der Verbrauch eines Zeitraums wird pro Zählersegment berechnet und anschließend summiert. Für jedes Segment gilt:
+
+- Startwert ist der letzte Stand vor oder am Periodenbeginn, andernfalls der gespeicherte Einbaustand.
+- Endwert ist der letzte Stand vor oder am Periodenende, andernfalls bei einem innerhalb der Periode ausgebauten Zähler dessen Endstand.
+- Negative Differenzen sind unzulässig.
+
+Dadurch werden mehrere Zählerwechsel innerhalb eines Abrechnungsjahres korrekt berücksichtigt.
+
+#### Rechte in Phase 2
+
+- Administrator und Vorstand dürfen alle Zähler, Stände und Wechsel lesen und bearbeiten.
+- Wasserwart darf Wasser- und Stromzähler, Zählerstände und Wechsel verwalten.
+- Kassierer darf alle Zähler und Stände lesen, jedoch nicht verändern.
+- Gartenwart darf Zählerdaten lesen, jedoch nicht verändern.
+- Pächter dürfen ausschließlich Zähler und Zählerstände von eigenen, aktuell oder historisch zugeordneten Parzellen lesen.
+- Pächter dürfen in Phase 2 noch keine Zählerstände selbst erfassen.
+- Physisches Löschen und Bearbeiten bestehender Zählerstände ist für alle Rollen ausgeschlossen.
+
 ### Phase 3: Abrechnung
 
 Abrechnungsperioden, historische Preise, flächen-, verbrauchs- und festpreisabhängige Positionen, optionale Kosten, Rechnungen und PDF-Ausgabe. Freigegebene Rechnungen sind unveränderbar.
@@ -118,14 +177,10 @@ Mahnwesen, Arbeitsstunden, Warteliste, Inventar, Arbeitseinsätze, CSV-Import un
 
 ## Versionen
 
-- `0.0.1`: Projektstart
-- `0.1.0`: Projektbasis
-- `0.2.0`: Mitglieder und Parzellen
-- `0.3.0`: Zählerverwaltung
-- `0.4.0`: Abrechnung
-- `0.5.0`: Pächterportal
-- `0.6.0`: Dokumente
-- `0.7.0`: Kommunikation
-- `0.8.0`: SEPA
-- `0.9.0`: Security Review
-- `1.0.0`: Erste produktive Version
+Die bisherige Basisversion `0.2.0` bleibt während der weiteren Bauphase bestehen. Veröffentlichte Entwicklungsstände erhalten eine fortlaufende vierte Stelle:
+
+- `0.2.0.1`: erster Entwicklungsstand nach `0.2.0`
+- `0.2.0.2`: zweiter Entwicklungsstand
+- `0.2.0.n`: weitere Entwicklungsstände
+
+Die vierte Stelle ist eine projektinterne Build-Nummer. Bereits veröffentlichte Tags bleiben unverändert. Eine neue dreiteilige Basisversion wird erst nach ausdrücklicher Freigabe festgelegt.

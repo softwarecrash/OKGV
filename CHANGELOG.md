@@ -2,6 +2,23 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.1] - 2026-06-14
+
+### Entwicklung
+
+- Versionierung auf die feste Basis `0.2.0` mit fortlaufender vierter Build-Stelle umgestellt
+- Bestehende Git-Tags bleiben unverändert
+- Datenmodell, Historienregeln, Verbrauchsberechnung und Rechtekonzept der Zählerverwaltung spezifiziert
+- Migrationen für Zähler und unveränderliche, datumsbezogen eindeutige Zählerstände hinzugefügt
+- Zähler- und Zählerstandmodels, Factories und Parzellenbeziehungen hinzugefügt
+- Transaktionale Zähleranlage, atomare Zählerwechsel und append-only Zählerstände implementiert
+- Segmentierte Verbrauchsberechnung über mehrere Zähler eines Zeitraums implementiert
+- Rollenbasierte Policies, Form Requests und deutsche Zähleroberflächen hinzugefügt
+- Eigener, auditierter Zählerwechselprozess und append-only Ableseerfassung ergänzt
+- Tests für Rollenrechte, Pächterisolation, Aktivzähler, Ableseplausibilität, Wechsel und Mehrzählerverbrauch ergänzt
+- Historische Zähler sind nicht reaktivierbar; Wechsel respektieren vorhandene spätere und letzte Ablesungen
+- Phase 2 mit 25 Tests, 109 Assertions, Migration-Rollback und Sicherheits-Audits geprüft
+
 ## [0.2.0] - 2026-06-14
 
 ### Phase 1

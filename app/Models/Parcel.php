@@ -43,6 +43,11 @@ class Parcel extends Model
             ->withTimestamps();
     }
 
+    public function meters(): HasMany
+    {
+        return $this->hasMany(Meter::class);
+    }
+
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
         return $query->when($search, function (Builder $query, string $search): void {

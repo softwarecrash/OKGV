@@ -1,0 +1,13 @@
+@extends('layouts.app')
+@section('content')
+<div class="container">
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4"><div><h1 class="h2 mb-1">{{ $meter->type->label() }}zähler {{ $meter->meter_number }}</h1><span class="text-secondary">Parzelle {{ $meter->parcel->parcel_number }} · {{ $meter->status->label() }}</span></div>
+<div class="d-flex gap-2">@can('update', $meter)<a class="btn btn-primary" href="{{ route('meters.edit', $meter) }}">Bearbeiten</a>@endcan
+@can('create', App\Models\MeterReading::class)<a class="btn btn-outline-primary" href="{{ route('meter-readings.create', ['meter_id' => $meter->id]) }}">Stand erfassen</a>@endcan
+@can('replace', $meter)@if($meter->status === App\Enums\MeterStatus::Active)<a class="btn btn-outline-danger" href="{{ route('meters.replace', $meter) }}">Zähler wechseln</a>@endif @endcan</div></div>
+<div class="row g-4"><div class="col-lg-4"><div class="card border-0 shadow-sm"><div class="card-header">Zählerdaten</div><div class="card-body"><dl class="row mb-0">
+<dt class="col-6">Einbau</dt><dd class="col-6">{{ $meter->installed_at->format('d.m.Y') }}</dd><dt class="col-6">Startstand</dt><dd class="col-6">{{ $meter->start_reading }} {{ $meter->type->unit() }}</dd><dt class="col-6">Ausbau</dt><dd class="col-6">{{ $meter->removed_at?->format('d.m.Y') ?? '–' }}</dd><dt class="col-6">Endstand</dt><dd class="col-6">{{ $meter->end_reading ?? '–' }}</dd></dl></div></div></div>
+<div class="col-lg-8"><div class="card border-0 shadow-sm"><div class="card-header">Zählerstände</div><div class="table-responsive"><table class="table mb-0"><thead><tr><th>Datum</th><th>Stand</th><th>Quelle</th></tr></thead><tbody>
+@forelse($meter->readings as $reading)<tr><td>{{ $reading->reading_date->format('d.m.Y') }}</td><td>{{ $reading->reading_value }} {{ $meter->type->unit() }}</td><td>{{ $reading->source->label() }}</td></tr>@empty<tr><td colspan="3" class="text-center py-4">Keine Zählerstände vorhanden.</td></tr>@endforelse
+</tbody></table></div></div></div></div></div>
+@endsection

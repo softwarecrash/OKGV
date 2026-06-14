@@ -14,6 +14,9 @@
             @can('create', App\Models\ParcelTenant::class)
                 <a class="btn btn-outline-primary" href="{{ route('parcel-tenants.create', ['parcel_id' => $parcel->id]) }}">Pächter zuordnen</a>
             @endcan
+            @can('create', App\Models\Meter::class)
+                <a class="btn btn-outline-primary" href="{{ route('meters.create', ['parcel_id' => $parcel->id]) }}">Zähler anlegen</a>
+            @endcan
         </div>
     </div>
     <div class="row g-4">
@@ -58,6 +61,19 @@
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-header">Zähler</div>
+        <div class="list-group list-group-flush">
+            @forelse ($parcel->meters()->latest('installed_at')->get() as $meter)
+                <a class="list-group-item list-group-item-action" href="{{ route('meters.show', $meter) }}">
+                    {{ $meter->type->label() }} · {{ $meter->meter_number }}
+                    <span class="text-secondary">({{ $meter->status->label() }})</span>
+                </a>
+            @empty
+                <div class="card-body">Keine Zähler vorhanden.</div>
+            @endforelse
         </div>
     </div>
 </div>

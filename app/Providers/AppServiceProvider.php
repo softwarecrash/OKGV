@@ -3,10 +3,14 @@
 namespace App\Providers;
 
 use App\Models\Member;
+use App\Models\Meter;
+use App\Models\MeterReading;
 use App\Models\Parcel;
 use App\Models\ParcelTenant;
 use App\Models\User;
 use App\Policies\MemberPolicy;
+use App\Policies\MeterPolicy;
+use App\Policies\MeterReadingPolicy;
 use App\Policies\ParcelPolicy;
 use App\Policies\ParcelTenantPolicy;
 use App\Policies\UserPolicy;
@@ -38,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Member::class, MemberPolicy::class);
+        Gate::policy(Meter::class, MeterPolicy::class);
+        Gate::policy(MeterReading::class, MeterReadingPolicy::class);
         Gate::policy(Parcel::class, ParcelPolicy::class);
         Gate::policy(ParcelTenant::class, ParcelTenantPolicy::class);
         Gate::before(fn (User $user) => $user->isAdministrator() ? true : null);

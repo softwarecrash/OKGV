@@ -6,7 +6,9 @@
 - Beginne keine neue Phase, bevor Datenmodell und Rechtekonzept der vorherigen Phase geprüft sind.
 - Dokumentiere jede Änderung in `CHANGELOG.md`.
 - Aktualisiere `TODO.md` unmittelbar nach Abschluss einer Aufgabe.
-- Erhöhe `VERSION` nur an den definierten Meilensteinen gemäß Semantic Versioning.
+- Behalte während der Bauphase die Basisversion `0.2.0` bei.
+- Erhöhe für jeden veröffentlichten Entwicklungsstand nur die vierte Stelle: `0.2.0.1`, `0.2.0.2` und so weiter.
+- Ändere die dreiteilige Basisversion erst nach einer ausdrücklich beschlossenen neuen Versionierungsphase.
 - Erweitere bei Unklarheiten zuerst die Spezifikation.
 - Entferne keine Funktionen ohne dokumentierte Begründung.
 - Hardcode keine Geheimnisse oder personenbezogenen Daten.

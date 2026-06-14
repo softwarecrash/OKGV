@@ -41,6 +41,11 @@
                                     <a class="nav-link" href="{{ route('parcels.index') }}">Parzellen</a>
                                 </li>
                             @endcan
+                            @can('viewAny', App\Models\Meter::class)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('meters.index') }}">Zähler</a>
+                                </li>
+                            @endcan
                         @endauth
                     </ul>
 

@@ -32,4 +32,14 @@ enum UserRole: string
     {
         return $this !== self::Tenant;
     }
+
+    public function canManageMeters(): bool
+    {
+        return in_array($this, [self::Administrator, self::Board, self::WaterManager], true);
+    }
+
+    public function canViewAllMeters(): bool
+    {
+        return $this !== self::Tenant;
+    }
 }

@@ -37,3 +37,17 @@
 - [x] Version 0.2.0 auf GitHub veröffentlichen
 
 Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
+
+## Phase 2: Zählerverwaltung
+
+- [x] Datenmodell für Zähler, Zählerstände und Zählerwechsel spezifizieren
+- [x] Rechtekonzept der Zählerverwaltung vollständig prüfen
+- [x] Migrationen erstellen
+- [x] Models und Beziehungen erstellen
+- [x] Verbrauchsberechnung über mehrere Zähler implementieren
+- [x] Policies und Form Requests erstellen
+- [x] CRUD-Oberflächen für Zähler und Zählerstände erstellen
+- [x] Historisierten Zählerwechsel implementieren
+- [x] Tests erstellen
+- [x] Phase 2 vollständig prüfen
+- [ ] Entwicklungsstand 0.2.0.1 veröffentlichen

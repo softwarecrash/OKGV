@@ -8,7 +8,7 @@ OKGV ist eine moderne, sichere und selbsthostbare Laravel-Anwendung. Eine Instal
 
 ## Aktueller Stand
 
-Version `0.2.0` enthält die technische Projektbasis und Stammdatenverwaltung:
+Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vierten Stelle ergänzt. Der aktuelle Entwicklungsstand wird in `VERSION` geführt.
 
 - Laravel 13 und PHP 8.3+
 - Bootstrap 5 und Alpine.js
@@ -21,6 +21,9 @@ Version `0.2.0` enthält die technische Projektbasis und Stammdatenverwaltung:
 - Parzellenverwaltung mit Status und Flächenangaben
 - Dauerhafte Pächterhistorie mit Konfliktprüfung
 - Rollenabhängige Lese- und Schreibrechte
+- Wasser- und Stromzähler mit dauerhaftem Lebenszyklus
+- Unveränderliche, plausibilitätsgeprüfte Zählerstände
+- Atomare Zählerwechsel und Verbrauch über mehrere Zählersegmente
 
 ## Voraussetzungen
 

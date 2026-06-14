@@ -23,6 +23,9 @@
                         @can('viewAny', App\Models\Parcel::class)
                             <a class="btn btn-outline-primary" href="{{ route('parcels.index') }}">Parzellen</a>
                         @endcan
+                        @can('viewAny', App\Models\Meter::class)
+                            <a class="btn btn-outline-primary" href="{{ route('meters.index') }}">Zähler</a>
+                        @endcan
                     </div>
                 </div>
             </div>
