@@ -84,4 +84,4 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Code-Style-Richtlinie aus `AGENTS.md` referenzieren
 - [x] Entwicklungsstand 0.2.0.2 veröffentlichen
 - [x] Verbindliche Regeln für selbsterklärende und fehlertolerante Formulare ergänzen
-- [ ] Entwicklungsstand 0.2.0.7 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.7 veröffentlichen

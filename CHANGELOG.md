@@ -11,6 +11,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - `AGENT_CODE_STYLE.md` beschreibt verbindliche UX-Regeln für Hilfetexte,
   Formatnormalisierung, riskante Aktionen, leere Zustände und UX-Tests.
 - Entwicklungsstand auf `0.2.0.7` erhöht.
+- Entwicklungsstand `0.2.0.7` auf GitHub veröffentlicht.
 
 ## [0.2.0.6] - 2026-06-14
 
