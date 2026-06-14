@@ -21,7 +21,7 @@
 - [x] Projektdokumentation erstellen
 - [x] Version auf 0.1.0 erhöhen
 - [x] Phase 0 vollständig testen
-- [ ] Version 0.1.0 auf GitHub veröffentlichen
+- [x] Version 0.1.0 auf GitHub veröffentlichen
 
 ## Phase 1: Stammdaten
 

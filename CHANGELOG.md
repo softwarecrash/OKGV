@@ -28,5 +28,6 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 ### Entwicklung
 
 - Git-Repository und Remote `softwarecrash/OKGV` eingerichtet
+- Version `0.1.0` mit repositorygebundenem Deploy Key auf GitHub veröffentlicht
 - Docker und Deployment-Artefakte gemäß Entwicklungsstrategie zurückgestellt
 - Verwundbare, ungenutzte Frontend-Entwicklungsabhängigkeiten entfernt
