@@ -265,4 +265,4 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Migration isoliert vorwärts und rückwärts prüfen
 - [x] Migration ausschließlich nicht löschend auf MariaDB anwenden
 - [x] Gesamttests, Formatter, Build und Audits ausführen
-- [ ] Nachbesserung vollständig prüfen und veröffentlichen
+- [x] Nachbesserung vollständig prüfen und veröffentlichen
