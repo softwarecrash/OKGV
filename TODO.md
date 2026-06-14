@@ -192,4 +192,4 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Auditlogs und deutschsprachige Bedienhinweise ergänzen
 - [x] Feature-, Rechte- und Uploadtests ergänzen
 - [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
-- [ ] Phase 6 vollständig prüfen und veröffentlichen
+- [x] Phase 6 vollständig prüfen und veröffentlichen
