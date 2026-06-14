@@ -666,11 +666,58 @@ Mahnstufe. Berechtigte Finanzkonten erhalten hierfür einen Aktionshinweis.
 Die PDF-Ausgabe enthält Rechnungsnummer, Mahnnummer, Mahnstufe, Frist,
 Einzelgebühr, bisherige aktive Gebühren und Gesamtforderung.
 
-### Phase 9 bis 18
+### Phase 9: Arbeitsstunden und Strafzahlungen
 
-Arbeitsstunden, Warteliste, Inventar, Arbeitseinsätze, CSV-Import und -Export,
-DSGVO, Vereinseinstellungen, Nummernkreise, Pächterwechsel und später ein
-Lageplan.
+#### Arbeitsstundenkonto
+
+Für jedes Mitglied kann je Abrechnungsperiode genau ein Arbeitsstundenkonto
+geführt werden. Es speichert:
+
+- geforderte Pflichtstunden,
+- anerkannte geleistete Stunden,
+- serverseitig berechnete Fehlstunden,
+- den historischen Betrag je Fehlstunde,
+- den serverseitig berechneten Strafbetrag,
+- optionale interne Notizen.
+
+Fehlstunden entsprechen höchstens der positiven Differenz aus Pflichtstunden
+und geleisteten Stunden. Mehrarbeit erzeugt weder negative Fehlstunden noch
+eine Gutschrift. Ohne angelegtes Arbeitsstundenkonto entsteht für ein
+Mitglied keine Fehlstundenposition. Arbeitseinsatztermine und die automatische
+Übernahme einzelner Teilnahmen bleiben Phase 12.
+
+#### Abrechnung
+
+Bei der Berechnung einer Abrechnungsperiode werden positive Strafbeträge als
+eigene Rechnungsposition `WORK_HOURS_PENALTY` übernommen. Die Position
+speichert Mitglied, Pflichtstunden, geleistete Stunden, Fehlstunden,
+Stundensatz und Gesamtbetrag als historischen Snapshot.
+
+Stehen mehrere Mitglieder gemeinsam im Pachtvertrag, werden deren
+Fehlstundenpositionen einzeln auf der gemeinsamen Rechnung ausgewiesen. Ein
+Mitglied darf innerhalb einer Periode höchstens einmal belastet werden.
+Freigegebene Rechnungen und ihre Fehlstundenpositionen bleiben unveränderlich.
+
+#### Rechte und Änderungen
+
+Arbeitsstunden verwenden das granulare Recht `Abrechnungen und Rechnungen
+verwalten`. Pächter, Wasserwart und Gartenwart erhalten ohne dieses Recht
+keinen Zugriff auf die Verwaltung.
+
+Arbeitsstunden können nur in Entwurfsperioden und berechneten
+Zwischenständen geändert werden. Eine Änderung an einem Zwischenstand
+verwirft die noch nicht freigegebenen Rechnungsentwürfe auditierbar und setzt
+die Periode auf Entwurf zurück. Freigegebene und archivierte Perioden sind
+gesperrt. Konten werden nicht gelöscht; Korrekturen erfolgen durch
+nachvollziehbare Änderungen und werden auditiert.
+
+Offene Fehlstunden in Entwurfsperioden erzeugen für berechtigte Finanzkonten
+einen Aktionshinweis.
+
+### Phase 10 bis 18
+
+Warteliste, Inventar, Arbeitseinsätze, CSV-Import und -Export, DSGVO,
+Vereinseinstellungen, Nummernkreise, Pächterwechsel und später ein Lageplan.
 
 ## Versionen
 

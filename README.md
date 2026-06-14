@@ -58,10 +58,21 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Optionale Mahngebühren, neue Zahlungsfristen und kumulierte Forderungen
 - PDF-Mahnungen und begründete, historisierte Stornierungen
 - Pächterzugriff auf eigene Mahnhistorie
+- Arbeitsstundenkonten je Mitglied und Abrechnungsperiode
+- Automatisch berechnete Fehlstunden und Strafzahlungen
+- Historische Fehlstundenpositionen auf Einzel- und Gemeinschaftsrechnungen
 
 Freigegebene Rechnungen sind unveränderbar. Pächterwechsel innerhalb einer
 Periode werden bis zum vollständigen Übergabeprozess bewusst nicht automatisch
 abgerechnet.
+
+Konten mit dem Recht `Abrechnungen und Rechnungen verwalten` finden unter
+`Finanzen` die Arbeitsstundenübersicht. Pflichtstunden, geleistete Stunden und
+der Betrag je Fehlstunde werden pro Mitglied und Periode erfasst. Fehlstunden
+und Strafbetrag berechnet OKGV automatisch. Bei der nächsten
+Zwischenberechnung erscheinen positive Beträge als eigene Rechnungsposition;
+Änderungen an einem bereits berechneten Zwischenstand verwerfen dessen
+Entwürfe und erfordern eine erneute Berechnung.
 
 ## Voraussetzungen
 

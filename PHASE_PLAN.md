@@ -103,8 +103,8 @@ vorherigen Phase geprüft sein.
 
 ## Phase 9: Arbeitsstunden
 
-- [ ] Arbeitsstunden
-- [ ] Strafzahlungen
+- [x] Arbeitsstunden
+- [x] Strafzahlungen
 
 ## Phase 10: Warteliste
 
@@ -163,5 +163,5 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 8 sind abgeschlossen. Als Nächstes folgt Phase 9:
-Arbeitsstunden und Strafzahlungen.
+Die Phasen 0 bis 9 sind abgeschlossen. Als Nächstes folgt Phase 10:
+Warteliste.

@@ -215,3 +215,19 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Migration vorwärts und rückwärts isoliert prüfen
 - [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
 - [x] Phase 8 vollständig prüfen und veröffentlichen
+
+## Phase 9: Arbeitsstunden
+
+- [x] Datenmodell, Berechnung und Rechtekonzept spezifizieren
+- [x] Arbeitsstundenkonten je Mitglied und Abrechnungsperiode implementieren
+- [x] Fehlstunden und Strafbeträge ausschließlich serverseitig berechnen
+- [x] Verwaltung und verständliche Bedienhinweise implementieren
+- [x] Änderungen berechneter Zwischenstände sicher zurücksetzen
+- [x] Strafzahlungen als historische Rechnungspositionen übernehmen
+- [x] Gemeinsame Rechnungen mehrerer Vertragspartner berücksichtigen
+- [x] Auditlogs und Aktionshinweise ergänzen
+- [x] Feature- und Rechtetests ergänzen
+- [x] Migration vorwärts und rückwärts isoliert prüfen
+- [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
+- [x] Gesamttests, Formatter und Asset-Build ausführen
+- [ ] Phase 9 vollständig prüfen und veröffentlichen

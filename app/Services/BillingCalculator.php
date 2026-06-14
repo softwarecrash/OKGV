@@ -15,6 +15,7 @@ use App\Models\Member;
 use App\Models\Parcel;
 use App\Models\ParcelTenant;
 use App\Models\User;
+use App\Models\WorkHour;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -54,6 +55,11 @@ final class BillingCalculator
                 ->with(['assignments.member', 'assignments.parcel'])
                 ->orderBy('id')
                 ->get();
+            $workHours = $period->workHours()
+                ->with('member')
+                ->get()
+                ->keyBy('member_id');
+            $billedWorkHourMemberIds = [];
 
             $tenancies = ParcelTenant::query()
                 ->where('is_primary', true)
@@ -78,7 +84,15 @@ final class BillingCalculator
                     ->unique('id')
                     ->values();
 
-                $this->createInvoice($period, $member, $contractParties, $parcels, $rates);
+                $this->createInvoice(
+                    $period,
+                    $member,
+                    $contractParties,
+                    $parcels,
+                    $rates,
+                    $workHours,
+                    $billedWorkHourMemberIds,
+                );
             }
 
             if ($period->invoices()->doesntExist()) {
@@ -129,6 +143,8 @@ final class BillingCalculator
      * @param  Collection<int, Parcel>  $parcels
      * @param  Collection<int, Member>  $contractParties
      * @param  Collection<int, BillingRate>  $rates
+     * @param  Collection<int, WorkHour>  $workHours
+     * @param  array<int, true>  $billedWorkHourMemberIds
      */
     private function createInvoice(
         BillingPeriod $period,
@@ -136,6 +152,8 @@ final class BillingCalculator
         Collection $contractParties,
         Collection $parcels,
         Collection $rates,
+        Collection $workHours,
+        array &$billedWorkHourMemberIds,
     ): void {
         $invoice = Invoice::create([
             'billing_period_id' => $period->id,
@@ -184,7 +202,66 @@ final class BillingCalculator
             );
         }
 
+        $total = bcadd(
+            $total,
+            $this->addWorkHourPenalties(
+                $invoice,
+                $contractParties,
+                $workHours,
+                $billedWorkHourMemberIds,
+            ),
+            2,
+        );
+
         $invoice->update(['total_amount' => $total]);
+    }
+
+    /**
+     * @param  Collection<int, Member>  $contractParties
+     * @param  Collection<int, WorkHour>  $workHours
+     * @param  array<int, true>  $billedWorkHourMemberIds
+     */
+    private function addWorkHourPenalties(
+        Invoice $invoice,
+        Collection $contractParties,
+        Collection $workHours,
+        array &$billedWorkHourMemberIds,
+    ): string {
+        $total = '0.00';
+
+        foreach ($contractParties as $contractParty) {
+            if (isset($billedWorkHourMemberIds[$contractParty->id])) {
+                continue;
+            }
+
+            $workHour = $workHours->get($contractParty->id);
+
+            if (! $workHour || bccomp($workHour->penalty_amount, '0.00', 2) <= 0) {
+                continue;
+            }
+
+            $invoice->items()->create([
+                'billing_rate_id' => null,
+                'parcel_id' => null,
+                'code' => 'WORK_HOURS_PENALTY',
+                'description' => "Fehlende Arbeitsstunden - {$contractParty->full_name}",
+                'calculation_type' => BillingRateType::Manual,
+                'quantity' => $workHour->hours_missing,
+                'unit_price' => $workHour->penalty_rate,
+                'total_amount' => $workHour->penalty_amount,
+                'metadata' => [
+                    'work_hour_id' => $workHour->id,
+                    'member_id' => $contractParty->id,
+                    'hours_required' => $workHour->hours_required,
+                    'hours_done' => $workHour->hours_done,
+                ],
+            ]);
+
+            $billedWorkHourMemberIds[$contractParty->id] = true;
+            $total = bcadd($total, $workHour->penalty_amount, 2);
+        }
+
+        return $total;
     }
 
     private function addMemberRate(Invoice $invoice, BillingRate $rate): string

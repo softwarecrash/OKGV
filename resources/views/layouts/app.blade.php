@@ -41,6 +41,7 @@
                                 $canViewBilling = auth()->user()->can('viewAny', App\Models\BillingPeriod::class);
                                 $canViewTemplates = auth()->user()->can('viewAny', App\Models\BillingRateTemplate::class);
                                 $canViewInvoices = auth()->user()->can('viewAny', App\Models\Invoice::class);
+                                $canViewWorkHours = auth()->user()->can('viewAny', App\Models\WorkHour::class);
                                 $canViewSepa = auth()->user()->can('viewAny', App\Models\SepaMandate::class);
                                 $canViewCommunication = auth()->user()->can('viewAny', App\Models\MailCampaign::class);
                                 $canViewDocuments = auth()->user()->can('viewAny', App\Models\Document::class);
@@ -100,7 +101,7 @@
                                     </ul>
                                 </li>
                             @endif
-                            @if ($canViewBilling || $canViewTemplates || $canViewInvoices || $canViewSepa)
+                            @if ($canViewBilling || $canViewTemplates || $canViewInvoices || $canViewWorkHours || $canViewSepa)
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                         Finanzen
@@ -112,6 +113,14 @@
                                         @endif
                                         @if ($canViewTemplates)
                                             <li><a class="dropdown-item" href="{{ route('billing-rate-templates.index') }}">Preisvorlagen</a></li>
+                                        @endif
+                                        @if ($canViewWorkHours)
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('work-hours.index') }}">
+                                                    Arbeitsstunden
+                                                    <x-action-indicator :count="$actionIndicators['work_hours']" label="offene Fehlstunden" />
+                                                </a>
+                                            </li>
                                         @endif
                                         @if ($canViewInvoices)
                                             <li>

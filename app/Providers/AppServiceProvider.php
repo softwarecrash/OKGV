@@ -26,6 +26,7 @@ use App\Models\RegistrationRequest;
 use App\Models\SepaMandate;
 use App\Models\SepaSetting;
 use App\Models\User;
+use App\Models\WorkHour;
 use App\Policies\ApplicationSettingPolicy;
 use App\Policies\BillingPeriodPolicy;
 use App\Policies\BillingRateAssignmentPolicy;
@@ -50,6 +51,7 @@ use App\Policies\RegistrationRequestPolicy;
 use App\Policies\SepaMandatePolicy;
 use App\Policies\SepaSettingPolicy;
 use App\Policies\UserPolicy;
+use App\Policies\WorkHourPolicy;
 use App\Services\ActionIndicatorService;
 use App\Services\AuditLogger;
 use Illuminate\Auth\Events\Failed;
@@ -113,6 +115,7 @@ class AppServiceProvider extends ServiceProvider
                         'registrations' => 0,
                         'meter_readings' => 0,
                         'invoices' => 0,
+                        'work_hours' => 0,
                         'members_group' => 0,
                         'meters_group' => 0,
                         'finance_group' => 0,
@@ -147,6 +150,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(RegistrationRequest::class, RegistrationRequestPolicy::class);
         Gate::policy(SepaMandate::class, SepaMandatePolicy::class);
         Gate::policy(SepaSetting::class, SepaSettingPolicy::class);
+        Gate::policy(WorkHour::class, WorkHourPolicy::class);
         Gate::before(fn (User $user) => $user->isAdministrator() ? true : null);
 
         Event::listen(Login::class, fn (Login $event) => AuditLogger::log(

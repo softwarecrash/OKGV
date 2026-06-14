@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\BillingPeriodStatus;
 use App\Enums\InvoicePaymentStatus;
 use App\Enums\InvoiceStatus;
 use App\Enums\MailCampaignStatus;
@@ -13,6 +14,7 @@ use App\Models\MailCampaign;
 use App\Models\MeterReadingSubmission;
 use App\Models\RegistrationRequest;
 use App\Models\User;
+use App\Models\WorkHour;
 
 final class ActionIndicatorService
 {
@@ -21,6 +23,7 @@ final class ActionIndicatorService
      *     registrations: int,
      *     meter_readings: int,
      *     invoices: int,
+     *     work_hours: int,
      *     members_group: int,
      *     meters_group: int,
      *     finance_group: int,
@@ -66,6 +69,13 @@ final class ActionIndicatorService
             default => 0,
         };
         $dunningNotices = $user->canManageBilling() ? $invoices : 0;
+        $workHours = $user->canManageBilling()
+            ? WorkHour::query()
+                ->where('hours_missing', '>', 0)
+                ->whereHas('billingPeriod', fn ($query) => $query
+                    ->where('status', BillingPeriodStatus::Draft))
+                ->count()
+            : 0;
 
         $failedCampaigns = $user->canManageCommunication()
             ? MailCampaign::query()->where('status', MailCampaignStatus::Failed)->count()
@@ -75,12 +85,13 @@ final class ActionIndicatorService
             'registrations' => $registrations,
             'meter_readings' => $meterReadings,
             'invoices' => $invoices,
+            'work_hours' => $workHours,
             'members_group' => $registrations,
             'meters_group' => $meterReadings,
-            'finance_group' => $invoices,
+            'finance_group' => $invoices + $workHours,
             'communication_group' => $failedCampaigns,
             'dunning_notices' => $dunningNotices,
-            'total' => $registrations + $meterReadings + $invoices + $failedCampaigns,
+            'total' => $registrations + $meterReadings + $invoices + $workHours + $failedCampaigns,
         ];
     }
 

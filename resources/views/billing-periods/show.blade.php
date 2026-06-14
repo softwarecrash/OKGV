@@ -15,6 +15,7 @@
                 @can('update', $billingPeriod)
                     <a class="btn btn-outline-primary" href="{{ route('billing-periods.edit', $billingPeriod) }}">Bearbeiten</a>
                     <a class="btn btn-primary" href="{{ route('billing-periods.billing-rates.create', $billingPeriod) }}">Preis aus Vorlage</a>
+                    <a class="btn btn-outline-primary" href="{{ route('billing-periods.work-hours.create', $billingPeriod) }}">Arbeitsstunden erfassen</a>
                 @endcan
                 @can('calculate', $billingPeriod)
                     <form method="POST" action="{{ route('billing-periods.calculate', $billingPeriod) }}" onsubmit="return confirm('Abrechnung jetzt neu berechnen? Vorhandene Entwürfe dieser Periode werden durch die aktuelle Berechnung ersetzt.')">
@@ -132,6 +133,58 @@
                         @endif
                     @empty
                         <tr><td colspan="6" class="text-center py-4"><strong>Noch keine Preise angelegt.</strong><br><span class="text-secondary">Lege zuerst alle benötigten Kostenarten an, bevor du die Abrechnung berechnest.</span></td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <span>Arbeitsstunden</span>
+            <span class="text-secondary small">Fehlstunden werden beim Berechnen automatisch als Rechnungsposition übernommen.</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Mitglied</th>
+                        <th>Pflicht</th>
+                        <th>Geleistet</th>
+                        <th>Fehlend</th>
+                        <th>Je Fehlstunde</th>
+                        <th>Strafzahlung</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($billingPeriod->workHours->sortBy(fn ($entry) => $entry->member->last_name) as $workHour)
+                        <tr>
+                            <td>{{ $workHour->member->full_name }}</td>
+                            <td>{{ number_format((float) $workHour->hours_required, 2, ',', '.') }} Std.</td>
+                            <td>{{ number_format((float) $workHour->hours_done, 2, ',', '.') }} Std.</td>
+                            <td>
+                                @if ((float) $workHour->hours_missing > 0)
+                                    <span class="badge text-bg-warning">{{ number_format((float) $workHour->hours_missing, 2, ',', '.') }} Std.</span>
+                                @else
+                                    <span class="text-success">Erfüllt</span>
+                                @endif
+                            </td>
+                            <td>{{ number_format((float) $workHour->penalty_rate, 2, ',', '.') }} €</td>
+                            <td>{{ number_format((float) $workHour->penalty_amount, 2, ',', '.') }} €</td>
+                            <td class="text-end">
+                                @can('update', $workHour)
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('work-hours.edit', $workHour) }}">Bearbeiten</a>
+                                @endcan
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-4">
+                                <strong>Noch keine Arbeitsstunden erfasst.</strong><br>
+                                <span class="text-secondary">Ohne Arbeitsstundenkonto entsteht für ein Mitglied keine Fehlstundenposition.</span>
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>

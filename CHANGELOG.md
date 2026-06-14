@@ -2,6 +2,42 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.26] - 2026-06-14
+
+### Phase 9
+
+- Arbeitsstundenkonten je Mitglied und Abrechnungsperiode umgesetzt.
+- Pflichtstunden, geleistete Stunden, Fehlstunden, Betrag je Fehlstunde und
+  Strafzahlung werden übersichtlich im Finanzbereich verwaltet.
+- Fehlstunden und Strafbeträge werden ausschließlich serverseitig berechnet;
+  Mehrarbeit erzeugt keine negative Forderung.
+- Positive Strafbeträge werden mit Stundenmenge und historischem Stundensatz
+  als eigene Rechnungsposition übernommen.
+- Bei gemeinsamen Pachtverträgen erscheinen die Fehlstunden aller
+  Vertragspartner einzeln auf derselben Rechnung.
+- Offene Fehlstunden in Entwurfsperioden erzeugen einen rollenabhängigen
+  Aktionspunkt im Finanzbereich.
+
+### Security
+
+- Arbeitsstunden verwenden das granulare Abrechnungsrecht und sind für
+  unberechtigte Konten serverseitig gesperrt.
+- Änderungen an berechneten Zwischenständen verwerfen nur die noch nicht
+  freigegebenen Rechnungsentwürfe und werden auditiert.
+- Arbeitsstunden freigegebener oder archivierter Perioden sind auch auf
+  Modellebene unveränderlich; Datensätze können nicht gelöscht werden.
+- Die Migration wurde vorwärts und rückwärts isoliert geprüft und
+  anschließend ausschließlich mit `php artisan migrate` auf MariaDB
+  angewendet; vorhandene Bestandszahlen blieben unverändert.
+
+### Tests
+
+- Berechnung, Übererfüllung, Zwischenstandsrücksetzung, Unveränderlichkeit,
+  Gemeinschaftsrechnungen, Rechte und Aktionspunkte werden durch
+  Feature-Tests abgedeckt.
+- Insgesamt bestehen 96 Tests mit 559 Assertions.
+- Entwicklungsstand auf `0.2.0.26` erhöht.
+
 ## [0.2.0.25] - 2026-06-14
 
 ### Phase 8

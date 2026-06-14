@@ -79,6 +79,11 @@ class Member extends Model
         return $this->hasMany(Document::class);
     }
 
+    public function workHours(): HasMany
+    {
+        return $this->hasMany(WorkHour::class);
+    }
+
     public function parcels(): BelongsToMany
     {
         return $this->belongsToMany(Parcel::class, 'parcel_tenants')

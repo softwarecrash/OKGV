@@ -32,6 +32,7 @@ use App\Http\Controllers\SepaSettingController;
 use App\Http\Controllers\TenantPortalController;
 use App\Http\Controllers\TenantRegistrationController;
 use App\Http\Controllers\UserPermissionController;
+use App\Http\Controllers\WorkHourController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -127,6 +128,16 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::post('billing-periods/{billing_period}/archive', [BillingPeriodController::class, 'archive'])
         ->name('billing-periods.archive');
     Route::resource('billing-periods', BillingPeriodController::class)->except('destroy');
+    Route::get('work-hours', [WorkHourController::class, 'index'])
+        ->name('work-hours.index');
+    Route::get('billing-periods/{billing_period}/work-hours/create', [WorkHourController::class, 'create'])
+        ->name('billing-periods.work-hours.create');
+    Route::post('billing-periods/{billing_period}/work-hours', [WorkHourController::class, 'store'])
+        ->name('billing-periods.work-hours.store');
+    Route::get('work-hours/{work_hour}/edit', [WorkHourController::class, 'edit'])
+        ->name('work-hours.edit');
+    Route::put('work-hours/{work_hour}', [WorkHourController::class, 'update'])
+        ->name('work-hours.update');
     Route::resource('billing-periods.billing-rates', BillingRateController::class)
         ->only(['create', 'store', 'edit', 'update', 'destroy'])
         ->parameters(['billing-rates' => 'billing_rate']);
