@@ -17,6 +17,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
   durch einen Feature-Test abgedeckt.
 - Insgesamt bestehen 85 Tests mit 485 Assertions.
 - Entwicklungsstand auf `0.2.0.23` erhöht.
+- Entwicklungsstand `0.2.0.23` auf GitHub veröffentlicht.
 
 ## [0.2.0.22] - 2026-06-14
 
