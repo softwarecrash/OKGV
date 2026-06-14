@@ -8,9 +8,11 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MeterController;
 use App\Http\Controllers\MeterReadingController;
+use App\Http\Controllers\MeterReadingCorrectionController;
 use App\Http\Controllers\MeterReplacementController;
 use App\Http\Controllers\ParcelController;
 use App\Http\Controllers\ParcelTenantController;
+use App\Http\Controllers\UserPermissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,6 +31,10 @@ Route::get('/dashboard', [HomeController::class, 'index'])
     ->name('home');
 
 Route::middleware('auth')->group(function (): void {
+    Route::get('user-permissions', [UserPermissionController::class, 'index'])
+        ->name('user-permissions.index');
+    Route::put('user-permissions/{user}', [UserPermissionController::class, 'update'])
+        ->name('user-permissions.update');
     Route::post('billing-periods/{billing_period}/calculate', [BillingPeriodController::class, 'calculate'])
         ->name('billing-periods.calculate');
     Route::post('billing-periods/{billing_period}/approve', [BillingPeriodController::class, 'approve'])
@@ -55,6 +61,10 @@ Route::middleware('auth')->group(function (): void {
     Route::post('meters/{meter}/replace', [MeterReplacementController::class, 'store'])
         ->name('meters.replace.store');
     Route::resource('meters', MeterController::class)->except('destroy');
+    Route::get('meter-readings/{meter_reading}/corrections/create', [MeterReadingCorrectionController::class, 'create'])
+        ->name('meter-reading-corrections.create');
+    Route::post('meter-readings/{meter_reading}/corrections', [MeterReadingCorrectionController::class, 'store'])
+        ->name('meter-reading-corrections.store');
     Route::resource('meter-readings', MeterReadingController::class)->only(['create', 'store']);
     Route::resource('parcel-tenants', ParcelTenantController::class)
         ->only(['create', 'store', 'edit', 'update'])

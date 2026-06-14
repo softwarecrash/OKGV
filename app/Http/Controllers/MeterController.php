@@ -69,7 +69,12 @@ class MeterController extends Controller
     public function show(Meter $meter): View
     {
         $this->authorize('view', $meter);
-        $meter->load(['parcel', 'readings' => fn ($query) => $query->latest('reading_date')]);
+        $meter->load([
+            'parcel',
+            'readings' => fn ($query) => $query
+                ->with('corrections.corrector')
+                ->latest('reading_date'),
+        ]);
 
         return view('meters.show', compact('meter'));
     }

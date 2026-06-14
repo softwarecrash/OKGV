@@ -2,6 +2,28 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.5] - 2026-06-14
+
+### Added
+
+- Revisionssicheres Konzept für Zählerstandkorrekturen mit unverändertem
+  Originalwert und vollständiger Korrekturhistorie spezifiziert.
+- Optionales Sonderrecht für Administrator- und Vorstandskonten festgelegt.
+- Migrationen, Model und Beziehungen für das optionale Kontorecht und
+  append-only Zählerstandkorrekturen hinzugefügt.
+- Plausibilitätsprüfung und Verbrauchsberechnung verwenden den jeweils
+  jüngsten wirksamen Korrekturwert.
+- Transaktionaler, auditierter Korrekturservice und administrative
+  Rechtezuweisung implementiert.
+- Deutsche Oberflächen für die Vergabe des Sonderrechts, Erfassung von
+  Korrekturen und Anzeige der vollständigen Korrekturhistorie ergänzt.
+- Tests für explizite Rechtevergabe, Rollenbegrenzung, unveränderte
+  Originalwerte, Auditlog, Append-only-Schutz und korrigierte
+  Verbrauchsberechnung ergänzt.
+- Rollback der ursprünglichen Rollen-Migration entfernt den Rollenindex nun
+  vor der Spalte.
+- Entwicklungsstand auf `0.2.0.5` erhöht.
+
 ## [0.2.0.4] - 2026-06-14
 
 ### Fixed

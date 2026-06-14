@@ -23,6 +23,7 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Rollenabhängige Lese- und Schreibrechte
 - Wasser- und Stromzähler mit dauerhaftem Lebenszyklus
 - Unveränderliche, plausibilitätsgeprüfte Zählerstände
+- Revisionssichere Zählerstandkorrekturen mit optionalem Kontorecht
 - Atomare Zählerwechsel und Verbrauch über mehrere Zählersegmente
 - Abrechnungsperioden mit historischen Preisen und Zusatzkosten
 - Reproduzierbare Rechnungen aus Flächen-, Verbrauchs- und Festkosten

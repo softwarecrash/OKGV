@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role'])]
+#[Fillable(['name', 'email', 'password', 'role', 'can_correct_meter_readings'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -31,6 +31,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'role' => UserRole::class,
+            'can_correct_meter_readings' => 'boolean',
         ];
     }
 
@@ -47,5 +48,16 @@ class User extends Authenticatable
     public function approvedInvoices(): HasMany
     {
         return $this->hasMany(Invoice::class, 'approved_by');
+    }
+
+    public function meterReadingCorrections(): HasMany
+    {
+        return $this->hasMany(MeterReadingCorrection::class, 'corrected_by');
+    }
+
+    public function canCorrectMeterReadings(): bool
+    {
+        return in_array($this->role, [UserRole::Administrator, UserRole::Board], true)
+            && $this->can_correct_meter_readings;
     }
 }

@@ -18,13 +18,15 @@ final class ConsumptionCalculator
 
         $startReading = $meter->readings()
             ->whereDate('reading_date', '<=', $segmentStart)
+            ->with('corrections')
             ->latest('reading_date')
-            ->value('reading_value') ?? $meter->start_reading;
+            ->first()?->effective_reading_value ?? $meter->start_reading;
 
         $endReading = $meter->readings()
             ->whereDate('reading_date', '<=', $segmentEnd)
+            ->with('corrections')
             ->latest('reading_date')
-            ->value('reading_value');
+            ->first()?->effective_reading_value;
 
         if ($endReading === null && $meter->removed_at?->lte($to)) {
             $endReading = $meter->end_reading;

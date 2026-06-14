@@ -34,9 +34,10 @@ final class MeterReadingManager
 
             $previous = $meter->readings()
                 ->whereDate('reading_date', '<', $date)
+                ->with('corrections')
                 ->latest('reading_date')
                 ->first();
-            $previousValue = $previous?->reading_value ?? $meter->start_reading;
+            $previousValue = $previous?->effective_reading_value ?? $meter->start_reading;
 
             if (bccomp($value, $previousValue, 4) < 0) {
                 throw ValidationException::withMessages([
@@ -46,9 +47,10 @@ final class MeterReadingManager
 
             $next = $meter->readings()
                 ->whereDate('reading_date', '>', $date)
+                ->with('corrections')
                 ->oldest('reading_date')
                 ->first();
-            $nextValue = $next?->reading_value ?? $meter->end_reading;
+            $nextValue = $next?->effective_reading_value ?? $meter->end_reading;
 
             if ($nextValue !== null && bccomp($value, $nextValue, 4) > 0) {
                 throw ValidationException::withMessages([

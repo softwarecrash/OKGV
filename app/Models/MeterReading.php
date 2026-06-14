@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable([
     'meter_id',
@@ -34,5 +35,15 @@ class MeterReading extends Model
     public function meter(): BelongsTo
     {
         return $this->belongsTo(Meter::class);
+    }
+
+    public function corrections(): HasMany
+    {
+        return $this->hasMany(MeterReadingCorrection::class)->latest('id');
+    }
+
+    public function getEffectiveReadingValueAttribute(): string
+    {
+        return $this->corrections->first()?->corrected_value ?? $this->reading_value;
     }
 }

@@ -123,6 +123,18 @@ Die Tabelle `meter_readings` enthält:
 
 Zählerstände sind append-only: Bestehende Werte werden weder bearbeitet noch gelöscht. Korrekturen werden als neuer, nachvollziehbarer Datensatz erfasst. Pro Zähler und Datum ist höchstens ein Stand zulässig. Ein Stand muss innerhalb der Einbau- und Ausbauzeit des Zählers liegen und darf chronologisch nicht kleiner als der vorherige Stand oder größer als ein bereits vorhandener späterer Stand sein.
 
+`meter_reading_corrections` referenziert den ursprünglichen Zählerstand und
+speichert den korrigierten Wert, eine verpflichtende Begründung, den
+korrigierenden Benutzer und den Erfassungszeitpunkt. Auch Korrekturen sind
+append-only. Mehrere aufeinanderfolgende Korrekturen bleiben erhalten; für
+Berechnungen gilt jeweils der jüngste Korrekturwert. Originalwert und gesamte
+Korrekturhistorie werden niemals überschrieben oder gelöscht.
+
+Das optionale Benutzerrecht `can_correct_meter_readings` darf ausschließlich
+Administrator- und Vorstandskonten zugewiesen werden. Die Rolle allein
+berechtigt nicht zur Korrektur. Nur Administratoren verwalten dieses
+Sonderrecht. Jede Korrektur wird zusätzlich im Auditlog erfasst.
+
 #### Zählerwechsel
 
 Ein Zählerwechsel wird in einer Datenbanktransaktion ausgeführt:
@@ -153,7 +165,12 @@ Dadurch werden mehrere Zählerwechsel innerhalb eines Abrechnungsjahres korrekt 
 - Gartenwart darf Zählerdaten lesen, jedoch nicht verändern.
 - Pächter dürfen ausschließlich Zähler und Zählerstände von eigenen, aktuell oder historisch zugeordneten Parzellen lesen.
 - Pächter dürfen in Phase 2 noch keine Zählerstände selbst erfassen.
-- Physisches Löschen und Bearbeiten bestehender Zählerstände ist für alle Rollen ausgeschlossen.
+- Pächter dürfen in Phase 5 eigene Zählerstände melden; fehlerhafte Meldungen
+  werden später über denselben revisionssicheren Korrekturprozess berichtigt.
+- Physisches Löschen und direktes Bearbeiten bestehender Zählerstände ist für
+  alle Rollen ausgeschlossen.
+- Administrator- und Vorstandskonten dürfen Zählerstände nur mit dem
+  ausdrücklich zugewiesenen Sonderrecht revisionssicher korrigieren.
 
 ### Phase 3: Abrechnung
 

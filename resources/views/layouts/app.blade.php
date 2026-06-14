@@ -56,6 +56,11 @@
                                     <a class="nav-link" href="{{ route('invoices.index') }}">Rechnungen</a>
                                 </li>
                             @endcan
+                            @if (auth()->user()->isAdministrator())
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('user-permissions.index') }}">Benutzerrechte</a>
+                                </li>
+                            @endif
                         @endauth
                     </ul>
 
