@@ -85,10 +85,10 @@
                 </a>
             @endif
         </div>
-        @if ($parcel->workHours->isEmpty() && $availableWorkHourPeriods->isEmpty())
+        @if ($parcel->workHours->isEmpty())
             <div class="card-body">
                 <strong>Noch kein Arbeitsstundenkonto vorhanden.</strong>
-                <div class="text-secondary">Konten werden je Parzelle und Abrechnungsperiode geführt.</div>
+                <div class="text-secondary">Konten werden automatisch angelegt, sobald die Parzelle am Stichtag einer Abrechnungsperiode verpachtet ist.</div>
             </div>
         @else
             <div class="table-responsive">
@@ -117,7 +117,10 @@
                                     @else
                                         {{ $workHour->billingPeriod->name }}
                                     @endcan
-                                    <div class="small text-secondary">{{ $workHour->billingPeriod->status->label() }}</div>
+                                    <div class="small text-secondary">
+                                        {{ $workHour->billingPeriod->starts_at->format('d.m.Y') }}–{{ $workHour->billingPeriod->ends_at->format('d.m.Y') }}
+                                        · {{ $workHour->billingPeriod->status->label() }}
+                                    </div>
                                 </td>
                                 <td>{{ number_format((float) $workHour->hours_required, 2, ',', '.') }} Std.</td>
                                 <td>
@@ -154,20 +157,6 @@
                                     @can('update', $workHour)
                                         <a class="btn btn-sm btn-outline-secondary" href="{{ route('work-hours.edit', $workHour) }}">Details</a>
                                     @endcan
-                                </td>
-                            </tr>
-                        @endforeach
-                        @foreach ($availableWorkHourPeriods as $period)
-                            <tr>
-                                <td>
-                                    <a href="{{ route('billing-periods.show', $period) }}">{{ $period->name }}</a>
-                                    <div class="small text-secondary">{{ $period->status->label() }}</div>
-                                </td>
-                                <td colspan="7" class="text-secondary">Für diese Parzelle wurde noch kein Arbeitsstundenkonto angelegt.</td>
-                                <td class="text-end">
-                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('billing-periods.work-hours.create', ['billing_period' => $period, 'parcel_id' => $parcel->id, 'return_to' => 'parcel']) }}">
-                                        Konto anlegen
-                                    </a>
                                 </td>
                             </tr>
                         @endforeach

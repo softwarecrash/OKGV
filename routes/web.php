@@ -141,8 +141,6 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         ->name('work-hours.edit');
     Route::put('work-hours/{work_hour}', [WorkHourController::class, 'update'])
         ->name('work-hours.update');
-    Route::post('billing-periods/{billing_period}/work-hours/initialize', [WorkHourController::class, 'initialize'])
-        ->name('billing-periods.work-hours.initialize');
     Route::get('work-events', [WorkEventController::class, 'index'])
         ->name('work-events.index');
     Route::get('billing-periods/{billing_period}/work-events/create', [WorkEventController::class, 'create'])

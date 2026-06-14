@@ -43,13 +43,9 @@ class WorkHourSubmissionWorkflowTest extends TestCase
             ->assertSee('aktuell keine Parzelle zugeordnet');
     }
 
-    public function test_period_accounts_are_initialized_for_parcels_from_global_defaults(): void
+    public function test_period_accounts_are_created_automatically_from_global_defaults(): void
     {
         $administrator = User::factory()->administrator()->create();
-        $period = BillingPeriod::factory()->create([
-            'starts_at' => '2025-01-01',
-            'ends_at' => '2025-12-31',
-        ]);
         ApplicationSetting::current()->update([
             'default_work_hours_required' => '12.00',
             'default_work_hour_penalty_rate' => '18.50',
@@ -58,9 +54,15 @@ class WorkHourSubmissionWorkflowTest extends TestCase
         $secondParcel = $this->leasedParcel();
 
         $this->actingAs($administrator)
-            ->post(route('billing-periods.work-hours.initialize', $period))
+            ->post(route('billing-periods.store'), [
+                'name' => 'Abrechnung 2025',
+                'starts_at' => '2025-01-01',
+                'ends_at' => '2025-12-31',
+                'due_at' => '2026-02-01',
+            ])
             ->assertRedirect();
 
+        $period = BillingPeriod::query()->where('name', 'Abrechnung 2025')->firstOrFail();
         $this->assertDatabaseCount('work_hours', 2);
         foreach ([$firstParcel, $secondParcel] as $parcel) {
             $this->assertDatabaseHas('work_hours', [
@@ -70,6 +72,12 @@ class WorkHourSubmissionWorkflowTest extends TestCase
                 'penalty_rate' => 18.5,
             ]);
         }
+
+        $this->actingAs($administrator)
+            ->get(route('billing-periods.show', $period))
+            ->assertOk()
+            ->assertDontSee('Parzellenkonten vorbereiten')
+            ->assertSee('Konten werden für verpachtete Parzellen automatisch angelegt.');
     }
 
     public function test_tenant_submission_with_private_photo_is_approved_for_parcel_account(): void

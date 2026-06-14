@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\BillingPeriodStatus;
 use App\Enums\WorkEventParticipantStatus;
 use App\Enums\WorkEventStatus;
 use App\Enums\WorkHourSubmissionStatus;
@@ -72,41 +73,35 @@ final class WorkHourManager
 
     public function initializePeriod(BillingPeriod $period, User $actor): int
     {
+        $parcelIds = ParcelTenant::query()
+            ->activeOn($period->ends_at)
+            ->pluck('parcel_id')
+            ->unique();
+        $existingParcelIds = WorkHour::query()
+            ->where('billing_period_id', $period->id)
+            ->whereIn('parcel_id', $parcelIds)
+            ->pluck('parcel_id');
+        $missingParcelIds = $parcelIds->diff($existingParcelIds);
+
+        if ($missingParcelIds->isEmpty()) {
+            return 0;
+        }
+
         return $this->periodManager->changeCalculationInputs(
             $period,
             $actor,
-            'work_hours_initialized',
-            function (BillingPeriod $lockedPeriod) use ($actor): int {
-                $settings = ApplicationSetting::current();
-                $parcelIds = ParcelTenant::query()
-                    ->activeOn($lockedPeriod->ends_at)
-                    ->pluck('parcel_id')
-                    ->unique();
+            'work_hour_accounts_automatically_created',
+            function (BillingPeriod $lockedPeriod) use ($actor, $missingParcelIds): int {
                 $created = 0;
 
-                foreach ($parcelIds as $parcelId) {
-                    $record = WorkHour::query()->firstOrNew([
-                        'billing_period_id' => $lockedPeriod->id,
-                        'parcel_id' => $parcelId,
-                    ]);
-
-                    if ($record->exists) {
-                        continue;
+                foreach ($missingParcelIds as $parcelId) {
+                    if ($this->createAccount($lockedPeriod, (int) $parcelId)) {
+                        $created++;
                     }
-
-                    $record->fill([
-                        'hours_required' => $settings->default_work_hours_required,
-                        'manual_hours_done' => '0.00',
-                        'event_hours_done' => '0.00',
-                        'submission_hours_done' => '0.00',
-                        'penalty_rate' => $settings->default_work_hour_penalty_rate,
-                    ]);
-                    $this->recalculate($record, $lockedPeriod);
-                    $created++;
                 }
 
                 AuditLogger::log(
-                    'work_hours.period_initialized',
+                    'work_hours.accounts_automatically_created',
                     $actor,
                     $lockedPeriod,
                     ['created_count' => $created],
@@ -115,6 +110,53 @@ final class WorkHourManager
                 return $created;
             },
         );
+    }
+
+    public function synchronizeTenancy(ParcelTenant $tenancy, User $actor): int
+    {
+        $periods = BillingPeriod::query()
+            ->whereIn('status', [
+                BillingPeriodStatus::Draft->value,
+                BillingPeriodStatus::Calculated->value,
+            ])
+            ->whereDate('ends_at', '>=', $tenancy->starts_at)
+            ->when(
+                $tenancy->ends_at,
+                fn ($query) => $query->whereDate('ends_at', '<=', $tenancy->ends_at),
+            )
+            ->whereDoesntHave(
+                'workHours',
+                fn ($query) => $query->where('parcel_id', $tenancy->parcel_id),
+            )
+            ->get();
+        $created = 0;
+
+        foreach ($periods as $period) {
+            $created += $this->periodManager->changeCalculationInputs(
+                $period,
+                $actor,
+                'work_hour_account_automatically_created',
+                function (BillingPeriod $lockedPeriod) use ($actor, $tenancy): int {
+                    if (! $this->createAccount($lockedPeriod, $tenancy->parcel_id)) {
+                        return 0;
+                    }
+
+                    AuditLogger::log(
+                        'work_hours.account_automatically_created',
+                        $actor,
+                        $lockedPeriod,
+                        [
+                            'parcel_id' => $tenancy->parcel_id,
+                            'parcel_tenant_id' => $tenancy->id,
+                        ],
+                    );
+
+                    return 1;
+                },
+            );
+        }
+
+        return $created;
     }
 
     public function synchronizeParcel(
@@ -198,6 +240,30 @@ final class WorkHourManager
                 bcmul($missing, (string) $record->penalty_rate, 8),
             ),
         ])->save();
+    }
+
+    private function createAccount(BillingPeriod $period, int $parcelId): bool
+    {
+        $record = WorkHour::query()->firstOrNew([
+            'billing_period_id' => $period->id,
+            'parcel_id' => $parcelId,
+        ]);
+
+        if ($record->exists) {
+            return false;
+        }
+
+        $settings = ApplicationSetting::current();
+        $record->fill([
+            'hours_required' => $settings->default_work_hours_required,
+            'manual_hours_done' => '0.00',
+            'event_hours_done' => '0.00',
+            'submission_hours_done' => '0.00',
+            'penalty_rate' => $settings->default_work_hour_penalty_rate,
+        ]);
+        $this->recalculate($record, $period);
+
+        return true;
     }
 
     private function roundMoney(string $value): string

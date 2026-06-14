@@ -701,21 +701,25 @@ mehrfach für jeden Mitpächter. Es speichert:
 
 Fehlstunden entsprechen höchstens der positiven Differenz aus Pflichtstunden
 und anerkannten Gesamtstunden. Mehrarbeit erzeugt weder negative Fehlstunden
-noch eine Gutschrift. Ohne angelegtes Parzellenkonto entsteht keine
-Fehlstundenposition.
+noch eine Gutschrift.
 
 Die globale Vereinskonfiguration enthält Pflichtstunden je Parzelle und
-Betrag je Fehlstunde. Beim Sammelvorbereiten einer Abrechnungsperiode werden
-für alle zum Periodenende vergebenen Parzellen fehlende Konten mit diesen
-Werten angelegt. Die Werte werden als historischer Periodenstand kopiert.
+Betrag je Fehlstunde. Beim Anlegen oder zeitlichen Ändern einer
+Abrechnungsperiode werden für alle zum Periodenende vergebenen Parzellen
+automatisch Konten mit diesen Werten angelegt. Entsteht oder ändert sich
+später eine Pächterzuordnung, ergänzt OKGV die Konten aller passenden,
+bearbeitbaren Perioden automatisch. Die Werte werden als historischer
+Periodenstand kopiert. Vorhandene Konten und abgeschlossene Perioden werden
+dabei nicht überschrieben.
 
 Die Parzellendetailansicht zeigt die Arbeitsstundenkonten aller Perioden mit
 Pflichtstunden, manuell anerkannten Stunden, Arbeitseinsätzen,
 Pächtermeldungen, Gesamtleistung, Fehlstunden und Fehlbetrag. Berechtigte
 Finanzkonten können manuell anerkannte Stunden direkt dort ändern. Fehlende
-Konten bearbeitbarer Perioden können mit vorausgewählter Parzelle angelegt
-werden. Pächter gelangen von ihrer Parzelle mit vorausgewählter Parzelle zur
-eigenen Arbeitsstundenmeldung.
+Konten werden nicht manuell vorbereitet. Pächter gelangen von ihrer Parzelle
+mit vorausgewählter Parzelle zur eigenen Arbeitsstundenmeldung. Zur
+eindeutigen Unterscheidung zeigt die Parzellendetailansicht neben dem Namen
+auch den vollständigen Zeitraum jeder Abrechnungsperiode.
 
 #### Abrechnung
 
@@ -803,10 +807,9 @@ Das Arbeitsstundenkonto trennt:
 - die daraus berechnete Gesamtsumme.
 
 Korrektur, Abwesenheit oder Absage berechnen den automatischen Anteil neu.
-Existiert noch kein Arbeitsstundenkonto, wird eines mit null Pflichtstunden
-und null Strafsatz angelegt; Pflichtstunden und Strafsatz werden weiterhin
-von der Finanzverwaltung festgelegt. Dadurch werden keine fachlichen
-Standardwerte erfunden.
+Existiert wider Erwarten noch kein Arbeitsstundenkonto, wird es aus den
+globalen Vereinsvorgaben angelegt. Pflichtstunden und Strafsatz bleiben als
+historischer Wert der jeweiligen Periode erhalten.
 
 #### Rechte, Historie und Aktionshinweise
 

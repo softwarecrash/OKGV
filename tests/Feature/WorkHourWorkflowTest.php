@@ -134,6 +134,25 @@ class WorkHourWorkflowTest extends TestCase
         ]);
     }
 
+    public function test_account_synchronization_without_missing_accounts_keeps_calculation(): void
+    {
+        [$administrator, $period, $member, $parcel] = $this->billingScenario();
+        WorkHour::factory()->create([
+            'billing_period_id' => $period->id,
+            'parcel_id' => $parcel->id,
+        ]);
+        app(BillingCalculator::class)->calculate($period, $administrator);
+
+        $created = app(WorkHourManager::class)->initializePeriod(
+            $period->fresh(),
+            $administrator,
+        );
+
+        $this->assertSame(0, $created);
+        $this->assertSame(BillingPeriodStatus::Calculated, $period->fresh()->status);
+        $this->assertDatabaseCount('invoices', 1);
+    }
+
     public function test_approved_work_hours_cannot_be_changed(): void
     {
         [$administrator, $period, $member, $parcel] = $this->billingScenario();

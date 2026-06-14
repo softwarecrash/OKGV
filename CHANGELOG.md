@@ -2,6 +2,37 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.32] - 2026-06-14
+
+### Arbeitsstundenkonten
+
+- Arbeitsstundenkonten werden beim Anlegen oder zeitlichen Ändern einer
+  Abrechnungsperiode automatisch für alle am Periodenende verpachteten
+  Parzellen eingerichtet.
+- Neue oder geänderte Pächterzuordnungen ergänzen fehlende Konten passender,
+  bearbeitbarer Abrechnungsperioden automatisch.
+- Die manuelle Aktion `Parzellenkonten vorbereiten` und die zusätzliche
+  Einzelanlage fehlender Konten wurden aus der Oberfläche entfernt.
+- Ein Synchronisationslauf ohne fehlende Konten verwirft keinen bereits
+  berechneten Zwischenstand mehr.
+- Die Parzellendetailansicht zeigt zusätzlich den vollständigen Zeitraum
+  jedes Arbeitsstundenkontos, damit ähnlich benannte Perioden eindeutig
+  bleiben.
+
+### Datenkorrektur
+
+- Die normale `Abrechnung 2026` enthält nun Konten für alle sechs am
+  Periodenende verpachteten Parzellen und wurde wegen der ergänzten
+  Berechnungsgrundlagen korrekt in den Entwurfsstatus zurückgesetzt.
+- Die `DEMO Abrechnung 2026` enthält wieder ausschließlich die fünf
+  markierten Demo-Parzellen; andere Entwicklungsdaten wurden nicht gelöscht.
+- Automatische Kontoerzeugung, nachträgliche Pächterzuordnung und der Erhalt
+  berechneter Zwischenstände sind durch Regressionstests abgedeckt.
+- Perioden- beziehungsweise Pächteränderung und automatische Kontoanlage
+  werden gemeinsam in einer Datenbanktransaktion gespeichert.
+- Insgesamt bestehen 118 Tests mit 682 Assertions.
+- Entwicklungsstand auf `0.2.0.32` erhöht.
+
 ## [0.2.0.31] - 2026-06-14
 
 ### Arbeitseinsätze

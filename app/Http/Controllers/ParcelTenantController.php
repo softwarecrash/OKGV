@@ -8,13 +8,18 @@ use App\Models\Parcel;
 use App\Models\ParcelTenant;
 use App\Services\AuditLogger;
 use App\Services\ParcelTenancyManager;
+use App\Services\WorkHourManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ParcelTenantController extends Controller
 {
-    public function __construct(private readonly ParcelTenancyManager $tenancyManager) {}
+    public function __construct(
+        private readonly ParcelTenancyManager $tenancyManager,
+        private readonly WorkHourManager $workHourManager,
+    ) {}
 
     public function create(Request $request): View
     {
@@ -38,11 +43,24 @@ class ParcelTenantController extends Controller
 
     public function store(ParcelTenantRequest $request): RedirectResponse
     {
-        $tenancy = $this->tenancyManager->save($request->validated());
-        AuditLogger::log('parcel_tenant.created', $request->user(), $tenancy);
+        [$tenancy, $createdAccounts] = DB::transaction(function () use ($request): array {
+            $tenancy = $this->tenancyManager->save($request->validated());
+            $createdAccounts = $this->workHourManager->synchronizeTenancy(
+                $tenancy,
+                $request->user(),
+            );
+            AuditLogger::log('parcel_tenant.created', $request->user(), $tenancy);
+
+            return [$tenancy, $createdAccounts];
+        });
 
         return redirect()->route('parcels.show', $tenancy->parcel_id)
-            ->with('status', 'Pächterzuordnung wurde angelegt.');
+            ->with(
+                'status',
+                $createdAccounts > 0
+                    ? "Pächterzuordnung wurde angelegt. {$createdAccounts} Arbeitsstundenkonten wurden automatisch ergänzt."
+                    : 'Pächterzuordnung wurde angelegt.',
+            );
     }
 
     public function edit(ParcelTenant $parcelTenant): View
@@ -60,12 +78,30 @@ class ParcelTenantController extends Controller
         ParcelTenantRequest $request,
         ParcelTenant $parcelTenant,
     ): RedirectResponse {
-        $parcelTenant = $this->tenancyManager->save($request->validated(), $parcelTenant);
-        AuditLogger::log('parcel_tenant.updated', $request->user(), $parcelTenant, [
-            'changed_fields' => array_keys($parcelTenant->getChanges()),
-        ]);
+        [$parcelTenant, $createdAccounts] = DB::transaction(
+            function () use ($request, $parcelTenant): array {
+                $parcelTenant = $this->tenancyManager->save(
+                    $request->validated(),
+                    $parcelTenant,
+                );
+                $createdAccounts = $this->workHourManager->synchronizeTenancy(
+                    $parcelTenant,
+                    $request->user(),
+                );
+                AuditLogger::log('parcel_tenant.updated', $request->user(), $parcelTenant, [
+                    'changed_fields' => array_keys($parcelTenant->getChanges()),
+                ]);
+
+                return [$parcelTenant, $createdAccounts];
+            },
+        );
 
         return redirect()->route('parcels.show', $parcelTenant->parcel_id)
-            ->with('status', 'Pächterzuordnung wurde aktualisiert.');
+            ->with(
+                'status',
+                $createdAccounts > 0
+                    ? "Pächterzuordnung wurde aktualisiert. {$createdAccounts} Arbeitsstundenkonten wurden automatisch ergänzt."
+                    : 'Pächterzuordnung wurde aktualisiert.',
+            );
     }
 }

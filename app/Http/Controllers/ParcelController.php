@@ -6,7 +6,6 @@ use App\Enums\ParcelStatus;
 use App\Http\Requests\ParcelRequest;
 use App\Models\BillingPeriod;
 use App\Models\Parcel;
-use App\Models\WorkHour;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -87,20 +86,8 @@ class ParcelController extends Controller
                 ),
         ]);
 
-        $assignedPeriodIds = $parcel->workHours->pluck('billing_period_id');
-
         return view('parcels.show', [
             'parcel' => $parcel,
-            'availableWorkHourPeriods' => request()->user()->can('create', WorkHour::class)
-                ? BillingPeriod::query()
-                    ->whereNotIn('id', $assignedPeriodIds)
-                    ->whereIn('status', ['draft', 'calculated'])
-                    ->latest('starts_at')
-                    ->get()
-                    ->filter(fn (BillingPeriod $period) => $parcel->tenancies()
-                        ->activeOn($period->ends_at)
-                        ->exists())
-                : collect(),
         ]);
     }
 

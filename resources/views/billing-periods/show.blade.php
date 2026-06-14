@@ -15,11 +15,6 @@
                 @can('update', $billingPeriod)
                     <a class="btn btn-outline-primary" href="{{ route('billing-periods.edit', $billingPeriod) }}">Bearbeiten</a>
                     <a class="btn btn-primary" href="{{ route('billing-periods.billing-rates.create', $billingPeriod) }}">Preis aus Vorlage</a>
-                    <a class="btn btn-outline-primary" href="{{ route('billing-periods.work-hours.create', $billingPeriod) }}">Arbeitsstunden erfassen</a>
-                    <form method="POST" action="{{ route('billing-periods.work-hours.initialize', $billingPeriod) }}" onsubmit="return confirm('Fehlende Konten für alle aktuell vergebenen Parzellen mit den globalen Vereinswerten anlegen?')">
-                        @csrf
-                        <button class="btn btn-outline-primary">Parzellenkonten vorbereiten</button>
-                    </form>
                     @can('create', App\Models\WorkEvent::class)
                         <a class="btn btn-outline-primary" href="{{ route('billing-periods.work-events.create', $billingPeriod) }}">Arbeitseinsatz anlegen</a>
                     @endcan
@@ -149,7 +144,7 @@
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
             <span>Arbeitsstunden</span>
-            <span class="text-secondary small">Fehlstunden werden beim Berechnen automatisch als Rechnungsposition übernommen.</span>
+            <span class="text-secondary small">Konten werden für verpachtete Parzellen automatisch angelegt. Fehlstunden werden beim Berechnen als Rechnungsposition übernommen.</span>
         </div>
         <div class="table-responsive">
             <table class="table align-middle mb-0">
@@ -194,8 +189,8 @@
                     @empty
                         <tr>
                             <td colspan="10" class="text-center py-4">
-                                <strong>Noch keine Arbeitsstunden erfasst.</strong><br>
-                                <span class="text-secondary">Ohne Arbeitsstundenkonto entsteht für ein Mitglied keine Fehlstundenposition.</span>
+                                <strong>Für den Periodenstichtag ist keine Parzelle verpachtet.</strong><br>
+                                <span class="text-secondary">Sobald eine passende Pächterzuordnung besteht, wird das Arbeitsstundenkonto automatisch angelegt.</span>
                             </td>
                         </tr>
                     @endforelse

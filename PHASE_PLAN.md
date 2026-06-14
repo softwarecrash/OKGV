@@ -107,7 +107,7 @@ vorherigen Phase geprüft sein.
 - [x] Arbeitsstunden
 - [x] Strafzahlungen
 - [x] Parzellenbezogene Konten statt Einzelkonten je Mitpächter
-- [x] Globale Vereinsvorgaben und Sammelvorbereitung
+- [x] Globale Vereinsvorgaben und automatische Parzellenkonten
 - [x] Prüfpflichtige Pächtermeldungen mit optionalem Foto
 - [x] Arbeitsstundenübersicht und Direkterfassung in der Parzellendetailansicht
 

@@ -59,6 +59,7 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - PDF-Mahnungen und begründete, historisierte Stornierungen
 - Pächterzugriff auf eigene Mahnhistorie
 - Arbeitsstundenkonten je Parzelle und Abrechnungsperiode
+- Automatische Arbeitsstundenkonten für zum Periodenstichtag verpachtete Parzellen
 - Automatisch berechnete Fehlstunden und Strafzahlungen
 - Historische Fehlstundenpositionen auf Einzel- und Gemeinschaftsrechnungen
 - Arbeitseinsatztermine mit Teilnehmer- und Anwesenheitsstatus
@@ -78,8 +79,10 @@ Konten können dort manuell anerkannte Stunden direkt pflegen. Pflichtstunden,
 geleistete Stunden und
 der Betrag je Fehlstunde werden pro Parzelle und Periode geführt. Die globale
 Konfiguration stellt Vereinsvorgaben bereit, aus denen alle vergebenen
-Parzellen einer Periode gesammelt vorbereitet werden können. Fehlstunden und
-Strafbetrag berechnet OKGV automatisch. Bei der nächsten
+Parzellen beim Anlegen einer Periode automatisch ihr Konto erhalten.
+Nachträgliche Pächterzuordnungen ergänzen passende bearbeitbare Perioden
+ebenfalls automatisch. Fehlstunden und Strafbetrag berechnet OKGV
+automatisch. Bei der nächsten
 Zwischenberechnung erscheinen positive Beträge als eigene Rechnungsposition;
 Änderungen an einem bereits berechneten Zwischenstand verwerfen dessen
 Entwürfe und erfordern eine erneute Berechnung.

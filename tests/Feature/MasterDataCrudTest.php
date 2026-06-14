@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Enums\MemberStatus;
+use App\Models\ApplicationSetting;
+use App\Models\BillingPeriod;
 use App\Models\Member;
 use App\Models\Parcel;
 use App\Models\ParcelTenant;
@@ -138,5 +140,39 @@ class MasterDataCrudTest extends TestCase
             'ends_at' => '2025-12-31 00:00:00',
         ]);
         $this->delete('/parcel-tenants/'.$tenancy->id)->assertMethodNotAllowed();
+    }
+
+    public function test_new_tenancy_automatically_creates_matching_work_hour_account(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $period = BillingPeriod::factory()->create([
+            'starts_at' => '2026-01-01',
+            'ends_at' => '2026-12-31',
+        ]);
+        $parcel = Parcel::factory()->create();
+        $member = Member::factory()->create();
+        ApplicationSetting::current()->update([
+            'default_work_hours_required' => '8.00',
+            'default_work_hour_penalty_rate' => '25.00',
+        ]);
+
+        $this->actingAs($administrator)->post(route('parcel-tenants.store'), [
+            'parcel_id' => $parcel->id,
+            'member_id' => $member->id,
+            'starts_at' => '2026-01-01',
+            'is_primary' => true,
+        ])->assertRedirect(route('parcels.show', $parcel));
+
+        $this->assertDatabaseHas('work_hours', [
+            'billing_period_id' => $period->id,
+            'parcel_id' => $parcel->id,
+            'hours_required' => 8,
+            'penalty_rate' => 25,
+        ]);
+        $this->actingAs($administrator)
+            ->get(route('parcels.show', $parcel))
+            ->assertOk()
+            ->assertSee($period->name)
+            ->assertDontSee('Konto anlegen');
     }
 }

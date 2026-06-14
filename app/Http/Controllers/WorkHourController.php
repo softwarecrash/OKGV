@@ -125,22 +125,4 @@ class WorkHourController extends Controller
         return $redirect
             ->with('status', 'Arbeitsstundenkonto wurde aktualisiert.');
     }
-
-    public function initialize(
-        Request $request,
-        BillingPeriod $billingPeriod,
-    ): RedirectResponse {
-        $this->authorize('create', WorkHour::class);
-        $count = $this->workHourManager->initializePeriod(
-            $billingPeriod,
-            $request->user(),
-        );
-
-        return back()->with(
-            'status',
-            $count > 0
-                ? "{$count} Parzellenkonten wurden aus den Vereinsvorgaben angelegt."
-                : 'Für alle aktuell vergebenen Parzellen bestehen bereits Arbeitsstundenkonten.',
-        );
-    }
 }

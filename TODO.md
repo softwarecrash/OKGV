@@ -255,7 +255,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Arbeitsstundenpflicht auf Parzellen statt Mitglieder umstellen
 - [x] Sichere Migrationsstrategie für bestehende Konten implementieren
 - [x] Globale Pflichtstunden und Fehlstundensatz ergänzen
-- [x] Sammelvorbereitung aller vergebenen Parzellen implementieren
+- [x] Konten aller vergebenen Parzellen aus Vereinsvorgaben erzeugen
 - [x] Manuelle, Einsatz- und Pächtermeldungsstunden getrennt summieren
 - [x] Arbeitseinsatzteilnahmen einer Parzelle zuordnen
 - [x] Rechnungsposition je Parzelle statt je Mitpächter erzeugen
@@ -303,3 +303,17 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Administrator- und Gartenwartzugriff testen
 - [x] Gesamttests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen und veröffentlichen
+
+## Nachbesserung Phase 9: Automatische Parzellenkonten
+
+- [x] Ursache der widersprüchlichen Kontostände zweier 2026-Perioden prüfen
+- [x] Arbeitsstundenkonten beim Anlegen einer Abrechnungsperiode automatisch erzeugen
+- [x] Konten bei späteren passenden Pächterzuordnungen automatisch ergänzen
+- [x] Leere Synchronisation ohne Zurücksetzen eines Zwischenstands absichern
+- [x] Manuelle Sammelvorbereitung aus der Oberfläche entfernen
+- [x] Periodenzeiträume in der Parzellendetailansicht anzeigen
+- [x] Demo- und Bestandsperiode 2026 ohne Datenbanklöschung berichtigen
+- [x] Regressionstests und Projektdokumentation ergänzen
+- [x] Gesamttests, Formatter und Asset-Build ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen

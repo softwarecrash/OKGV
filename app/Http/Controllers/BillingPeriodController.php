@@ -9,8 +9,10 @@ use App\Models\Parcel;
 use App\Services\AuditLogger;
 use App\Services\BillingCalculator;
 use App\Services\BillingPeriodManager;
+use App\Services\WorkHourManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class BillingPeriodController extends Controller
@@ -18,6 +20,7 @@ class BillingPeriodController extends Controller
     public function __construct(
         private readonly BillingPeriodManager $periodManager,
         private readonly BillingCalculator $billingCalculator,
+        private readonly WorkHourManager $workHourManager,
     ) {}
 
     public function index(): View
@@ -43,11 +46,22 @@ class BillingPeriodController extends Controller
 
     public function store(BillingPeriodRequest $request): RedirectResponse
     {
-        $period = $this->periodManager->save($request->validated());
-        AuditLogger::log('billing.period.created', $request->user(), $period);
+        [$period, $createdAccounts] = DB::transaction(function () use ($request): array {
+            $period = $this->periodManager->save($request->validated());
+            $createdAccounts = $this->workHourManager->initializePeriod(
+                $period,
+                $request->user(),
+            );
+            AuditLogger::log('billing.period.created', $request->user(), $period);
+
+            return [$period, $createdAccounts];
+        });
 
         return redirect()->route('billing-periods.show', $period)
-            ->with('status', 'Abrechnungsperiode wurde angelegt.');
+            ->with(
+                'status',
+                "Abrechnungsperiode wurde angelegt. {$createdAccounts} Arbeitsstundenkonten wurden automatisch eingerichtet.",
+            );
     }
 
     public function show(BillingPeriod $billingPeriod): View
@@ -79,15 +93,28 @@ class BillingPeriodController extends Controller
         BillingPeriodRequest $request,
         BillingPeriod $billingPeriod,
     ): RedirectResponse {
-        $period = $this->periodManager->save(
-            $request->validated(),
-            $billingPeriod,
-            $request->user(),
+        [$period, $createdAccounts] = DB::transaction(
+            function () use ($request, $billingPeriod): array {
+                $period = $this->periodManager->save(
+                    $request->validated(),
+                    $billingPeriod,
+                    $request->user(),
+                );
+                $createdAccounts = $this->workHourManager->initializePeriod(
+                    $period,
+                    $request->user(),
+                );
+                AuditLogger::log('billing.period.updated', $request->user(), $period);
+
+                return [$period, $createdAccounts];
+            },
         );
-        AuditLogger::log('billing.period.updated', $request->user(), $period);
 
         return redirect()->route('billing-periods.show', $period)
-            ->with('status', 'Abrechnungsperiode wurde aktualisiert.');
+            ->with(
+                'status',
+                "Abrechnungsperiode wurde aktualisiert. {$createdAccounts} fehlende Arbeitsstundenkonten wurden automatisch ergänzt.",
+            );
     }
 
     public function calculate(
