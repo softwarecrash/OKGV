@@ -177,4 +177,4 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] PDF-Zahlungserinnerungen ohne Mahnstufen implementieren
 - [x] Feature- und Sicherheitstests ergänzen
 - [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
-- [ ] Phase 7 vollständig prüfen und veröffentlichen
+- [x] Phase 7 vollständig prüfen und veröffentlichen
