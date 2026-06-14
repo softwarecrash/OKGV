@@ -9,6 +9,7 @@ use App\Enums\UserRole;
 use App\Models\Document;
 use App\Models\Invoice;
 use App\Models\MeterReadingSubmission;
+use App\Models\WorkHourSubmission;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -34,6 +35,7 @@ class TenantPortalController extends Controller
                 'invoices' => collect(),
                 'documents' => collect(),
                 'submissions' => collect(),
+                'workHourSubmissions' => collect(),
             ]);
         }
 
@@ -67,12 +69,19 @@ class TenantPortalController extends Controller
             ->latest()
             ->limit(5)
             ->get();
+        $workHourSubmissions = WorkHourSubmission::query()
+            ->where('submitted_by', $request->user()->id)
+            ->with('parcel')
+            ->latest()
+            ->limit(5)
+            ->get();
 
         return view('tenant-portal.index', compact(
             'member',
             'invoices',
             'documents',
             'submissions',
+            'workHourSubmissions',
         ));
     }
 }

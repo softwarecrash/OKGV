@@ -7,6 +7,7 @@ use App\Enums\WorkEventStatus;
 use App\Http\Requests\WorkEventRequest;
 use App\Models\BillingPeriod;
 use App\Models\Member;
+use App\Models\Parcel;
 use App\Models\WorkEvent;
 use App\Services\WorkEventManager;
 use Illuminate\Http\RedirectResponse;
@@ -72,7 +73,7 @@ class WorkEventController extends Controller
     public function show(WorkEvent $workEvent): View
     {
         $this->authorize('view', $workEvent);
-        $workEvent->load(['billingPeriod', 'participants.member', 'participants.confirmer']);
+        $workEvent->load(['billingPeriod', 'participants.member', 'participants.parcel', 'participants.confirmer']);
         $assignedMemberIds = $workEvent->participants->pluck('member_id');
 
         return view('work-events.show', [
@@ -82,6 +83,10 @@ class WorkEventController extends Controller
                 ->whereNotIn('id', $assignedMemberIds)
                 ->orderBy('last_name')
                 ->orderBy('first_name')
+                ->get(),
+            'parcels' => Parcel::query()
+                ->whereHas('tenancies', fn ($query) => $query->activeOn($workEvent->starts_at))
+                ->orderBy('parcel_number')
                 ->get(),
             'participantStatuses' => WorkEventParticipantStatus::cases(),
         ]);

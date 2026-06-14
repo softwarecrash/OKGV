@@ -105,6 +105,9 @@ vorherigen Phase geprüft sein.
 
 - [x] Arbeitsstunden
 - [x] Strafzahlungen
+- [x] Parzellenbezogene Konten statt Einzelkonten je Mitpächter
+- [x] Globale Vereinsvorgaben und Sammelvorbereitung
+- [x] Prüfpflichtige Pächtermeldungen mit optionalem Foto
 
 ## Phase 10: Warteliste
 

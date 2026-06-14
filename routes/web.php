@@ -35,6 +35,7 @@ use App\Http\Controllers\UserPermissionController;
 use App\Http\Controllers\WorkEventController;
 use App\Http\Controllers\WorkEventParticipantController;
 use App\Http\Controllers\WorkHourController;
+use App\Http\Controllers\WorkHourSubmissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -140,6 +141,8 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         ->name('work-hours.edit');
     Route::put('work-hours/{work_hour}', [WorkHourController::class, 'update'])
         ->name('work-hours.update');
+    Route::post('billing-periods/{billing_period}/work-hours/initialize', [WorkHourController::class, 'initialize'])
+        ->name('billing-periods.work-hours.initialize');
     Route::get('work-events', [WorkEventController::class, 'index'])
         ->name('work-events.index');
     Route::get('billing-periods/{billing_period}/work-events/create', [WorkEventController::class, 'create'])
@@ -156,6 +159,18 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         ->name('work-events.participants.store');
     Route::put('work-event-participants/{work_event_participant}', [WorkEventParticipantController::class, 'update'])
         ->name('work-event-participants.update');
+    Route::get('arbeitsstundenmeldungen', [WorkHourSubmissionController::class, 'index'])
+        ->name('work-hour-submissions.index');
+    Route::get('arbeitsstunden-melden', [WorkHourSubmissionController::class, 'create'])
+        ->name('work-hour-submissions.create');
+    Route::post('arbeitsstundenmeldungen', [WorkHourSubmissionController::class, 'store'])
+        ->name('work-hour-submissions.store');
+    Route::get('arbeitsstundenmeldungen/{work_hour_submission}/foto', [WorkHourSubmissionController::class, 'photo'])
+        ->name('work-hour-submissions.photo');
+    Route::post('arbeitsstundenmeldungen/{work_hour_submission}/freigeben', [WorkHourSubmissionController::class, 'approve'])
+        ->name('work-hour-submissions.approve');
+    Route::post('arbeitsstundenmeldungen/{work_hour_submission}/ablehnen', [WorkHourSubmissionController::class, 'reject'])
+        ->name('work-hour-submissions.reject');
     Route::resource('billing-periods.billing-rates', BillingRateController::class)
         ->only(['create', 'store', 'edit', 'update', 'destroy'])
         ->parameters(['billing-rates' => 'billing_rate']);

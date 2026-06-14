@@ -56,10 +56,9 @@ final class BillingCalculator
                 ->orderBy('id')
                 ->get();
             $workHours = $period->workHours()
-                ->with('member')
+                ->with('parcel')
                 ->get()
-                ->keyBy('member_id');
-            $billedWorkHourMemberIds = [];
+                ->keyBy('parcel_id');
 
             $tenancies = ParcelTenant::query()
                 ->where('is_primary', true)
@@ -91,7 +90,6 @@ final class BillingCalculator
                     $parcels,
                     $rates,
                     $workHours,
-                    $billedWorkHourMemberIds,
                 );
             }
 
@@ -144,7 +142,6 @@ final class BillingCalculator
      * @param  Collection<int, Member>  $contractParties
      * @param  Collection<int, BillingRate>  $rates
      * @param  Collection<int, WorkHour>  $workHours
-     * @param  array<int, true>  $billedWorkHourMemberIds
      */
     private function createInvoice(
         BillingPeriod $period,
@@ -153,7 +150,6 @@ final class BillingCalculator
         Collection $parcels,
         Collection $rates,
         Collection $workHours,
-        array &$billedWorkHourMemberIds,
     ): void {
         $invoice = Invoice::create([
             'billing_period_id' => $period->id,
@@ -206,9 +202,8 @@ final class BillingCalculator
             $total,
             $this->addWorkHourPenalties(
                 $invoice,
-                $contractParties,
+                $parcels,
                 $workHours,
-                $billedWorkHourMemberIds,
             ),
             2,
         );
@@ -217,24 +212,18 @@ final class BillingCalculator
     }
 
     /**
-     * @param  Collection<int, Member>  $contractParties
+     * @param  Collection<int, Parcel>  $parcels
      * @param  Collection<int, WorkHour>  $workHours
-     * @param  array<int, true>  $billedWorkHourMemberIds
      */
     private function addWorkHourPenalties(
         Invoice $invoice,
-        Collection $contractParties,
+        Collection $parcels,
         Collection $workHours,
-        array &$billedWorkHourMemberIds,
     ): string {
         $total = '0.00';
 
-        foreach ($contractParties as $contractParty) {
-            if (isset($billedWorkHourMemberIds[$contractParty->id])) {
-                continue;
-            }
-
-            $workHour = $workHours->get($contractParty->id);
+        foreach ($parcels as $parcel) {
+            $workHour = $workHours->get($parcel->id);
 
             if (! $workHour || bccomp($workHour->penalty_amount, '0.00', 2) <= 0) {
                 continue;
@@ -242,22 +231,21 @@ final class BillingCalculator
 
             $invoice->items()->create([
                 'billing_rate_id' => null,
-                'parcel_id' => null,
+                'parcel_id' => $parcel->id,
                 'code' => 'WORK_HOURS_PENALTY',
-                'description' => "Fehlende Arbeitsstunden - {$contractParty->full_name}",
+                'description' => "Fehlende Arbeitsstunden - Parzelle {$parcel->parcel_number}",
                 'calculation_type' => BillingRateType::Manual,
                 'quantity' => $workHour->hours_missing,
                 'unit_price' => $workHour->penalty_rate,
                 'total_amount' => $workHour->penalty_amount,
                 'metadata' => [
                     'work_hour_id' => $workHour->id,
-                    'member_id' => $contractParty->id,
+                    'parcel_id' => $parcel->id,
                     'hours_required' => $workHour->hours_required,
                     'hours_done' => $workHour->hours_done,
                 ],
             ]);
 
-            $billedWorkHourMemberIds[$contractParty->id] = true;
             $total = bcadd($total, $workHour->penalty_amount, 2);
         }
 

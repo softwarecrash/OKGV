@@ -37,7 +37,7 @@
                 <thead>
                     <tr>
                         <th>Periode</th>
-                        <th>Mitglied</th>
+                        <th>Parzelle</th>
                         <th>Pflicht</th>
                         <th>Manuell</th>
                         <th>Einsätze</th>
@@ -55,7 +55,7 @@
                                     {{ $workHour->billingPeriod->name }}
                                 </a>
                             </td>
-                            <td>{{ $workHour->member->full_name }}</td>
+                            <td>Parzelle {{ $workHour->parcel->parcel_number }}</td>
                             <td>{{ number_format((float) $workHour->hours_required, 2, ',', '.') }} Std.</td>
                             <td>{{ number_format((float) $workHour->manual_hours_done, 2, ',', '.') }} Std.</td>
                             <td>{{ number_format((float) $workHour->event_hours_done, 2, ',', '.') }} Std.</td>
@@ -78,7 +78,7 @@
                         <tr>
                             <td colspan="9" class="text-center py-4">
                                 <strong>Noch keine Arbeitsstunden erfasst.</strong><br>
-                                <span class="text-secondary">Arbeitsstunden werden direkt in einer Abrechnungsperiode angelegt.</span>
+                                <span class="text-secondary">Arbeitsstundenkonten werden gesammelt oder einzeln in einer Abrechnungsperiode angelegt.</span>
                             </td>
                         </tr>
                     @endforelse

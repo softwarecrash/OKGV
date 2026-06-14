@@ -23,11 +23,11 @@ class WorkHourRequest extends FormRequest
         $workHour = $this->route('work_hour');
 
         return [
-            'member_id' => [
+            'parcel_id' => [
                 'required',
                 'integer',
-                Rule::exists('members', 'id')->whereNull('archived_at'),
-                Rule::unique('work_hours', 'member_id')
+                Rule::exists('parcels', 'id'),
+                Rule::unique('work_hours', 'parcel_id')
                     ->where('billing_period_id', $period?->id ?? $workHour?->billing_period_id)
                     ->ignore($workHour),
             ],
@@ -43,7 +43,7 @@ class WorkHourRequest extends FormRequest
         $workHour = $this->route('work_hour');
 
         if ($workHour instanceof WorkHour) {
-            $this->merge(['member_id' => $workHour->member_id]);
+            $this->merge(['parcel_id' => $workHour->parcel_id]);
         }
     }
 }

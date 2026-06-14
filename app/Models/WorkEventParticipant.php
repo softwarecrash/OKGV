@@ -14,6 +14,7 @@ use LogicException;
 #[Fillable([
     'work_event_id',
     'member_id',
+    'parcel_id',
     'status',
     'hours',
     'notes',
@@ -64,6 +65,11 @@ class WorkEventParticipant extends Model
     public function member(): BelongsTo
     {
         return $this->belongsTo(Member::class);
+    }
+
+    public function parcel(): BelongsTo
+    {
+        return $this->belongsTo(Parcel::class);
     }
 
     public function confirmer(): BelongsTo

@@ -42,12 +42,12 @@ final class WorkEventManager
                 ])->save();
 
                 if (! $created) {
-                    $memberIds = $event->participants()->pluck('member_id')->unique();
+                    $parcelIds = $event->participants()->pluck('parcel_id')->filter()->unique();
 
-                    foreach ($memberIds as $memberId) {
-                        $this->workHourManager->synchronizeMember(
+                    foreach ($parcelIds as $parcelId) {
+                        $this->workHourManager->synchronizeParcel(
                             $lockedPeriod,
-                            (int) $memberId,
+                            (int) $parcelId,
                             $actor,
                         );
                     }

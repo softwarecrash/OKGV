@@ -57,7 +57,7 @@ class BillingPeriodController extends Controller
             'rates.assignments.member',
             'rates.assignments.parcel',
             'invoices.member',
-            'workHours.member',
+            'workHours.parcel',
         ]);
 
         return view('billing-periods.show', [

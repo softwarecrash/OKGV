@@ -249,3 +249,20 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
 - [x] Gesamttests, Formatter und Asset-Build ausführen
 - [x] Vorgezogene Phase 12 vollständig prüfen und veröffentlichen
+
+## Nachbesserung Phase 9 und 12: Parzellenkonten
+
+- [x] Arbeitsstundenpflicht auf Parzellen statt Mitglieder umstellen
+- [x] Sichere Migrationsstrategie für bestehende Konten implementieren
+- [x] Globale Pflichtstunden und Fehlstundensatz ergänzen
+- [x] Sammelvorbereitung aller vergebenen Parzellen implementieren
+- [x] Manuelle, Einsatz- und Pächtermeldungsstunden getrennt summieren
+- [x] Arbeitseinsatzteilnahmen einer Parzelle zuordnen
+- [x] Rechnungsposition je Parzelle statt je Mitpächter erzeugen
+- [x] Pächterformular mit Tätigkeitsbeschreibung und privatem Foto ergänzen
+- [x] Bestätigungs- und Ablehnungsworkflow implementieren
+- [x] Gemeinschaftspacht auf gemeinsames Parzellenkonto testen
+- [x] Migration isoliert vorwärts und rückwärts prüfen
+- [x] Migration ausschließlich nicht löschend auf MariaDB anwenden
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [ ] Nachbesserung vollständig prüfen und veröffentlichen

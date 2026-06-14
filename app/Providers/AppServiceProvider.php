@@ -29,6 +29,7 @@ use App\Models\User;
 use App\Models\WorkEvent;
 use App\Models\WorkEventParticipant;
 use App\Models\WorkHour;
+use App\Models\WorkHourSubmission;
 use App\Policies\ApplicationSettingPolicy;
 use App\Policies\BillingPeriodPolicy;
 use App\Policies\BillingRateAssignmentPolicy;
@@ -56,6 +57,7 @@ use App\Policies\UserPolicy;
 use App\Policies\WorkEventParticipantPolicy;
 use App\Policies\WorkEventPolicy;
 use App\Policies\WorkHourPolicy;
+use App\Policies\WorkHourSubmissionPolicy;
 use App\Services\ActionIndicatorService;
 use App\Services\AuditLogger;
 use Illuminate\Auth\Events\Failed;
@@ -121,6 +123,7 @@ class AppServiceProvider extends ServiceProvider
                         'invoices' => 0,
                         'work_hours' => 0,
                         'work_events' => 0,
+                        'work_hour_submissions' => 0,
                         'members_group' => 0,
                         'meters_group' => 0,
                         'finance_group' => 0,
@@ -158,6 +161,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(WorkHour::class, WorkHourPolicy::class);
         Gate::policy(WorkEvent::class, WorkEventPolicy::class);
         Gate::policy(WorkEventParticipant::class, WorkEventParticipantPolicy::class);
+        Gate::policy(WorkHourSubmission::class, WorkHourSubmissionPolicy::class);
         Gate::before(fn (User $user) => $user->isAdministrator() ? true : null);
 
         Event::listen(Login::class, fn (Login $event) => AuditLogger::log(

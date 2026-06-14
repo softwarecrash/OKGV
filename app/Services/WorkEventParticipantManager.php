@@ -50,6 +50,7 @@ final class WorkEventParticipantManager
                 $record->fill([
                     'work_event_id' => $event->id,
                     'member_id' => $data['member_id'],
+                    'parcel_id' => $data['parcel_id'],
                     'status' => $status,
                     'hours' => $data['hours'],
                     'notes' => $data['notes'] ?? null,
@@ -61,9 +62,9 @@ final class WorkEventParticipantManager
                         : null,
                 ])->save();
 
-                $this->workHourManager->synchronizeMember(
+                $this->workHourManager->synchronizeParcel(
                     $lockedPeriod,
-                    $record->member_id,
+                    $record->parcel_id,
                     $actor,
                 );
 

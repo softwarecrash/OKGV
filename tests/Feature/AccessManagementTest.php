@@ -95,6 +95,8 @@ class AccessManagementTest extends TestCase
             ->put(route('application-settings.update'), [
                 'system_name' => 'KGV Sonnental',
                 'default_board_permission_profile_id' => $profile->id,
+                'default_work_hours_required' => '8.00',
+                'default_work_hour_penalty_rate' => '15.00',
             ])
             ->assertRedirect();
 

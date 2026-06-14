@@ -4,10 +4,14 @@ namespace App\Services;
 
 use App\Enums\WorkEventParticipantStatus;
 use App\Enums\WorkEventStatus;
+use App\Enums\WorkHourSubmissionStatus;
+use App\Models\ApplicationSetting;
 use App\Models\BillingPeriod;
+use App\Models\ParcelTenant;
 use App\Models\User;
 use App\Models\WorkEventParticipant;
 use App\Models\WorkHour;
+use App\Models\WorkHourSubmission;
 
 final class WorkHourManager
 {
@@ -39,7 +43,7 @@ final class WorkHourManager
 
                 $record->fill([
                     'billing_period_id' => $lockedPeriod->id,
-                    'member_id' => $data['member_id'],
+                    'parcel_id' => $data['parcel_id'],
                     'hours_required' => $data['hours_required'],
                     'manual_hours_done' => $data['hours_done'],
                     'penalty_rate' => $data['penalty_rate'],
@@ -66,24 +70,72 @@ final class WorkHourManager
         );
     }
 
-    public function synchronizeMember(
+    public function initializePeriod(BillingPeriod $period, User $actor): int
+    {
+        return $this->periodManager->changeCalculationInputs(
+            $period,
+            $actor,
+            'work_hours_initialized',
+            function (BillingPeriod $lockedPeriod) use ($actor): int {
+                $settings = ApplicationSetting::current();
+                $parcelIds = ParcelTenant::query()
+                    ->activeOn($lockedPeriod->ends_at)
+                    ->pluck('parcel_id')
+                    ->unique();
+                $created = 0;
+
+                foreach ($parcelIds as $parcelId) {
+                    $record = WorkHour::query()->firstOrNew([
+                        'billing_period_id' => $lockedPeriod->id,
+                        'parcel_id' => $parcelId,
+                    ]);
+
+                    if ($record->exists) {
+                        continue;
+                    }
+
+                    $record->fill([
+                        'hours_required' => $settings->default_work_hours_required,
+                        'manual_hours_done' => '0.00',
+                        'event_hours_done' => '0.00',
+                        'submission_hours_done' => '0.00',
+                        'penalty_rate' => $settings->default_work_hour_penalty_rate,
+                    ]);
+                    $this->recalculate($record, $lockedPeriod);
+                    $created++;
+                }
+
+                AuditLogger::log(
+                    'work_hours.period_initialized',
+                    $actor,
+                    $lockedPeriod,
+                    ['created_count' => $created],
+                );
+
+                return $created;
+            },
+        );
+    }
+
+    public function synchronizeParcel(
         BillingPeriod $period,
-        int $memberId,
+        int $parcelId,
         User $actor,
     ): WorkHour {
         $record = WorkHour::query()
             ->where('billing_period_id', $period->id)
-            ->where('member_id', $memberId)
+            ->where('parcel_id', $parcelId)
             ->lockForUpdate()
             ->first();
 
         if (! $record) {
+            $settings = ApplicationSetting::current();
             $record = new WorkHour([
                 'billing_period_id' => $period->id,
-                'member_id' => $memberId,
-                'hours_required' => '0.00',
+                'parcel_id' => $parcelId,
+                'hours_required' => $settings->default_work_hours_required,
                 'manual_hours_done' => '0.00',
-                'penalty_rate' => '0.00',
+                'penalty_rate' => $settings->default_work_hour_penalty_rate,
             ]);
         }
 
@@ -100,6 +152,7 @@ final class WorkHourManager
                 'before' => $before,
                 'hours_done' => $record->hours_done,
                 'event_hours_done' => $record->event_hours_done,
+                'submission_hours_done' => $record->submission_hours_done,
                 'hours_missing' => $record->hours_missing,
                 'penalty_amount' => $record->penalty_amount,
             ],
@@ -111,15 +164,24 @@ final class WorkHourManager
     private function recalculate(WorkHour $record, BillingPeriod $period): void
     {
         $eventHours = WorkEventParticipant::query()
-            ->where('member_id', $record->member_id)
+            ->where('parcel_id', $record->parcel_id)
             ->where('status', WorkEventParticipantStatus::Confirmed)
             ->whereHas('workEvent', fn ($query) => $query
                 ->where('billing_period_id', $period->id)
                 ->where('status', WorkEventStatus::Completed))
             ->sum('hours');
+        $submissionHours = WorkHourSubmission::query()
+            ->where('billing_period_id', $period->id)
+            ->where('parcel_id', $record->parcel_id)
+            ->where('status', WorkHourSubmissionStatus::Approved)
+            ->sum('hours');
         $hoursDone = bcadd(
-            (string) ($record->manual_hours_done ?? '0.00'),
-            (string) $eventHours,
+            bcadd(
+                (string) ($record->manual_hours_done ?? '0.00'),
+                (string) $eventHours,
+                2,
+            ),
+            (string) $submissionHours,
             2,
         );
         $difference = bcsub((string) $record->hours_required, $hoursDone, 2);
@@ -129,6 +191,7 @@ final class WorkHourManager
 
         $record->fill([
             'event_hours_done' => $eventHours,
+            'submission_hours_done' => $submissionHours,
             'hours_done' => $hoursDone,
             'hours_missing' => $missing,
             'penalty_amount' => $this->roundMoney(

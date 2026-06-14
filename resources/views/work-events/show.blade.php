@@ -39,13 +39,17 @@
         <div class="card-header">Teilnehmer</div>
         <div class="table-responsive">
             <table class="table align-middle mb-0">
-                <thead><tr><th>Mitglied</th><th>Status</th><th>Stunden</th><th>Hinweis</th><th></th></tr></thead>
+                <thead><tr><th>Mitglied</th><th>Parzelle</th><th>Status</th><th>Stunden</th><th>Hinweis</th><th></th></tr></thead>
                 <tbody>
                     @forelse ($workEvent->participants->sortBy(fn ($entry) => $entry->member->last_name) as $participant)
                         <tr>
                             <td>
                                 {{ $participant->member->full_name }}
                                 <input form="participant-{{ $participant->id }}" type="hidden" name="member_id" value="{{ $participant->member_id }}">
+                            </td>
+                            <td>
+                                Parzelle {{ $participant->parcel?->parcel_number }}
+                                <input form="participant-{{ $participant->id }}" type="hidden" name="parcel_id" value="{{ $participant->parcel_id }}">
                             </td>
                             <td>
                                 <select form="participant-{{ $participant->id }}" class="form-select form-select-sm" name="status" @disabled($workEvent->status === App\Enums\WorkEventStatus::Cancelled)>
@@ -65,7 +69,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="text-center py-4">Noch keine Teilnehmer zugeordnet.</td></tr>
+                        <tr><td colspan="6" class="text-center py-4">Noch keine Teilnehmer zugeordnet.</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -81,7 +85,7 @@
                 @else
                     <form class="row g-3 align-items-end" method="POST" action="{{ route('work-events.participants.store', $workEvent) }}">
                         @csrf
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <label class="form-label" for="member_id">Mitglied</label>
                             <select class="form-select" id="member_id" name="member_id" required>
                                 <option value="">Mitglied auswählen</option>
@@ -91,6 +95,15 @@
                             </select>
                         </div>
                         <div class="col-md-3">
+                            <label class="form-label" for="parcel_id">Parzelle</label>
+                            <select class="form-select" id="parcel_id" name="parcel_id" required>
+                                <option value="">Parzelle auswählen</option>
+                                @foreach ($parcels as $parcel)
+                                    <option value="{{ $parcel->id }}">Parzelle {{ $parcel->parcel_number }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
                             <label class="form-label" for="participant-status">Status</label>
                             <select class="form-select" id="participant-status" name="status" required>
                                 @foreach ($participantStatuses as $status)
@@ -102,7 +115,7 @@
                             <label class="form-label" for="hours">Stunden</label>
                             <input class="form-control" id="hours" name="hours" type="number" min="0" step="0.25" value="0" required>
                         </div>
-                        <div class="col-md-2"><button class="btn btn-primary w-100">Hinzufügen</button></div>
+                        <div class="col-md-1"><button class="btn btn-primary w-100">+</button></div>
                         <div class="col-12 form-text">Nur bestätigte Teilnahmen eines abgeschlossenen Einsatzes werden automatisch übernommen.</div>
                     </form>
                 @endif

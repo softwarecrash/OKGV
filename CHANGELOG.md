@@ -2,6 +2,50 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.28] - 2026-06-14
+
+### Arbeitsstunden je Parzelle
+
+- Arbeitsstundenkonten von einzelnen Mitgliedern auf genau ein gemeinsames
+  Konto je Parzelle und Abrechnungsperiode umgestellt.
+- Globale Vereinsvorgaben für Pflichtstunden und Betrag je Fehlstunde in der
+  globalen Konfiguration ergänzt.
+- Alle zum Periodenende vergebenen Parzellen können gesammelt mit diesen
+  Vorgaben vorbereitet werden; bestehende historische Konten werden dabei
+  nicht überschrieben.
+- Manuell anerkannte Stunden, bestätigte Arbeitseinsätze und freigegebene
+  Pächtermeldungen werden getrennt ausgewiesen und gemeinsam berechnet.
+- Fehlstunden und Strafzahlungen werden nur einmal je Parzelle berechnet,
+  auch wenn mehrere Personen im Pachtvertrag stehen.
+- Arbeitseinsatzteilnahmen sind nun zusätzlich der betroffenen Parzelle
+  zugeordnet.
+
+### Pächtermeldungen
+
+- Pächter können geleistete Arbeitsstunden mit Datum, Tätigkeitsbeschreibung
+  und optionalem Foto selbst einreichen.
+- Meldungen werden erst nach Bestätigung durch eine berechtigte Person dem
+  gemeinsamen Parzellenkonto gutgeschrieben.
+- Ablehnungen benötigen eine Begründung und bleiben für den einreichenden
+  Pächter nachvollziehbar.
+- Nachweisfotos werden ausschließlich im privaten Speicher abgelegt und sind
+  nur für den Einreicher sowie berechtigte Prüfer abrufbar.
+- Offene Meldungen erzeugen einen rollenabhängigen Aktionshinweis.
+
+### Migration und Tests
+
+- Bestehende mitgliederbezogene Konten und Einsatzteilnahmen werden nur bei
+  eindeutiger historischer Parzellenzuordnung migriert; uneindeutige Daten
+  brechen die Migration mit einer verständlichen Fehlermeldung ab.
+- Migration vorwärts und rückwärts isoliert geprüft und anschließend
+  ausschließlich mit `php artisan migrate` auf MariaDB angewendet;
+  vorhandene Benutzer-, Mitglieder- und Periodendaten blieben unverändert.
+- Parzellenkonten, globale Vorgaben, Gemeinschaftspacht, Pächtermeldungen,
+  Prüfung, Ablehnung, Unveränderlichkeit und private Fotonachweise sind durch
+  Feature-Tests abgedeckt.
+- Insgesamt bestehen 110 Tests mit 620 Assertions.
+- Entwicklungsstand auf `0.2.0.28` erhöht.
+
 ## [0.2.0.27] - 2026-06-14
 
 ### Vorgezogene Phase 12

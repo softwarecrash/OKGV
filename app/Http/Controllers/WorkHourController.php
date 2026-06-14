@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\WorkHourRequest;
 use App\Models\BillingPeriod;
-use App\Models\Member;
+use App\Models\Parcel;
 use App\Models\WorkHour;
 use App\Services\WorkHourManager;
 use Illuminate\Http\RedirectResponse;
@@ -24,7 +24,7 @@ class WorkHourController extends Controller
 
         return view('work-hours.index', [
             'workHours' => WorkHour::query()
-                ->with(['member', 'billingPeriod'])
+                ->with(['parcel', 'billingPeriod'])
                 ->when($periodId, fn ($query) => $query
                     ->where('billing_period_id', $periodId))
                 ->orderByDesc(
@@ -32,11 +32,7 @@ class WorkHourController extends Controller
                         ->select('ends_at')
                         ->whereColumn('billing_periods.id', 'work_hours.billing_period_id'),
                 )
-                ->orderBy(
-                    Member::query()
-                        ->select('last_name')
-                        ->whereColumn('members.id', 'work_hours.member_id'),
-                )
+                ->orderBy('parcel_id')
                 ->paginate(25)
                 ->withQueryString(),
             'periods' => BillingPeriod::query()->latest('starts_at')->get(),
@@ -49,16 +45,15 @@ class WorkHourController extends Controller
         $this->authorize('create', WorkHour::class);
         abort_unless($billingPeriod->isEditable(), 403);
 
-        $assignedMemberIds = $billingPeriod->workHours()->pluck('member_id');
+        $assignedParcelIds = $billingPeriod->workHours()->pluck('parcel_id');
 
         return view('work-hours.create', [
             'billingPeriod' => $billingPeriod,
             'workHour' => new WorkHour,
-            'members' => Member::query()
-                ->whereNull('archived_at')
-                ->whereNotIn('id', $assignedMemberIds)
-                ->orderBy('last_name')
-                ->orderBy('first_name')
+            'parcels' => Parcel::query()
+                ->whereNotIn('id', $assignedParcelIds)
+                ->whereHas('tenancies', fn ($query) => $query->activeOn($billingPeriod->ends_at))
+                ->orderBy('parcel_number')
                 ->get(),
         ]);
     }
@@ -84,8 +79,8 @@ class WorkHourController extends Controller
 
         return view('work-hours.edit', [
             'billingPeriod' => $workHour->billingPeriod,
-            'workHour' => $workHour->load('member'),
-            'members' => collect([$workHour->member]),
+            'workHour' => $workHour->load('parcel'),
+            'parcels' => collect([$workHour->parcel]),
         ]);
     }
 
@@ -103,5 +98,23 @@ class WorkHourController extends Controller
 
         return redirect()->route('billing-periods.show', $period)
             ->with('status', 'Arbeitsstundenkonto wurde aktualisiert.');
+    }
+
+    public function initialize(
+        Request $request,
+        BillingPeriod $billingPeriod,
+    ): RedirectResponse {
+        $this->authorize('create', WorkHour::class);
+        $count = $this->workHourManager->initializePeriod(
+            $billingPeriod,
+            $request->user(),
+        );
+
+        return back()->with(
+            'status',
+            $count > 0
+                ? "{$count} Parzellenkonten wurden aus den Vereinsvorgaben angelegt."
+                : 'Für alle aktuell vergebenen Parzellen bestehen bereits Arbeitsstundenkonten.',
+        );
     }
 }

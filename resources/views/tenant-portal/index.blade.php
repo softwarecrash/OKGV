@@ -28,6 +28,9 @@
                                 <strong>Parzelle {{ $tenancy->parcel->parcel_number }}</strong>
                                 <span class="text-secondary"> · {{ number_format((float) $tenancy->parcel->area_sqm, 2, ',', '.') }} m²</span>
                                 <div class="mt-2 d-flex flex-wrap gap-2">
+                                    <a class="btn btn-sm btn-outline-success" href="{{ route('work-hour-submissions.create') }}">
+                                        Arbeitsstunden melden
+                                    </a>
                                     @forelse ($tenancy->parcel->meters as $meter)
                                         <a class="btn btn-sm btn-outline-primary" href="{{ route('meter-reading-submissions.create', $meter) }}">
                                             {{ $meter->type->label() }} {{ $meter->meter_number }} melden
@@ -78,6 +81,26 @@
                             <div class="border-top py-2">{{ $submission->meter->type->label() }} · {{ $submission->reading_date->format('d.m.Y') }} · {{ $submission->reading_value }} · <strong>{{ $submission->status->label() }}</strong></div>
                         @empty
                             <p class="text-secondary mb-0">Du hast noch keinen Zählerstand gemeldet.</p>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h2 class="h5">Letzte Arbeitsstundenmeldungen</h2>
+                            <a href="{{ route('work-hour-submissions.index') }}">Alle</a>
+                        </div>
+                        @forelse ($workHourSubmissions as $submission)
+                            <div class="border-top py-2">
+                                Parzelle {{ $submission->parcel->parcel_number }} ·
+                                {{ $submission->worked_at->format('d.m.Y') }} ·
+                                {{ number_format((float) $submission->hours, 2, ',', '.') }} Std. ·
+                                <strong>{{ $submission->status->label() }}</strong>
+                            </div>
+                        @empty
+                            <p class="text-secondary mb-0">Du hast noch keine Arbeitsstunden gemeldet.</p>
                         @endforelse
                     </div>
                 </div>

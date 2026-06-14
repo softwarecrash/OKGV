@@ -9,9 +9,9 @@
 
     <div class="card border-0 shadow-sm">
         <div class="card-body">
-            @if ($members->isEmpty())
+            @if ($parcels->isEmpty())
                 <div class="alert alert-warning mb-0">
-                    Für alle aktiven Mitglieder wurde in dieser Periode bereits ein Arbeitsstundenkonto angelegt.
+                    Für alle aktuell vergebenen Parzellen wurde in dieser Periode bereits ein Arbeitsstundenkonto angelegt.
                 </div>
             @else
                 <form method="POST" action="{{ route('billing-periods.work-hours.store', $billingPeriod) }}">

@@ -8,26 +8,26 @@
 </div>
 
 <div class="mb-3">
-    <label class="form-label" for="member_id">Mitglied</label>
-    <select class="form-select @error('member_id') is-invalid @enderror"
-            id="member_id"
-            name="member_id"
+    <label class="form-label" for="parcel_id">Parzelle</label>
+    <select class="form-select @error('parcel_id') is-invalid @enderror"
+            id="parcel_id"
+            name="parcel_id"
             required
             @disabled($workHour->exists)>
-        <option value="">Mitglied auswählen</option>
-        @foreach ($members as $member)
-            <option value="{{ $member->id }}" @selected((int) old('member_id', $workHour->member_id) === $member->id)>
-                {{ $member->last_name }}, {{ $member->first_name }} · {{ $member->member_number }}
+        <option value="">Parzelle auswählen</option>
+        @foreach ($parcels as $parcel)
+            <option value="{{ $parcel->id }}" @selected((int) old('parcel_id', $workHour->parcel_id) === $parcel->id)>
+                Parzelle {{ $parcel->parcel_number }}
             </option>
         @endforeach
     </select>
     @if ($workHour->exists)
-        <input type="hidden" name="member_id" value="{{ $workHour->member_id }}">
-        <div class="form-text">Das Mitglied kann nach dem Anlegen nicht gewechselt werden. Korrigiere stattdessen die Stundenwerte.</div>
+        <input type="hidden" name="parcel_id" value="{{ $workHour->parcel_id }}">
+        <div class="form-text">Die Parzelle kann nach dem Anlegen nicht gewechselt werden.</div>
     @else
-        <div class="form-text">Pro Mitglied und Abrechnungsperiode kann genau ein Arbeitsstundenkonto geführt werden.</div>
+        <div class="form-text">Pro Parzelle und Abrechnungsperiode kann genau ein Arbeitsstundenkonto geführt werden.</div>
     @endif
-    @error('member_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+    @error('parcel_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
 </div>
 
 <div class="row g-3">

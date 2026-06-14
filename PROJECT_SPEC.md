@@ -670,32 +670,39 @@ Einzelgebühr, bisherige aktive Gebühren und Gesamtforderung.
 
 #### Arbeitsstundenkonto
 
-Für jedes Mitglied kann je Abrechnungsperiode genau ein Arbeitsstundenkonto
-geführt werden. Es speichert:
+Für jede Parzelle kann je Abrechnungsperiode genau ein Arbeitsstundenkonto
+geführt werden. Die Pflicht gilt damit einmal für den Pachtvertrag und nicht
+mehrfach für jeden Mitpächter. Es speichert:
 
 - geforderte Pflichtstunden,
-- anerkannte geleistete Stunden,
+- zusätzlich manuell anerkannte Stunden,
+- bestätigte Stunden aus Arbeitseinsätzen,
+- bestätigte Pächtermeldungen,
+- die Summe aller anerkannten Stunden,
 - serverseitig berechnete Fehlstunden,
 - den historischen Betrag je Fehlstunde,
 - den serverseitig berechneten Strafbetrag,
 - optionale interne Notizen.
 
 Fehlstunden entsprechen höchstens der positiven Differenz aus Pflichtstunden
-und geleisteten Stunden. Mehrarbeit erzeugt weder negative Fehlstunden noch
-eine Gutschrift. Ohne angelegtes Arbeitsstundenkonto entsteht für ein
-Mitglied keine Fehlstundenposition. Arbeitseinsatztermine und die automatische
-Übernahme einzelner Teilnahmen bleiben Phase 12.
+und anerkannten Gesamtstunden. Mehrarbeit erzeugt weder negative Fehlstunden
+noch eine Gutschrift. Ohne angelegtes Parzellenkonto entsteht keine
+Fehlstundenposition.
+
+Die globale Vereinskonfiguration enthält Pflichtstunden je Parzelle und
+Betrag je Fehlstunde. Beim Sammelvorbereiten einer Abrechnungsperiode werden
+für alle zum Periodenende vergebenen Parzellen fehlende Konten mit diesen
+Werten angelegt. Die Werte werden als historischer Periodenstand kopiert.
 
 #### Abrechnung
 
 Bei der Berechnung einer Abrechnungsperiode werden positive Strafbeträge als
 eigene Rechnungsposition `WORK_HOURS_PENALTY` übernommen. Die Position
-speichert Mitglied, Pflichtstunden, geleistete Stunden, Fehlstunden,
+speichert Parzelle, Pflichtstunden, geleistete Stunden, Fehlstunden,
 Stundensatz und Gesamtbetrag als historischen Snapshot.
 
-Stehen mehrere Mitglieder gemeinsam im Pachtvertrag, werden deren
-Fehlstundenpositionen einzeln auf der gemeinsamen Rechnung ausgewiesen. Ein
-Mitglied darf innerhalb einer Periode höchstens einmal belastet werden.
+Stehen mehrere Mitglieder gemeinsam im Pachtvertrag, entsteht genau eine
+Fehlstundenposition für die Parzelle auf der gemeinsamen Rechnung.
 Freigegebene Rechnungen und ihre Fehlstundenpositionen bleiben unveränderlich.
 
 #### Rechte und Änderungen
@@ -713,6 +720,20 @@ nachvollziehbare Änderungen und werden auditiert.
 
 Offene Fehlstunden in Entwurfsperioden erzeugen für berechtigte Finanzkonten
 einen Aktionshinweis.
+
+#### Pächtermeldungen
+
+Pächter können über ihr Portal Arbeitsstunden für eine zum Tätigkeitsdatum
+selbst gepachtete Parzelle melden. Eine Meldung enthält Datum, positive
+Stundenzahl, verpflichtende Tätigkeitsbeschreibung und optional ein privates
+Foto als Nachweis. Erlaubt sind JPEG, PNG und WebP bis 8 MiB.
+
+Die Meldung ist zunächst `pending` und verändert das Parzellenkonto nicht.
+Konten mit dem Recht `Arbeitseinsätze verwalten` können sie bestätigen oder
+mit Pflichtbegründung ablehnen. Erst eine Bestätigung übernimmt die Stunden.
+Gemeinsame Pächter melden in dasselbe Parzellenkonto. Meldungen können nach
+dem Absenden nicht geändert oder gelöscht werden; Prüfung, Prüfer und
+Begründung bleiben dauerhaft erhalten und werden auditiert.
 
 ### Vorgezogene Phase 12: Arbeitseinsätze
 
@@ -739,6 +760,8 @@ bleiben historisch erhalten und können nicht gelöscht werden.
 #### Teilnehmer und Stundenübernahme
 
 Jedes Mitglied kann einem Einsatz höchstens einmal zugeordnet werden.
+Dabei wird festgehalten, für welche aktuell gepachtete Parzelle die Stunden
+gelten.
 Teilnahmen besitzen den Status `registered`, `confirmed` oder `absent`.
 Nur `confirmed` mit einem positiven Stundenwert und nur bei einem
 abgeschlossenen Einsatz wird in das Arbeitsstundenkonto übernommen.
@@ -747,6 +770,7 @@ Das Arbeitsstundenkonto trennt:
 
 - zusätzlich manuell anerkannte Stunden,
 - bestätigte Stunden aus Arbeitseinsätzen,
+- bestätigte Pächtermeldungen,
 - die daraus berechnete Gesamtsumme.
 
 Korrektur, Abwesenheit oder Absage berechnen den automatischen Anteil neu.

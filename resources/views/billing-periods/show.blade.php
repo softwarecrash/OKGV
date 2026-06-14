@@ -16,6 +16,10 @@
                     <a class="btn btn-outline-primary" href="{{ route('billing-periods.edit', $billingPeriod) }}">Bearbeiten</a>
                     <a class="btn btn-primary" href="{{ route('billing-periods.billing-rates.create', $billingPeriod) }}">Preis aus Vorlage</a>
                     <a class="btn btn-outline-primary" href="{{ route('billing-periods.work-hours.create', $billingPeriod) }}">Arbeitsstunden erfassen</a>
+                    <form method="POST" action="{{ route('billing-periods.work-hours.initialize', $billingPeriod) }}" onsubmit="return confirm('Fehlende Konten für alle aktuell vergebenen Parzellen mit den globalen Vereinswerten anlegen?')">
+                        @csrf
+                        <button class="btn btn-outline-primary">Parzellenkonten vorbereiten</button>
+                    </form>
                     @can('create', App\Models\WorkEvent::class)
                         <a class="btn btn-outline-primary" href="{{ route('billing-periods.work-events.create', $billingPeriod) }}">Arbeitseinsatz anlegen</a>
                     @endcan
@@ -151,10 +155,11 @@
             <table class="table align-middle mb-0">
                 <thead>
                     <tr>
-                        <th>Mitglied</th>
+                        <th>Parzelle</th>
                         <th>Pflicht</th>
                         <th>Manuell</th>
                         <th>Aus Einsätzen</th>
+                        <th>Pächtermeldungen</th>
                         <th>Gesamt</th>
                         <th>Fehlend</th>
                         <th>Je Fehlstunde</th>
@@ -163,12 +168,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($billingPeriod->workHours->sortBy(fn ($entry) => $entry->member->last_name) as $workHour)
+                    @forelse ($billingPeriod->workHours->sortBy(fn ($entry) => $entry->parcel->parcel_number) as $workHour)
                         <tr>
-                            <td>{{ $workHour->member->full_name }}</td>
+                            <td>Parzelle {{ $workHour->parcel->parcel_number }}</td>
                             <td>{{ number_format((float) $workHour->hours_required, 2, ',', '.') }} Std.</td>
                             <td>{{ number_format((float) $workHour->manual_hours_done, 2, ',', '.') }} Std.</td>
                             <td>{{ number_format((float) $workHour->event_hours_done, 2, ',', '.') }} Std.</td>
+                            <td>{{ number_format((float) $workHour->submission_hours_done, 2, ',', '.') }} Std.</td>
                             <td>{{ number_format((float) $workHour->hours_done, 2, ',', '.') }} Std.</td>
                             <td>
                                 @if ((float) $workHour->hours_missing > 0)
@@ -187,7 +193,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center py-4">
+                            <td colspan="10" class="text-center py-4">
                                 <strong>Noch keine Arbeitsstunden erfasst.</strong><br>
                                 <span class="text-secondary">Ohne Arbeitsstundenkonto entsteht für ein Mitglied keine Fehlstundenposition.</span>
                             </td>

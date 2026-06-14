@@ -21,6 +21,12 @@ class ApplicationSettingRequest extends FormRequest
                 'required',
                 Rule::exists('permission_profiles', 'id')->where('is_active', true),
             ],
+            'default_work_hours_required' => [
+                'required', 'numeric', 'decimal:0,2', 'min:0', 'max:999999.99',
+            ],
+            'default_work_hour_penalty_rate' => [
+                'required', 'numeric', 'decimal:0,2', 'min:0', 'max:99999999.99',
+            ],
         ];
     }
 
@@ -29,6 +35,8 @@ class ApplicationSettingRequest extends FormRequest
         return [
             'system_name' => 'Systemname',
             'default_board_permission_profile_id' => 'Standardvorlage für Vorstände',
+            'default_work_hours_required' => 'Pflichtstunden je Parzelle',
+            'default_work_hour_penalty_rate' => 'Betrag je Fehlstunde',
         ];
     }
 }

@@ -30,10 +30,10 @@ class WorkEventWorkflowTest extends TestCase
 
     public function test_confirmed_participation_is_added_to_manual_hours(): void
     {
-        [$administrator, $period, $member] = $this->scenario();
+        [$administrator, $period, $member, $parcel] = $this->scenario();
         $workHour = WorkHour::factory()->create([
             'billing_period_id' => $period->id,
-            'member_id' => $member->id,
+            'parcel_id' => $parcel->id,
             'hours_required' => '10.00',
             'manual_hours_done' => '2.00',
             'event_hours_done' => '0.00',
@@ -47,6 +47,7 @@ class WorkEventWorkflowTest extends TestCase
         $this->actingAs($administrator)
             ->post(route('work-events.participants.store', $event), [
                 'member_id' => $member->id,
+                'parcel_id' => $parcel->id,
                 'status' => WorkEventParticipantStatus::Confirmed->value,
                 'hours' => '3.50',
             ])
@@ -69,10 +70,10 @@ class WorkEventWorkflowTest extends TestCase
 
     public function test_changing_participation_to_absent_removes_transferred_hours(): void
     {
-        [$administrator, $period, $member] = $this->scenario();
+        [$administrator, $period, $member, $parcel] = $this->scenario();
         $workHour = WorkHour::factory()->create([
             'billing_period_id' => $period->id,
-            'member_id' => $member->id,
+            'parcel_id' => $parcel->id,
             'hours_required' => '10.00',
             'manual_hours_done' => '1.00',
             'event_hours_done' => '0.00',
@@ -85,6 +86,7 @@ class WorkEventWorkflowTest extends TestCase
         $participant = WorkEventParticipant::factory()->create([
             'work_event_id' => $event->id,
             'member_id' => $member->id,
+            'parcel_id' => $parcel->id,
             'status' => WorkEventParticipantStatus::Confirmed,
             'hours' => '4.00',
         ]);
@@ -92,6 +94,7 @@ class WorkEventWorkflowTest extends TestCase
         $this->actingAs($administrator)
             ->put(route('work-event-participants.update', $participant), [
                 'member_id' => $member->id,
+                'parcel_id' => $parcel->id,
                 'status' => WorkEventParticipantStatus::Absent->value,
                 'hours' => '4.00',
             ])
@@ -104,12 +107,13 @@ class WorkEventWorkflowTest extends TestCase
 
     public function test_participation_creates_missing_work_hour_account(): void
     {
-        [$administrator, $period, $member] = $this->scenario();
+        [$administrator, $period, $member, $parcel] = $this->scenario();
         $event = $this->completedEvent($period, $administrator);
 
         $this->actingAs($administrator)
             ->post(route('work-events.participants.store', $event), [
                 'member_id' => $member->id,
+                'parcel_id' => $parcel->id,
                 'status' => WorkEventParticipantStatus::Confirmed->value,
                 'hours' => '2.25',
             ])
@@ -124,10 +128,10 @@ class WorkEventWorkflowTest extends TestCase
 
     public function test_cancelling_event_removes_hours_and_discards_calculated_drafts(): void
     {
-        [$administrator, $period, $member] = $this->scenario(withBilling: true);
+        [$administrator, $period, $member, $parcel] = $this->scenario(withBilling: true);
         $workHour = WorkHour::factory()->create([
             'billing_period_id' => $period->id,
-            'member_id' => $member->id,
+            'parcel_id' => $parcel->id,
             'hours_required' => '10.00',
             'manual_hours_done' => '0.00',
             'event_hours_done' => '4.00',
@@ -140,6 +144,7 @@ class WorkEventWorkflowTest extends TestCase
         WorkEventParticipant::factory()->create([
             'work_event_id' => $event->id,
             'member_id' => $member->id,
+            'parcel_id' => $parcel->id,
             'status' => WorkEventParticipantStatus::Confirmed,
             'hours' => '4.00',
         ]);
@@ -162,7 +167,7 @@ class WorkEventWorkflowTest extends TestCase
 
     public function test_unfinished_event_cannot_confirm_participation(): void
     {
-        [$administrator, $period, $member] = $this->scenario();
+        [$administrator, $period, $member, $parcel] = $this->scenario();
         $event = WorkEvent::factory()->create([
             'billing_period_id' => $period->id,
             'created_by' => $administrator->id,
@@ -172,6 +177,7 @@ class WorkEventWorkflowTest extends TestCase
         $this->actingAs($administrator)
             ->post(route('work-events.participants.store', $event), [
                 'member_id' => $member->id,
+                'parcel_id' => $parcel->id,
                 'status' => WorkEventParticipantStatus::Confirmed->value,
                 'hours' => '3.00',
             ])
@@ -220,11 +226,12 @@ class WorkEventWorkflowTest extends TestCase
 
     public function test_approved_event_and_participants_are_immutable(): void
     {
-        [$administrator, $period, $member] = $this->scenario(withBilling: true);
+        [$administrator, $period, $member, $parcel] = $this->scenario(withBilling: true);
         $event = $this->completedEvent($period, $administrator);
         WorkEventParticipant::factory()->create([
             'work_event_id' => $event->id,
             'member_id' => $member->id,
+            'parcel_id' => $parcel->id,
         ]);
         app(BillingCalculator::class)->calculate($period, $administrator);
         app(BillingPeriodManager::class)->approve($period->fresh(), $administrator);
@@ -235,11 +242,12 @@ class WorkEventWorkflowTest extends TestCase
 
     public function test_approved_participation_is_immutable_at_model_level(): void
     {
-        [$administrator, $period, $member] = $this->scenario(withBilling: true);
+        [$administrator, $period, $member, $parcel] = $this->scenario(withBilling: true);
         $event = $this->completedEvent($period, $administrator);
         $participant = WorkEventParticipant::factory()->create([
             'work_event_id' => $event->id,
             'member_id' => $member->id,
+            'parcel_id' => $parcel->id,
         ]);
         app(BillingCalculator::class)->calculate($period, $administrator);
         app(BillingPeriodManager::class)->approve($period->fresh(), $administrator);
@@ -249,7 +257,7 @@ class WorkEventWorkflowTest extends TestCase
     }
 
     /**
-     * @return array{User, BillingPeriod, Member}
+     * @return array{User, BillingPeriod, Member, Parcel}
      */
     private function scenario(bool $withBilling = false): array
     {
@@ -261,16 +269,16 @@ class WorkEventWorkflowTest extends TestCase
             'due_at' => '2026-02-01',
         ]);
         $member = Member::factory()->create();
+        $parcel = Parcel::factory()->create();
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $member->id,
+            'starts_at' => '2020-01-01',
+            'ends_at' => null,
+            'is_primary' => true,
+        ]);
 
         if ($withBilling) {
-            $parcel = Parcel::factory()->create();
-            ParcelTenant::factory()->create([
-                'parcel_id' => $parcel->id,
-                'member_id' => $member->id,
-                'starts_at' => '2020-01-01',
-                'ends_at' => null,
-                'is_primary' => true,
-            ]);
             BillingRate::factory()->create([
                 'billing_period_id' => $period->id,
                 'code' => 'MEMBER_FEE',
@@ -280,7 +288,7 @@ class WorkEventWorkflowTest extends TestCase
             ]);
         }
 
-        return [$administrator, $period, $member];
+        return [$administrator, $period, $member, $parcel];
     }
 
     private function completedEvent(BillingPeriod $period, User $creator): WorkEvent

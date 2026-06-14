@@ -30,11 +30,9 @@ class WorkHourWorkflowTest extends TestCase
     {
         $administrator = User::factory()->administrator()->create();
         $period = BillingPeriod::factory()->create();
-        $member = Member::factory()->create();
-
         $this->actingAs($administrator)
             ->post(route('billing-periods.work-hours.store', $period), [
-                'member_id' => $member->id,
+                'parcel_id' => $parcel = Parcel::factory()->create()->id,
                 'hours_required' => '12.50',
                 'hours_done' => '7.25',
                 'penalty_rate' => '15.00',
@@ -52,7 +50,7 @@ class WorkHourWorkflowTest extends TestCase
 
         $this->actingAs($administrator)
             ->put(route('work-hours.update', $workHour), [
-                'member_id' => $member->id,
+                'parcel_id' => $parcel,
                 'hours_required' => '12.50',
                 'hours_done' => '14.00',
                 'penalty_rate' => '15.00',
@@ -65,10 +63,10 @@ class WorkHourWorkflowTest extends TestCase
 
     public function test_changing_work_hours_discards_a_calculated_intermediate_result(): void
     {
-        [$administrator, $period, $member] = $this->billingScenario();
+        [$administrator, $period, $member, $parcel] = $this->billingScenario();
         $workHour = WorkHour::factory()->create([
             'billing_period_id' => $period->id,
-            'member_id' => $member->id,
+            'parcel_id' => $parcel->id,
             'hours_required' => '10.00',
             'hours_done' => '5.00',
             'hours_missing' => '5.00',
@@ -81,7 +79,7 @@ class WorkHourWorkflowTest extends TestCase
 
         $this->actingAs($administrator)
             ->put(route('work-hours.update', $workHour), [
-                'member_id' => $member->id,
+                'parcel_id' => $parcel->id,
                 'hours_required' => '10.00',
                 'hours_done' => '6.00',
                 'penalty_rate' => '20.00',
@@ -98,10 +96,10 @@ class WorkHourWorkflowTest extends TestCase
 
     public function test_approved_work_hours_cannot_be_changed(): void
     {
-        [$administrator, $period, $member] = $this->billingScenario();
+        [$administrator, $period, $member, $parcel] = $this->billingScenario();
         $workHour = WorkHour::factory()->create([
             'billing_period_id' => $period->id,
-            'member_id' => $member->id,
+            'parcel_id' => $parcel->id,
         ]);
         app(BillingCalculator::class)->calculate($period, $administrator);
         app(BillingPeriodManager::class)->approve($period->fresh(), $administrator);
@@ -110,7 +108,7 @@ class WorkHourWorkflowTest extends TestCase
         app(WorkHourManager::class)->save(
             $period->fresh(),
             [
-                'member_id' => $member->id,
+                'parcel_id' => $parcel->id,
                 'hours_required' => '10.00',
                 'hours_done' => '10.00',
                 'penalty_rate' => '20.00',
@@ -122,10 +120,10 @@ class WorkHourWorkflowTest extends TestCase
 
     public function test_approved_work_hours_are_immutable_at_model_level(): void
     {
-        [$administrator, $period, $member] = $this->billingScenario();
+        [$administrator, $period, $member, $parcel] = $this->billingScenario();
         $workHour = WorkHour::factory()->create([
             'billing_period_id' => $period->id,
-            'member_id' => $member->id,
+            'parcel_id' => $parcel->id,
         ]);
         app(BillingCalculator::class)->calculate($period, $administrator);
         app(BillingPeriodManager::class)->approve($period->fresh(), $administrator);
@@ -150,34 +148,23 @@ class WorkHourWorkflowTest extends TestCase
         ]);
         WorkHour::factory()->create([
             'billing_period_id' => $period->id,
-            'member_id' => $primaryMember->id,
+            'parcel_id' => $parcel->id,
             'hours_required' => '10.00',
             'hours_done' => '8.00',
             'hours_missing' => '2.00',
             'penalty_rate' => '15.00',
             'penalty_amount' => '30.00',
         ]);
-        WorkHour::factory()->create([
-            'billing_period_id' => $period->id,
-            'member_id' => $coTenant->id,
-            'hours_required' => '10.00',
-            'hours_done' => '5.00',
-            'hours_missing' => '5.00',
-            'penalty_rate' => '15.00',
-            'penalty_amount' => '75.00',
-        ]);
-
         app(BillingCalculator::class)->calculate($period, $administrator);
 
         $invoice = Invoice::query()->with('items')->firstOrFail();
         $penalties = $invoice->items->where('code', 'WORK_HOURS_PENALTY')->values();
-        $this->assertCount(2, $penalties);
-        $this->assertEquals(105.00, $penalties->sum('total_amount'));
-        $this->assertSame('106.00', $invoice->total_amount);
+        $this->assertCount(1, $penalties);
+        $this->assertEquals(30.00, $penalties->sum('total_amount'));
+        $this->assertSame('31.00', $invoice->total_amount);
         $this->assertSame(
             [
-                "Fehlende Arbeitsstunden - {$primaryMember->full_name}",
-                'Fehlende Arbeitsstunden - Erika Mitpächterin',
+                "Fehlende Arbeitsstunden - Parzelle {$parcel->parcel_number}",
             ],
             $penalties->pluck('description')->all(),
         );

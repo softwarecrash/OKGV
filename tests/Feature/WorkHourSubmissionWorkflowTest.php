@@ -1,0 +1,217 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Enums\UserRole;
+use App\Enums\WorkHourSubmissionStatus;
+use App\Models\ApplicationSetting;
+use App\Models\BillingPeriod;
+use App\Models\Member;
+use App\Models\Parcel;
+use App\Models\ParcelTenant;
+use App\Models\User;
+use App\Models\WorkHour;
+use App\Models\WorkHourSubmission;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use LogicException;
+use Tests\TestCase;
+
+class WorkHourSubmissionWorkflowTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_period_accounts_are_initialized_for_parcels_from_global_defaults(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $period = BillingPeriod::factory()->create([
+            'starts_at' => '2025-01-01',
+            'ends_at' => '2025-12-31',
+        ]);
+        ApplicationSetting::current()->update([
+            'default_work_hours_required' => '12.00',
+            'default_work_hour_penalty_rate' => '18.50',
+        ]);
+        $firstParcel = $this->leasedParcel();
+        $secondParcel = $this->leasedParcel();
+
+        $this->actingAs($administrator)
+            ->post(route('billing-periods.work-hours.initialize', $period))
+            ->assertRedirect();
+
+        $this->assertDatabaseCount('work_hours', 2);
+        foreach ([$firstParcel, $secondParcel] as $parcel) {
+            $this->assertDatabaseHas('work_hours', [
+                'billing_period_id' => $period->id,
+                'parcel_id' => $parcel->id,
+                'hours_required' => 12,
+                'penalty_rate' => 18.5,
+            ]);
+        }
+    }
+
+    public function test_tenant_submission_with_private_photo_is_approved_for_parcel_account(): void
+    {
+        Storage::fake('local');
+        [$tenant, $parcel, $period] = $this->tenantScenario();
+        $reviewer = User::factory()->create(['role' => UserRole::GardenManager]);
+        WorkHour::factory()->create([
+            'billing_period_id' => $period->id,
+            'parcel_id' => $parcel->id,
+            'hours_required' => '10.00',
+            'manual_hours_done' => '1.00',
+            'hours_done' => '1.00',
+            'hours_missing' => '9.00',
+            'penalty_rate' => '20.00',
+            'penalty_amount' => '180.00',
+        ]);
+
+        $this->actingAs($tenant)
+            ->post(route('work-hour-submissions.store'), [
+                'parcel_id' => $parcel->id,
+                'worked_at' => '2025-06-10',
+                'hours' => '3.50',
+                'description' => 'Gemeinschaftsweg gereinigt.',
+                'photo' => UploadedFile::fake()->image('nachweis.jpg'),
+            ])
+            ->assertRedirect(route('work-hour-submissions.index'));
+
+        $submission = WorkHourSubmission::query()->firstOrFail();
+        Storage::disk('local')->assertExists($submission->photo_path);
+        $otherTenant = User::factory()->create(['role' => UserRole::Tenant]);
+
+        $this->actingAs($tenant)
+            ->get(route('work-hour-submissions.photo', $submission))
+            ->assertOk();
+        $this->actingAs($otherTenant)
+            ->get(route('work-hour-submissions.photo', $submission))
+            ->assertForbidden();
+        $this->actingAs($reviewer)
+            ->get(route('work-hour-submissions.photo', $submission))
+            ->assertOk();
+
+        $this->actingAs($reviewer)
+            ->post(route('work-hour-submissions.approve', $submission), [
+                'review_note' => 'Nachweis geprüft.',
+            ])
+            ->assertRedirect();
+
+        $this->assertSame(WorkHourSubmissionStatus::Approved, $submission->fresh()->status);
+        $workHour = WorkHour::query()->firstOrFail();
+        $this->assertSame('3.50', $workHour->submission_hours_done);
+        $this->assertSame('4.50', $workHour->hours_done);
+        $this->assertSame('5.50', $workHour->hours_missing);
+        $this->assertSame('110.00', $workHour->penalty_amount);
+    }
+
+    public function test_co_tenants_report_into_the_same_parcel_account(): void
+    {
+        [$firstTenant, $parcel, $period] = $this->tenantScenario();
+        $secondUser = User::factory()->create();
+        $secondMember = Member::factory()->create(['user_id' => $secondUser->id]);
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $secondMember->id,
+            'starts_at' => '2020-01-01',
+            'is_primary' => false,
+        ]);
+        $reviewer = User::factory()->create(['role' => UserRole::GardenManager]);
+
+        foreach ([[$firstTenant, '2.00'], [$secondUser, '3.00']] as [$tenant, $hours]) {
+            $this->actingAs($tenant)->post(route('work-hour-submissions.store'), [
+                'parcel_id' => $parcel->id,
+                'worked_at' => '2025-07-01',
+                'hours' => $hours,
+                'description' => 'Arbeit an der Gemeinschaftsanlage.',
+            ])->assertRedirect();
+        }
+
+        foreach (WorkHourSubmission::all() as $submission) {
+            $this->actingAs($reviewer)
+                ->post(route('work-hour-submissions.approve', $submission))
+                ->assertRedirect();
+        }
+
+        $this->assertDatabaseCount('work_hours', 1);
+        $this->assertSame('5.00', WorkHour::query()->firstOrFail()->submission_hours_done);
+    }
+
+    public function test_rejected_submission_does_not_count_and_is_visible_to_tenant(): void
+    {
+        [$tenant, $parcel] = $this->tenantScenario();
+        $reviewer = User::factory()->create(['role' => UserRole::GardenManager]);
+        $this->actingAs($tenant)->post(route('work-hour-submissions.store'), [
+            'parcel_id' => $parcel->id,
+            'worked_at' => '2025-05-01',
+            'hours' => '2.00',
+            'description' => 'Nicht ausreichend belegte Tätigkeit.',
+        ]);
+        $submission = WorkHourSubmission::query()->firstOrFail();
+
+        $this->actingAs($reviewer)
+            ->post(route('work-hour-submissions.reject', $submission), [
+                'review_note' => 'Tätigkeit nicht nachvollziehbar.',
+            ])
+            ->assertRedirect();
+
+        $this->assertSame(WorkHourSubmissionStatus::Rejected, $submission->fresh()->status);
+        $this->assertSame('0.00', WorkHour::query()->firstOrFail()->submission_hours_done);
+        $this->actingAs($tenant)
+            ->get(route('work-hour-submissions.index'))
+            ->assertOk()
+            ->assertSee('Tätigkeit nicht nachvollziehbar.');
+    }
+
+    public function test_reviewed_submission_is_immutable_and_cannot_be_deleted(): void
+    {
+        [$tenant, $parcel, $period] = $this->tenantScenario();
+        $submission = WorkHourSubmission::create([
+            'billing_period_id' => $period->id,
+            'parcel_id' => $parcel->id,
+            'submitted_by' => $tenant->id,
+            'worked_at' => '2025-05-01',
+            'hours' => '2.00',
+            'description' => 'Bestätigte Tätigkeit.',
+            'status' => WorkHourSubmissionStatus::Approved,
+        ]);
+
+        $this->expectException(LogicException::class);
+        $submission->update(['hours' => '3.00']);
+    }
+
+    /**
+     * @return array{User, Parcel, BillingPeriod}
+     */
+    private function tenantScenario(): array
+    {
+        $tenant = User::factory()->create();
+        $member = Member::factory()->create(['user_id' => $tenant->id]);
+        $parcel = Parcel::factory()->create();
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $member->id,
+            'starts_at' => '2020-01-01',
+            'is_primary' => true,
+        ]);
+        $period = BillingPeriod::factory()->create([
+            'starts_at' => '2025-01-01',
+            'ends_at' => '2025-12-31',
+        ]);
+
+        return [$tenant, $parcel, $period];
+    }
+
+    private function leasedParcel(): Parcel
+    {
+        $parcel = Parcel::factory()->create();
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => Member::factory(),
+            'starts_at' => '2020-01-01',
+            'is_primary' => true,
+        ]);
+
+        return $parcel;
+    }
+}

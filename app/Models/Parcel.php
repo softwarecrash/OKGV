@@ -63,6 +63,21 @@ class Parcel extends Model
         return $this->hasMany(Document::class);
     }
 
+    public function workHours(): HasMany
+    {
+        return $this->hasMany(WorkHour::class);
+    }
+
+    public function workEventParticipations(): HasMany
+    {
+        return $this->hasMany(WorkEventParticipant::class);
+    }
+
+    public function workHourSubmissions(): HasMany
+    {
+        return $this->hasMany(WorkHourSubmission::class);
+    }
+
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
         return $query->when($search, function (Builder $query, string $search): void {

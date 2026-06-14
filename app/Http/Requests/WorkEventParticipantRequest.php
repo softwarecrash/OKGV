@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\WorkEventParticipantStatus;
 use App\Enums\WorkEventStatus;
+use App\Models\ParcelTenant;
 use App\Models\WorkEventParticipant;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -34,6 +35,7 @@ class WorkEventParticipantRequest extends FormRequest
                     ->where('work_event_id', $event?->id ?? $participant?->work_event_id)
                     ->ignore($participant),
             ],
+            'parcel_id' => ['required', 'integer', Rule::exists('parcels', 'id')],
             'status' => ['required', Rule::enum(WorkEventParticipantStatus::class)],
             'hours' => ['required', 'numeric', 'decimal:0,2', 'min:0', 'max:999999.99'],
             'notes' => ['nullable', 'string', 'max:10000'],
@@ -66,6 +68,19 @@ class WorkEventParticipantRequest extends FormRequest
                         'Für eine bestätigte Teilnahme müssen geleistete Stunden eingetragen werden.',
                     );
                 }
+
+                $activeTenancy = ParcelTenant::query()
+                    ->where('member_id', $this->integer('member_id'))
+                    ->where('parcel_id', $this->integer('parcel_id'))
+                    ->activeOn($event->starts_at)
+                    ->exists();
+
+                if (! $activeTenancy) {
+                    $validator->errors()->add(
+                        'parcel_id',
+                        'Das Mitglied ist zum Termin nicht dieser Parzelle zugeordnet.',
+                    );
+                }
             },
         ];
     }
@@ -77,6 +92,7 @@ class WorkEventParticipantRequest extends FormRequest
 
         $this->merge([
             'member_id' => $participant?->member_id ?? $this->input('member_id'),
+            'parcel_id' => $participant?->parcel_id ?? $this->input('parcel_id'),
             'hours' => $status === WorkEventParticipantStatus::Confirmed->value
                 ? $this->input('hours')
                 : 0,

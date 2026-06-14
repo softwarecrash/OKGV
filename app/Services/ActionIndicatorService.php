@@ -10,6 +10,7 @@ use App\Enums\MeterReadingSubmissionStatus;
 use App\Enums\RegistrationRequestStatus;
 use App\Enums\UserRole;
 use App\Enums\WorkEventStatus;
+use App\Enums\WorkHourSubmissionStatus;
 use App\Models\Invoice;
 use App\Models\MailCampaign;
 use App\Models\MeterReadingSubmission;
@@ -17,6 +18,7 @@ use App\Models\RegistrationRequest;
 use App\Models\User;
 use App\Models\WorkEvent;
 use App\Models\WorkHour;
+use App\Models\WorkHourSubmission;
 
 final class ActionIndicatorService
 {
@@ -27,6 +29,7 @@ final class ActionIndicatorService
      *     invoices: int,
      *     work_hours: int,
      *     work_events: int,
+     *     work_hour_submissions: int,
      *     members_group: int,
      *     meters_group: int,
      *     finance_group: int,
@@ -85,6 +88,16 @@ final class ActionIndicatorService
                 ->where('ends_at', '<', now())
                 ->count()
             : 0;
+        $workHourSubmissions = match (true) {
+            $user->canManageWorkEvents() => WorkHourSubmission::query()
+                ->where('status', WorkHourSubmissionStatus::Pending)
+                ->count(),
+            $user->role === UserRole::Tenant => WorkHourSubmission::query()
+                ->where('submitted_by', $user->id)
+                ->where('status', WorkHourSubmissionStatus::Rejected)
+                ->count(),
+            default => 0,
+        };
 
         $failedCampaigns = $user->canManageCommunication()
             ? MailCampaign::query()->where('status', MailCampaignStatus::Failed)->count()
@@ -96,12 +109,13 @@ final class ActionIndicatorService
             'invoices' => $invoices,
             'work_hours' => $workHours,
             'work_events' => $workEvents,
+            'work_hour_submissions' => $workHourSubmissions,
             'members_group' => $registrations,
             'meters_group' => $meterReadings,
-            'finance_group' => $invoices + $workHours + $workEvents,
+            'finance_group' => $invoices + $workHours + $workEvents + $workHourSubmissions,
             'communication_group' => $failedCampaigns,
             'dunning_notices' => $dunningNotices,
-            'total' => $registrations + $meterReadings + $invoices + $workHours + $workEvents + $failedCampaigns,
+            'total' => $registrations + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns,
         ];
     }
 

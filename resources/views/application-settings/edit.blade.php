@@ -26,7 +26,7 @@
                 </div>
             </div>
 
-            <div>
+            <div class="mb-4">
                 <label class="form-label" for="default_board_permission_profile_id">Standardvorlage für neue Vorstandsmitglieder</label>
                 <select class="form-select @error('default_board_permission_profile_id') is-invalid @enderror"
                         id="default_board_permission_profile_id"
@@ -43,6 +43,39 @@
                     Die Vorlage wird in der Rechteverwaltung bei neuen Vorstandszuweisungen vorausgewählt.
                 </div>
             </div>
+
+            <fieldset>
+                <legend class="h5">Arbeitsstunden je Parzelle</legend>
+                <p class="text-secondary">
+                    Diese Werte werden als Vorlage in neue Abrechnungsperioden kopiert. Bereits angelegte Periodenkonten ändern sich dadurch nicht rückwirkend.
+                </p>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="default_work_hours_required">Pflichtstunden je Parzelle</label>
+                        <div class="input-group">
+                            <input class="form-control @error('default_work_hours_required') is-invalid @enderror"
+                                   id="default_work_hours_required"
+                                   name="default_work_hours_required"
+                                   type="number" min="0" step="0.25" required
+                                   value="{{ old('default_work_hours_required', $settings->default_work_hours_required) }}">
+                            <span class="input-group-text">Std.</span>
+                            @error('default_work_hours_required')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="default_work_hour_penalty_rate">Betrag je Fehlstunde</label>
+                        <div class="input-group">
+                            <input class="form-control @error('default_work_hour_penalty_rate') is-invalid @enderror"
+                                   id="default_work_hour_penalty_rate"
+                                   name="default_work_hour_penalty_rate"
+                                   type="number" min="0" step="0.01" required
+                                   value="{{ old('default_work_hour_penalty_rate', $settings->default_work_hour_penalty_rate) }}">
+                            <span class="input-group-text">€</span>
+                            @error('default_work_hour_penalty_rate')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
 
         </div>
         <div class="card-footer bg-body border-0">
