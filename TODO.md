@@ -50,4 +50,4 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Historisierten Zählerwechsel implementieren
 - [x] Tests erstellen
 - [x] Phase 2 vollständig prüfen
-- [ ] Entwicklungsstand 0.2.0.1 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.1 veröffentlichen

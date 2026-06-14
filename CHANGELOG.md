@@ -18,6 +18,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Tests für Rollenrechte, Pächterisolation, Aktivzähler, Ableseplausibilität, Wechsel und Mehrzählerverbrauch ergänzt
 - Historische Zähler sind nicht reaktivierbar; Wechsel respektieren vorhandene spätere und letzte Ablesungen
 - Phase 2 mit 25 Tests, 109 Assertions, Migration-Rollback und Sicherheits-Audits geprüft
+- Entwicklungsstand `0.2.0.1` auf GitHub veröffentlicht
 
 ## [0.2.0] - 2026-06-14
 
