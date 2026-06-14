@@ -25,6 +25,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
   Administratorzugriff werden durch Feature-Tests abgedeckt.
 - Insgesamt bestehen 83 Tests mit 450 Assertions.
 - Entwicklungsstand auf `0.2.0.19` erhöht.
+- Entwicklungsstand `0.2.0.19` auf GitHub veröffentlicht.
 
 ## [0.2.0.18] - 2026-06-14
 
