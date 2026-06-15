@@ -716,6 +716,10 @@ werden weder in der Kampagne noch im Auditlog gespeichert.
 
 Ein allgemeiner Brief speichert Mitgliedsbezug, vollständige
 Empfängeranschrift, Betreff, Inhalt und Ersteller als dauerhaften Snapshot.
+Die Auswahl eines Mitglieds befüllt Name und Anschrift im Formular sofort,
+damit die verwendeten Daten vor dem Speichern sichtbar und bei Bedarf
+prüfbar sind. Ohne Mitgliedsauswahl kann eine freie Anschrift eingetragen
+werden.
 Die PDF-Ausgabe verändert den Brief nicht. Briefe werden in Phase 7 nicht
 automatisch in die aufgeschobene Dokumentenverwaltung übernommen.
 

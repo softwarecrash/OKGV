@@ -662,3 +662,12 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Regressionstests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
+
+## Nachbesserung Phase 7: Empfängeranschrift im PDF-Brief
+
+- [x] Mitgliedsauswahl mit Adressdaten für die Formularbefüllung ergänzen
+- [x] Empfängerfelder bei der Auswahl automatisch befüllen
+- [x] Missverständlichen Hinweis zur freien Anschrift entfernen
+- [x] Regressionstest, Formatter, Build und Audits ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen

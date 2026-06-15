@@ -58,6 +58,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    const letterMemberSelect = document.getElementById('member_id');
+    const letterRecipientFields = document.querySelector('[data-letter-recipient-fields]');
+
+    if (letterMemberSelect instanceof HTMLSelectElement
+        && letterRecipientFields instanceof HTMLFieldSetElement) {
+        const recipientInputs = {
+            recipientName: document.getElementById('recipient_name'),
+            recipientStreet: document.getElementById('street'),
+            recipientZip: document.getElementById('zip'),
+            recipientCity: document.getElementById('city'),
+        };
+
+        letterMemberSelect.addEventListener('change', () => {
+            const selectedOption = letterMemberSelect.selectedOptions.item(0);
+
+            Object.entries(recipientInputs).forEach(([dataKey, input]) => {
+                if (input instanceof HTMLInputElement) {
+                    input.value = selectedOption?.dataset[dataKey] ?? '';
+                }
+            });
+        });
+    }
+
     document.querySelectorAll('[data-parcel-map-zoom]').forEach((map) => {
         const viewport = map.querySelector('[data-map-viewport]');
         const target = map.querySelector('[data-map-zoom-target]');

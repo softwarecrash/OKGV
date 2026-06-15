@@ -2,6 +2,21 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.61] - 2026-06-15
+
+### Automatische Empfängeranschrift bei PDF-Briefen
+
+- Die Auswahl eines Mitglieds befüllt Name, Straße, PLZ und Ort unmittelbar
+  im Briefformular.
+- Die Option „Freie Anschrift verwenden“ leert die Empfängerfelder wieder
+  und ermöglicht weiterhin manuelle Briefe ohne Mitgliedsbezug.
+- Der missverständliche Hinweis, die Felder nur ohne Mitglied auszufüllen,
+  wurde entfernt.
+- Insgesamt bestehen 199 Tests mit 1.203 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.61` erhöht.
+
 ## [0.2.0.60] - 2026-06-15
 
 ### Verständliche Arbeitsstunden-Aktionshinweise

@@ -273,6 +273,28 @@ class CommunicationWorkflowTest extends TestCase
             ->assertHeader('Content-Type', 'application/pdf');
     }
 
+    public function test_letter_form_provides_member_address_for_automatic_input(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        Member::factory()->create([
+            'first_name' => 'Erika',
+            'last_name' => 'Erbse',
+            'street' => 'Gartenweg 7',
+            'zip' => '12345',
+            'city' => 'Grünstadt',
+        ]);
+
+        $this->actingAs($administrator)
+            ->get(route('letters.create'))
+            ->assertOk()
+            ->assertSee('data-recipient-name="Erika Erbse"', false)
+            ->assertSee('data-recipient-street="Gartenweg 7"', false)
+            ->assertSee('data-recipient-zip="12345"', false)
+            ->assertSee('data-recipient-city="Grünstadt"', false)
+            ->assertSee('Empfängeranschrift')
+            ->assertDontSee('Nur ausfüllen, wenn kein Mitglied ausgewählt wurde.');
+    }
+
     public function test_payment_reminder_requires_overdue_open_invoice(): void
     {
         $administrator = User::factory()->administrator()->create();

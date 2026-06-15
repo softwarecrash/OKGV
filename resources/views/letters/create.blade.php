@@ -12,15 +12,20 @@
                 <select class="form-select" id="member_id" name="member_id">
                     <option value="">Freie Anschrift verwenden</option>
                     @foreach ($members as $member)
-                        <option value="{{ $member->id }}" @selected((int) old('member_id') === $member->id)>
+                        <option
+                            value="{{ $member->id }}"
+                            data-recipient-name="{{ $member->full_name }}"
+                            data-recipient-street="{{ $member->street }}"
+                            data-recipient-zip="{{ $member->zip }}"
+                            data-recipient-city="{{ $member->city }}"
+                            @selected((int) old('member_id') === $member->id)>
                             {{ $member->member_number }} · {{ $member->full_name }} · {{ $member->zip }} {{ $member->city }}
                         </option>
                     @endforeach
                 </select>
             </div>
-            <fieldset class="border rounded p-3 mb-4">
-                <legend class="h5 float-none w-auto px-2">Freie Anschrift</legend>
-                <p class="text-secondary">Nur ausfüllen, wenn kein Mitglied ausgewählt wurde.</p>
+            <fieldset class="border rounded p-3 mb-4" data-letter-recipient-fields>
+                <legend class="h5 float-none w-auto px-2">Empfängeranschrift</legend>
                 <div class="row g-3">
                     <div class="col-12"><label class="form-label" for="recipient_name">Name</label><input class="form-control" id="recipient_name" name="recipient_name" maxlength="255" value="{{ old('recipient_name') }}"></div>
                     <div class="col-12"><label class="form-label" for="street">Straße</label><input class="form-control" id="street" name="street" maxlength="255" value="{{ old('street') }}"></div>
