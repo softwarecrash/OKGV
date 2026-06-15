@@ -12,6 +12,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
   Meldung statt `validation.uploaded`.
 - Insgesamt bestehen 188 Tests mit 1.063 Assertions.
 - Entwicklungsstand auf `0.2.0.48` erhöht.
+- Entwicklungsstand `0.2.0.48` auf GitHub veröffentlicht.
 
 ## [0.2.0.47] - 2026-06-15
 

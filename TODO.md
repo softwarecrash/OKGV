@@ -98,7 +98,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 - [x] PHP-Uploadlimits an das 15-MiB-Lageplanlimit anpassen
 - [x] Fehlgeschlagene Uploads mit einer deutschen Meldung erklären
-- [ ] Entwicklungsstand 0.2.0.48 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.48 veröffentlichen
 
 - [x] Projektlizenz von MIT auf GNU AGPLv3 umstellen
 - [x] Paketmetadaten auf `AGPL-3.0-only` aktualisieren
