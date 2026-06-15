@@ -249,6 +249,25 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Phase 10 vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
 
+## Phase 11: Inventarverwaltung
+
+- [x] Datenmodell, Status und Rechtekonzept spezifizieren
+- [x] Frei definierbare Gegenstände und Kategorien implementieren
+- [x] Optionale Anschaffungsdaten, Kosten, Seriennummern und Standorte ergänzen
+- [x] Eigenes granulares Inventarrecht ergänzen
+- [x] Suche sowie Status- und Kategoriefilter implementieren
+- [x] Transaktionale Ausgabe mit Mitglieds- und Namenssnapshot implementieren
+- [x] Einmalige Rückgabe mit Folgestatus implementieren
+- [x] Ausgabe- und Rückgabehistorie dauerhaft schützen
+- [x] Auditlogs und Aktionshinweise für überfällige Rückgaben ergänzen
+- [x] Bedienhinweise und leere Zustände ergänzen
+- [x] Feature-, Rechte-, Validierungs- und Historientests ergänzen
+- [x] Migration vorwärts und rückwärts isoliert prüfen
+- [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Phase 11 vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen
+
 ## Vorgezogene Phase 12: Arbeitseinsätze
 
 - [x] Vorziehen von Phase 12 direkt nach Phase 9 dokumentieren

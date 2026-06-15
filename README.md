@@ -73,6 +73,9 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Prüfpflichtige Pächtermeldungen mit optionalem privatem Foto
 - Granular geschützte Warteliste mit Prioritäten, Status und Kontaktsuche
 - Aktionshinweise für offene Wartelistenvorgänge
+- Frei definierbares Vereinsinventar mit Kategorien und optionalen Anschaffungsdaten
+- Transaktionale Ausgabe und Rückgabe mit dauerhafter Empfänger- und Zustandshistorie
+- Granulares Inventarrecht und Aktionshinweise für überfällige Rückgaben
 
 Freigegebene Rechnungen sind unveränderbar. Bei der Berechnung werden
 Mitgliedseintritte und -austritte anhand der Mitgliedschaft, Pächterwechsel

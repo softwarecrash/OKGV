@@ -9,6 +9,8 @@ use App\Http\Controllers\CommunicationSettingController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DunningNoticeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InventoryItemController;
+use App\Http\Controllers\InventoryLoanController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LetterController;
 use App\Http\Controllers\MailCampaignController;
@@ -233,4 +235,16 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         ->except(['destroy'])
         ->parameters(['warteliste' => 'waiting_list_entry'])
         ->names('waiting-list-entries');
+    Route::get('inventar/{inventory_item}/ausgeben', [InventoryLoanController::class, 'create'])
+        ->name('inventory-items.loans.create');
+    Route::post('inventar/{inventory_item}/ausgaben', [InventoryLoanController::class, 'store'])
+        ->name('inventory-items.loans.store');
+    Route::get('inventar/{inventory_item}/ausgaben/{inventory_loan}/rueckgabe', [InventoryLoanController::class, 'editReturn'])
+        ->name('inventory-items.loans.return.edit');
+    Route::put('inventar/{inventory_item}/ausgaben/{inventory_loan}/rueckgabe', [InventoryLoanController::class, 'updateReturn'])
+        ->name('inventory-items.loans.return.update');
+    Route::resource('inventar', InventoryItemController::class)
+        ->except(['destroy'])
+        ->parameters(['inventar' => 'inventory_item'])
+        ->names('inventory-items');
 });

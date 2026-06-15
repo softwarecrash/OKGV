@@ -10,6 +10,7 @@ use App\Models\BillingRateTemplate;
 use App\Models\CommunicationSetting;
 use App\Models\Document;
 use App\Models\DunningNotice;
+use App\Models\InventoryItem;
 use App\Models\Invoice;
 use App\Models\Letter;
 use App\Models\MailCampaign;
@@ -39,6 +40,7 @@ use App\Policies\BillingRateTemplatePolicy;
 use App\Policies\CommunicationSettingPolicy;
 use App\Policies\DocumentPolicy;
 use App\Policies\DunningNoticePolicy;
+use App\Policies\InventoryItemPolicy;
 use App\Policies\InvoicePolicy;
 use App\Policies\LetterPolicy;
 use App\Policies\MailCampaignPolicy;
@@ -127,6 +129,7 @@ class AppServiceProvider extends ServiceProvider
                         'work_events' => 0,
                         'work_hour_submissions' => 0,
                         'waiting_list' => 0,
+                        'inventory' => 0,
                         'members_group' => 0,
                         'meters_group' => 0,
                         'finance_group' => 0,
@@ -145,6 +148,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(BillingRateAssignment::class, BillingRateAssignmentPolicy::class);
         Gate::policy(CommunicationSetting::class, CommunicationSettingPolicy::class);
         Gate::policy(Invoice::class, InvoicePolicy::class);
+        Gate::policy(InventoryItem::class, InventoryItemPolicy::class);
         Gate::policy(Letter::class, LetterPolicy::class);
         Gate::policy(MailCampaign::class, MailCampaignPolicy::class);
         Gate::policy(Member::class, MemberPolicy::class);

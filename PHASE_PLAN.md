@@ -126,11 +126,11 @@ vorherigen Phase geprüft sein.
 
 ## Phase 11: Inventarverwaltung
 
-- [ ] Inventarverwaltung
-- [ ] Geräte
-- [ ] Schlüssel
-- [ ] Anhänger
-- [ ] Vereinsinventar
+- [x] Inventarverwaltung
+- [x] Geräte, Schlüssel, Anhänger und weitere frei definierbare Inventargegenstände
+- [x] Optionale Anschaffungsdaten, Kosten, Seriennummern und Standorte
+- [x] Ausgabe, Rückgabe und dauerhafte Historie
+- [x] Granulares Recht und Aktionshinweis für überfällige Rückgaben
 
 ## Phase 12: Arbeitseinsätze
 
@@ -140,6 +140,10 @@ vorherigen Phase geprüft sein.
 - [x] Stundenübernahme
 - [x] Direkter Anlegezugang aus der Arbeitseinsatzübersicht
 - [x] Bearbeitbare Abrechnungsperiode beim Anlegen auswählen
+
+## Phase 12.1: Modularisierung
+
+- [ ] Funktionsbereiche wie Arbeitseinsätze, Inventar, Warteliste, Arbeitsstunden und SEPA modularisieren und konfigurierbar aktivier- oder deaktivierbar machen, damit später unterschiedliche Ausbaustufen möglich sind
 
 ## Phase 13: CSV-Import
 
@@ -180,6 +184,5 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 10 sowie die fachlich zu Phase 9 gehörende, vorgezogene
-Phase 12 sind abgeschlossen. Als Nächstes folgt Phase 11:
-Inventarverwaltung.
+Die Phasen 0 bis 12 einschließlich der vorgezogenen Arbeitseinsätze sind
+abgeschlossen. Als Nächstes folgt Phase 12.1: Modularisierung.

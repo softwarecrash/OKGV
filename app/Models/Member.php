@@ -84,6 +84,11 @@ class Member extends Model
         return $this->hasMany(WorkEventParticipant::class);
     }
 
+    public function inventoryLoans(): HasMany
+    {
+        return $this->hasMany(InventoryLoan::class);
+    }
+
     public function parcels(): BelongsToMany
     {
         return $this->belongsToMany(Parcel::class, 'parcel_tenants')

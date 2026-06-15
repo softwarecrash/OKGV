@@ -12,6 +12,7 @@ use App\Enums\UserRole;
 use App\Enums\WaitingListStatus;
 use App\Enums\WorkEventStatus;
 use App\Enums\WorkHourSubmissionStatus;
+use App\Models\InventoryLoan;
 use App\Models\Invoice;
 use App\Models\MailCampaign;
 use App\Models\MeterReadingSubmission;
@@ -33,6 +34,7 @@ final class ActionIndicatorService
      *     work_events: int,
      *     work_hour_submissions: int,
      *     waiting_list: int,
+     *     inventory: int,
      *     members_group: int,
      *     meters_group: int,
      *     finance_group: int,
@@ -110,6 +112,13 @@ final class ActionIndicatorService
                 ->whereIn('status', WaitingListStatus::openValues())
                 ->count()
             : 0;
+        $inventory = $user->canManageInventory()
+            ? InventoryLoan::query()
+                ->whereNull('returned_at')
+                ->whereNotNull('due_at')
+                ->whereDate('due_at', '<', today())
+                ->count()
+            : 0;
 
         return [
             'registrations' => $registrations,
@@ -119,12 +128,13 @@ final class ActionIndicatorService
             'work_events' => $workEvents,
             'work_hour_submissions' => $workHourSubmissions,
             'waiting_list' => $waitingList,
+            'inventory' => $inventory,
             'members_group' => $registrations + $waitingList,
             'meters_group' => $meterReadings,
             'finance_group' => $invoices + $workHours + $workEvents + $workHourSubmissions,
             'communication_group' => $failedCampaigns,
             'dunning_notices' => $dunningNotices,
-            'total' => $registrations + $waitingList + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns,
+            'total' => $registrations + $waitingList + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns + $inventory,
         ];
     }
 

@@ -925,10 +925,47 @@ Wartende, kontaktierte und mit einem Angebot versehene Einträge gelten als
 offene Vorgänge. Berechtigte Konten sehen ihre Anzahl als Aktionspunkt im
 Mitglieder-Menü.
 
-### Phase 11 und 13 bis 18
+### Phase 11: Inventarverwaltung
 
-Inventar, CSV-Import und -Export, DSGVO, Vereinseinstellungen,
-Nummernkreise, Pächterwechsel und später ein Lageplan.
+Die Inventarverwaltung bildet frei definierbare Vereinsgegenstände ab. Dazu
+zählen beispielsweise Geräte, Werkzeuge, Pumpen, Anhänger und Schlüssel,
+ohne diese Kategorien technisch fest vorzugeben. Jeder Gegenstand speichert:
+
+- eine eindeutige Inventarnummer,
+- Name und frei definierbare Kategorie,
+- optional Beschreibung, Standort und Seriennummer,
+- Status,
+- optional Anschaffungsdatum und Anschaffungskosten,
+- interne Notizen.
+
+Zulässige Status sind `available`, `issued`, `maintenance`, `retired` und
+`lost`. Die Oberfläche bezeichnet sie als Verfügbar, Ausgegeben, Wartung,
+Ausgemustert und Verloren. Der Status Ausgegeben wird ausschließlich durch
+den Ausgabeworkflow gesetzt. Ausgemusterte Gegenstände und ihre Historie
+werden nicht gelöscht.
+
+Eine Ausgabe speichert den optional zugeordneten Mitgliedsdatensatz und
+zusätzlich den Namen des Empfängers als historischen Snapshot. Dadurch bleibt
+die Ausgabe auch dann verständlich, wenn sich Stammdaten später ändern.
+Ausgabedatum, optionale Rückgabefrist, ausgebende Person, Zustand und Notizen
+werden dauerhaft gespeichert. Bei der Rückgabe werden Rückgabedatum,
+rücknehmende Person, Zustand und der anschließende Gegenstandsstatus ergänzt.
+Eine offene Ausgabe kann nur einmal zurückgegeben werden; ein Gegenstand kann
+nicht gleichzeitig mehrfach ausgegeben werden.
+
+Überfällige offene Ausgaben erzeugen für berechtigte Konten einen
+Aktionshinweis. Suche und Filter berücksichtigen Inventarnummer, Name,
+Kategorie, Seriennummer, Standort und Status.
+
+Das granulare Recht `Inventar verwalten` schützt sämtliche Inventardaten und
+Workflows. Administratoren besitzen es immer. Standardvorstand und
+Gartenwarte erhalten es als Ausgangswert; individuelle Rechtevorlagen können
+es entziehen. Anlage, Änderung, Ausgabe und Rückgabe werden auditiert.
+
+### Phase 13 bis 18
+
+CSV-Import und -Export, DSGVO, Vereinseinstellungen, Nummernkreise,
+Pächterwechsel und später ein Lageplan.
 
 ## Versionen
 

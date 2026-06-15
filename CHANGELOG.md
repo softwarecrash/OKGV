@@ -2,6 +2,37 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.39] - 2026-06-15
+
+### Phase 11: Inventarverwaltung
+
+- Frei definierbare Vereinsgegenstände können mit Inventarnummer, Kategorie,
+  Beschreibung, Standort, Seriennummer und Status verwaltet werden.
+- Anschaffungsdatum und Anschaffungskosten sind optionale Angaben.
+- Ausgaben speichern Mitgliedszuordnung, Empfängername, Ausgabezeitpunkt,
+  optionale Rückgabefrist, Zustand und Bearbeiter dauerhaft.
+- Bei Mitgliedern wird der historische Empfängername serverseitig aus den
+  Stammdaten übernommen; archivierte Mitglieder sind nicht auswählbar.
+- Rückgaben schließen eine Ausgabe genau einmal ab und setzen den Gegenstand
+  wahlweise auf Verfügbar, Wartung oder Verloren.
+- Transaktionen und Datensperren verhindern parallele Mehrfachausgaben und
+  doppelte Rückgaben.
+- Gegenstände und Ausgaben besitzen keine Löschroute und können auch auf
+  Modellebene nicht gelöscht werden.
+- Suche nach Inventarnummer, Name, Kategorie, Seriennummer und Standort sowie
+  Status- und Kategoriefilter wurden ergänzt.
+- Überfällige offene Ausgaben erscheinen als Aktionshinweis.
+- Das neue granulare Recht `Inventar verwalten` schützt Oberfläche und
+  Workflows; Administratoren besitzen es immer, Vorstand und Gartenwart
+  erhalten es als Standardrecht.
+- Anlage, Änderung, Ausgabe und Rückgabe werden auditiert.
+- Der Phasenplan enthält die zusätzlich vorgesehene Phase 12.1 zur späteren
+  Modularisierung und Aktivierbarkeit einzelner Funktionsbereiche.
+- Migrationen wurden isoliert vorwärts, rückwärts und erneut vorwärts geprüft
+  und anschließend ausschließlich vorwärts auf MariaDB angewendet.
+- Insgesamt bestehen 143 Tests mit 843 Assertions.
+- Entwicklungsstand auf `0.2.0.39` erhöht.
+
 ## [0.2.0.38] - 2026-06-15
 
 ### Session und CSRF

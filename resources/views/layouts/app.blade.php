@@ -48,6 +48,7 @@
                                 $canViewSepa = auth()->user()->can('viewAny', App\Models\SepaMandate::class);
                                 $canViewCommunication = auth()->user()->can('viewAny', App\Models\MailCampaign::class);
                                 $canViewDocuments = auth()->user()->can('viewAny', App\Models\Document::class);
+                                $canViewInventory = auth()->user()->can('viewAny', App\Models\InventoryItem::class);
                             @endphp
                             @if (auth()->user()->role === App\Enums\UserRole::Tenant)
                                 <li class="nav-item">
@@ -195,6 +196,14 @@
                             @if ($canViewDocuments)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('documents.index') }}">Dokumente</a>
+                                </li>
+                            @endif
+                            @if ($canViewInventory)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('inventory-items.index') }}">
+                                        Inventar
+                                        <x-action-indicator :count="$actionIndicators['inventory']" label="überfällige Inventarausgaben" />
+                                    </a>
                                 </li>
                             @endif
                         @endauth

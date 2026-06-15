@@ -18,6 +18,7 @@ enum UserPermission: string
     case ManageDocuments = 'manage_documents';
     case ManageWorkEvents = 'manage_work_events';
     case ManageWaitingList = 'manage_waiting_list';
+    case ManageInventory = 'manage_inventory';
 
     public function label(): string
     {
@@ -36,6 +37,7 @@ enum UserPermission: string
             self::ManageDocuments => 'Dokumente verwalten',
             self::ManageWorkEvents => 'Arbeitseinsätze verwalten',
             self::ManageWaitingList => 'Warteliste verwalten',
+            self::ManageInventory => 'Inventar verwalten',
         };
     }
 
@@ -56,6 +58,7 @@ enum UserPermission: string
             self::ManageDocuments => 'Erlaubt private Uploads, Dateiversionen, Freigaben und die zentrale Dokumentenverwaltung.',
             self::ManageWorkEvents => 'Erlaubt Termine, Teilnehmer und bestätigte Arbeitsstunden zu verwalten.',
             self::ManageWaitingList => 'Erlaubt den Zugriff auf Interessenten, Kontaktdaten, Prioritäten und Bearbeitungsstatus.',
+            self::ManageInventory => 'Erlaubt Gegenstände, Ausgaben, Rückgaben und die Inventarhistorie zu verwalten.',
         };
     }
 
