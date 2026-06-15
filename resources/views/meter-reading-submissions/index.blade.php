@@ -21,14 +21,29 @@
     <div class="card border-0 shadow-sm">
         <div class="table-responsive">
             <table class="table align-middle mb-0">
-                <thead><tr><th>Parzelle / Zähler</th><th>Pächter</th><th>Datum</th><th>Stand</th><th>Foto</th><th>Status</th><th>Prüfung</th></tr></thead>
+                <thead><tr><th>Parzelle / Zähler</th><th>Pächter</th><th>Datum</th><th>Vorheriger Stand</th><th>Gemeldeter Stand</th><th>Foto</th><th>Status</th><th>Prüfung</th></tr></thead>
                 <tbody>
                     @forelse ($submissions as $submission)
                         <tr @class(['table-danger' => (int) session('review_submission_id') === $submission->id])>
                             <td>{{ $submission->meter->parcel->parcel_number }} · {{ $submission->meter->meter_number }}</td>
                             <td>{{ $submission->submitter->member?->full_name ?? $submission->submitter->name }}</td>
                             <td>{{ $submission->reading_date->format('d.m.Y') }}</td>
-                            <td>{{ $submission->reading_value }}</td>
+                            <td>
+                                <strong>{{ $submission->previous_reading_value }} {{ $submission->meter->type->unit() }}</strong>
+                                <div class="small text-secondary">
+                                    @if ($submission->previous_reading_is_installation)
+                                        Einbaustand vom {{ $submission->previous_reading_date->format('d.m.Y') }}
+                                    @else
+                                        Abgelesen am {{ $submission->previous_reading_date->format('d.m.Y') }}
+                                    @endif
+                                </div>
+                            </td>
+                            <td @class(['text-danger' => $submission->is_below_previous_reading])>
+                                <strong>{{ $submission->reading_value }} {{ $submission->meter->type->unit() }}</strong>
+                                @if ($submission->is_below_previous_reading)
+                                    <div class="small fw-semibold">Niedriger als der vorherige Stand</div>
+                                @endif
+                            </td>
                             <td>
                                 @if ($submission->photo_path)
                                     <button
@@ -65,7 +80,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="text-center py-4"><strong>Keine Zählerstandsmeldungen vorhanden.</strong></td></tr>
+                        <tr><td colspan="8" class="text-center py-4"><strong>Keine Zählerstandsmeldungen vorhanden.</strong></td></tr>
                     @endforelse
                 </tbody>
             </table>

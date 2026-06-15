@@ -14,6 +14,8 @@ use App\Models\Document;
 use App\Models\Invoice;
 use App\Models\Member;
 use App\Models\Meter;
+use App\Models\MeterReading;
+use App\Models\MeterReadingCorrection;
 use App\Models\MeterReadingSubmission;
 use App\Models\Parcel;
 use App\Models\ParcelTenant;
@@ -347,6 +349,16 @@ class TenantPortalTest extends TestCase
             'status' => MeterStatus::Active,
         ]);
         $waterManager = User::factory()->create(['role' => UserRole::WaterManager]);
+        $previousReading = MeterReading::factory()->create([
+            'meter_id' => $meter->id,
+            'reading_value' => '120.0000',
+            'reading_date' => now()->subDay()->toDateString(),
+        ]);
+        MeterReadingCorrection::factory()->create([
+            'meter_reading_id' => $previousReading->id,
+            'corrected_value' => '130.0000',
+            'corrected_by' => $waterManager->id,
+        ]);
         $submission = MeterReadingSubmission::factory()->create([
             'meter_id' => $meter->id,
             'submitted_by' => $tenant->id,
@@ -368,13 +380,16 @@ class TenantPortalTest extends TestCase
             ->assertOk()
             ->assertSee('Zählerstand konnte nicht bestätigt werden.')
             ->assertSee('Der Zählerstand darf nicht kleiner als der vorherige Stand sein.')
+            ->assertSee('Vorheriger Stand')
+            ->assertSee('130.0000')
+            ->assertSee('Niedriger als der vorherige Stand')
             ->assertSee('table-danger', false);
 
         $this->assertSame(
             MeterReadingSubmissionStatus::Pending,
             $submission->fresh()->status,
         );
-        $this->assertDatabaseCount('meter_readings', 0);
+        $this->assertDatabaseCount('meter_readings', 1);
     }
 
     /**

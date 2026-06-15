@@ -2,6 +2,22 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.55] - 2026-06-15
+
+### Vorheriger Zählerstand in der Prüfübersicht
+
+- Die Übersicht der Zählerstandsmeldungen zeigt den vorherigen wirksamen
+  Zählerstand mit Datum und Einheit direkt neben dem gemeldeten Wert.
+- Historisierte Korrekturen werden bei der Ermittlung des Vergleichswerts
+  berücksichtigt.
+- Existiert noch keine Ablesung, wird der Einbaustand des Zählers verwendet.
+- Ein gemeldeter Wert unterhalb des vorherigen Stands wird bereits vor der
+  Bestätigung rot und mit einem verständlichen Hinweis markiert.
+- Insgesamt bestehen 188 Tests mit 1.097 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.55` erhöht.
+
 ## [0.2.0.54] - 2026-06-15
 
 ### Rückmeldung beim Bestätigen von Zählerständen

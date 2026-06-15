@@ -25,7 +25,12 @@ class MeterReadingSubmissionController extends Controller
         $this->authorize('viewAny', MeterReadingSubmission::class);
 
         $submissions = MeterReadingSubmission::query()
-            ->with(['meter.parcel', 'submitter.member', 'reviewer'])
+            ->with([
+                'meter.parcel',
+                'meter.readings.corrections',
+                'submitter.member',
+                'reviewer',
+            ])
             ->when(
                 $request->user()->role === UserRole::Tenant,
                 fn ($query) => $query->where('submitted_by', $request->user()->id),
@@ -33,6 +38,29 @@ class MeterReadingSubmissionController extends Controller
             ->orderByRaw("status = 'pending' desc")
             ->latest()
             ->paginate(20);
+
+        $submissions->getCollection()->each(function (MeterReadingSubmission $submission): void {
+            $previousReading = $submission->meter->readings
+                ->filter(fn ($reading): bool => $reading->reading_date->lt($submission->reading_date))
+                ->sortByDesc('reading_date')
+                ->first();
+            $previousValue = $previousReading?->effective_reading_value
+                ?? $submission->meter->start_reading;
+
+            $submission->setAttribute('previous_reading_value', $previousValue);
+            $submission->setAttribute(
+                'previous_reading_date',
+                $previousReading?->reading_date ?? $submission->meter->installed_at,
+            );
+            $submission->setAttribute(
+                'previous_reading_is_installation',
+                $previousReading === null,
+            );
+            $submission->setAttribute(
+                'is_below_previous_reading',
+                bccomp($submission->reading_value, $previousValue, 4) < 0,
+            );
+        });
 
         return view('meter-reading-submissions.index', compact('submissions'));
     }

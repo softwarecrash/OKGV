@@ -49,6 +49,8 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
   zoombarer geschützter Vorschau
 - Sichtbare Plausibilitätsfehler und dauerhaft nachvollziehbare
   Zählerstandsmeldungshistorie
+- Vorheriger wirksamer Stand mit Warnung bei rückläufigen
+  Zählerstandsmeldungen
 - Kompakte Navigationsgruppen für Mitglieder, Zähler und Finanzen
 - Rollenabhängige Aktionspunkte für Vorgänge mit notwendiger Bearbeitung
 - Persistenter heller und dunkler Darstellungsmodus

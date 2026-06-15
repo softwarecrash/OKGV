@@ -557,6 +557,12 @@ begründet abgelehnt und anschließend vom Pächter neu eingereicht. Erfolgreich
 bestätigte und abgelehnte Meldungen bleiben als nachvollziehbare Historie
 sichtbar.
 
+Die Prüfübersicht zeigt zu jeder Meldung den zeitlich vorherigen wirksamen
+Zählerstand mit Datum und Einheit. Korrekturen bestehender Ablesungen werden
+dabei berücksichtigt; ohne frühere Ablesung dient der Einbaustand als
+Vergleich. Rückläufige Meldungen werden bereits vor dem Bestätigungsversuch
+deutlich markiert.
+
 #### Navigation und Aktionshinweise
 
 Die Hauptnavigation wird fachlich gruppiert:
