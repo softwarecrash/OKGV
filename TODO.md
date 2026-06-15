@@ -652,3 +652,13 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Gesamttests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
+
+## Nachbesserung Phase 9: Arbeitsstunden-Aktionshinweise
+
+- [x] Laufende Fehlstundenkonten von sofortigem Handlungsbedarf trennen
+- [x] Warnpunkt für Vorstand und Administration auf wartende Meldungen begrenzen
+- [x] Ablehnungsgrund in Meldungsübersicht und Pächterportal anzeigen
+- [x] Abgelehnte Meldung bis zur korrigierten Folgemeldung hervorheben
+- [x] Regressionstests, Formatter, Build und Audits ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen

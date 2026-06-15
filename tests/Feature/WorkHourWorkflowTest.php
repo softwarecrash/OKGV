@@ -299,7 +299,7 @@ class WorkHourWorkflowTest extends TestCase
         ));
     }
 
-    public function test_only_billing_managers_can_access_work_hours_and_open_items_are_indicated(): void
+    public function test_only_billing_managers_can_access_work_hours_without_midyear_deficit_indicator(): void
     {
         $administrator = User::factory()->administrator()->create();
         $tenant = User::factory()->create();
@@ -319,8 +319,8 @@ class WorkHourWorkflowTest extends TestCase
             ->assertSee('Arbeitsstunden');
 
         $indicators = app(ActionIndicatorService::class)->forUser($administrator);
-        $this->assertSame(1, $indicators['work_hours']);
-        $this->assertSame(1, $indicators['finance_group']);
+        $this->assertSame(0, $indicators['work_hours']);
+        $this->assertSame(0, $indicators['finance_group']);
     }
 
     /**

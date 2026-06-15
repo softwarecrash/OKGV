@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\WorkHourSubmissionStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use LogicException;
@@ -67,5 +68,29 @@ class WorkHourSubmission extends Model
     public function reviewer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reviewed_by');
+    }
+
+    public function scopeUnresolvedRejectedForUser(Builder $query, int $userId): Builder
+    {
+        return $query
+            ->where('submitted_by', $userId)
+            ->where('status', WorkHourSubmissionStatus::Rejected)
+            ->whereNotExists(function ($query): void {
+                $query->selectRaw('1')
+                    ->from('work_hour_submissions as later_submission')
+                    ->whereColumn(
+                        'later_submission.submitted_by',
+                        'work_hour_submissions.submitted_by',
+                    )
+                    ->whereColumn(
+                        'later_submission.parcel_id',
+                        'work_hour_submissions.parcel_id',
+                    )
+                    ->whereColumn(
+                        'later_submission.id',
+                        '>',
+                        'work_hour_submissions.id',
+                    );
+            });
     }
 }

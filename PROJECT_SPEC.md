@@ -585,6 +585,9 @@ Eine abgelehnte eigene Zählerstandsmeldung gilt nur bis zur nächsten Meldung
 desselben Pächters für denselben Zähler als offen. Sobald ein korrigierter
 Stand erneut eingereicht wurde, verschwindet der Aktionshinweis unabhängig
 davon, ob die neue Meldung noch geprüft wird oder bereits bestätigt ist.
+Dasselbe gilt für abgelehnte Arbeitsstundenmeldungen je Pächter und Parzelle.
+Der Ablehnungsgrund bleibt in beiden Fällen dauerhaft in der Historie
+sichtbar.
 Jeder Aktionspunkt muss auf seiner Zielseite durch eine verständliche
 Aufgabenbox, einen weiteren Punkt oder eine hervorgehobene Zeile eindeutig
 erklärbar sein.
@@ -857,8 +860,10 @@ die Periode auf Entwurf zurück. Freigegebene und archivierte Perioden sind
 gesperrt. Konten werden nicht gelöscht; Korrekturen erfolgen durch
 nachvollziehbare Änderungen und werden auditiert.
 
-Offene Fehlstunden in Entwurfsperioden erzeugen für berechtigte Finanzkonten
-einen Aktionshinweis.
+Offene Fehlstunden in laufenden Entwurfsperioden sind ein normaler
+Jahreszwischenstand und erzeugen keinen Aktionshinweis. Berechtigte
+Vorstands- und Administrationskonten erhalten nur für noch zu prüfende
+Arbeitsstundenmeldungen einen Punkt.
 
 #### Pächtermeldungen
 

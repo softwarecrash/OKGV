@@ -12,6 +12,7 @@ use App\Models\ParcelTenant;
 use App\Models\User;
 use App\Models\WorkHour;
 use App\Models\WorkHourSubmission;
+use App\Services\ActionIndicatorService;
 use App\Services\WorkHourManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -337,7 +338,38 @@ class WorkHourSubmissionWorkflowTest extends TestCase
         $this->actingAs($tenant)
             ->get(route('work-hour-submissions.index'))
             ->assertOk()
+            ->assertSee('Ablehnungsgrund:')
+            ->assertSee('Tätigkeit nicht nachvollziehbar.')
+            ->assertSee('Erneute Meldung erforderlich')
+            ->assertSee('Korrigierte Meldung einreichen');
+        $this->actingAs($tenant)
+            ->get(route('tenant-portal.index'))
+            ->assertOk()
+            ->assertSee('Ablehnungsgrund:')
             ->assertSee('Tätigkeit nicht nachvollziehbar.');
+
+        $this->assertSame(
+            1,
+            app(ActionIndicatorService::class)->forUser($tenant)['work_hour_submissions'],
+        );
+
+        $this->actingAs($tenant)->post(route('work-hour-submissions.store'), [
+            'parcel_id' => $parcel->id,
+            'worked_at' => '2025-05-02',
+            'hours' => '2.00',
+            'description' => 'Korrigierte und belegte Tätigkeit.',
+        ])->assertRedirect();
+
+        $this->assertSame(
+            0,
+            app(ActionIndicatorService::class)->forUser($tenant)['work_hour_submissions'],
+        );
+        $this->actingAs($tenant)
+            ->get(route('work-hour-submissions.index'))
+            ->assertOk()
+            ->assertSee('Ablehnungsgrund:')
+            ->assertSee('Tätigkeit nicht nachvollziehbar.')
+            ->assertDontSee('Erneute Meldung erforderlich');
     }
 
     public function test_reviewed_submission_is_immutable_and_cannot_be_deleted(): void

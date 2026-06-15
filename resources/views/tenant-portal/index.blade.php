@@ -154,6 +154,12 @@
                                 {{ $submission->worked_at->format('d.m.Y') }} ·
                                 {{ number_format((float) $submission->hours, 2, ',', '.') }} Std. ·
                                 <strong>{{ $submission->status->label() }}</strong>
+                                @if ($submission->status === App\Enums\WorkHourSubmissionStatus::Rejected)
+                                    <div class="small text-danger mt-1">
+                                        <strong>Ablehnungsgrund:</strong>
+                                        {{ $submission->review_note ?: 'Kein Ablehnungsgrund hinterlegt.' }}
+                                    </div>
+                                @endif
                             </div>
                         @empty
                             <p class="text-secondary mb-0">Du hast noch keine Arbeitsstunden gemeldet.</p>

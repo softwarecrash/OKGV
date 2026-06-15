@@ -2,6 +2,24 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.60] - 2026-06-15
+
+### Verständliche Arbeitsstunden-Aktionshinweise
+
+- Ablehnungsgründe von Arbeitsstundenmeldungen werden in der
+  Meldungsübersicht und im Pächterportal ausdrücklich angezeigt.
+- Eine noch zu korrigierende Ablehnung wird hervorgehoben und führt direkt
+  zu einer neuen Meldung für die betroffene Parzelle.
+- Der Pächter-Aktionshinweis verschwindet nach einer neu eingereichten
+  Meldung; die abgelehnte Meldung und ihr Grund bleiben historisch sichtbar.
+- Laufende Fehlstunden eines Jahres gelten nicht mehr als sofortige Aufgabe.
+  Vorstand und Administration sehen einen Punkt nur bei tatsächlich
+  wartenden Arbeitsstundenmeldungen.
+- Insgesamt bestehen 198 Tests mit 1.196 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.60` erhöht.
+
 ## [0.2.0.59] - 2026-06-15
 
 ### Nachvollziehbare Aktionshinweise für Pächter

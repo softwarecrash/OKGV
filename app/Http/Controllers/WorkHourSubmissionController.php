@@ -8,6 +8,7 @@ use App\Http\Requests\WorkHourSubmissionRequest;
 use App\Http\Requests\WorkHourSubmissionReviewRequest;
 use App\Models\Parcel;
 use App\Models\WorkHourSubmission;
+use App\Services\ActionIndicatorService;
 use App\Services\WorkHourSubmissionManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,22 +20,38 @@ class WorkHourSubmissionController extends Controller
 {
     public function __construct(
         private readonly WorkHourSubmissionManager $manager,
+        private readonly ActionIndicatorService $actionIndicatorService,
     ) {}
 
     public function index(Request $request): View
     {
         $this->authorize('viewAny', WorkHourSubmission::class);
 
+        $submissions = WorkHourSubmission::query()
+            ->with(['parcel', 'submitter.member', 'reviewer'])
+            ->when(
+                $request->user()->role === UserRole::Tenant,
+                fn ($query) => $query->where('submitted_by', $request->user()->id),
+            )
+            ->orderByRaw("status = 'pending' desc")
+            ->latest()
+            ->paginate(20);
+        $unresolvedRejectedIds = $request->user()->role === UserRole::Tenant
+            ? WorkHourSubmission::query()
+                ->unresolvedRejectedForUser($request->user()->id)
+                ->pluck('id')
+            : collect();
+
+        $submissions->getCollection()->each(
+            fn (WorkHourSubmission $submission) => $submission->setAttribute(
+                'requires_tenant_action',
+                $unresolvedRejectedIds->contains($submission->id),
+            ),
+        );
+
         return view('work-hour-submissions.index', [
-            'submissions' => WorkHourSubmission::query()
-                ->with(['parcel', 'submitter.member', 'reviewer'])
-                ->when(
-                    $request->user()->role === UserRole::Tenant,
-                    fn ($query) => $query->where('submitted_by', $request->user()->id),
-                )
-                ->orderByRaw("status = 'pending' desc")
-                ->latest()
-                ->paginate(20),
+            'submissions' => $submissions,
+            'actionIndicators' => $this->actionIndicatorService->forUser($request->user()),
         ]);
     }
 

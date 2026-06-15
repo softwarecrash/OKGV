@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Enums\BillingPeriodStatus;
 use App\Enums\FeatureModule;
 use App\Enums\InvoicePaymentStatus;
 use App\Enums\InvoiceStatus;
@@ -21,7 +20,6 @@ use App\Models\RegistrationRequest;
 use App\Models\User;
 use App\Models\WaitingListEntry;
 use App\Models\WorkEvent;
-use App\Models\WorkHour;
 use App\Models\WorkHourSubmission;
 
 final class ActionIndicatorService
@@ -84,14 +82,7 @@ final class ActionIndicatorService
         };
         $dunningNotices = FeatureModule::Dunning->enabled()
             && $user->canManageBilling() ? $invoices : 0;
-        $workHours = FeatureModule::WorkHours->enabled()
-            && $user->canManageBilling()
-            ? WorkHour::query()
-                ->where('hours_missing', '>', 0)
-                ->whereHas('billingPeriod', fn ($query) => $query
-                    ->where('status', BillingPeriodStatus::Draft))
-                ->count()
-            : 0;
+        $workHours = 0;
         $workEvents = FeatureModule::WorkEvents->enabled()
             && $user->canManageWorkEvents()
             ? WorkEvent::query()
@@ -105,8 +96,7 @@ final class ActionIndicatorService
                 ->where('status', WorkHourSubmissionStatus::Pending)
                 ->count(),
             $user->role === UserRole::Tenant => WorkHourSubmission::query()
-                ->where('submitted_by', $user->id)
-                ->where('status', WorkHourSubmissionStatus::Rejected)
+                ->unresolvedRejectedForUser($user->id)
                 ->count(),
             default => 0,
         };
