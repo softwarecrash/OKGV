@@ -21,6 +21,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
   Login nicht blockiert.
 - Insgesamt bestehen 136 Tests mit 797 Assertions.
 - Entwicklungsstand auf `0.2.0.38` erhöht.
+- Entwicklungsstand `0.2.0.38` auf GitHub veröffentlicht.
 
 ## [0.2.0.37] - 2026-06-15
 
