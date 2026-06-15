@@ -732,3 +732,10 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Admin- und Demo-Datenbefehle dokumentieren
 - [x] Update- und Fehlerbehebungsnotizen ergänzen
 - [x] Dokumentation prüfen und veröffentlichen
+
+## Nachbesserung Phase 20: Plesk-Vite-Build dokumentieren
+
+- [x] Node.js-Einstellungen für Plesk dokumentieren
+- [x] Expliziten `build` Skriptaufruf dokumentieren
+- [x] Fehler `Vite manifest not found` ergänzen
+- [x] Dokumentation prüfen und veröffentlichen

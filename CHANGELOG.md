@@ -2,6 +2,19 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.68] - 2026-06-15
+
+### Plesk-Vite-Build dokumentiert
+
+- `PLESK_SETUP.md` erklärt jetzt, dass das Laravel Toolkit den
+  Vite-Build nicht automatisch erzeugt.
+- Die nötigen Plesk-Node.js-Einstellungen und der explizite Skriptaufruf
+  `build` sind dokumentiert.
+- Der Fehler `Vite manifest not found` verweist nun auf den fehlenden
+  Ordner `public/build`.
+- Entwicklungsstand auf `0.2.0.68` erhöht.
+- Entwicklungsstand `0.2.0.68` auf GitHub veröffentlicht.
+
 ## [0.2.0.67] - 2026-06-15
 
 ### Plesk-Installationsnotizen

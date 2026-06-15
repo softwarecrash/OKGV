@@ -109,6 +109,58 @@ php artisan up
 Wenn Plesk Node.js nicht passend bereitstellt, `npm ci` und `npm run build`
 lokal ausführen und anschließend `public/build` per Dateimanager hochladen.
 
+## Frontend-Build mit Plesk Node.js
+
+Das Laravel Toolkit erzeugt `public/build` nicht automatisch. Der
+Frontend-Build muss in Plesk ausdrücklich ausgeführt werden.
+
+Im Plesk-Bereich `Node.js`:
+
+```text
+Node.js-Version: 22 LTS, 24 oder 26
+Anwendungsstamm: /demo.okgv.de
+Dokumentenstamm: /demo.okgv.de/public
+Package Manager: npm
+```
+
+Danach:
+
+1. `npm-Installation` ausführen.
+2. `Skript ausführen` öffnen.
+3. Als Skriptname `build` eintragen.
+
+Nicht `vite build` direkt eintragen. Das Projekt definiert in `package.json`:
+
+```json
+"scripts": {
+  "build": "vite build"
+}
+```
+
+Nach erfolgreichem Build muss diese Datei existieren:
+
+```text
+/demo.okgv.de/public/build/manifest.json
+```
+
+Fehlt sie, erscheint in Laravel:
+
+```text
+Vite manifest not found
+```
+
+Alternativ kann der Build in den Git-Bereitstellungsaktionen stehen:
+
+```bash
+npm ci --ignore-scripts
+npm run build
+php artisan migrate --force
+php artisan optimize
+```
+
+Falls Plesk dort `npm` nicht findet, den Build über den Node.js-Bereich
+ausführen oder lokal erzeugen und `public/build` hochladen.
+
 ## Typische Fehler
 
 ### `vendor/autoload.php` fehlt
@@ -136,6 +188,18 @@ Migrationen ausführen:
 ```bash
 php artisan migrate --force
 ```
+
+### `Vite manifest not found`
+
+Der Frontend-Build fehlt. Erzeuge `public/build` mit:
+
+```bash
+npm ci --ignore-scripts
+npm run build
+```
+
+Oder lokal bauen und den Ordner `public/build` nach
+`/demo.okgv.de/public/build` hochladen.
 
 ### Plesk-Defaultseite erscheint
 
