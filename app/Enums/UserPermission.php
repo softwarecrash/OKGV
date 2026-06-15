@@ -62,12 +62,48 @@ enum UserPermission: string
         };
     }
 
+    public function module(): ?FeatureModule
+    {
+        return match ($this) {
+            self::ViewAllMeters,
+            self::ManageMeters,
+            self::CorrectMeterReadings,
+            self::ReviewMeterReadingSubmissions => FeatureModule::Meters,
+            self::ManageBilling,
+            self::ManageBillingTemplates => FeatureModule::Billing,
+            self::ManageSepa => FeatureModule::Sepa,
+            self::ReviewTenantRegistrations => FeatureModule::TenantPortal,
+            self::ManageCommunication => FeatureModule::Communication,
+            self::ManageDocuments => FeatureModule::Documents,
+            self::ManageWorkEvents => FeatureModule::WorkEvents,
+            self::ManageWaitingList => FeatureModule::WaitingList,
+            self::ManageInventory => FeatureModule::Inventory,
+            default => null,
+        };
+    }
+
+    public function isAvailable(): bool
+    {
+        return $this->module()?->enabled() ?? true;
+    }
+
     /**
      * @return list<string>
      */
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
+    }
+
+    /**
+     * @return list<self>
+     */
+    public static function availableCases(): array
+    {
+        return array_values(array_filter(
+            self::cases(),
+            fn (self $permission): bool => $permission->isAvailable(),
+        ));
     }
 
     /**

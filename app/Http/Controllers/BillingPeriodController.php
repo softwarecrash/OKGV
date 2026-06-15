@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FeatureModule;
 use App\Http\Requests\BillingPeriodRequest;
 use App\Models\BillingPeriod;
 use App\Models\Member;
@@ -48,10 +49,9 @@ class BillingPeriodController extends Controller
     {
         [$period, $createdAccounts] = DB::transaction(function () use ($request): array {
             $period = $this->periodManager->save($request->validated());
-            $createdAccounts = $this->workHourManager->initializePeriod(
-                $period,
-                $request->user(),
-            );
+            $createdAccounts = FeatureModule::WorkHours->enabled()
+                ? $this->workHourManager->initializePeriod($period, $request->user())
+                : 0;
             AuditLogger::log('billing.period.created', $request->user(), $period);
 
             return [$period, $createdAccounts];
@@ -67,12 +67,15 @@ class BillingPeriodController extends Controller
     public function show(BillingPeriod $billingPeriod): View
     {
         $this->authorize('view', $billingPeriod);
-        $billingPeriod->load([
+        $relations = [
             'rates.assignments.member',
             'rates.assignments.parcel',
             'invoices.member',
-            'workHours.parcel',
-        ]);
+        ];
+        if (FeatureModule::WorkHours->enabled()) {
+            $relations[] = 'workHours.parcel';
+        }
+        $billingPeriod->load($relations);
 
         return view('billing-periods.show', [
             'billingPeriod' => $billingPeriod,
@@ -100,10 +103,9 @@ class BillingPeriodController extends Controller
                     $billingPeriod,
                     $request->user(),
                 );
-                $createdAccounts = $this->workHourManager->initializePeriod(
-                    $period,
-                    $request->user(),
-                );
+                $createdAccounts = FeatureModule::WorkHours->enabled()
+                    ? $this->workHourManager->initializePeriod($period, $request->user())
+                    : 0;
                 AuditLogger::log('billing.period.updated', $request->user(), $period);
 
                 return [$period, $createdAccounts];

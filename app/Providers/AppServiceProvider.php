@@ -64,6 +64,7 @@ use App\Policies\WorkHourPolicy;
 use App\Policies\WorkHourSubmissionPolicy;
 use App\Services\ActionIndicatorService;
 use App\Services\AuditLogger;
+use App\Services\ModuleManager;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
@@ -91,6 +92,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        app(ModuleManager::class)->ensureValidConfiguration();
+
         Paginator::useBootstrapFive();
 
         RateLimiter::for('smtp-tests', function ($request): Limit {

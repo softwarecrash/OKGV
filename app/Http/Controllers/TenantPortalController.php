@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\DocumentVisibility;
+use App\Enums\FeatureModule;
 use App\Enums\InvoiceStatus;
 use App\Enums\MeterStatus;
 use App\Enums\UserRole;
@@ -21,11 +22,17 @@ class TenantPortalController extends Controller
 
         $member = $request->user()->member()
             ->with([
-                'parcelTenancies' => fn ($query) => $query
-                    ->activeOn()
-                    ->with(['parcel.meters' => fn ($query) => $query
-                        ->where('status', MeterStatus::Active)
-                        ->orderBy('type')]),
+                'parcelTenancies' => function ($query): void {
+                    $query->activeOn();
+
+                    if (FeatureModule::Meters->enabled()) {
+                        $query->with(['parcel.meters' => fn ($query) => $query
+                            ->where('status', MeterStatus::Active)
+                            ->orderBy('type')]);
+                    } else {
+                        $query->with('parcel');
+                    }
+                },
             ])
             ->first();
 
@@ -39,42 +46,50 @@ class TenantPortalController extends Controller
             ]);
         }
 
-        $invoices = Invoice::query()
-            ->where('status', InvoiceStatus::Approved)
-            ->where(function ($query) use ($request): void {
-                $query->whereHas('recipients.member', fn ($query) => $query
-                    ->where('user_id', $request->user()->id))
-                    ->orWhereHas('member', fn ($query) => $query
-                        ->where('user_id', $request->user()->id));
-            })
-            ->latest('issued_at')
-            ->limit(5)
-            ->get();
+        $invoices = FeatureModule::Billing->enabled()
+            ? Invoice::query()
+                ->where('status', InvoiceStatus::Approved)
+                ->where(function ($query) use ($request): void {
+                    $query->whereHas('recipients.member', fn ($query) => $query
+                        ->where('user_id', $request->user()->id))
+                        ->orWhereHas('member', fn ($query) => $query
+                            ->where('user_id', $request->user()->id));
+                })
+                ->latest('issued_at')
+                ->limit(5)
+                ->get()
+            : collect();
 
         $parcelIds = $member->parcelTenancies->pluck('parcel_id');
-        $documents = Document::query()
-            ->where('visibility', DocumentVisibility::Tenant)
-            ->whereNotNull('published_at')
-            ->where(function ($query) use ($member, $parcelIds): void {
-                $query->where('member_id', $member->id)
-                    ->orWhereIn('parcel_id', $parcelIds);
-            })
-            ->latest('published_at')
-            ->limit(5)
-            ->get();
+        $documents = FeatureModule::Documents->enabled()
+            ? Document::query()
+                ->where('visibility', DocumentVisibility::Tenant)
+                ->whereNotNull('published_at')
+                ->where(function ($query) use ($member, $parcelIds): void {
+                    $query->where('member_id', $member->id)
+                        ->orWhereIn('parcel_id', $parcelIds);
+                })
+                ->latest('published_at')
+                ->limit(5)
+                ->get()
+            : collect();
 
-        $submissions = MeterReadingSubmission::query()
-            ->where('submitted_by', $request->user()->id)
-            ->with('meter.parcel')
-            ->latest()
-            ->limit(5)
-            ->get();
-        $workHourSubmissions = WorkHourSubmission::query()
-            ->where('submitted_by', $request->user()->id)
-            ->with('parcel')
-            ->latest()
-            ->limit(5)
-            ->get();
+        $submissions = FeatureModule::Meters->enabled()
+            ? MeterReadingSubmission::query()
+                ->where('submitted_by', $request->user()->id)
+                ->with('meter.parcel')
+                ->latest()
+                ->limit(5)
+                ->get()
+            : collect();
+        $workHourSubmissions = FeatureModule::WorkHours->enabled()
+            ? WorkHourSubmission::query()
+                ->where('submitted_by', $request->user()->id)
+                ->with('parcel')
+                ->latest()
+                ->limit(5)
+                ->get()
+            : collect();
 
         return view('tenant-portal.index', compact(
             'member',

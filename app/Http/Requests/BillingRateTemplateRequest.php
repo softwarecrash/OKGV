@@ -34,7 +34,10 @@ class BillingRateTemplateRequest extends FormRequest
             ],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:10000'],
-            'calculation_type' => ['required', Rule::enum(BillingRateType::class)],
+            'calculation_type' => [
+                'required',
+                Rule::in(array_column(BillingRateType::availableCases(), 'value')),
+            ],
             'scope' => ['required', Rule::enum(BillingRateScope::class)],
             'settlement_type' => ['required', Rule::enum(BillingSettlementType::class)],
             'default_amount' => ['nullable', 'numeric', 'decimal:0,4', 'min:0'],

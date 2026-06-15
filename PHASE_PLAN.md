@@ -143,7 +143,10 @@ vorherigen Phase geprüft sein.
 
 ## Phase 12.1: Modularisierung
 
-- [ ] Funktionsbereiche wie Arbeitseinsätze, Inventar, Warteliste, Arbeitsstunden und SEPA modularisieren und konfigurierbar aktivier- oder deaktivierbar machen, damit später unterschiedliche Ausbaustufen möglich sind
+- [x] Funktionsbereiche wie Arbeitseinsätze, Inventar, Warteliste, Arbeitsstunden und SEPA modularisieren und konfigurierbar aktivier- oder deaktivierbar machen, damit später unterschiedliche Ausbaustufen möglich sind
+- [x] Abhängigkeiten zentral prüfen und ungültige Kombinationen ablehnen
+- [x] Routen, Navigation, Rechte, Aktionshinweise und Fachlogik absichern
+- [x] Daten und Rechte deaktivierter Module dauerhaft erhalten
 
 ## Phase 13: CSV-Import
 
@@ -184,5 +187,5 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 12 einschließlich der vorgezogenen Arbeitseinsätze sind
-abgeschlossen. Als Nächstes folgt Phase 12.1: Modularisierung.
+Die Phasen 0 bis 12.1 einschließlich der vorgezogenen Arbeitseinsätze und
+Modularisierung sind abgeschlossen. Als Nächstes folgt Phase 13: CSV-Import.

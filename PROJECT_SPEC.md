@@ -967,6 +967,60 @@ es entziehen. Anlage, Änderung, Ausgabe und Rückgabe werden auditiert.
 CSV-Import und -Export, DSGVO, Vereinseinstellungen, Nummernkreise,
 Pächterwechsel und später ein Lageplan.
 
+### Phase 12.1: Modulare Funktionsbereiche
+
+Die Stammdatenverwaltung für Mitglieder, Parzellen, Pächterhistorie,
+Benutzer, Rollen und globale Konfiguration bildet den unverzichtbaren Kern.
+Folgende Funktionsbereiche können instanzweise über `.env` aktiviert oder
+deaktiviert werden:
+
+- Pächterportal und öffentliche Pächterregistrierung,
+- Zählerverwaltung und Zählerstandsmeldungen,
+- Abrechnung und Rechnungen,
+- Arbeitsstunden,
+- Arbeitseinsätze,
+- SEPA,
+- Mahnwesen,
+- Dokumentenverwaltung,
+- Kommunikation und Serienmails,
+- Warteliste,
+- Inventarverwaltung.
+
+Deaktivierte Module bleiben vollständig migriert. Vorhandene Daten, Rechte
+und Historien werden weder gelöscht noch verändert und stehen nach einer
+erneuten Aktivierung wieder zur Verfügung. Die Modulschaltung schützt:
+
+- direkte und öffentliche Routen,
+- Navigation und Dashboard,
+- Pächterportal und Detailansichten,
+- Rollen- und Rechteauswahl,
+- Aktionshinweise,
+- automatische Geschäftslogik,
+- modulabhängige Auswahlmöglichkeiten anderer Bereiche.
+
+Ein deaktiviertes Modul antwortet auch Administratoren bei direktem
+URL-Aufruf mit HTTP 404. Dies vermeidet die Offenlegung nicht gebuchter
+SaaS-Funktionen. Die serverseitige Rechteprüfung bleibt zusätzlich bestehen.
+
+Folgende Abhängigkeiten sind verbindlich:
+
+- Arbeitsstunden benötigen Abrechnung,
+- Arbeitseinsätze benötigen Arbeitsstunden,
+- SEPA benötigt Abrechnung,
+- Mahnwesen benötigt Abrechnung.
+
+Ungültige Kombinationen verhindern den Anwendungsstart mit einer eindeutigen
+Konfigurationsmeldung. Verbrauchspreise pro kWh oder m³ und die
+Serienmail-Gruppe für fehlende Zählerstände stehen nur bei aktiver
+Zählerverwaltung zur Verfügung. Die Empfängergruppe für offene Rechnungen
+steht nur bei aktiver Abrechnung zur Verfügung. Bei deaktivierten
+Arbeitsstunden werden weder Konten automatisch erzeugt noch
+Fehlstundenpositionen berechnet.
+
+SMTP bleibt Teil der globalen Kernkonfiguration, weil auch Passwort-Reset und
+E-Mail-Verifizierung darauf angewiesen sind. Serienmails und PDF-Briefe
+gehören dagegen zum schaltbaren Kommunikationsmodul.
+
 ## Versionen
 
 Die bisherige Basisversion `0.2.0` bleibt während der weiteren Bauphase bestehen. Veröffentlichte Entwicklungsstände erhalten eine fortlaufende vierte Stelle:

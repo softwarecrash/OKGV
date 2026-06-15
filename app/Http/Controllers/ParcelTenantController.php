@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FeatureModule;
 use App\Http\Requests\ParcelTenantRequest;
 use App\Models\Member;
 use App\Models\Parcel;
@@ -45,10 +46,9 @@ class ParcelTenantController extends Controller
     {
         [$tenancy, $createdAccounts] = DB::transaction(function () use ($request): array {
             $tenancy = $this->tenancyManager->save($request->validated());
-            $createdAccounts = $this->workHourManager->synchronizeTenancy(
-                $tenancy,
-                $request->user(),
-            );
+            $createdAccounts = FeatureModule::WorkHours->enabled()
+                ? $this->workHourManager->synchronizeTenancy($tenancy, $request->user())
+                : 0;
             AuditLogger::log('parcel_tenant.created', $request->user(), $tenancy);
 
             return [$tenancy, $createdAccounts];
@@ -85,13 +85,15 @@ class ParcelTenantController extends Controller
                     $request->validated(),
                     $parcelTenant,
                 );
-                $createdAccounts = $this->workHourManager->synchronizeParcels(
-                    array_values(array_unique([
-                        $previousParcelId,
-                        $parcelTenant->parcel_id,
-                    ])),
-                    $request->user(),
-                );
+                $createdAccounts = FeatureModule::WorkHours->enabled()
+                    ? $this->workHourManager->synchronizeParcels(
+                        array_values(array_unique([
+                            $previousParcelId,
+                            $parcelTenant->parcel_id,
+                        ])),
+                        $request->user(),
+                    )
+                    : 0;
                 AuditLogger::log('parcel_tenant.updated', $request->user(), $parcelTenant, [
                     'changed_fields' => array_keys($parcelTenant->getChanges()),
                 ]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\FeatureModule;
 use App\Models\ApplicationSetting;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -22,9 +23,11 @@ class ApplicationSettingRequest extends FormRequest
                 Rule::exists('permission_profiles', 'id')->where('is_active', true),
             ],
             'default_work_hours_required' => [
+                Rule::excludeIf(! FeatureModule::WorkHours->enabled()),
                 'required', 'numeric', 'decimal:0,2', 'min:0', 'max:999999.99',
             ],
             'default_work_hour_penalty_rate' => [
+                Rule::excludeIf(! FeatureModule::WorkHours->enabled()),
                 'required', 'numeric', 'decimal:0,2', 'min:0', 'max:99999999.99',
             ],
         ];

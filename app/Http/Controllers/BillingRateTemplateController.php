@@ -35,7 +35,7 @@ class BillingRateTemplateController extends Controller
                 'settlement_type' => BillingSettlementType::Arrears,
                 'prorate' => false,
             ]),
-            'types' => BillingRateType::cases(),
+            'types' => BillingRateType::availableCases(),
             'scopes' => BillingRateScope::cases(),
             'settlementTypes' => BillingSettlementType::cases(),
         ]);
@@ -56,7 +56,7 @@ class BillingRateTemplateController extends Controller
 
         return view('billing-rate-templates.edit', [
             'template' => $billingRateTemplate,
-            'types' => BillingRateType::cases(),
+            'types' => BillingRateType::availableCases(),
             'scopes' => BillingRateScope::cases(),
             'settlementTypes' => BillingSettlementType::cases(),
         ]);

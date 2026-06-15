@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FeatureModule;
 use App\Enums\ParcelStatus;
 use App\Http\Requests\ParcelRequest;
 use App\Models\BillingPeriod;
@@ -66,7 +67,7 @@ class ParcelController extends Controller
     {
         $this->authorize('view', $parcel);
 
-        $parcel->load([
+        $relations = [
             'tenancies' => fn ($query) => $query
                 ->when(
                     ! request()->user()->canViewAllMasterData(),
@@ -77,14 +78,17 @@ class ParcelController extends Controller
                 )
                 ->with('member')
                 ->latest('starts_at'),
-            'workHours' => fn ($query) => $query
+        ];
+        if (FeatureModule::WorkHours->enabled()) {
+            $relations['workHours'] = fn ($query) => $query
                 ->with('billingPeriod')
                 ->latest(
                     BillingPeriod::query()
                         ->select('ends_at')
                         ->whereColumn('billing_periods.id', 'work_hours.billing_period_id'),
-                ),
-        ]);
+                );
+        }
+        $parcel->load($relations);
 
         return view('parcels.show', [
             'parcel' => $parcel,

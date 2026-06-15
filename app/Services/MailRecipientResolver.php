@@ -11,6 +11,7 @@ use App\Enums\UserRole;
 use App\Models\Member;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 
 final class MailRecipientResolver
 {
@@ -19,6 +20,12 @@ final class MailRecipientResolver
      */
     public function resolve(MailRecipientGroup $group): Collection
     {
+        if (! $group->isAvailable()) {
+            throw ValidationException::withMessages([
+                'recipient_group' => 'Diese Empfängergruppe ist nicht verfügbar, weil das zugehörige Funktionsmodul deaktiviert ist.',
+            ]);
+        }
+
         $recipients = match ($group) {
             MailRecipientGroup::ActiveMembers => $this->activeMembers(),
             MailRecipientGroup::CurrentTenants => $this->currentTenants(),

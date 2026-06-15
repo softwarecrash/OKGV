@@ -31,6 +31,29 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 
 ## Schichten und Verantwortlichkeiten
 
+### Funktionsmodule
+
+- Prüfe vor neuen Fachbereichen, ob sie zum Kern oder zu einem Eintrag in
+  `FeatureModule` gehören.
+- Schaltbare Module müssen über `config/modules.php` und einen dokumentierten
+  `OKGV_MODULE_*`-Wert konfigurierbar sein.
+- Sichere sämtliche Modulrouten mit der Middleware `module:<key>`.
+- Blende deaktivierte Module zusätzlich aus Navigation, Dashboard,
+  Detailansichten, Pächterportal, Rechteauswahl und Aktionshinweisen aus.
+- Ein ausgeblendeter Link ersetzt niemals die Modul-Middleware.
+- Automatische Services und fachübergreifende Berechnungen müssen den
+  Modulstatus ebenfalls prüfen.
+- Definiere Modulabhängigkeiten zentral am `FeatureModule`-Enum. Verteile
+  Abhängigkeitsregeln nicht als freie Strings über Controller oder Views.
+- Deaktivieren eines Moduls darf keine Tabellen, Datensätze, Historien oder
+  bereits zugewiesenen Rechte löschen.
+- Modulabhängige Rechte bleiben gespeichert, werden während der Deaktivierung
+  aber nicht als wirksame Berechtigung behandelt.
+- SMTP bleibt Kernfunktion für Authentifizierungsmails; Serienmails und
+  PDF-Briefe gehören zum Kommunikationsmodul.
+- Ergänze Tests für direkte URLs, Administratorzugriff, Navigation,
+  Abhängigkeiten, Datenhaltbarkeit und fachübergreifende Auswahlfelder.
+
 ### Controller
 
 - Controller bleiben klein und koordinieren nur Request, Policy, Service, Model und Response.

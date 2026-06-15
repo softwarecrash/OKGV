@@ -89,7 +89,9 @@
                     <hr>
                     <p class="mb-0 text-center">
                         Noch kein Pächterkonto?
-                        <a href="{{ route('tenant-registration.create') }}">Zugang mit Parzellennummer beantragen</a>
+                        @if (App\Enums\FeatureModule::TenantPortal->enabled())
+                            <a href="{{ route('tenant-registration.create') }}">Zugang mit Parzellennummer beantragen</a>
+                        @endif
                     </p>
                 </div>
             </div>

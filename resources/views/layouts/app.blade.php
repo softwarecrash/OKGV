@@ -34,23 +34,33 @@
                     <ul class="navbar-nav me-auto">
                         @auth
                             @php
+                                $tenantPortalEnabled = App\Enums\FeatureModule::TenantPortal->enabled();
+                                $metersEnabled = App\Enums\FeatureModule::Meters->enabled();
+                                $billingEnabled = App\Enums\FeatureModule::Billing->enabled();
+                                $workHoursEnabled = App\Enums\FeatureModule::WorkHours->enabled();
+                                $workEventsEnabled = App\Enums\FeatureModule::WorkEvents->enabled();
+                                $sepaEnabled = App\Enums\FeatureModule::Sepa->enabled();
+                                $communicationEnabled = App\Enums\FeatureModule::Communication->enabled();
+                                $documentsEnabled = App\Enums\FeatureModule::Documents->enabled();
+                                $waitingListEnabled = App\Enums\FeatureModule::WaitingList->enabled();
+                                $inventoryEnabled = App\Enums\FeatureModule::Inventory->enabled();
                                 $canViewMembers = auth()->user()->can('viewAny', App\Models\Member::class);
-                                $canViewRegistrations = auth()->user()->can('viewAny', App\Models\RegistrationRequest::class);
-                                $canViewWaitingList = auth()->user()->can('viewAny', App\Models\WaitingListEntry::class);
-                                $canViewMeters = auth()->user()->can('viewAny', App\Models\Meter::class);
-                                $canViewMeterSubmissions = auth()->user()->can('viewAny', App\Models\MeterReadingSubmission::class);
-                                $canViewBilling = auth()->user()->can('viewAny', App\Models\BillingPeriod::class);
-                                $canViewTemplates = auth()->user()->can('viewAny', App\Models\BillingRateTemplate::class);
-                                $canViewInvoices = auth()->user()->can('viewAny', App\Models\Invoice::class);
-                                $canViewWorkHours = auth()->user()->can('viewAny', App\Models\WorkHour::class);
-                                $canViewWorkEvents = auth()->user()->can('viewAny', App\Models\WorkEvent::class);
-                                $canViewWorkHourSubmissions = auth()->user()->can('viewAny', App\Models\WorkHourSubmission::class);
-                                $canViewSepa = auth()->user()->can('viewAny', App\Models\SepaMandate::class);
-                                $canViewCommunication = auth()->user()->can('viewAny', App\Models\MailCampaign::class);
-                                $canViewDocuments = auth()->user()->can('viewAny', App\Models\Document::class);
-                                $canViewInventory = auth()->user()->can('viewAny', App\Models\InventoryItem::class);
+                                $canViewRegistrations = $tenantPortalEnabled && auth()->user()->can('viewAny', App\Models\RegistrationRequest::class);
+                                $canViewWaitingList = $waitingListEnabled && auth()->user()->can('viewAny', App\Models\WaitingListEntry::class);
+                                $canViewMeters = $metersEnabled && auth()->user()->can('viewAny', App\Models\Meter::class);
+                                $canViewMeterSubmissions = $metersEnabled && auth()->user()->can('viewAny', App\Models\MeterReadingSubmission::class);
+                                $canViewBilling = $billingEnabled && auth()->user()->can('viewAny', App\Models\BillingPeriod::class);
+                                $canViewTemplates = $billingEnabled && auth()->user()->can('viewAny', App\Models\BillingRateTemplate::class);
+                                $canViewInvoices = $billingEnabled && auth()->user()->can('viewAny', App\Models\Invoice::class);
+                                $canViewWorkHours = $workHoursEnabled && auth()->user()->can('viewAny', App\Models\WorkHour::class);
+                                $canViewWorkEvents = $workEventsEnabled && auth()->user()->can('viewAny', App\Models\WorkEvent::class);
+                                $canViewWorkHourSubmissions = $workHoursEnabled && auth()->user()->can('viewAny', App\Models\WorkHourSubmission::class);
+                                $canViewSepa = $sepaEnabled && auth()->user()->can('viewAny', App\Models\SepaMandate::class);
+                                $canViewCommunication = $communicationEnabled && auth()->user()->can('viewAny', App\Models\MailCampaign::class);
+                                $canViewDocuments = $documentsEnabled && auth()->user()->can('viewAny', App\Models\Document::class);
+                                $canViewInventory = $inventoryEnabled && auth()->user()->can('viewAny', App\Models\InventoryItem::class);
                             @endphp
-                            @if (auth()->user()->role === App\Enums\UserRole::Tenant)
+                            @if ($tenantPortalEnabled && auth()->user()->role === App\Enums\UserRole::Tenant)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('tenant-portal.index') }}">
                                         Mein Portal
@@ -157,7 +167,7 @@
                                                     <x-action-indicator :count="$actionIndicators['invoices']" label="offene Rechnungen" />
                                                 </a>
                                             </li>
-                                            @if (auth()->user()->canManageBilling())
+                                            @if (App\Enums\FeatureModule::Dunning->enabled() && auth()->user()->canManageBilling())
                                                 <li>
                                                     <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('dunning-notices.index') }}">
                                                         Mahnwesen

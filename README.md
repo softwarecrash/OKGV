@@ -76,6 +76,8 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Frei definierbares Vereinsinventar mit Kategorien und optionalen Anschaffungsdaten
 - Transaktionale Ausgabe und Rückgabe mit dauerhafter Empfänger- und Zustandshistorie
 - Granulares Inventarrecht und Aktionshinweise für überfällige Rückgaben
+- Instanzweise aktivierbare Funktionsmodule für unterschiedliche SaaS-Ausbaustufen
+- Serverseitig geschützte Modulrouten mit geprüften Abhängigkeiten
 
 Freigegebene Rechnungen sind unveränderbar. Bei der Berechnung werden
 Mitgliedseintritte und -austritte anhand der Mitgliedschaft, Pächterwechsel
@@ -178,6 +180,38 @@ Modus kann ein Browser für eine zuvor direkt per HTTP aufgerufene Adresse
 noch ein unbrauchbares altes Cookie halten. In diesem Fall kann einmalig ein
 neuer `SESSION_COOKIE`-Name gesetzt oder das Cookie der betroffenen Adresse
 gelöscht werden.
+
+### Funktionsmodule
+
+Die vorhandenen Fachdaten bleiben beim Deaktivieren eines Moduls vollständig
+erhalten. Nach Änderungen muss der Konfigurationscache geleert werden:
+
+```bash
+php artisan optimize:clear
+```
+
+Verfügbare Schalter:
+
+```dotenv
+OKGV_MODULE_TENANT_PORTAL=true
+OKGV_MODULE_METERS=true
+OKGV_MODULE_BILLING=true
+OKGV_MODULE_WORK_HOURS=true
+OKGV_MODULE_WORK_EVENTS=true
+OKGV_MODULE_SEPA=true
+OKGV_MODULE_DUNNING=true
+OKGV_MODULE_DOCUMENTS=true
+OKGV_MODULE_COMMUNICATION=true
+OKGV_MODULE_WAITING_LIST=true
+OKGV_MODULE_INVENTORY=true
+```
+
+Arbeitsstunden benötigen Abrechnung, Arbeitseinsätze benötigen
+Arbeitsstunden, und SEPA sowie Mahnwesen benötigen Abrechnung. OKGV startet
+bei einer ungültigen Kombination nicht, damit keine unvollständige
+SaaS-Instanz betrieben wird. SMTP bleibt unabhängig vom Kommunikationsmodul
+verfügbar, weil E-Mail-Verifizierung und Passwort-Reset darauf angewiesen
+sind.
 
 Für Serienmails muss zusätzlich ein Queue-Worker laufen:
 

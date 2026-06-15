@@ -30,6 +30,9 @@ class BillingRateController extends Controller
             ->whereKey(request()->integer('template'))
             ->where('is_active', true)
             ->first();
+        if ($selectedTemplate && ! $selectedTemplate->calculation_type->isAvailable()) {
+            $selectedTemplate = null;
+        }
 
         $billingRate = new BillingRate([
             'is_active' => true,
@@ -68,9 +71,13 @@ class BillingRateController extends Controller
             'selectedTemplate' => $selectedTemplate,
             'templates' => BillingRateTemplate::query()
                 ->where('is_active', true)
+                ->when(
+                    BillingRateType::unavailableValues(),
+                    fn ($query, array $types) => $query->whereNotIn('calculation_type', $types),
+                )
                 ->orderBy('name')
                 ->get(),
-            'types' => BillingRateType::cases(),
+            'types' => BillingRateType::availableCases(),
             'scopes' => BillingRateScope::cases(),
             'settlementTypes' => BillingSettlementType::cases(),
         ]);
@@ -108,7 +115,7 @@ class BillingRateController extends Controller
             'billingPeriod' => $billingPeriod,
             'billingRate' => $billingRate,
             'selectedTemplate' => null,
-            'types' => BillingRateType::cases(),
+            'types' => BillingRateType::availableCases(),
             'scopes' => BillingRateScope::cases(),
             'settlementTypes' => BillingSettlementType::cases(),
         ]);

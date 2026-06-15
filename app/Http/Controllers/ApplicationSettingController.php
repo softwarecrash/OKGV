@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FeatureModule;
 use App\Http\Requests\ApplicationSettingRequest;
 use App\Models\ApplicationSetting;
 use App\Models\CommunicationSetting;
@@ -21,6 +22,7 @@ class ApplicationSettingController extends Controller
             'settings' => ApplicationSetting::current(),
             'communicationSettings' => CommunicationSetting::current(),
             'profiles' => PermissionProfile::query()->orderBy('name')->get(),
+            'modules' => FeatureModule::cases(),
         ]);
     }
 

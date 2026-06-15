@@ -31,7 +31,10 @@ class PermissionProfileRequest extends FormRequest
             ],
             'description' => ['nullable', 'string', 'max:1000'],
             'permissions' => ['nullable', 'array'],
-            'permissions.*' => ['string', Rule::enum(UserPermission::class)],
+            'permissions.*' => [
+                'string',
+                Rule::in(array_column(UserPermission::availableCases(), 'value')),
+            ],
             'is_active' => ['required', 'boolean'],
         ];
     }

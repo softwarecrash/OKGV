@@ -31,4 +31,24 @@ enum MailRecipientGroup: string
             self::MissingMeterReadings => 'Aktuelle Pächter aktiver Zähler ohne Ablesung seit Jahresbeginn.',
         };
     }
+
+    public function isAvailable(): bool
+    {
+        return match ($this) {
+            self::OpenInvoices => FeatureModule::Billing->enabled(),
+            self::MissingMeterReadings => FeatureModule::Meters->enabled(),
+            default => true,
+        };
+    }
+
+    /**
+     * @return list<self>
+     */
+    public static function availableCases(): array
+    {
+        return array_values(array_filter(
+            self::cases(),
+            fn (self $group): bool => $group->isAvailable(),
+        ));
+    }
 }

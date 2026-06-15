@@ -19,7 +19,10 @@ class MailCampaignRequest extends FormRequest
         return [
             'subject' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string', 'max:20000'],
-            'recipient_group' => ['required', Rule::enum(MailRecipientGroup::class)],
+            'recipient_group' => [
+                'required',
+                Rule::in(array_column(MailRecipientGroup::availableCases(), 'value')),
+            ],
         ];
     }
 }

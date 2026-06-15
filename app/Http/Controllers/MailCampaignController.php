@@ -34,10 +34,11 @@ class MailCampaignController extends Controller
     public function create(): View
     {
         $this->authorize('create', MailCampaign::class);
+        $groups = MailRecipientGroup::availableCases();
 
         return view('mail-campaigns.create', [
-            'groups' => MailRecipientGroup::cases(),
-            'recipientCounts' => collect(MailRecipientGroup::cases())
+            'groups' => $groups,
+            'recipientCounts' => collect($groups)
                 ->mapWithKeys(fn (MailRecipientGroup $group) => [
                     $group->value => $this->resolver->resolve($group)->count(),
                 ]),
@@ -66,6 +67,7 @@ class MailCampaignController extends Controller
         return view('mail-campaigns.show', [
             'campaign' => $mailCampaign,
             'prospectiveCount' => $mailCampaign->status->value === 'draft'
+                && $mailCampaign->recipient_group->isAvailable()
                 ? $this->resolver->resolve($mailCampaign->recipient_group)->count()
                 : null,
         ]);

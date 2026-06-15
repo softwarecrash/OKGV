@@ -29,7 +29,7 @@ class UserPermissionController extends Controller
                 ->where('is_active', true)
                 ->orderBy('name')
                 ->get(),
-            'permissions' => UserPermission::cases(),
+            'permissions' => UserPermission::availableCases(),
             'defaultProfileId' => ApplicationSetting::current()
                 ->default_board_permission_profile_id,
             'assignableRoles' => [

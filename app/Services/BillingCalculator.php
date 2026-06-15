@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\BillingPeriodStatus;
 use App\Enums\BillingRateScope;
 use App\Enums\BillingRateType;
+use App\Enums\FeatureModule;
 use App\Enums\InvoiceStatus;
 use App\Enums\MeterType;
 use App\Models\BillingPeriod;
@@ -52,13 +53,16 @@ final class BillingCalculator
 
             $rates = $period->rates()
                 ->where('is_active', true)
+                ->when(
+                    BillingRateType::unavailableValues(),
+                    fn ($query, array $types) => $query->whereNotIn('calculation_type', $types),
+                )
                 ->with(['assignments.member', 'assignments.parcel'])
                 ->orderBy('id')
                 ->get();
-            $workHours = $period->workHours()
-                ->with('parcel')
-                ->get()
-                ->keyBy('parcel_id');
+            $workHours = FeatureModule::WorkHours->enabled()
+                ? $period->workHours()->with('parcel')->get()->keyBy('parcel_id')
+                : collect();
             $members = Member::query()
                 ->with(['parcelTenancies.parcel'])
                 ->orderBy('id')
@@ -150,16 +154,18 @@ final class BillingCalculator
             );
         }
 
-        $total = bcadd(
-            $total,
-            $this->addWorkHourPenalties(
-                $invoice,
-                $primaryTenancies,
-                $workHours,
-                $period,
-            ),
-            2,
-        );
+        if (FeatureModule::WorkHours->enabled()) {
+            $total = bcadd(
+                $total,
+                $this->addWorkHourPenalties(
+                    $invoice,
+                    $primaryTenancies,
+                    $workHours,
+                    $period,
+                ),
+                2,
+            );
+        }
 
         if ($invoice->items()->doesntExist()) {
             $invoice->recipients()->delete();

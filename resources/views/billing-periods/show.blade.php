@@ -15,9 +15,11 @@
                 @can('update', $billingPeriod)
                     <a class="btn btn-outline-primary" href="{{ route('billing-periods.edit', $billingPeriod) }}">Bearbeiten</a>
                     <a class="btn btn-primary" href="{{ route('billing-periods.billing-rates.create', $billingPeriod) }}">Preis aus Vorlage</a>
+                    @if (App\Enums\FeatureModule::WorkEvents->enabled())
                     @can('create', App\Models\WorkEvent::class)
                         <a class="btn btn-outline-primary" href="{{ route('billing-periods.work-events.create', $billingPeriod) }}">Arbeitseinsatz anlegen</a>
                     @endcan
+                    @endif
                 @endcan
                 @can('calculate', $billingPeriod)
                     <form method="POST" action="{{ route('billing-periods.calculate', $billingPeriod) }}" onsubmit="return confirm('Abrechnung jetzt neu berechnen? Vorhandene Entwürfe dieser Periode werden durch die aktuelle Berechnung ersetzt.')">
@@ -57,6 +59,7 @@
         </div>
     @endif
 
+    @if (App\Enums\FeatureModule::WorkHours->enabled())
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header">Preise</div>
         <div class="table-responsive">
@@ -149,6 +152,7 @@
             </table>
         </div>
     </div>
+    @endif
 
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">

@@ -28,9 +28,12 @@
                                 <strong>Parzelle {{ $tenancy->parcel->parcel_number }}</strong>
                                 <span class="text-secondary"> · {{ number_format((float) $tenancy->parcel->area_sqm, 2, ',', '.') }} m²</span>
                                 <div class="mt-2 d-flex flex-wrap gap-2">
-                                    <a class="btn btn-sm btn-outline-success" href="{{ route('work-hour-submissions.create', ['parcel_id' => $tenancy->parcel_id]) }}">
-                                        Arbeitsstunden melden
-                                    </a>
+                                    @if (App\Enums\FeatureModule::WorkHours->enabled())
+                                        <a class="btn btn-sm btn-outline-success" href="{{ route('work-hour-submissions.create', ['parcel_id' => $tenancy->parcel_id]) }}">
+                                            Arbeitsstunden melden
+                                        </a>
+                                    @endif
+                                    @if (App\Enums\FeatureModule::Meters->enabled())
                                     @forelse ($tenancy->parcel->meters as $meter)
                                         <a class="btn btn-sm btn-outline-primary" href="{{ route('meter-reading-submissions.create', $meter) }}">
                                             {{ $meter->type->label() }} {{ $meter->meter_number }} melden
@@ -38,6 +41,7 @@
                                     @empty
                                         <span class="text-secondary">Keine Zähler hinterlegt.</span>
                                     @endforelse
+                                    @endif
                                 </div>
                             </div>
                         @empty
@@ -46,6 +50,7 @@
                     </div>
                 </div>
             </div>
+            @if (App\Enums\FeatureModule::Billing->enabled())
             <div class="col-lg-6">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body">
@@ -61,6 +66,8 @@
                     </div>
                 </div>
             </div>
+            @endif
+            @if (App\Enums\FeatureModule::Documents->enabled())
             <div class="col-lg-6">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body">
@@ -73,6 +80,8 @@
                     </div>
                 </div>
             </div>
+            @endif
+            @if (App\Enums\FeatureModule::Meters->enabled())
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
@@ -85,6 +94,8 @@
                     </div>
                 </div>
             </div>
+            @endif
+            @if (App\Enums\FeatureModule::WorkHours->enabled())
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
@@ -105,6 +116,7 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
     @endunless
 </div>

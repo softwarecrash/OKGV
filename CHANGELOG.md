@@ -2,6 +2,41 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.40] - 2026-06-15
+
+### Phase 12.1: Modularisierung
+
+- Pächterportal, Zähler, Abrechnung, Arbeitsstunden, Arbeitseinsätze, SEPA,
+  Mahnwesen, Dokumente, Kommunikation, Warteliste und Inventar können
+  instanzweise über `.env` aktiviert oder deaktiviert werden.
+- Eine zentrale Moduldefinition stellt deutsche Namen, Status und
+  Abhängigkeiten bereit.
+- Arbeitsstunden benötigen Abrechnung, Arbeitseinsätze benötigen
+  Arbeitsstunden und SEPA sowie Mahnwesen benötigen Abrechnung.
+- Ungültige Modulkombinationen verhindern den Anwendungsstart mit einer
+  eindeutigen technischen Fehlermeldung.
+- Modul-Middleware schützt alle direkten und öffentlichen Fachrouten auch vor
+  Administratorzugriffen; deaktivierte Bereiche antworten mit HTTP 404.
+- Navigation, Dashboard, Pächterportal, Parzellendetails, globale
+  Konfiguration, Rechteauswahl und Aktionshinweise beachten den Modulstatus.
+- Deaktivierte Module behalten Tabellen, Fachdaten, Historien,
+  Rechtezuweisungen und Rechtevorlagen unverändert.
+- Bei deaktivierten Arbeitsstunden werden keine Konten synchronisiert und
+  keine Fehlstundenpositionen in Rechnungen aufgenommen.
+- Verbrauchspreise und ihre Vorlagen stehen nur mit aktiver
+  Zählerverwaltung zur Verfügung.
+- Serienmail-Gruppen für offene Rechnungen und fehlende Zählerstände richten
+  sich nach den zugehörigen Modulen.
+- SMTP bleibt als Kernfunktion für Passwort-Reset und E-Mail-Verifizierung
+  unabhängig vom Kommunikationsmodul konfigurierbar.
+- Die globale Konfiguration zeigt den aktuellen Modulstatus schreibgeschützt
+  an.
+- Direkte URLs, Abhängigkeiten, Datenhaltbarkeit, Rechteerhalt,
+  Fachberechnungen und manipulierte Requests sind durch Regressionstests
+  abgesichert.
+- Insgesamt bestehen 153 Tests mit 883 Assertions.
+- Entwicklungsstand auf `0.2.0.40` erhöht.
+
 ## [0.2.0.39] - 2026-06-15
 
 ### Phase 11: Inventarverwaltung

@@ -26,7 +26,7 @@ class PermissionProfileController extends Controller
         $this->authorize('create', PermissionProfile::class);
 
         return view('permission-profiles.create', [
-            'permissions' => UserPermission::cases(),
+            'permissions' => UserPermission::availableCases(),
         ]);
     }
 
@@ -58,7 +58,16 @@ class PermissionProfileController extends Controller
         PermissionProfileRequest $request,
         PermissionProfile $permissionProfile,
     ): RedirectResponse {
-        $permissionProfile->update($request->validated());
+        $data = $request->validated();
+        $unavailablePermissions = collect($permissionProfile->permissions)
+            ->filter(fn (string $permission): bool => ! UserPermission::from($permission)->isAvailable())
+            ->values()
+            ->all();
+        $data['permissions'] = array_values(array_unique([
+            ...$data['permissions'] ?? [],
+            ...$unavailablePermissions,
+        ]));
+        $permissionProfile->update($data);
 
         AuditLogger::log('permission_profile.updated', $request->user(), $permissionProfile, [
             'changed_fields' => array_keys($permissionProfile->getChanges()),

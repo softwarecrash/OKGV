@@ -105,6 +105,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function hasPermission(UserPermission $permission): bool
     {
+        if (! $permission->isAvailable()) {
+            return false;
+        }
+
         $permissions = $this->permissions ?? $this->role->defaultPermissions();
 
         return in_array($permission->value, $permissions, true);

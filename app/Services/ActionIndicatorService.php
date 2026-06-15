@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\BillingPeriodStatus;
+use App\Enums\FeatureModule;
 use App\Enums\InvoicePaymentStatus;
 use App\Enums\InvoiceStatus;
 use App\Enums\MailCampaignStatus;
@@ -45,13 +46,15 @@ final class ActionIndicatorService
      */
     public function forUser(User $user): array
     {
-        $registrations = $user->canReviewTenantRegistrations()
+        $registrations = FeatureModule::TenantPortal->enabled()
+            && $user->canReviewTenantRegistrations()
             ? RegistrationRequest::query()
                 ->where('status', RegistrationRequestStatus::Pending)
                 ->count()
             : 0;
 
         $meterReadings = match (true) {
+            ! FeatureModule::Meters->enabled() => 0,
             $user->canReviewMeterReadingSubmissions() => MeterReadingSubmission::query()
                 ->where('status', MeterReadingSubmissionStatus::Pending)
                 ->count(),
@@ -63,6 +66,7 @@ final class ActionIndicatorService
         };
 
         $invoices = match (true) {
+            ! FeatureModule::Billing->enabled() => 0,
             $user->canManageBilling() => $this->dunnableInvoiceCount(),
             $user->role === UserRole::Tenant => Invoice::query()
                 ->where('status', InvoiceStatus::Approved)
@@ -79,21 +83,25 @@ final class ActionIndicatorService
                 ->count(),
             default => 0,
         };
-        $dunningNotices = $user->canManageBilling() ? $invoices : 0;
-        $workHours = $user->canManageBilling()
+        $dunningNotices = FeatureModule::Dunning->enabled()
+            && $user->canManageBilling() ? $invoices : 0;
+        $workHours = FeatureModule::WorkHours->enabled()
+            && $user->canManageBilling()
             ? WorkHour::query()
                 ->where('hours_missing', '>', 0)
                 ->whereHas('billingPeriod', fn ($query) => $query
                     ->where('status', BillingPeriodStatus::Draft))
                 ->count()
             : 0;
-        $workEvents = $user->canManageWorkEvents()
+        $workEvents = FeatureModule::WorkEvents->enabled()
+            && $user->canManageWorkEvents()
             ? WorkEvent::query()
                 ->where('status', WorkEventStatus::Planned)
                 ->where('ends_at', '<', now())
                 ->count()
             : 0;
         $workHourSubmissions = match (true) {
+            ! FeatureModule::WorkHours->enabled() => 0,
             $user->canManageWorkEvents() => WorkHourSubmission::query()
                 ->where('status', WorkHourSubmissionStatus::Pending)
                 ->count(),
@@ -104,15 +112,18 @@ final class ActionIndicatorService
             default => 0,
         };
 
-        $failedCampaigns = $user->canManageCommunication()
+        $failedCampaigns = FeatureModule::Communication->enabled()
+            && $user->canManageCommunication()
             ? MailCampaign::query()->where('status', MailCampaignStatus::Failed)->count()
             : 0;
-        $waitingList = $user->canManageWaitingList()
+        $waitingList = FeatureModule::WaitingList->enabled()
+            && $user->canManageWaitingList()
             ? WaitingListEntry::query()
                 ->whereIn('status', WaitingListStatus::openValues())
                 ->count()
             : 0;
-        $inventory = $user->canManageInventory()
+        $inventory = FeatureModule::Inventory->enabled()
+            && $user->canManageInventory()
             ? InventoryLoan::query()
                 ->whereNull('returned_at')
                 ->whereNotNull('due_at')

@@ -34,7 +34,10 @@ class UserAccessRequest extends FormRequest
                 Rule::exists('permission_profiles', 'id')->where('is_active', true),
             ],
             'permissions' => ['nullable', 'array'],
-            'permissions.*' => ['string', Rule::enum(UserPermission::class)],
+            'permissions.*' => [
+                'string',
+                Rule::in(array_column(UserPermission::availableCases(), 'value')),
+            ],
         ];
     }
 

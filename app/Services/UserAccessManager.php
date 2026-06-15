@@ -25,9 +25,17 @@ final class UserAccessManager
             $oldRole = $subject->role;
             $oldPermissions = $subject->permissions;
 
-            $explicitPermissions = $role === UserRole::Board
-                ? ($profile?->permissions ?? $permissions)
-                : null;
+            $explicitPermissions = null;
+            if ($role === UserRole::Board) {
+                $unavailablePermissions = collect($oldPermissions ?? [])
+                    ->filter(fn (string $permission): bool => ! UserPermission::from($permission)->isAvailable())
+                    ->values()
+                    ->all();
+                $explicitPermissions = array_values(array_unique([
+                    ...$profile?->permissions ?? $permissions,
+                    ...$unavailablePermissions,
+                ]));
+            }
 
             $subject->update([
                 'role' => $role,

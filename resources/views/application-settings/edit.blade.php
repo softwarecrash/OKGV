@@ -44,6 +44,7 @@
                 </div>
             </div>
 
+            @if (App\Enums\FeatureModule::WorkHours->enabled())
             <fieldset>
                 <legend class="h5">Arbeitsstunden je Parzelle</legend>
                 <p class="text-secondary">
@@ -76,6 +77,25 @@
                     </div>
                 </div>
             </fieldset>
+            @endif
+
+            <hr class="my-4">
+            <h2 class="h5">Aktive Funktionsmodule</h2>
+            <p class="text-secondary">
+                Diese Auswahl wird durch die Serverkonfiguration gesteuert. Deaktivierte Module und ihre Daten bleiben gespeichert, sind aber in dieser Instanz nicht nutzbar.
+            </p>
+            <div class="row g-2">
+                @foreach ($modules as $module)
+                    <div class="col-md-6 col-lg-4">
+                        <div class="border rounded p-3 h-100 d-flex justify-content-between align-items-center gap-2">
+                            <span>{{ $module->label() }}</span>
+                            <span class="badge {{ $module->enabled() ? 'text-bg-success' : 'text-bg-secondary' }}">
+                                {{ $module->enabled() ? 'Aktiv' : 'Deaktiviert' }}
+                            </span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
 
         </div>
         <div class="card-footer bg-body border-0">

@@ -268,6 +268,28 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Phase 11 vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
 
+## Phase 12.1: Modularisierung
+
+- [x] Kernfunktionen und schaltbare Fachmodule festlegen
+- [x] Zentrale `.env`-Konfiguration für alle vorhandenen Fachmodule ergänzen
+- [x] Verbindliche Modulabhängigkeiten implementieren
+- [x] Ungültige Konfigurationen beim Anwendungsstart ablehnen
+- [x] Modul-Middleware für direkte und öffentliche Routen implementieren
+- [x] Navigation, Dashboard und Pächterportal modulabhängig machen
+- [x] Parzellen-, Abrechnungs- und Konfigurationsansichten anpassen
+- [x] Rechte deaktivierter Module ausblenden, aber dauerhaft erhalten
+- [x] Aktionshinweise deaktivierter Module unterdrücken
+- [x] Automatische Arbeitsstundenkonten und Fehlstundenpositionen abschalten
+- [x] Verbrauchspreise an das Zählermodul koppeln
+- [x] modulabhängige Serienmail-Empfängergruppen absichern
+- [x] Modulstatus in der globalen Konfiguration anzeigen
+- [x] Datenhaltbarkeit bei Deaktivierung und Reaktivierung testen
+- [x] Direktzugriffe einschließlich Administratorzugriff testen
+- [x] Abhängigkeiten und manipulierte Requests testen
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Phase 12.1 vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen
+
 ## Vorgezogene Phase 12: Arbeitseinsätze
 
 - [x] Vorziehen von Phase 12 direkt nach Phase 9 dokumentieren

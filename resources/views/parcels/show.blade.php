@@ -14,9 +14,11 @@
             @can('create', App\Models\ParcelTenant::class)
                 <a class="btn btn-outline-primary" href="{{ route('parcel-tenants.create', ['parcel_id' => $parcel->id]) }}">Pächter zuordnen</a>
             @endcan
+            @if (App\Enums\FeatureModule::Meters->enabled())
             @can('create', App\Models\Meter::class)
                 <a class="btn btn-outline-primary" href="{{ route('meters.create', ['parcel_id' => $parcel->id]) }}">Zähler anlegen</a>
             @endcan
+            @endif
         </div>
     </div>
     <div class="row g-4">
@@ -63,6 +65,7 @@
             </div>
         </div>
     </div>
+    @if (App\Enums\FeatureModule::Meters->enabled())
     <div class="card border-0 shadow-sm mt-4">
         <div class="card-header">Zähler</div>
         <div class="list-group list-group-flush">
@@ -76,6 +79,8 @@
             @endforelse
         </div>
     </div>
+    @endif
+    @if (App\Enums\FeatureModule::WorkHours->enabled())
     <div class="card border-0 shadow-sm mt-4">
         <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
             <span>Arbeitsstunden</span>
@@ -176,5 +181,6 @@
             </div>
         @endif
     </div>
+    @endif
 </div>
 @endsection
