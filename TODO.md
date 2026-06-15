@@ -22,6 +22,7 @@ projektweite Einzelaufgaben detailliert geführt.
 - [x] Auditlog-Basis für Authentifizierungsereignisse anlegen
 - [x] Logout als JavaScript-unabhängiges POST-Formular absichern
 - [x] Logout für Vorstandsaccounts durch Regressionstest absichern
+- [x] Entwicklungsstand 0.2.0.56 veröffentlichen
 - [x] Security-Header ergänzen
 - [x] Deutsche Oberfläche und OKGV-Branding vorbereiten
 - [x] Projektdokumentation erstellen
