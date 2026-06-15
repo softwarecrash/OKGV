@@ -2,6 +2,39 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.42] - 2026-06-15
+
+### Phase 13 und 14: Datenübertragung, Backup und Restore
+
+- CSV-Import und CSV-Export wurden zu einem gemeinsamen, schaltbaren
+  Funktionsbereich `Datenübertragung` zusammengeführt.
+- Das granulare Recht `CSV-Daten übertragen` kann Vorstandsmitgliedern
+  zugewiesen werden; vollständige Backups und Restore bleiben ausschließlich
+  Administratoren vorbehalten.
+- UTF-8-Importvorlagen und transaktionale Importe für Mitglieder, Parzellen,
+  Zähler und Zählerstände wurden ergänzt.
+- Bestehende Mitglieder und Parzellen werden über ihre Fachnummer
+  aktualisiert; historische Zähler und Zählerstände werden niemals
+  überschrieben.
+- Fehler nennen die betroffene CSV-Zeile und rollen den gesamten Import
+  zurück.
+- Exporte stehen für Mitglieder, Parzellen, Zähler, effektive Zählerstände
+  und Rechnungen einschließlich Empfängern und Positionen bereit.
+- Private ZIP-Backups enthalten MariaDB-Dump, Dokumente und Nachweisfotos
+  sowie ein versionsgebundenes Manifest mit SHA-256-Prüfsummen.
+- Die `.env` und ihre Geheimnisse werden nicht in Backups aufgenommen und
+  müssen insbesondere wegen des benötigten `APP_KEY` separat gesichert werden.
+- Restore prüft Archivpfade, Version und Prüfsummen, verlangt das aktuelle
+  Administratorpasswort und die Bestätigung `WIEDERHERSTELLEN` und erstellt
+  vorab automatisch ein Sicherheitsbackup.
+- Import, Export, Backup-Erstellung, Löschung und Wiederherstellung werden
+  auditiert.
+- Ein realer MariaDB-Dump der Entwicklungsinstanz wurde als privates
+  OKGV-Backup erzeugt und erfolgreich auf ZIP-Integrität sowie Dateirechte
+  `0600` geprüft.
+- Insgesamt bestehen 163 Tests mit 929 Assertions.
+- Entwicklungsstand auf `0.2.0.42` erhöht.
+
 ## [0.2.0.41] - 2026-06-15
 
 ### Lizenzierung

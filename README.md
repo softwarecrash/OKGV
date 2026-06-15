@@ -204,6 +204,7 @@ OKGV_MODULE_DOCUMENTS=true
 OKGV_MODULE_COMMUNICATION=true
 OKGV_MODULE_WAITING_LIST=true
 OKGV_MODULE_INVENTORY=true
+OKGV_MODULE_DATA_TRANSFER=true
 ```
 
 Arbeitsstunden benötigen Abrechnung, Arbeitseinsätze benötigen
@@ -296,6 +297,26 @@ php artisan okgv:demo-purge
 
 Normale Vereinsdaten werden von diesem Befehl nicht verändert. Der gewöhnliche
 Befehl `php artisan db:seed` legt bewusst keine Beispieldaten an.
+
+## Datenübertragung und Backups
+
+Konten mit dem Recht `CSV-Daten übertragen` finden im Benutzermenü den
+Bereich `Datenübertragung`. Dort stehen verbindliche Importvorlagen und
+Exporte für Mitglieder, Parzellen, Zähler, Zählerstände und Rechnungen
+bereit. CSV-Dateien müssen UTF-8-kodiert sein. Ein Import wird vollständig
+zurückgerollt, sobald eine Zeile fachlich ungültig ist.
+
+Nur Administratoren sehen die Backup-Funktionen. Ein Backup enthält einen
+MariaDB-Dump sowie private Dokumente und Nachweisfotos. Vor einem Restore
+prüft OKGV Format, Version und SHA-256-Prüfsummen und erstellt automatisch
+ein Sicherheitsbackup.
+
+Die `.env` ist bewusst nicht Bestandteil des Archivs. Sie muss separat
+geschützt gesichert werden. Für eine erfolgreiche Wiederherstellung ist
+insbesondere derselbe `APP_KEY` erforderlich, da andernfalls verschlüsselte
+SMTP- und Bankdaten nicht mehr lesbar sind. Produktive Betreiber benötigen
+zusätzlich einen externen, automatisierten Backupplan; die manuelle
+Serverablage allein schützt nicht gegen einen vollständigen Serverausfall.
 
 ## Entwicklung
 

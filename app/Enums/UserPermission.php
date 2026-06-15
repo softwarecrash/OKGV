@@ -19,6 +19,7 @@ enum UserPermission: string
     case ManageWorkEvents = 'manage_work_events';
     case ManageWaitingList = 'manage_waiting_list';
     case ManageInventory = 'manage_inventory';
+    case ManageDataTransfer = 'manage_data_transfer';
 
     public function label(): string
     {
@@ -38,6 +39,7 @@ enum UserPermission: string
             self::ManageWorkEvents => 'Arbeitseinsätze verwalten',
             self::ManageWaitingList => 'Warteliste verwalten',
             self::ManageInventory => 'Inventar verwalten',
+            self::ManageDataTransfer => 'CSV-Daten übertragen',
         };
     }
 
@@ -59,6 +61,7 @@ enum UserPermission: string
             self::ManageWorkEvents => 'Erlaubt Termine, Teilnehmer und bestätigte Arbeitsstunden zu verwalten.',
             self::ManageWaitingList => 'Erlaubt den Zugriff auf Interessenten, Kontaktdaten, Prioritäten und Bearbeitungsstatus.',
             self::ManageInventory => 'Erlaubt Gegenstände, Ausgaben, Rückgaben und die Inventarhistorie zu verwalten.',
+            self::ManageDataTransfer => 'Erlaubt geprüfte CSV-Importe und Exporte. Vollständige Backups bleiben Administratoren vorbehalten.',
         };
     }
 
@@ -78,6 +81,7 @@ enum UserPermission: string
             self::ManageWorkEvents => FeatureModule::WorkEvents,
             self::ManageWaitingList => FeatureModule::WaitingList,
             self::ManageInventory => FeatureModule::Inventory,
+            self::ManageDataTransfer => FeatureModule::DataTransfer,
             default => null,
         };
     }

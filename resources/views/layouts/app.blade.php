@@ -255,6 +255,12 @@
                                         </a>
                                         <div class="dropdown-divider"></div>
                                     @endcan
+                                    @if (App\Enums\FeatureModule::DataTransfer->enabled() && auth()->user()->canManageDataTransfer())
+                                        <a class="dropdown-item" href="{{ route('data-transfer.index') }}">
+                                            Datenübertragung
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

@@ -38,6 +38,7 @@ class ModuleConfigurationTest extends TestCase
             FeatureModule::Communication->value => 'mail-campaigns.index',
             FeatureModule::WaitingList->value => 'waiting-list-entries.index',
             FeatureModule::Inventory->value => 'inventory-items.index',
+            FeatureModule::DataTransfer->value => 'data-transfer.index',
         ];
 
         foreach ($routes as $module => $routeName) {

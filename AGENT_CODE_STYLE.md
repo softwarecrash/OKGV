@@ -65,6 +65,20 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 - Ergänze Tests für direkte URLs, Administratorzugriff, Navigation,
   Abhängigkeiten, Datenhaltbarkeit und fachübergreifende Auswahlfelder.
 
+### Datenübertragung und Backups
+
+- CSV-Importe müssen vollständig transaktional sein. Eine fehlerhafte Zeile
+  darf keine Teilimporte hinterlassen.
+- Bestehende historische Datensätze wie Zähler und Zählerstände dürfen durch
+  einen Import nicht überschrieben werden.
+- CSV-Fehler nennen die konkrete Zeile und eine verständliche Korrektur.
+- Backups bleiben im privaten Storage und dürfen keine `.env` oder Klartext-
+  Geheimnisse ergänzen.
+- Restore muss Archivpfade, Format, Version und Prüfsummen vor jeder Änderung
+  prüfen und vorher ein Sicherheitsbackup erstellen.
+- Vollständige Backups und Restore bleiben unabhängig von granularen
+  Vorstandsrechten ausschließlich Administratoren vorbehalten.
+
 ### Controller
 
 - Controller bleiben klein und koordinieren nur Request, Policy, Service, Model und Response.

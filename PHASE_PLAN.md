@@ -148,13 +148,16 @@ vorherigen Phase geprüft sein.
 - [x] Routen, Navigation, Rechte, Aktionshinweise und Fachlogik absichern
 - [x] Daten und Rechte deaktivierter Module dauerhaft erhalten
 
-## Phase 13: CSV-Import
+## Phase 13: Datenübertragung
 
-- [ ] CSV-Import
+- [x] Die bisherigen Phasen 13 und 14 zu einer gemeinsamen Phase zusammengeführt
+- [x] CSV-Import für Mitglieder, Parzellen, Zähler und Zählerstände
+- [x] CSV-Export für Mitglieder, Parzellen, Zähler, Zählerstände und Rechnungen
+- [x] Vollständige manuelle Backups und Wiederherstellung
 
-## Phase 14: CSV-Export
+## Phase 14: In Phase 13 zusammengeführt
 
-- [ ] CSV-Export
+- [x] CSV-Export als Bestandteil der Datenübertragung umgesetzt
 
 ## Phase 15: DSGVO
 
@@ -182,10 +185,11 @@ vorherigen Phase geprüft sein.
 - [ ] Deployment
 - [ ] Docker
 - [ ] Docker Compose
-- [ ] Backupstrategie
+- [ ] Automatisierte Zeitpläne, externe Backupziele und Aufbewahrungsstrategie
 - [ ] Produktionsdokumentation
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 12.1 einschließlich der vorgezogenen Arbeitseinsätze und
-Modularisierung sind abgeschlossen. Als Nächstes folgt Phase 13: CSV-Import.
+Die Phasen 0 bis 14 einschließlich der zusammengefassten Datenübertragung,
+manuellen Backups und Wiederherstellung sind abgeschlossen. Als Nächstes
+folgt Phase 15: DSGVO-Funktionen.

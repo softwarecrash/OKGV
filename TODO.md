@@ -295,6 +295,26 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Phase 12.1 vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
 
+## Phase 13 und 14: Datenübertragung, Backup und Restore
+
+- [x] CSV-Import und CSV-Export zu einer gemeinsamen Phase zusammenführen
+- [x] Datenmodell und Rechtekonzept vollständig spezifizieren
+- [x] Schaltbares Modul und granulares CSV-Recht ergänzen
+- [x] UTF-8-Importvorlagen für Mitglieder, Parzellen, Zähler und Zählerstände bereitstellen
+- [x] Transaktionalen Import mit verständlichen Zeilenfehlern implementieren
+- [x] Mitglieder und Parzellen anhand ihrer Fachnummer sicher aktualisieren
+- [x] Zähler und Zählerstände ausschließlich historisch ergänzen
+- [x] CSV-Export für Mitglieder, Parzellen, Zähler, Zählerstände und Rechnungen implementieren
+- [x] Private ZIP-Backups aus MariaDB-Dump und privaten Dateien implementieren
+- [x] Manifest, Versionsprüfung und SHA-256-Prüfsummen ergänzen
+- [x] Administratorpasswort, Bestätigungsphrase und Sicherheitsbackup vor Restore erzwingen
+- [x] Backup-Download und Löschung serverseitig schützen
+- [x] Auditlogs ohne fachliche Klartextdaten ergänzen
+- [x] Rechte-, Import-, Export-, Backup- und Modulprüfungen ergänzen
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Phase 13 und 14 vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen
+
 ## Vorgezogene Phase 12: Arbeitseinsätze
 
 - [x] Vorziehen von Phase 12 direkt nach Phase 9 dokumentieren

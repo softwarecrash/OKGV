@@ -45,6 +45,7 @@ enum UserRole: string
                 UserPermission::ManageWorkEvents->value,
                 UserPermission::ManageWaitingList->value,
                 UserPermission::ManageInventory->value,
+                UserPermission::ManageDataTransfer->value,
             ],
             self::Treasurer => [
                 UserPermission::ViewAllMasterData->value,

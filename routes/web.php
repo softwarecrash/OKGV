@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\ApplicationSettingController;
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\BillingPeriodController;
 use App\Http\Controllers\BillingRateAssignmentController;
 use App\Http\Controllers\BillingRateController;
 use App\Http\Controllers\BillingRateTemplateController;
 use App\Http\Controllers\CommunicationSettingController;
+use App\Http\Controllers\DataTransferController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DunningNoticeController;
 use App\Http\Controllers\HomeController;
@@ -125,6 +127,30 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::post('globale-konfiguration/smtp/test', [CommunicationSettingController::class, 'test'])
         ->middleware('throttle:smtp-tests')
         ->name('communication-settings.test');
+    Route::get('datenuebertragung', [DataTransferController::class, 'index'])
+        ->middleware('module:data_transfer')
+        ->name('data-transfer.index');
+    Route::post('datenuebertragung/import', [DataTransferController::class, 'import'])
+        ->middleware(['module:data_transfer', 'throttle:10,1'])
+        ->name('data-transfer.import');
+    Route::get('datenuebertragung/export/{type}', [DataTransferController::class, 'export'])
+        ->middleware(['module:data_transfer', 'throttle:30,1'])
+        ->name('data-transfer.export');
+    Route::get('datenuebertragung/vorlage/{type}', [DataTransferController::class, 'template'])
+        ->middleware(['module:data_transfer', 'throttle:30,1'])
+        ->name('data-transfer.template');
+    Route::post('datenuebertragung/backups', [BackupController::class, 'create'])
+        ->middleware(['module:data_transfer', 'throttle:3,10'])
+        ->name('backups.create');
+    Route::get('datenuebertragung/backups/{backup}', [BackupController::class, 'download'])
+        ->middleware(['module:data_transfer', 'throttle:10,1'])
+        ->name('backups.download');
+    Route::delete('datenuebertragung/backups/{backup}', [BackupController::class, 'destroy'])
+        ->middleware('module:data_transfer')
+        ->name('backups.destroy');
+    Route::post('datenuebertragung/wiederherstellen', [BackupController::class, 'restore'])
+        ->middleware(['module:data_transfer', 'throttle:2,60'])
+        ->name('backups.restore');
     Route::post('mail-campaigns/{mail_campaign}/send', [MailCampaignController::class, 'send'])
         ->middleware('module:communication')
         ->name('mail-campaigns.send');

@@ -976,10 +976,48 @@ Workflows. Administratoren besitzen es immer. Standardvorstand und
 Gartenwarte erhalten es als Ausgangswert; individuelle Rechtevorlagen können
 es entziehen. Anlage, Änderung, Ausgabe und Rückgabe werden auditiert.
 
-### Phase 13 bis 18
+### Phase 13: Datenübertragung, Backup und Restore
 
-CSV-Import und -Export, DSGVO, Vereinseinstellungen, Nummernkreise,
-Pächterwechsel und später ein Lageplan.
+Die ursprünglich getrennten Phasen 13 und 14 werden als ein gemeinsamer
+Bereich `Datenübertragung` umgesetzt. Das granulare Recht
+`CSV-Daten übertragen` erlaubt Vorstandsmitgliedern den Import und Export.
+Vollständige Backups, Downloads, Löschung und Wiederherstellung sind
+ausschließlich Administratoren erlaubt.
+
+CSV-Importe unterstützen Mitglieder, Parzellen, Zähler und Zählerstände.
+Jede Datenart besitzt eine herunterladbare UTF-8-Vorlage mit verbindlicher
+Kopfzeile. Mitglieder werden anhand der Mitgliedsnummer und Parzellen anhand
+der Parzellennummer neu angelegt oder aktualisiert. Zähler und Zählerstände
+sind historische Datensätze und werden ausschließlich ergänzt. Vorhandene
+Zählernummern oder Stände desselben Zählers am selben Datum werden nicht
+überschrieben. Sämtliche Zeilen werden fachlich validiert; ein Fehler rollt
+den vollständigen Import zurück. Import und Export werden ohne
+personenbezogene Nutzdaten im Auditlog protokolliert.
+
+CSV-Exporte stehen für Mitglieder, Parzellen, Zähler, effektive
+Zählerstände und Rechnungen zur Verfügung. Rechnungsexporte enthalten
+Empfängersnapshots und einzelne Rechnungspositionen. CSV-Dateien verwenden
+UTF-8 mit BOM und Semikolon als Trennzeichen.
+
+Ein vollständiges OKGV-Backup ist ein privates ZIP-Archiv aus MariaDB-Dump,
+privaten Dokumenten, Zählerstandfotos und Arbeitsstundennachweisen. Ein
+Manifest speichert Format, Anwendungsversion und SHA-256-Prüfsummen. Die
+`.env` wird niemals in das Archiv aufgenommen. Insbesondere `APP_KEY`,
+Datenbankzugang und SMTP-Geheimnisse müssen deshalb separat und geschützt
+gesichert werden; ohne denselben `APP_KEY` bleiben verschlüsselte Werte nach
+einem Restore unlesbar.
+
+Restore akzeptiert ausschließlich unveränderte OKGV-Archive derselben
+Anwendungsversion, prüft Pfade und sämtliche Prüfsummen und verlangt
+Administratorpasswort sowie die Bestätigung `WIEDERHERSTELLEN`. Vor jeder
+Wiederherstellung wird automatisch ein Sicherheitsbackup des aktuellen
+Zustands angelegt. Backup-Erstellung, Downloadschutz, Löschung und Restore
+sind serverseitig geschützt und auditiert.
+
+### Phase 15 bis 18
+
+DSGVO, Vereinseinstellungen, Nummernkreise, Pächterwechsel und später ein
+Lageplan.
 
 ### Phase 12.1: Modulare Funktionsbereiche
 
@@ -998,7 +1036,8 @@ deaktiviert werden:
 - Dokumentenverwaltung,
 - Kommunikation und Serienmails,
 - Warteliste,
-- Inventarverwaltung.
+- Inventarverwaltung,
+- Datenübertragung einschließlich CSV sowie manuellem Backup und Restore.
 
 Deaktivierte Module bleiben vollständig migriert. Vorhandene Daten, Rechte
 und Historien werden weder gelöscht noch verändert und stehen nach einer

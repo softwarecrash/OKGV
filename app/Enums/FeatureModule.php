@@ -15,6 +15,7 @@ enum FeatureModule: string
     case Communication = 'communication';
     case WaitingList = 'waiting_list';
     case Inventory = 'inventory';
+    case DataTransfer = 'data_transfer';
 
     public function label(): string
     {
@@ -30,6 +31,7 @@ enum FeatureModule: string
             self::Communication => 'Kommunikation',
             self::WaitingList => 'Warteliste',
             self::Inventory => 'Inventarverwaltung',
+            self::DataTransfer => 'Datenübertragung',
         };
     }
 
