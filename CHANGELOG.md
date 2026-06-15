@@ -27,6 +27,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Produktions-Asset-Build, Formatter sowie Composer- und npm-Audits wurden
   erfolgreich ausgeführt.
 - Entwicklungsstand auf `0.2.0.58` erhöht.
+- Entwicklungsstand `0.2.0.58` auf GitHub veröffentlicht.
 
 ## [0.2.0.57] - 2026-06-15
 

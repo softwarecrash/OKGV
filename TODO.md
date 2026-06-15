@@ -430,6 +430,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Bestehende Entwicklungsdaten vor und nach der Migration kontrollieren
 - [x] Gesamttests, Formatter, Asset-Build und Audits ausführen
 - [x] Phase 18 vollständig prüfen
+- [x] Entwicklungsstand 0.2.0.58 veröffentlichen
 
 ## Phase 19: SVG-Lageplan
 
