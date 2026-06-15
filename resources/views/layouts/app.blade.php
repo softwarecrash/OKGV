@@ -274,14 +274,11 @@
                                         Datenschutz
                                     </a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        Abmelden
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form action="{{ route('logout') }}" method="POST" data-logout-form>
                                         @csrf
+                                        <button class="dropdown-item" type="submit">
+                                            Abmelden
+                                        </button>
                                     </form>
                                 </div>
                             </li>

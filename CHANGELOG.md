@@ -2,6 +2,22 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.56] - 2026-06-15
+
+### Zuverlässige Abmeldung
+
+- Die Abmeldung im Benutzermenü verwendet nun ein natives,
+  CSRF-geschütztes POST-Formular.
+- Der bisherige GET-Link mit abhängigem Inline-JavaScript wurde entfernt,
+  sodass die Abmeldung auch bei blockiertem oder nicht ausgeführtem
+  JavaScript funktioniert.
+- Ein Regressionstest prüft Darstellung und Abmeldung ausdrücklich mit
+  einem Vorstandsaccount.
+- Insgesamt bestehen 189 Tests mit 1.105 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.56` erhöht.
+
 ## [0.2.0.55] - 2026-06-15
 
 ### Vorheriger Zählerstand in der Prüfübersicht

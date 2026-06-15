@@ -121,7 +121,7 @@ Anforderungen; bei abweichender Nummerierung gilt `PHASE_PLAN.md`.
 
 ### Phase 0: Projektbasis
 
-Laravel, Git, Bootstrap, Alpine.js, Login, Logout, Passwort-Reset, Dashboard, Rollenmodell, Policies, Security-Header und Auditlog-Basis.
+Laravel, Git, Bootstrap, Alpine.js, Login, Logout, Passwort-Reset, Dashboard, Rollenmodell, Policies, Security-Header und Auditlog-Basis. Die Abmeldung erfolgt ausschließlich über ein natives, CSRF-geschütztes POST-Formular und funktioniert unabhängig von JavaScript.
 
 ### Phase 1: Stammdaten
 

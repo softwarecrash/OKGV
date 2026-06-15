@@ -280,6 +280,9 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 - Halte Ansichten responsiv und verwende Tabellen in `.table-responsive`.
 - Verwende gemeinsame Partials oder Blade-Komponenten für wiederkehrende Formbereiche und Fehlerausgabe.
 - Formulare enthalten CSRF-Schutz und bei Bedarf die korrekte HTTP-Methodensimulation.
+- Zustandsändernde Aktionen wie Abmelden werden als native, CSRF-geschützte
+  Formulare umgesetzt und dürfen nicht von JavaScript oder einem GET-Link
+  abhängen.
 - Zeige Aktionen nur mit `@can`, prüfe dieselbe Fähigkeit aber zusätzlich im Controller oder Form Request.
 - Escape Benutzereingaben standardmäßig mit Blade.
 - Falls Zeilenumbrüche dargestellt werden, verwende das bestehende Muster `{!! nl2br(e($value)) !!}`.

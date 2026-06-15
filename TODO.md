@@ -20,6 +20,8 @@ projektweite Einzelaufgaben detailliert geführt.
 - [x] Rollenmodell anlegen
 - [x] Policy-Grundlage anlegen
 - [x] Auditlog-Basis für Authentifizierungsereignisse anlegen
+- [x] Logout als JavaScript-unabhängiges POST-Formular absichern
+- [x] Logout für Vorstandsaccounts durch Regressionstest absichern
 - [x] Security-Header ergänzen
 - [x] Deutsche Oberfläche und OKGV-Branding vorbereiten
 - [x] Projektdokumentation erstellen

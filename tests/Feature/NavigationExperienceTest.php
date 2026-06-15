@@ -98,4 +98,22 @@ class NavigationExperienceTest extends TestCase
             ->assertSee('js/theme-init.js')
             ->assertSee('Darstellungsmodus wechseln');
     }
+
+    public function test_board_member_logs_out_through_a_native_post_form(): void
+    {
+        $board = User::factory()->create(['role' => UserRole::Board]);
+
+        $this->actingAs($board)
+            ->get(route('home'))
+            ->assertOk()
+            ->assertSee('data-logout-form', false)
+            ->assertSee('action="'.route('logout').'"', false)
+            ->assertSee('method="POST" data-logout-form', false)
+            ->assertDontSee('href="'.route('logout').'"', false);
+
+        $this->post(route('logout'))
+            ->assertRedirect('/');
+
+        $this->assertGuest();
+    }
 }
