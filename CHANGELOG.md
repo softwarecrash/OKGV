@@ -16,6 +16,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Insgesamt bestehen 206 Tests mit 1.235 Assertions.
 - Composer-Abhängigkeiten weisen keine bekannten Sicherheitswarnungen auf.
 - Entwicklungsstand auf `0.2.0.66` erhöht.
+- Entwicklungsstand `0.2.0.66` auf GitHub veröffentlicht.
 
 ## [0.2.0.65] - 2026-06-15
 

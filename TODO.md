@@ -722,4 +722,4 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Optionalen `--password` Parameter ergänzen
 - [x] Fachtests, Gesamttests, Formatter und Audit ausführen
 - [x] Nachbesserung vollständig prüfen
-- [ ] Entwicklungsstand veröffentlichen
+- [x] Entwicklungsstand veröffentlichen
