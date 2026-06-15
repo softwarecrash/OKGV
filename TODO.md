@@ -99,7 +99,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Zusätzlichen Lageplan-Verschiebeschalter entfernen
 - [x] Direktes Ziehen mit Klick-vs.-Bewegungserkennung ergänzen
 - [x] Direkte Polygonbearbeitung und Zeichenmodus konfliktfrei erhalten
-- [ ] Entwicklungsstand 0.2.0.51 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.51 veröffentlichen
 - [x] Hand-Modus zum Verschieben vergrößerter Lagepläne ergänzen
 - [x] Navigation und Polygonbearbeitung im Verschiebemodus sperren
 - [x] Entwicklungsstand 0.2.0.50 veröffentlichen
