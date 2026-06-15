@@ -1162,6 +1162,10 @@ die Parzellendetails. Im Editor verschiebt freie Bildfläche die Karte, während
 Eckpunkte und Polygonfläche bearbeitbar bleiben. Im Zeichenmodus dienen Klicks
 auf freie Bildfläche weiterhin der Punktsetzung.
 
+Die sichtbare Größe der kreisförmigen Eckpunkt-Griffe bleibt über alle
+Zoomstufen konstant. Die Griffe dürfen bei starker Vergrößerung keine
+unnötig großen Teile der Parzellenfläche verdecken.
+
 Wird das Hintergrundbild durch ein Bild mit anderer Größe ersetzt, skaliert
 OKGV bestehende Polygone proportional. Änderungen an Bild und Polygonen
 werden auditiert. Frühere Rechteckkoordinaten werden einmalig verlustfrei in

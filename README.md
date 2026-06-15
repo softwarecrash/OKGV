@@ -401,7 +401,9 @@ Drag-and-drop. Das Entfernen einer Zeichnung löscht niemals die Parzelle.
 Neben den Schaltflächen steht dafür Strg und Mausrad zur Verfügung; der
 vergrößerte Ausschnitt kann über Bildlaufleisten oder unmittelbar mit
 gedrückter Maustaste bewegt werden. Kurze Klicks öffnen Parzellen weiterhin;
-im Editor bleiben Eckpunkte und Polygonflächen direkt bearbeitbar.
+im Editor bleiben Eckpunkte und Polygonflächen direkt bearbeitbar. Die
+Eckpunkt-Griffe behalten beim Zoomen ihre sichtbare Größe und verdecken daher
+auch bei starker Vergrößerung nicht die Parzellenfläche.
 
 Screenshots oder Satellitenbilder aus Google Maps dürfen nicht automatisch
 als eigene Bilddatei gespeichert werden. Für Google-Satellitendaten wäre

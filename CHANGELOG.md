@@ -2,6 +2,20 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.52] - 2026-06-15
+
+### Konstante Editor-Griffe
+
+- Die kreisförmigen Eckpunkt-Griffe im Polygoneditor behalten unabhängig von
+  der Zoomstufe dieselbe sichtbare Größe.
+- Der SVG-Radius wird gegenläufig zur aktuellen Vergrößerung berechnet, damit
+  die Griffe bei 400 Prozent nicht große Teile der Parzelle verdecken.
+- Konturbreite und Bedienbarkeit der Griffe bleiben erhalten.
+- Insgesamt bestehen 188 Tests mit 1.076 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.52` erhöht.
+
 ## [0.2.0.51] - 2026-06-15
 
 ### Direkte Lageplanbedienung

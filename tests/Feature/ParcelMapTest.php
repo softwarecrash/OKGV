@@ -204,6 +204,7 @@ class ParcelMapTest extends TestCase
             ->assertOk()
             ->assertSee('data-parcel-map-editor', false)
             ->assertSee('data-parcel-map-zoom', false)
+            ->assertSee('data-map-handle-radius="9"', false)
             ->assertSee('Strg und Mausrad')
             ->assertDontSee('data-map-pan-toggle', false)
             ->assertSee('Ziehe freie Bildfläche');

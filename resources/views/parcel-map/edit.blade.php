@@ -58,6 +58,7 @@
         class="card border-0 shadow-sm"
         data-parcel-map-editor
         data-parcel-map-zoom
+        data-map-handle-radius="9"
         data-width="{{ $settings->map_background_width }}"
         data-height="{{ $settings->map_background_height }}">
         <div class="card-body">

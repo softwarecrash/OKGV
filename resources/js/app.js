@@ -83,10 +83,19 @@ document.addEventListener('DOMContentLoaded', () => {
         let panDrag = null;
         let suppressClick = false;
 
+        const updateEditorHandles = () => {
+            const handleRadius = Number(map.dataset.mapHandleRadius ?? 9);
+
+            map.querySelectorAll('[data-map-handles] circle').forEach((handle) => {
+                handle.setAttribute('r', String(handleRadius / zoom));
+            });
+        };
+
         const applyZoom = (nextZoom, focalPoint = null) => {
             const previousWidth = target.getBoundingClientRect().width;
             const previousHeight = target.getBoundingClientRect().height;
             zoom = Math.max(minimumZoom, Math.min(maximumZoom, nextZoom));
+            map.dataset.mapZoom = String(zoom);
 
             const relativeX = focalPoint
                 ? (viewport.scrollLeft + focalPoint.x) / Math.max(previousWidth, 1)
@@ -100,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             zoomIn.disabled = zoom >= maximumZoom;
             zoomOut.disabled = zoom <= minimumZoom;
             viewport.classList.toggle('is-pannable', zoom > minimumZoom);
+            updateEditorHandles();
 
             requestAnimationFrame(() => {
                 if (zoom === minimumZoom) {
@@ -271,6 +281,9 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const update = () => {
+            const zoom = Number(editor.dataset.mapZoom ?? 1);
+            const handleRadius = Number(editor.dataset.mapHandleRadius ?? 9);
+
             polygonElement.setAttribute(
                 'points',
                 points.map((point) => `${point.x},${point.y}`).join(' '),
@@ -286,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const handle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                 handle.setAttribute('cx', point.x);
                 handle.setAttribute('cy', point.y);
-                handle.setAttribute('r', '9');
+                handle.setAttribute('r', String(handleRadius / zoom));
                 handle.setAttribute('class', 'parcel-map-editor-handle');
                 handle.dataset.index = String(index);
                 handlesElement.append(handle);
