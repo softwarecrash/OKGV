@@ -423,7 +423,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Vorhandene 6 Benutzer, 6 Parzellen und 5 Demo-Parzellen nach Migration prüfen
 - [x] Gesamttests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen
-- [ ] Entwicklungsstand 0.2.0.47 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.47 veröffentlichen
 
 ## Vorgezogene Phase 12: Arbeitseinsätze
 
