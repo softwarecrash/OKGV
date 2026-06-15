@@ -521,6 +521,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Arbeitsstundenfeld auf widerspruchsfreie Viertelstunden korrigieren
 - [x] Ganze Stunden und deutsche Dezimaleingaben verständlich unterstützen
 - [x] Eingabegrenzen und Fehlermeldung durch Regressionstests absichern
+- [x] Entwicklungsstand 0.2.0.57 veröffentlichen
 
 ## Nachbesserung Phase 12: Arbeitseinsatz anlegen
 
