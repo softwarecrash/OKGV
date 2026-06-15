@@ -556,6 +556,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Offene und durch Neueinreichung erledigte Fälle durch Tests absichern
 - [x] Punkt-Beschriftungen in korrekter Ein- und Mehrzahl ausgeben
 - [x] Gesamttests, Formatter und Audits ausführen
+- [x] Entwicklungsstand 0.2.0.59 veröffentlichen
 
 ## Nachbesserung Phase 12: Arbeitseinsatz anlegen
 
