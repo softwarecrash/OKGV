@@ -98,7 +98,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 - [x] Vorherigen wirksamen Zählerstand in der Meldungsprüfung anzeigen
 - [x] Rückläufige Meldungen bereits in der Übersicht markieren
-- [ ] Entwicklungsstand 0.2.0.55 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.55 veröffentlichen
 - [x] Plausibilitätsfehler bei Zählerstandsfreigaben sichtbar ausgeben
 - [x] Betroffene Meldungszeile bei fehlgeschlagener Freigabe markieren
 - [x] Demo-Zählerstand oberhalb des vorhandenen letzten Stands anlegen
