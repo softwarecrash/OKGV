@@ -2,6 +2,23 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.50] - 2026-06-15
+
+### Lageplan mit der Maus verschieben
+
+- Übersicht und Polygoneditor besitzen einen eindeutigen Modus
+  `Karte verschieben`.
+- Im aktiven Modus lässt sich der vergrößerte Kartenausschnitt mit gedrückter
+  linker Maustaste greifen und in alle Richtungen ziehen.
+- Parzellenlinks und Polygonbearbeitung werden während des Verschiebens
+  gesperrt, damit keine unbeabsichtigte Navigation oder Datenänderung erfolgt.
+- Scrollleisten bleiben parallel zum Ziehen mit der Maus nutzbar.
+- Pointer Events ermöglichen dieselbe Bedienung auch auf Touch-Geräten.
+- Insgesamt bestehen 188 Tests mit 1.075 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.50` erhöht.
+
 ## [0.2.0.49] - 2026-06-15
 
 ### Lageplan-Zoom

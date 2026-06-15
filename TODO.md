@@ -96,6 +96,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 ## Projektweite Standards
 
+- [x] Hand-Modus zum Verschieben vergrößerter Lagepläne ergänzen
+- [x] Navigation und Polygonbearbeitung im Verschiebemodus sperren
+- [ ] Entwicklungsstand 0.2.0.50 veröffentlichen
 - [x] Zoomsteuerung für Lageplanübersicht ergänzen
 - [x] Zoomsteuerung für WYSIWYG-Polygoneditor ergänzen
 - [x] Zoombereich scrollbar verschiebbar machen

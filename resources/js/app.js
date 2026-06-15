@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const zoomIn = map.querySelector('[data-map-zoom-in]');
         const zoomOut = map.querySelector('[data-map-zoom-out]');
         const zoomReset = map.querySelector('[data-map-zoom-reset]');
+        const panToggle = map.querySelector('[data-map-pan-toggle]');
         const zoomLabel = map.querySelector('[data-map-zoom-label]');
 
         if (!(viewport instanceof HTMLElement)
@@ -71,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
             || !(zoomIn instanceof HTMLButtonElement)
             || !(zoomOut instanceof HTMLButtonElement)
             || !(zoomReset instanceof HTMLButtonElement)
+            || !(panToggle instanceof HTMLButtonElement)
             || !(zoomLabel instanceof HTMLElement)) {
             return;
         }
@@ -79,6 +81,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const maximumZoom = 4;
         const zoomStep = 0.25;
         let zoom = minimumZoom;
+        let panActive = false;
+        let panDrag = null;
+        let suppressClick = false;
+
+        const setPanActive = (active) => {
+            panActive = active && zoom > minimumZoom;
+            map.dataset.mapPanActive = panActive ? 'true' : 'false';
+            panToggle.setAttribute('aria-pressed', String(panActive));
+            panToggle.classList.toggle('active', panActive);
+            viewport.classList.toggle('is-pannable', panActive);
+
+            if (!panActive) {
+                viewport.classList.remove('is-panning');
+                panDrag = null;
+            }
+        };
 
         const applyZoom = (nextZoom, focalPoint = null) => {
             const previousWidth = target.getBoundingClientRect().width;
@@ -96,6 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
             zoomLabel.textContent = `${Math.round(zoom * 100)} %`;
             zoomIn.disabled = zoom >= maximumZoom;
             zoomOut.disabled = zoom <= minimumZoom;
+            panToggle.disabled = zoom <= minimumZoom;
+
+            if (zoom <= minimumZoom) {
+                setPanActive(false);
+            }
 
             requestAnimationFrame(() => {
                 if (zoom === minimumZoom) {
@@ -117,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         zoomIn.addEventListener('click', () => applyZoom(zoom + zoomStep));
         zoomOut.addEventListener('click', () => applyZoom(zoom - zoomStep));
         zoomReset.addEventListener('click', () => applyZoom(minimumZoom));
+        panToggle.addEventListener('click', () => setPanActive(!panActive));
 
         viewport.addEventListener('wheel', (event) => {
             if (!event.ctrlKey && !event.metaKey) {
@@ -132,6 +156,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
             applyZoom(zoom + (event.deltaY < 0 ? zoomStep : -zoomStep), focalPoint);
         }, { passive: false });
+
+        viewport.addEventListener('pointerdown', (event) => {
+            if (!panActive || event.button !== 0) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            panDrag = {
+                pointerId: event.pointerId,
+                startX: event.clientX,
+                startY: event.clientY,
+                scrollLeft: viewport.scrollLeft,
+                scrollTop: viewport.scrollTop,
+                moved: false,
+            };
+            viewport.classList.add('is-panning');
+            viewport.setPointerCapture(event.pointerId);
+        });
+
+        viewport.addEventListener('pointermove', (event) => {
+            if (!panDrag || panDrag.pointerId !== event.pointerId) {
+                return;
+            }
+
+            const deltaX = event.clientX - panDrag.startX;
+            const deltaY = event.clientY - panDrag.startY;
+
+            if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3) {
+                panDrag.moved = true;
+            }
+
+            viewport.scrollLeft = panDrag.scrollLeft - deltaX;
+            viewport.scrollTop = panDrag.scrollTop - deltaY;
+        });
+
+        const stopPanning = (event) => {
+            if (!panDrag || panDrag.pointerId !== event.pointerId) {
+                return;
+            }
+
+            suppressClick = panDrag.moved;
+
+            if (viewport.hasPointerCapture(event.pointerId)) {
+                viewport.releasePointerCapture(event.pointerId);
+            }
+
+            panDrag = null;
+            viewport.classList.remove('is-panning');
+        };
+
+        viewport.addEventListener('pointerup', stopPanning);
+        viewport.addEventListener('pointercancel', stopPanning);
+        viewport.addEventListener('click', (event) => {
+            if (!panActive && !suppressClick) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            suppressClick = false;
+        }, true);
 
         applyZoom(minimumZoom);
     });
@@ -250,6 +336,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         svg.addEventListener('pointerdown', (event) => {
+            if (editor.dataset.mapPanActive === 'true') {
+                return;
+            }
+
             if (!selection.value) {
                 return;
             }

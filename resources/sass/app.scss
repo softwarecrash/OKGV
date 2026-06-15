@@ -23,8 +23,23 @@
     overscroll-behavior: contain;
 }
 
+.parcel-map-viewport.is-pannable {
+    cursor: grab;
+    touch-action: none;
+}
+
+.parcel-map-viewport.is-panning {
+    cursor: grabbing;
+}
+
+.parcel-map-viewport.is-pannable .parcel-map-canvas,
+.parcel-map-viewport.is-panning .parcel-map-canvas {
+    pointer-events: none;
+}
+
 .parcel-map-toolbar {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: .75rem;
 }

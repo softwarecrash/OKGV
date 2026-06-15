@@ -193,7 +193,7 @@ vorherigen Phase geprüft sein.
 - [x] Privates Luft- oder Lagebild mit dokumentiertem Nutzungsrecht
 - [x] WYSIWYG-Polygoneditor für beliebige Parzellenformen
 - [x] Eckpunkte und gesamte Flächen per Drag-and-drop verschieben
-- [x] Zoom und verschiebbarer Kartenausschnitt in Übersicht und Editor
+- [x] Zoom und per Scrollleiste oder Hand-Modus verschiebbarer Kartenausschnitt
 - [x] Validierte Polygonpunkte relativ zur Bildgröße
 - [x] Statusfarben mit zusätzlicher Textkennzeichnung
 - [x] Klickbare Parzellen mit geschützten Detaillinks
