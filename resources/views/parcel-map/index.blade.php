@@ -44,57 +44,71 @@
                     </div>
                 </div>
             @else
-                <div class="border rounded overflow-hidden bg-body-tertiary">
-                    <svg
-                        class="parcel-map-canvas"
-                        viewBox="0 0 {{ $settings->map_background_width }} {{ $settings->map_background_height }}"
-                        role="img"
-                        aria-labelledby="parcel-map-title parcel-map-description"
-                        preserveAspectRatio="xMidYMid meet">
-                        <title id="parcel-map-title">Lageplan der Kleingartenanlage</title>
-                        <desc id="parcel-map-description">Klickbare Parzellenflächen mit Nummer, Status und Größe.</desc>
-                        @if ($settings->map_background_path)
-                            <image
-                                href="{{ route('parcel-map.background', ['v' => $settings->updated_at?->timestamp]) }}"
-                                width="{{ $settings->map_background_width }}"
-                                height="{{ $settings->map_background_height }}"
-                                preserveAspectRatio="none"/>
-                        @else
-                            <rect width="100%" height="100%" fill="currentColor" fill-opacity="0.04"/>
-                        @endif
+                <div
+                    data-parcel-map-zoom
+                    data-width="{{ $settings->map_background_width }}"
+                    data-height="{{ $settings->map_background_height }}">
+                    <div class="parcel-map-toolbar mb-2" aria-label="Kartengröße">
+                        <div class="btn-group" role="group" aria-label="Lageplan vergrößern oder verkleinern">
+                            <button class="btn btn-sm btn-outline-secondary" type="button" data-map-zoom-out title="Verkleinern">−</button>
+                            <button class="btn btn-sm btn-outline-secondary" type="button" data-map-zoom-reset>Einpassen</button>
+                            <button class="btn btn-sm btn-outline-secondary" type="button" data-map-zoom-in title="Vergrößern">+</button>
+                        </div>
+                        <span class="small text-secondary" data-map-zoom-label aria-live="polite">100 %</span>
+                    </div>
+                    <div class="parcel-map-viewport" data-map-viewport>
+                        <svg
+                            class="parcel-map-canvas"
+                            viewBox="0 0 {{ $settings->map_background_width }} {{ $settings->map_background_height }}"
+                            role="img"
+                            aria-labelledby="parcel-map-title parcel-map-description"
+                            preserveAspectRatio="xMidYMid meet"
+                            data-map-zoom-target>
+                            <title id="parcel-map-title">Lageplan der Kleingartenanlage</title>
+                            <desc id="parcel-map-description">Klickbare Parzellenflächen mit Nummer, Status und Größe.</desc>
+                            @if ($settings->map_background_path)
+                                <image
+                                    href="{{ route('parcel-map.background', ['v' => $settings->updated_at?->timestamp]) }}"
+                                    width="{{ $settings->map_background_width }}"
+                                    height="{{ $settings->map_background_height }}"
+                                    preserveAspectRatio="none"/>
+                            @else
+                                <rect width="100%" height="100%" fill="currentColor" fill-opacity="0.04"/>
+                            @endif
 
-                        @foreach ($placedParcels as $parcel)
-                            <a href="{{ route('parcels.show', $parcel) }}" aria-label="Parzelle {{ $parcel->parcel_number }}, {{ $parcel->status->label() }}, {{ number_format((float) $parcel->area_sqm, 2, ',', '.') }} Quadratmeter">
-                                <title>Parzelle {{ $parcel->parcel_number }} · {{ $parcel->status->label() }} · {{ number_format((float) $parcel->area_sqm, 2, ',', '.') }} m²</title>
-                                <polygon
-                                    points="{{ collect($parcel->map_polygon)->map(fn ($point) => $point['x'].','.$point['y'])->implode(' ') }}"
-                                    fill="{{ $parcel->status->mapColor() }}"
-                                    fill-opacity="0.42"
-                                    stroke="var(--bs-body-color)"
-                                    stroke-width="3"
-                                    vector-effect="non-scaling-stroke"/>
-                                @php
-                                    $centerX = collect($parcel->map_polygon)->avg('x');
-                                    $centerY = collect($parcel->map_polygon)->avg('y');
-                                @endphp
-                                <text
-                                    x="{{ $centerX }}"
-                                    y="{{ $centerY }}"
-                                    fill="#FFFFFF"
-                                    stroke="#263238"
-                                    stroke-width="4"
-                                    paint-order="stroke"
-                                    font-size="24"
-                                    font-weight="700"
-                                    text-anchor="middle"
-                                    dominant-baseline="middle">
-                                    {{ $parcel->parcel_number }}
-                                </text>
-                            </a>
-                        @endforeach
-                    </svg>
+                            @foreach ($placedParcels as $parcel)
+                                <a href="{{ route('parcels.show', $parcel) }}" aria-label="Parzelle {{ $parcel->parcel_number }}, {{ $parcel->status->label() }}, {{ number_format((float) $parcel->area_sqm, 2, ',', '.') }} Quadratmeter">
+                                    <title>Parzelle {{ $parcel->parcel_number }} · {{ $parcel->status->label() }} · {{ number_format((float) $parcel->area_sqm, 2, ',', '.') }} m²</title>
+                                    <polygon
+                                        points="{{ collect($parcel->map_polygon)->map(fn ($point) => $point['x'].','.$point['y'])->implode(' ') }}"
+                                        fill="{{ $parcel->status->mapColor() }}"
+                                        fill-opacity="0.42"
+                                        stroke="var(--bs-body-color)"
+                                        stroke-width="3"
+                                        vector-effect="non-scaling-stroke"/>
+                                    @php
+                                        $centerX = collect($parcel->map_polygon)->avg('x');
+                                        $centerY = collect($parcel->map_polygon)->avg('y');
+                                    @endphp
+                                    <text
+                                        x="{{ $centerX }}"
+                                        y="{{ $centerY }}"
+                                        fill="#FFFFFF"
+                                        stroke="#263238"
+                                        stroke-width="4"
+                                        paint-order="stroke"
+                                        font-size="24"
+                                        font-weight="700"
+                                        text-anchor="middle"
+                                        dominant-baseline="middle">
+                                        {{ $parcel->parcel_number }}
+                                    </text>
+                                </a>
+                            @endforeach
+                        </svg>
+                    </div>
                 </div>
-                <p class="small text-secondary mt-3 mb-0">Wähle eine Fläche aus, um die Parzellendetails zu öffnen. Der Status wird zusätzlich beim Überfahren und für Hilfstechnologien als Text ausgegeben.</p>
+                <p class="small text-secondary mt-3 mb-0">Vergrößere den Plan mit den Schaltflächen oder mit Strg und Mausrad. Den vergrößerten Ausschnitt kannst du über die Bildlaufleisten verschieben. Wähle eine Fläche aus, um die Parzellendetails zu öffnen.</p>
             @endif
         </div>
     </div>

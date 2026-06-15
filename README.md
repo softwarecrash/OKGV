@@ -397,6 +397,9 @@ ausdrücklich lizenziertes JPEG-, PNG- oder WebP-Bild hoch und dokumentieren
 Quelle sowie Nutzungsrecht. Danach wählen sie eine Parzelle, setzen ihre
 Eckpunkte per Klick und verschieben Punkte oder die gesamte Fläche per
 Drag-and-drop. Das Entfernen einer Zeichnung löscht niemals die Parzelle.
+Übersicht und Editor lassen sich zwischen 100 und 400 Prozent vergrößern.
+Neben den Schaltflächen steht dafür Strg und Mausrad zur Verfügung; der
+vergrößerte Ausschnitt kann über Bildlaufleisten verschoben werden.
 
 Screenshots oder Satellitenbilder aus Google Maps dürfen nicht automatisch
 als eigene Bilddatei gespeichert werden. Für Google-Satellitendaten wäre

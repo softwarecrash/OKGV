@@ -11,16 +11,26 @@
     display: block;
     width: 100%;
     height: auto;
-    max-height: 75vh;
-    touch-action: none;
     user-select: none;
 }
 
-.parcel-map-editor-frame {
+.parcel-map-viewport {
     overflow: auto;
+    max-height: 75vh;
     border: var(--bs-border-width) solid var(--bs-border-color);
     border-radius: var(--bs-border-radius);
     background: var(--bs-tertiary-bg);
+    overscroll-behavior: contain;
+}
+
+.parcel-map-toolbar {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+.parcel-map-editor-frame .parcel-map-canvas {
+    touch-action: none;
 }
 
 .parcel-map-editor-polygon {

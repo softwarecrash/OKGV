@@ -1151,6 +1151,8 @@ Bildgröße gespeichert. Im WYSIWYG-Editor können berechtigte Benutzer:
 - einzelne Eckpunkte per Drag-and-drop verschieben,
 - die gesamte Fläche verschieben,
 - den letzten Punkt zurücknehmen,
+- Übersicht und Editor von 100 bis 400 Prozent zoomen,
+- den vergrößerten Kartenausschnitt verschieben,
 - nur die Fläche entfernen, ohne den Parzellendatensatz zu löschen.
 
 Wird das Hintergrundbild durch ein Bild mit anderer Größe ersetzt, skaliert

@@ -57,6 +57,7 @@
     <div
         class="card border-0 shadow-sm"
         data-parcel-map-editor
+        data-parcel-map-zoom
         data-width="{{ $settings->map_background_width }}"
         data-height="{{ $settings->map_background_height }}">
         <div class="card-body">
@@ -90,12 +91,22 @@
                 Wähle eine Parzelle. Setze anschließend mindestens drei Punkte. Eckpunkte lassen sich ziehen; die gefüllte Fläche kann als Ganzes verschoben werden.
             </div>
 
-            <div class="parcel-map-editor-frame">
+            <div class="parcel-map-toolbar mb-2" aria-label="Kartengröße">
+                <div class="btn-group" role="group" aria-label="Lageplan vergrößern oder verkleinern">
+                    <button class="btn btn-sm btn-outline-secondary" type="button" data-map-zoom-out title="Verkleinern">−</button>
+                    <button class="btn btn-sm btn-outline-secondary" type="button" data-map-zoom-reset>Einpassen</button>
+                    <button class="btn btn-sm btn-outline-secondary" type="button" data-map-zoom-in title="Vergrößern">+</button>
+                </div>
+                <span class="small text-secondary" data-map-zoom-label aria-live="polite">100 %</span>
+            </div>
+
+            <div class="parcel-map-viewport parcel-map-editor-frame" data-map-viewport>
                 <svg
                     class="parcel-map-canvas"
                     viewBox="0 0 {{ $settings->map_background_width }} {{ $settings->map_background_height }}"
                     preserveAspectRatio="xMidYMid meet"
-                    data-map-svg>
+                    data-map-svg
+                    data-map-zoom-target>
                     @if ($settings->map_background_path)
                         <image
                             href="{{ route('parcel-map.background', ['v' => $settings->updated_at?->timestamp]) }}"
@@ -110,6 +121,7 @@
                     <g data-map-handles></g>
                 </svg>
             </div>
+            <p class="small text-secondary mt-2 mb-0">Nutze die Zoomschaltflächen oder Strg und Mausrad. Bei vergrößerter Ansicht lässt sich der Ausschnitt über die Bildlaufleisten verschieben.</p>
 
             <form class="mt-3" method="POST" data-map-form>
                 @csrf

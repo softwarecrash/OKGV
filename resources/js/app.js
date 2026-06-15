@@ -58,6 +58,84 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    document.querySelectorAll('[data-parcel-map-zoom]').forEach((map) => {
+        const viewport = map.querySelector('[data-map-viewport]');
+        const target = map.querySelector('[data-map-zoom-target]');
+        const zoomIn = map.querySelector('[data-map-zoom-in]');
+        const zoomOut = map.querySelector('[data-map-zoom-out]');
+        const zoomReset = map.querySelector('[data-map-zoom-reset]');
+        const zoomLabel = map.querySelector('[data-map-zoom-label]');
+
+        if (!(viewport instanceof HTMLElement)
+            || !(target instanceof SVGSVGElement)
+            || !(zoomIn instanceof HTMLButtonElement)
+            || !(zoomOut instanceof HTMLButtonElement)
+            || !(zoomReset instanceof HTMLButtonElement)
+            || !(zoomLabel instanceof HTMLElement)) {
+            return;
+        }
+
+        const minimumZoom = 1;
+        const maximumZoom = 4;
+        const zoomStep = 0.25;
+        let zoom = minimumZoom;
+
+        const applyZoom = (nextZoom, focalPoint = null) => {
+            const previousWidth = target.getBoundingClientRect().width;
+            const previousHeight = target.getBoundingClientRect().height;
+            zoom = Math.max(minimumZoom, Math.min(maximumZoom, nextZoom));
+
+            const relativeX = focalPoint
+                ? (viewport.scrollLeft + focalPoint.x) / Math.max(previousWidth, 1)
+                : (viewport.scrollLeft + (viewport.clientWidth / 2)) / Math.max(previousWidth, 1);
+            const relativeY = focalPoint
+                ? (viewport.scrollTop + focalPoint.y) / Math.max(previousHeight, 1)
+                : (viewport.scrollTop + (viewport.clientHeight / 2)) / Math.max(previousHeight, 1);
+
+            target.style.width = `${zoom * 100}%`;
+            zoomLabel.textContent = `${Math.round(zoom * 100)} %`;
+            zoomIn.disabled = zoom >= maximumZoom;
+            zoomOut.disabled = zoom <= minimumZoom;
+
+            requestAnimationFrame(() => {
+                if (zoom === minimumZoom) {
+                    viewport.scrollTo({ left: 0, top: 0 });
+
+                    return;
+                }
+
+                const currentWidth = target.getBoundingClientRect().width;
+                const currentHeight = target.getBoundingClientRect().height;
+                const offsetX = focalPoint?.x ?? viewport.clientWidth / 2;
+                const offsetY = focalPoint?.y ?? viewport.clientHeight / 2;
+
+                viewport.scrollLeft = Math.max(0, (relativeX * currentWidth) - offsetX);
+                viewport.scrollTop = Math.max(0, (relativeY * currentHeight) - offsetY);
+            });
+        };
+
+        zoomIn.addEventListener('click', () => applyZoom(zoom + zoomStep));
+        zoomOut.addEventListener('click', () => applyZoom(zoom - zoomStep));
+        zoomReset.addEventListener('click', () => applyZoom(minimumZoom));
+
+        viewport.addEventListener('wheel', (event) => {
+            if (!event.ctrlKey && !event.metaKey) {
+                return;
+            }
+
+            event.preventDefault();
+            const bounds = viewport.getBoundingClientRect();
+            const focalPoint = {
+                x: event.clientX - bounds.left,
+                y: event.clientY - bounds.top,
+            };
+
+            applyZoom(zoom + (event.deltaY < 0 ? zoomStep : -zoomStep), focalPoint);
+        }, { passive: false });
+
+        applyZoom(minimumZoom);
+    });
+
     document.querySelectorAll('[data-parcel-map-editor]').forEach((editor) => {
         const svg = editor.querySelector('[data-map-svg]');
         const polygonElement = editor.querySelector('[data-map-polygon]');

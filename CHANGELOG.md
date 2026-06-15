@@ -2,6 +2,23 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.49] - 2026-06-15
+
+### Lageplan-Zoom
+
+- Lageplanübersicht und Polygoneditor besitzen Zoomschaltflächen von 100 bis
+  400 Prozent sowie eine Funktion zum Einpassen.
+- Strg und Mausrad vergrößern oder verkleinern den Kartenausschnitt an der
+  aktuellen Mausposition.
+- Vergrößerte Karten können innerhalb eines begrenzten Ansichtsbereichs über
+  die Bildlaufleisten verschoben werden.
+- Zoom und Verschiebung wirken ausschließlich auf die Browserdarstellung;
+  gespeicherte Hintergrundbilder, Polygone und Fachdaten bleiben unverändert.
+- Insgesamt bestehen 188 Tests mit 1.071 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.49` erhöht.
+
 ## [0.2.0.48] - 2026-06-15
 
 ### Korrekturen

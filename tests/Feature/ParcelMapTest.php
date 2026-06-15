@@ -191,7 +191,18 @@ class ParcelMapTest extends TestCase
             ->assertOk()
             ->assertSee('PLAN-01')
             ->assertSee('100,120 340,90 380,250 220,330 80,240', false)
-            ->assertSee('#C62828');
+            ->assertSee('#C62828')
+            ->assertSee('data-parcel-map-zoom', false)
+            ->assertSee('data-map-zoom-in', false)
+            ->assertSee('data-map-zoom-out', false)
+            ->assertSee('data-map-zoom-reset', false);
+
+        $this->actingAs($administrator)
+            ->get(route('parcel-map.edit'))
+            ->assertOk()
+            ->assertSee('data-parcel-map-editor', false)
+            ->assertSee('data-parcel-map-zoom', false)
+            ->assertSee('Strg und Mausrad');
 
         $this->actingAs($administrator)
             ->put(route('parcel-map.polygon.update', $parcel), [
