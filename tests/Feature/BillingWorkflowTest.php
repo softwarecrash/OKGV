@@ -98,6 +98,7 @@ class BillingWorkflowTest extends TestCase
 
         $invoice = Invoice::query()->with('items')->firstOrFail();
         $this->assertSame(BillingPeriodStatus::Calculated, $period->fresh()->status);
+        $this->assertSame('2025-00001', $invoice->invoice_number);
         $this->assertSame('195.25', $invoice->total_amount);
         $this->assertCount(4, $invoice->items);
         $this->assertSame('100.5000', $invoice->items->firstWhere('billing_rate_id', $leaseRate->id)->quantity);

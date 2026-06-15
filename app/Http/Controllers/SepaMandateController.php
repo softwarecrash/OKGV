@@ -2,17 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\NumberSequenceType;
 use App\Enums\SepaMandateStatus;
 use App\Enums\SepaMandateType;
 use App\Http\Requests\SepaMandateRequest;
 use App\Models\Member;
 use App\Models\SepaMandate;
 use App\Services\AuditLogger;
+use App\Services\NumberSequenceManager;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class SepaMandateController extends Controller
 {
+    public function __construct(
+        private readonly NumberSequenceManager $numberSequenceManager,
+    ) {}
+
     public function index(): View
     {
         $this->authorize('viewAny', SepaMandate::class);
@@ -39,11 +46,19 @@ class SepaMandateController extends Controller
 
     public function store(SepaMandateRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-        $data['iban_last_four'] = substr($data['iban'], -4);
-        $mandate = SepaMandate::create($data);
+        $mandate = DB::transaction(function () use ($request): SepaMandate {
+            $data = $request->validated();
+            $data['mandate_reference'] = $data['mandate_reference']
+                ?: $this->numberSequenceManager->next(
+                    NumberSequenceType::SepaMandate,
+                    $data['signed_at'],
+                );
+            $data['iban_last_four'] = substr($data['iban'], -4);
+            $mandate = SepaMandate::create($data);
+            AuditLogger::log('sepa.mandate.created', $request->user(), $mandate);
 
-        AuditLogger::log('sepa.mandate.created', $request->user(), $mandate);
+            return $mandate;
+        });
 
         return redirect()->route('sepa-mandates.index')
             ->with('status', 'SEPA-Mandat wurde angelegt.');

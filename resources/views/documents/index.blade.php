@@ -14,7 +14,7 @@
         <div class="card-body row g-3 align-items-end">
             <div class="col-lg-4">
                 <label class="form-label" for="q">Suche</label>
-                <input class="form-control" id="q" name="q" value="{{ request('q') }}" placeholder="Titel, Beschreibung oder Dateiname">
+                <input class="form-control" id="q" name="q" value="{{ request('q') }}" placeholder="Nummer, Titel, Beschreibung oder Dateiname">
             </div>
             <div class="col-md-3">
                 <label class="form-label" for="type">Dokumenttyp</label>
@@ -58,6 +58,7 @@
                         <tr>
                             <td>
                                 <strong>{{ $document->title }}</strong><br>
+                                <small class="text-secondary">{{ $document->document_number }}</small><br>
                                 <small class="text-secondary">{{ $document->original_name }} · {{ number_format($document->file_size / 1024, 0, ',', '.') }} KiB</small>
                             </td>
                             <td>{{ $document->type->label() }}</td>

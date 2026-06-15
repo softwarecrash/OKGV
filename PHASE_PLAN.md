@@ -174,7 +174,14 @@ vorherigen Phase geprüft sein.
 
 ## Phase 17: Nummernkreise
 
-- [ ] Nummernkreise
+- [x] Konfigurierbare Mitgliedsnummern
+- [x] Konfigurierbare Rechnungsnummern
+- [x] Konfigurierbare SEPA-Mandatsreferenzen
+- [x] Konfigurierbare Dokumentnummern
+- [x] Platzhalter für Jahr und fortlaufende Nummer
+- [x] Optionaler jährlicher Neustart
+- [x] Transaktionssichere Vergabe mit Kollisionsprüfung
+- [x] Historische und manuell vergebene Nummern unverändert erhalten
 
 ## Phase 18: Pächterwechsel
 
@@ -195,6 +202,6 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 16 einschließlich Vereinsstammdaten, Logo,
-Dokumentfußzeile, Mail-Signatur und historischen Absendersnapshots sind
-abgeschlossen. Als Nächstes folgt Phase 17: Nummernkreise.
+Die Phasen 0 bis 17 einschließlich konfigurierbarer Nummernkreise sind
+abgeschlossen. Als Nächstes folgt Phase 18: Pächterwechsel und
+Übergabeprozess.

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use LogicException;
 
 #[Fillable([
+    'document_number',
     'member_id',
     'parcel_id',
     'uploaded_by',

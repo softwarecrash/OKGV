@@ -369,8 +369,9 @@ Historie nicht umgeschrieben werden; eine spätere Gutschrift oder
 Korrekturrechnung benötigt einen eigenen, noch zu implementierenden
 Korrekturbeleg.
 
-Rechnungsnummern werden bis zur konfigurierbaren Nummernkreisverwaltung aus
-Phase 16 im Format `YYYY-NNNNN` je Kalenderjahr fortlaufend vergeben.
+Rechnungsnummern werden über den konfigurierbaren Nummernkreis aus Phase 17
+vergeben. Das Standardformat lautet `YYYY-NNNNN` und beginnt je Kalenderjahr
+neu.
 
 #### Rechnungen und Positionen
 
@@ -580,10 +581,12 @@ Die zentrale Dokumentenverwaltung unterstützt:
 - Foto,
 - Sonstiges.
 
-Ein Dokument besitzt Titel, optionale Beschreibung, Dokumenttyp,
+Ein Dokument besitzt eine eindeutige, automatisch vergebene Dokumentnummer,
+Titel, optionale Beschreibung, Dokumenttyp,
 Sichtbarkeit, optionalen Mitglieder- und Parzellenbezug sowie
 Veröffentlichungs- und Archivierungszeitpunkte. Die Oberfläche bietet Suche
-und Filter nach Typ, Sichtbarkeit und Archivstatus.
+nach Nummer, Titel und Dateiname sowie Filter nach Typ, Sichtbarkeit und
+Archivstatus.
 
 #### Dateien und Versionen
 
@@ -1096,9 +1099,36 @@ beziehungsweise Versandfreigabe einen Snapshot der Vereins- und
 Bankangaben. Spätere Änderungen an Name, Anschrift, Logo, Fußzeile oder
 Bankkonto verändern bereits erzeugte historische Dokumente nicht.
 
-### Phase 17 bis 18
+### Phase 17: Nummernkreise
 
-Nummernkreise, Pächterwechsel und später ein Lageplan.
+Administratoren konfigurieren getrennte Nummernkreise für:
+
+- Mitgliedsnummern,
+- Rechnungsnummern,
+- SEPA-Mandatsreferenzen,
+- Dokumentnummern.
+
+Ein Format muss den Platzhalter `{NUMMER}` enthalten und darf zusätzlich
+`{JAHR}` verwenden. Die Mindeststellen der fortlaufenden Nummer, der nächste
+Zählerstand und ein optionaler jährlicher Neustart sind je Nummernkreis
+konfigurierbar. Bei einem jährlichen Neustart ist `{JAHR}` Pflicht, damit
+keine Doppelnummern entstehen.
+
+Die Vergabe erfolgt innerhalb einer Datenbanktransaktion mit exklusiver
+Sperre des jeweiligen Nummernkreises. Bereits durch manuelle Eingabe,
+CSV-Import oder frühere Versionen belegte Nummern werden übersprungen.
+Dadurch sind fachlich harmlose Lücken zulässig. Eine Nummer wird niemals
+nachträglich wiederverwendet oder an historischen Datensätzen verändert.
+
+Bei neuen Mitgliedern und SEPA-Mandaten darf eine berechtigte Person
+weiterhin bewusst eine eigene eindeutige Nummer eingeben. Bleibt das Feld
+leer, verwendet OKGV den Nummernkreis. Rechnungen und hochgeladene Dokumente
+erhalten ihre Nummer immer serverseitig. Änderungen an den Einstellungen
+werden auditiert und sind ausschließlich Administratoren erlaubt.
+
+### Phase 18 bis 19
+
+Pächterwechsel, Übergabeprozess und später ein SVG-Lageplan.
 
 ### Phase 12.1: Modulare Funktionsbereiche
 

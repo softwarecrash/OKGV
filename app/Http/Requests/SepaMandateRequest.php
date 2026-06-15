@@ -22,15 +22,18 @@ class SepaMandateRequest extends FormRequest
 
     public function rules(): array
     {
+        $mandate = $this->route('sepa_mandate');
+
         return [
             'member_id' => ['required', 'integer', 'exists:members,id'],
             'mandate_reference' => [
-                'required',
+                Rule::requiredIf($mandate instanceof SepaMandate),
+                'nullable',
                 'string',
                 'max:35',
                 'regex:/^[A-Z0-9+?\\/\\-:().,\']+$/',
                 Rule::unique('sepa_mandates', 'mandate_reference')
-                    ->ignore($this->route('sepa_mandate')),
+                    ->ignore($mandate),
             ],
             'iban' => ['required', 'string', 'max:42', new ValidIban],
             'bic' => ['nullable', 'string', 'regex:/^[A-Z0-9]{8}([A-Z0-9]{3})?$/'],

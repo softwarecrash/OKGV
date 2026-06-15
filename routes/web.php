@@ -23,6 +23,7 @@ use App\Http\Controllers\MeterReadingController;
 use App\Http\Controllers\MeterReadingCorrectionController;
 use App\Http\Controllers\MeterReadingSubmissionController;
 use App\Http\Controllers\MeterReplacementController;
+use App\Http\Controllers\NumberSequenceController;
 use App\Http\Controllers\ParcelController;
 use App\Http\Controllers\ParcelTenantController;
 use App\Http\Controllers\PaymentBatchController;
@@ -143,6 +144,10 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
         ->name('application-settings.edit');
     Route::put('globale-konfiguration', [ApplicationSettingController::class, 'update'])
         ->name('application-settings.update');
+    Route::get('nummernkreise', [NumberSequenceController::class, 'edit'])
+        ->name('number-sequences.edit');
+    Route::put('nummernkreise', [NumberSequenceController::class, 'update'])
+        ->name('number-sequences.update');
     Route::resource('permission-profiles', PermissionProfileController::class)
         ->only(['index', 'create', 'store', 'edit', 'update']);
     Route::put('globale-konfiguration/smtp', [CommunicationSettingController::class, 'update'])

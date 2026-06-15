@@ -17,8 +17,8 @@
     </div>
     <div class="col-md-6">
         <label class="form-label" for="mandate_reference">Mandatsreferenz</label>
-        <input class="form-control text-uppercase" id="mandate_reference" name="mandate_reference" maxlength="35" required value="{{ old('mandate_reference', $mandate->mandate_reference) }}">
-        <div class="form-text">Vereinsweit eindeutig, höchstens 35 SEPA-Zeichen. Leerzeichen werden automatisch durch Bindestriche ersetzt.</div>
+        <input class="form-control text-uppercase" id="mandate_reference" name="mandate_reference" maxlength="35" @required($mandate->exists) value="{{ old('mandate_reference', $mandate->mandate_reference) }}" placeholder="{{ $mandate->exists ? '' : 'Wird automatisch vergeben' }}">
+        <div class="form-text">{{ $mandate->exists ? 'Vereinsweit eindeutig, höchstens 35 SEPA-Zeichen.' : 'Leer lassen, um die nächste Mandatsreferenz automatisch zu vergeben.' }} Leerzeichen werden automatisch durch Bindestriche ersetzt.</div>
     </div>
     <div class="col-md-8">
         <label class="form-label" for="iban">IBAN</label>

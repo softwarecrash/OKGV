@@ -30,7 +30,8 @@ class MemberRequest extends FormRequest
                 Rule::unique('members', 'user_id')->ignore($member),
             ],
             'member_number' => [
-                'required',
+                Rule::requiredIf($member instanceof Member),
+                'nullable',
                 'string',
                 'max:50',
                 Rule::unique('members', 'member_number')->ignore($member),

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\DocumentVisibility;
+use App\Enums\NumberSequenceType;
 use App\Models\Document;
 use App\Models\DocumentVersion;
 use App\Models\User;
@@ -14,6 +15,10 @@ use Throwable;
 
 final class DocumentManager
 {
+    public function __construct(
+        private readonly NumberSequenceManager $numberSequenceManager,
+    ) {}
+
     /**
      * @param  array<string, mixed>  $data
      */
@@ -24,6 +29,9 @@ final class DocumentManager
         try {
             return DB::transaction(function () use ($data, $file, $actor, $path): Document {
                 $document = Document::create([
+                    'document_number' => $this->numberSequenceManager->next(
+                        NumberSequenceType::Document,
+                    ),
                     ...$this->metadata($data),
                     'uploaded_by' => $actor->id,
                     ...$this->fileMetadata($file, $path),

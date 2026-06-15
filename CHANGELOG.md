@@ -2,6 +2,40 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.45] - 2026-06-15
+
+### Phase 17: Nummernkreise
+
+- Mitgliedsnummern, Rechnungsnummern, SEPA-Mandatsreferenzen und
+  Dokumentnummern besitzen getrennt konfigurierbare Nummernkreise.
+- Formate unterstützen die verständlichen Platzhalter `{JAHR}` und
+  `{NUMMER}` sowie eine einstellbare Mindeststellenzahl.
+- Leerzeichen in Formaten werden automatisch durch Bindestriche ersetzt;
+  unbekannte Platzhalter erhalten eine verständliche Validierungsmeldung.
+- Der nächste Zählerstand und ein optionaler jährlicher Neustart können
+  ausschließlich von Administratoren gepflegt werden.
+- Die Vergabe erfolgt transaktionssicher mit Datenbanksperre und zusätzlicher
+  Kollisionsprüfung gegen die jeweilige eindeutige Fachspalte.
+- Manuell vergebene, importierte und historische Nummern bleiben unverändert
+  und werden von der automatischen Vergabe übersprungen.
+- Neue Mitglieder und SEPA-Mandate erhalten bei leerem Nummernfeld
+  automatisch die nächste Nummer; eine bewusste manuelle Eingabe bleibt
+  möglich.
+- Rechnungsberechnung und Dokumentupload verwenden nun ebenfalls den
+  zentralen Nummerngenerator.
+- Dokumente besitzen eine sichtbare und durchsuchbare Dokumentnummer;
+  vorhandene Dokumente werden bei der Migration ohne Löschung nachnummeriert.
+- Eine Administrationsoberfläche zeigt Vorschauen und erklärt Platzhalter,
+  Jahreswechsel sowie zulässige Nummernlücken.
+- Änderungen an Nummernkreisen werden auditiert.
+- Beide Migrationen wurden isoliert vorwärts, rückwärts und erneut vorwärts
+  geprüft sowie ausschließlich vorwärts und ohne Löschung auf die
+  MariaDB-Entwicklungsdatenbank angewendet.
+- Insgesamt bestehen 179 Tests mit 1.013 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.45` erhöht.
+
 ## [0.2.0.44] - 2026-06-15
 
 ### Phase 16: Vereinseinstellungen und Vorlagenbranding

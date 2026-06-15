@@ -31,7 +31,8 @@ class DocumentController extends Controller
             ->when($request->filled('q'), function ($query) use ($request): void {
                 $term = '%'.$request->string('q')->trim()->toString().'%';
                 $query->where(function ($query) use ($term): void {
-                    $query->where('title', 'like', $term)
+                    $query->where('document_number', 'like', $term)
+                        ->orWhere('title', 'like', $term)
                         ->orWhere('description', 'like', $term)
                         ->orWhere('original_name', 'like', $term);
                 });

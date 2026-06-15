@@ -8,6 +8,7 @@ use App\Enums\BillingRateType;
 use App\Enums\FeatureModule;
 use App\Enums\InvoiceStatus;
 use App\Enums\MeterType;
+use App\Enums\NumberSequenceType;
 use App\Models\BillingPeriod;
 use App\Models\BillingRate;
 use App\Models\BillingRateAssignment;
@@ -27,6 +28,7 @@ final class BillingCalculator
     public function __construct(
         private readonly ConsumptionCalculator $consumptionCalculator,
         private readonly AssociationDocumentProfile $associationProfile,
+        private readonly NumberSequenceManager $numberSequenceManager,
     ) {}
 
     public function calculate(BillingPeriod $period, User $actor): BillingPeriod
@@ -120,7 +122,10 @@ final class BillingCalculator
         $invoice = Invoice::create([
             'billing_period_id' => $period->id,
             'member_id' => $member->id,
-            'invoice_number' => $this->nextInvoiceNumber($period),
+            'invoice_number' => $this->numberSequenceManager->next(
+                NumberSequenceType::Invoice,
+                $period->ends_at,
+            ),
             'status' => InvoiceStatus::Draft,
             'issued_at' => $period->ends_at,
             'due_at' => $period->due_at,
@@ -675,20 +680,6 @@ final class BillingCalculator
             'proration_factor' => $factor,
             'usage_periods' => $usagePeriods,
         ];
-    }
-
-    private function nextInvoiceNumber(BillingPeriod $period): string
-    {
-        $year = $period->ends_at->format('Y');
-        $prefix = "{$year}-";
-        $lastNumber = Invoice::query()
-            ->where('invoice_number', 'like', "{$prefix}%")
-            ->orderByDesc('invoice_number')
-            ->lockForUpdate()
-            ->value('invoice_number');
-        $sequence = $lastNumber ? ((int) substr($lastNumber, strlen($prefix))) + 1 : 1;
-
-        return $prefix.str_pad((string) $sequence, 5, '0', STR_PAD_LEFT);
     }
 
     private function roundMoney(string $value): string

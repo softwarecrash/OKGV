@@ -356,6 +356,27 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Phase 16 vollständig prüfen
 - [x] Entwicklungsstand 0.2.0.44 veröffentlichen
 
+## Phase 17: Nummernkreise
+
+- [x] Bestehende Nummernvergaben und Eindeutigkeitsregeln prüfen
+- [x] Nummernkreise für Mitglieder, Rechnungen, SEPA-Mandate und Dokumente spezifizieren
+- [x] Formatplatzhalter `{JAHR}` und `{NUMMER}` implementieren
+- [x] Mindeststellen, nächsten Zählerstand und optionalen Jahresneustart konfigurierbar machen
+- [x] Vergabe mit Datenbanksperre und Kollisionsprüfung transaktionssicher umsetzen
+- [x] Manuelle und importierte Fachnummern weiterhin zulassen
+- [x] Bereits vergebene und historische Nummern unverändert erhalten
+- [x] Automatische Mitgliedsnummer bei leerem Anlegefeld ergänzen
+- [x] Automatische Mandatsreferenz bei leerem Anlegefeld ergänzen
+- [x] Rechnungsberechnung auf den konfigurierbaren Nummernkreis umstellen
+- [x] Dokumentnummern ergänzen und bestehende Dokumente rückwirkend nummerieren
+- [x] Administrationsoberfläche mit Vorschau und Bedienhinweisen ergänzen
+- [x] Änderungen der Nummernkreise auditieren
+- [x] Rechte-, Validierungs-, Kollisions- und Integrationstests ergänzen
+- [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Phase 17 vollständig prüfen
+- [ ] Entwicklungsstand 0.2.0.45 veröffentlichen
+
 ## Vorgezogene Phase 12: Arbeitseinsätze
 
 - [x] Vorziehen von Phase 12 direkt nach Phase 9 dokumentieren

@@ -41,6 +41,7 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Aufstufung freigegebener Pächterkonten zu Vorstandsmitgliedern
 - Granulare Vorstandsrechte mit konfigurierbaren Rechtevorlagen
 - Globale Konfiguration des sichtbaren Systemnamens
+- Konfigurierbare Nummernkreise für Mitglieder, Rechnungen, Mandate und Dokumente
 - Isoliertes Pächterportal für eigene Daten, Parzellen und Rechnungen
 - Private Dokumentdownloads für Mitglieder und aktuelle Parzellen
 - Prüfpflichtige Zählerstandsmeldungen mit optionalem privatem Foto
@@ -369,6 +370,19 @@ Das Standard-Zahlungsziel wird bei neuen Abrechnungsperioden vorgeschlagen.
 Rechnungen, Briefe, Mahnungen und Serienmails speichern einen historischen
 Snapshot ihrer Absender- und Brandingdaten. Spätere Konfigurationsänderungen
 verändern daher keine bereits erzeugten Dokumente.
+
+## Nummernkreise
+
+Administratoren finden im Benutzermenü den Bereich `Nummernkreise`. Dort
+lassen sich die Formate für Mitglieds-, Rechnungs-, Mandats- und
+Dokumentnummern getrennt einstellen. `{NUMMER}` steht für die fortlaufende
+Nummer, `{JAHR}` für das vierstellige Kalenderjahr.
+
+Mindeststellen, nächster Zählerstand und ein optionaler jährlicher Neustart
+sind konfigurierbar. Bereits vergebene, manuell erfasste oder importierte
+Nummern bleiben unverändert und werden beim Weiterzählen übersprungen.
+Mitglieder und SEPA-Mandate können beim Anlegen weiterhin bewusst eine
+eigene Nummer erhalten; ein leeres Feld aktiviert die automatische Vergabe.
 
 ## Entwicklung
 

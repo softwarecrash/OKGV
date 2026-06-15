@@ -3,17 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Enums\MemberStatus;
+use App\Enums\NumberSequenceType;
 use App\Enums\UserRole;
 use App\Http\Requests\MemberRequest;
 use App\Models\Member;
 use App\Models\User;
 use App\Services\AuditLogger;
+use App\Services\NumberSequenceManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class MemberController extends Controller
 {
+    public function __construct(
+        private readonly NumberSequenceManager $numberSequenceManager,
+    ) {}
+
     public function index(Request $request): View
     {
         $this->authorize('viewAny', Member::class);
@@ -53,8 +60,18 @@ class MemberController extends Controller
 
     public function store(MemberRequest $request): RedirectResponse
     {
-        $member = Member::create($this->memberData($request));
-        AuditLogger::log('member.created', $request->user(), $member);
+        $member = DB::transaction(function () use ($request): Member {
+            $data = $this->memberData($request);
+            $data['member_number'] = $data['member_number']
+                ?: $this->numberSequenceManager->next(
+                    NumberSequenceType::Member,
+                    $data['joined_at'],
+                );
+            $member = Member::create($data);
+            AuditLogger::log('member.created', $request->user(), $member);
+
+            return $member;
+        });
 
         return redirect()->route('members.show', $member)
             ->with('status', 'Mitglied wurde angelegt.');

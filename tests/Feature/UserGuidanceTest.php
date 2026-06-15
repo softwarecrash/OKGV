@@ -96,8 +96,8 @@ class UserGuidanceTest extends TestCase
 
         $response->assertRedirect(route('members.create'));
         $response->assertSessionHasErrors([
-            'member_number' => 'Bitte fülle das Feld Mitgliedsnummer aus.',
             'first_name' => 'Bitte fülle das Feld Vorname aus.',
         ]);
+        $response->assertSessionDoesntHaveErrors('member_number');
     }
 }

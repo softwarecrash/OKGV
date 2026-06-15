@@ -7,8 +7,8 @@
 <div class="row g-3">
     <div class="col-md-4">
         <label class="form-label" for="member_number">Mitgliedsnummer</label>
-        <input class="form-control" id="member_number" name="member_number" value="{{ old('member_number', $member->member_number) }}" required maxlength="50">
-        <div class="form-text">Eindeutige vereinsinterne Nummer, zum Beispiel M-0123.</div>
+        <input class="form-control" id="member_number" name="member_number" value="{{ old('member_number', $member->member_number) }}" @required($member->exists) maxlength="50" placeholder="{{ $member->exists ? '' : 'Wird automatisch vergeben' }}">
+        <div class="form-text">{{ $member->exists ? 'Die bestehende vereinsinterne Nummer kann bei Bedarf korrigiert werden.' : 'Leer lassen, um die nächste Nummer aus dem konfigurierten Nummernkreis zu verwenden.' }}</div>
     </div>
     <div class="col-md-4">
         <label class="form-label" for="first_name">Vorname</label>

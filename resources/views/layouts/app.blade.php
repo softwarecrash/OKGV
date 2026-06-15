@@ -256,6 +256,9 @@
                                         <a class="dropdown-item" href="{{ route('application-settings.edit') }}">
                                             Globale Konfiguration
                                         </a>
+                                        <a class="dropdown-item" href="{{ route('number-sequences.edit') }}">
+                                            Nummernkreise
+                                        </a>
                                         <div class="dropdown-divider"></div>
                                     @endcan
                                     @if (App\Enums\FeatureModule::DataTransfer->enabled() && auth()->user()->canManageDataTransfer())

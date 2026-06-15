@@ -25,6 +25,8 @@
                 <div class="card-body">
                     <h2 class="h5">Dokumentdaten</h2>
                     <dl class="row mb-0">
+                        <dt class="col-sm-4">Dokumentnummer</dt>
+                        <dd class="col-sm-8">{{ $document->document_number }}</dd>
                         <dt class="col-sm-4">Beschreibung</dt>
                         <dd class="col-sm-8">{{ $document->description ?: 'Keine Beschreibung' }}</dd>
                         <dt class="col-sm-4">Sichtbarkeit</dt>

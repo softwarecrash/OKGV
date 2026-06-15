@@ -110,6 +110,23 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 - Lösche frühere Logos nicht, solange historische Snapshots sie referenzieren
   können.
 
+### Nummernkreise
+
+- Erzeuge Fachnummern ausschließlich über `NumberSequenceManager`; verteile
+  keine parallelen Zählerabfragen in Controller oder Models.
+- Sperre den Nummernkreis während der Vergabe transaktional und prüfe die
+  erzeugte Nummer zusätzlich gegen die eindeutige Fachspalte.
+- Bereits vergebene Nummern werden übersprungen und niemals nachträglich
+  verändert oder wiederverwendet.
+- Behandle Lücken als zulässig, insbesondere wenn ein umgebender Fachvorgang
+  nach der Nummernreservierung zurückgerollt oder verworfen wird.
+- Bestehende manuelle Eingaben und CSV-Importe dürfen die automatische
+  Vergabe nicht beschädigen; Kollisionsprüfung ist deshalb verpflichtend.
+- Neue Nummernformate müssen `{NUMMER}` enthalten. Ein jährlicher Neustart
+  verlangt zusätzlich `{JAHR}`.
+- Erkläre Platzhalter, Vorschau, Jahreswechsel und mögliche Lücken in der
+  sichtbaren Oberfläche für nichttechnische Benutzer.
+
 ### Controller
 
 - Controller bleiben klein und koordinieren nur Request, Policy, Service, Model und Response.
