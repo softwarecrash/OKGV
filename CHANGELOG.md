@@ -2,6 +2,17 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.48] - 2026-06-15
+
+### Korrekturen
+
+- Das PHP-Uploadlimit der Entwicklungsumgebung wurde an das im Lageplan
+  ausgewiesene Dateilimit angepasst.
+- Fehlgeschlagene Datei-Uploads zeigen nun eine verständliche deutsche
+  Meldung statt `validation.uploaded`.
+- Insgesamt bestehen 188 Tests mit 1.063 Assertions.
+- Entwicklungsstand auf `0.2.0.48` erhöht.
+
 ## [0.2.0.47] - 2026-06-15
 
 ### Nachbesserung Phase 19: Luftbild und WYSIWYG-Polygoneditor

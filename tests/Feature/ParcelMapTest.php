@@ -94,6 +94,29 @@ class ParcelMapTest extends TestCase
         $this->assertEmpty(Storage::disk('local')->allFiles());
     }
 
+    public function test_failed_background_upload_has_a_german_error_message(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $file = UploadedFile::fake()->image('luftbild.jpg');
+        $failedUpload = new UploadedFile(
+            $file->getPathname(),
+            'luftbild.jpg',
+            'image/jpeg',
+            UPLOAD_ERR_INI_SIZE,
+            true,
+        );
+
+        $this->actingAs($administrator)
+            ->put(route('parcel-map.background.update'), [
+                'background' => $failedUpload,
+                'source' => 'Eigenes Bild',
+                'rights_confirmed' => '1',
+            ])
+            ->assertSessionHasErrors([
+                'background' => 'Hintergrundbild konnte nicht hochgeladen werden. Die Datei ist möglicherweise größer als das Serverlimit.',
+            ]);
+    }
+
     public function test_replacing_background_rescales_existing_polygons_without_deleting_data(): void
     {
         Storage::fake('local');

@@ -28,6 +28,7 @@ return [
     'required_without' => 'Bitte wähle :attribute aus, wenn :values nicht angegeben ist.',
     'string' => ':Attribute muss als Text eingegeben werden.',
     'unique' => ':Attribute ist bereits vergeben. Bitte verwende einen anderen Wert.',
+    'uploaded' => ':Attribute konnte nicht hochgeladen werden. Die Datei ist möglicherweise größer als das Serverlimit.',
 
     'custom' => [
         'code' => [
