@@ -155,6 +155,10 @@ php artisan serve
 Die Anwendung ist danach standardmäßig unter `http://127.0.0.1:8000` erreichbar.
 Für die Frontend-Entwicklung kann parallel `npm run dev` gestartet werden.
 
+Der Composer-Lockfile wird bewusst gegen PHP 8.3 aufgelöst. Dadurch bleiben
+Webhostings mit PHP 8.3 kompatibel, auch wenn lokale Entwicklungsumgebungen
+bereits PHP 8.4 oder neuer verwenden.
+
 ### HTTPS über einen Reverse Proxy
 
 Wird OKGV über Nginx, OpenResty oder einen anderen Reverse Proxy unter einer

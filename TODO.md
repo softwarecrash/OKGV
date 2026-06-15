@@ -693,3 +693,13 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Fachtests, Gesamttests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
+
+## Nachbesserung Phase 20: PHP-8.3-kompatibler Composer-Lockfile
+
+- [x] Plesk-Fehler durch Symfony-8.1-Pakete mit PHP-8.4-Anforderung analysieren
+- [x] Composer-Plattform auf PHP 8.3 festlegen
+- [x] Lockfile auf PHP-8.3-kompatible Symfony-7.4-Pakete aktualisieren
+- [x] Produktionsinstallation ohne Dev-Pakete trocken prüfen
+- [x] Gesamttests und Composer-Audit ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen

@@ -2,6 +2,20 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.64] - 2026-06-15
+
+### PHP-8.3-kompatibler Composer-Lockfile
+
+- Composer löst Abhängigkeiten nun bewusst gegen PHP 8.3 auf.
+- Symfony-Komponenten wurden von 8.1 auf die PHP-8.3-kompatible 7.4-Linie
+  umgestellt.
+- Damit kann Plesk mit PHP 8.3.31 `composer install` ausführen, ohne
+  Plattformanforderungen zu ignorieren.
+- Eine Produktionsinstallation ohne Dev-Pakete wurde trocken geprüft.
+- Insgesamt bestehen 203 Tests mit 1.221 Assertions.
+- Composer-Abhängigkeiten weisen keine bekannten Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.64` erhöht.
+
 ## [0.2.0.63] - 2026-06-15
 
 ### Sichere Zuordnung registrierter Pächter
