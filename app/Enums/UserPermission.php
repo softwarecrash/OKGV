@@ -17,6 +17,7 @@ enum UserPermission: string
     case ManageCommunication = 'manage_communication';
     case ManageDocuments = 'manage_documents';
     case ManageWorkEvents = 'manage_work_events';
+    case ManageWaitingList = 'manage_waiting_list';
 
     public function label(): string
     {
@@ -34,6 +35,7 @@ enum UserPermission: string
             self::ManageCommunication => 'Kommunikation verwalten',
             self::ManageDocuments => 'Dokumente verwalten',
             self::ManageWorkEvents => 'Arbeitseinsätze verwalten',
+            self::ManageWaitingList => 'Warteliste verwalten',
         };
     }
 
@@ -53,6 +55,7 @@ enum UserPermission: string
             self::ManageCommunication => 'Erlaubt Serienmails, Versandhistorie und allgemeine PDF-Briefe.',
             self::ManageDocuments => 'Erlaubt private Uploads, Dateiversionen, Freigaben und die zentrale Dokumentenverwaltung.',
             self::ManageWorkEvents => 'Erlaubt Termine, Teilnehmer und bestätigte Arbeitsstunden zu verwalten.',
+            self::ManageWaitingList => 'Erlaubt den Zugriff auf Interessenten, Kontaktdaten, Prioritäten und Bearbeitungsstatus.',
         };
     }
 

@@ -32,6 +32,7 @@ use App\Http\Controllers\SepaSettingController;
 use App\Http\Controllers\TenantPortalController;
 use App\Http\Controllers\TenantRegistrationController;
 use App\Http\Controllers\UserPermissionController;
+use App\Http\Controllers\WaitingListEntryController;
 use App\Http\Controllers\WorkEventController;
 use App\Http\Controllers\WorkEventParticipantController;
 use App\Http\Controllers\WorkHourController;
@@ -228,4 +229,8 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::resource('parcel-tenants', ParcelTenantController::class)
         ->only(['create', 'store', 'edit', 'update'])
         ->parameters(['parcel-tenants' => 'parcel_tenant']);
+    Route::resource('warteliste', WaitingListEntryController::class)
+        ->except(['destroy'])
+        ->parameters(['warteliste' => 'waiting_list_entry'])
+        ->names('waiting-list-entries');
 });

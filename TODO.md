@@ -232,6 +232,23 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Gesamttests, Formatter und Asset-Build ausführen
 - [x] Phase 9 vollständig prüfen und veröffentlichen
 
+## Phase 10: Warteliste
+
+- [x] Datenmodell, Status und Prioritätsregel spezifizieren
+- [x] Eigenes granulares Wartelistenrecht ergänzen
+- [x] Anlegen, Anzeigen und Bearbeiten ohne Löschfunktion implementieren
+- [x] Suche nach Name und Kontaktdaten implementieren
+- [x] Status- und Prioritätsfilter implementieren
+- [x] Standardsortierung nach Priorität und Eingangsdatum implementieren
+- [x] Auditlogs ohne unnötige Kontaktdaten ergänzen
+- [x] Aktionshinweis im Mitglieder-Menü ergänzen
+- [x] Bedienhinweise und leere Zustände ergänzen
+- [x] Feature-, Rechte-, Validierungs- und Navigationstests ergänzen
+- [x] Migration vorwärts und rückwärts auf MariaDB prüfen
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Phase 10 vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen
+
 ## Vorgezogene Phase 12: Arbeitseinsätze
 
 - [x] Vorziehen von Phase 12 direkt nach Phase 9 dokumentieren

@@ -887,9 +887,43 @@ Stundenübernahme werden auditiert.
 Vergangene, weiterhin geplante Einsätze erzeugen für berechtigte Konten einen
 Aktionshinweis, damit Abschluss oder Absage nicht vergessen werden.
 
-### Phase 10, 11 und 13 bis 18
+### Phase 10: Warteliste
 
-Warteliste, Inventar, CSV-Import und -Export, DSGVO, Vereinseinstellungen,
+Die Warteliste verwaltet Interessenten, die noch kein Mitglied und keinem
+Pachtvertrag zugeordnet sind. Jeder Eintrag speichert:
+
+- Vorname und Nachname,
+- E-Mail-Adresse,
+- optional Telefon und Mobilnummer,
+- Eingangsdatum,
+- Priorität von 1 bis 5,
+- Status,
+- interne Notizen.
+
+Priorität 1 bedeutet höchste Dringlichkeit. Bei gleicher Priorität werden
+ältere Eingänge zuerst angezeigt. Zulässige Status sind `waiting`,
+`contacted`, `offered`, `accepted`, `withdrawn` und `rejected`. Die
+Oberfläche bezeichnet sie als Wartend, Kontaktiert, Angebot unterbreitet,
+Übernommen, Zurückgezogen und Abgelehnt.
+
+Wartelisteneinträge werden nicht gelöscht. Änderungen und Statuswechsel
+bleiben über Auditlogs nachvollziehbar. Abgeschlossene Einträge können über
+den Statusfilter weiterhin gefunden werden. Suche ist über Name, E-Mail und
+Telefon möglich.
+
+Wegen der personenbezogenen Kontaktdaten besitzt die Warteliste das eigene
+granulare Recht `Warteliste verwalten`. Administratoren besitzen es immer;
+der Standardvorstand erhält es als Ausgangswert. Individuelle
+Vorstandsrechte können es entziehen. Pächter und andere Rollen erhalten
+keinen Zugriff ohne ausdrückliche Rechtezuweisung.
+
+Wartende, kontaktierte und mit einem Angebot versehene Einträge gelten als
+offene Vorgänge. Berechtigte Konten sehen ihre Anzahl als Aktionspunkt im
+Mitglieder-Menü.
+
+### Phase 11 und 13 bis 18
+
+Inventar, CSV-Import und -Export, DSGVO, Vereinseinstellungen,
 Nummernkreise, Pächterwechsel und später ein Lageplan.
 
 ## Versionen

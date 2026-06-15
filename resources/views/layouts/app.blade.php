@@ -36,6 +36,7 @@
                             @php
                                 $canViewMembers = auth()->user()->can('viewAny', App\Models\Member::class);
                                 $canViewRegistrations = auth()->user()->can('viewAny', App\Models\RegistrationRequest::class);
+                                $canViewWaitingList = auth()->user()->can('viewAny', App\Models\WaitingListEntry::class);
                                 $canViewMeters = auth()->user()->can('viewAny', App\Models\Meter::class);
                                 $canViewMeterSubmissions = auth()->user()->can('viewAny', App\Models\MeterReadingSubmission::class);
                                 $canViewBilling = auth()->user()->can('viewAny', App\Models\BillingPeriod::class);
@@ -56,11 +57,11 @@
                                     </a>
                                 </li>
                             @endif
-                            @if ($canViewMembers || $canViewRegistrations)
+                            @if ($canViewMembers || $canViewRegistrations || $canViewWaitingList)
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                         Mitglieder
-                                        <x-action-indicator :count="$actionIndicators['members_group']" label="wartende Registrierungen" />
+                                        <x-action-indicator :count="$actionIndicators['members_group']" label="offene Vorgänge im Mitgliederbereich" />
                                     </a>
                                     <ul class="dropdown-menu">
                                         @if ($canViewMembers)
@@ -71,6 +72,14 @@
                                                 <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('registration-requests.index') }}">
                                                     Registrierungsanfragen
                                                     <x-action-indicator :count="$actionIndicators['registrations']" label="wartende Registrierungen" />
+                                                </a>
+                                            </li>
+                                        @endif
+                                        @if ($canViewWaitingList)
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('waiting-list-entries.index') }}">
+                                                    Warteliste
+                                                    <x-action-indicator :count="$actionIndicators['waiting_list']" label="offene Wartelisteneinträge" />
                                                 </a>
                                             </li>
                                         @endif

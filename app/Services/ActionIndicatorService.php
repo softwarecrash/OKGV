@@ -9,6 +9,7 @@ use App\Enums\MailCampaignStatus;
 use App\Enums\MeterReadingSubmissionStatus;
 use App\Enums\RegistrationRequestStatus;
 use App\Enums\UserRole;
+use App\Enums\WaitingListStatus;
 use App\Enums\WorkEventStatus;
 use App\Enums\WorkHourSubmissionStatus;
 use App\Models\Invoice;
@@ -16,6 +17,7 @@ use App\Models\MailCampaign;
 use App\Models\MeterReadingSubmission;
 use App\Models\RegistrationRequest;
 use App\Models\User;
+use App\Models\WaitingListEntry;
 use App\Models\WorkEvent;
 use App\Models\WorkHour;
 use App\Models\WorkHourSubmission;
@@ -30,6 +32,7 @@ final class ActionIndicatorService
      *     work_hours: int,
      *     work_events: int,
      *     work_hour_submissions: int,
+     *     waiting_list: int,
      *     members_group: int,
      *     meters_group: int,
      *     finance_group: int,
@@ -102,6 +105,11 @@ final class ActionIndicatorService
         $failedCampaigns = $user->canManageCommunication()
             ? MailCampaign::query()->where('status', MailCampaignStatus::Failed)->count()
             : 0;
+        $waitingList = $user->canManageWaitingList()
+            ? WaitingListEntry::query()
+                ->whereIn('status', WaitingListStatus::openValues())
+                ->count()
+            : 0;
 
         return [
             'registrations' => $registrations,
@@ -110,12 +118,13 @@ final class ActionIndicatorService
             'work_hours' => $workHours,
             'work_events' => $workEvents,
             'work_hour_submissions' => $workHourSubmissions,
-            'members_group' => $registrations,
+            'waiting_list' => $waitingList,
+            'members_group' => $registrations + $waitingList,
             'meters_group' => $meterReadings,
             'finance_group' => $invoices + $workHours + $workEvents + $workHourSubmissions,
             'communication_group' => $failedCampaigns,
             'dunning_notices' => $dunningNotices,
-            'total' => $registrations + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns,
+            'total' => $registrations + $waitingList + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns,
         ];
     }
 

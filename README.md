@@ -71,6 +71,8 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Eigenständiges Arbeitseinsatzrecht für Vorstand und Gartenwart
 - Globale Vereinsvorgaben für Pflichtstunden und Betrag je Fehlstunde
 - Prüfpflichtige Pächtermeldungen mit optionalem privatem Foto
+- Granular geschützte Warteliste mit Prioritäten, Status und Kontaktsuche
+- Aktionshinweise für offene Wartelistenvorgänge
 
 Freigegebene Rechnungen sind unveränderbar. Bei der Berechnung werden
 Mitgliedseintritte und -austritte anhand der Mitgliedschaft, Pächterwechsel

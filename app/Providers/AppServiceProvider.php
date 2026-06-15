@@ -26,6 +26,7 @@ use App\Models\RegistrationRequest;
 use App\Models\SepaMandate;
 use App\Models\SepaSetting;
 use App\Models\User;
+use App\Models\WaitingListEntry;
 use App\Models\WorkEvent;
 use App\Models\WorkEventParticipant;
 use App\Models\WorkHour;
@@ -54,6 +55,7 @@ use App\Policies\RegistrationRequestPolicy;
 use App\Policies\SepaMandatePolicy;
 use App\Policies\SepaSettingPolicy;
 use App\Policies\UserPolicy;
+use App\Policies\WaitingListEntryPolicy;
 use App\Policies\WorkEventParticipantPolicy;
 use App\Policies\WorkEventPolicy;
 use App\Policies\WorkHourPolicy;
@@ -124,6 +126,7 @@ class AppServiceProvider extends ServiceProvider
                         'work_hours' => 0,
                         'work_events' => 0,
                         'work_hour_submissions' => 0,
+                        'waiting_list' => 0,
                         'members_group' => 0,
                         'meters_group' => 0,
                         'finance_group' => 0,
@@ -162,6 +165,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(WorkEvent::class, WorkEventPolicy::class);
         Gate::policy(WorkEventParticipant::class, WorkEventParticipantPolicy::class);
         Gate::policy(WorkHourSubmission::class, WorkHourSubmissionPolicy::class);
+        Gate::policy(WaitingListEntry::class, WaitingListEntryPolicy::class);
         Gate::before(fn (User $user) => $user->isAdministrator() ? true : null);
 
         Event::listen(Login::class, fn (Login $event) => AuditLogger::log(

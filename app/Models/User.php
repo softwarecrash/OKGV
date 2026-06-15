@@ -170,6 +170,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasPermission(UserPermission::ManageWorkEvents);
     }
 
+    public function canManageWaitingList(): bool
+    {
+        return $this->hasPermission(UserPermission::ManageWaitingList);
+    }
+
     public function sendEmailVerificationNotification(): void
     {
         $this->notify(new VerifyEmailNotification);

@@ -2,6 +2,27 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.37] - 2026-06-15
+
+### Phase 10: Warteliste
+
+- Interessenten können mit Name, E-Mail, Telefon, Mobilnummer, Eingangsdatum,
+  Priorität, Status und internen Notizen verwaltet werden.
+- Priorität 1 bis 5 und das Eingangsdatum bestimmen die Standardsortierung.
+- Suche nach Name und Kontaktdaten sowie Status- und Prioritätsfilter
+  erleichtern die Bearbeitung größerer Listen.
+- Wartend, Kontaktiert und Angebot unterbreitet gelten als offene Vorgänge;
+  abgeschlossene Einträge bleiben über die Filter dauerhaft auffindbar.
+- Einträge werden nicht gelöscht. Anlage, Änderungen und Statuswechsel werden
+  ohne unnötige Kontaktdaten auditiert.
+- Das eigene Recht `Warteliste verwalten` schützt die personenbezogenen
+  Interessentendaten und kann Vorstandsmitgliedern granular zugewiesen werden.
+- Berechtigte Konten sehen offene Wartelistenvorgänge als Aktionspunkt im
+  Mitglieder-Menü.
+- Migrationen wurden auf MariaDB vorwärts und rückwärts geprüft.
+- Insgesamt bestehen 135 Tests mit 793 Assertions.
+- Entwicklungsstand auf `0.2.0.37` erhöht.
+
 ## [0.2.0.36] - 2026-06-15
 
 ### HTTPS-Reverse-Proxy

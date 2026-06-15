@@ -118,7 +118,11 @@ vorherigen Phase geprüft sein.
 
 ## Phase 10: Warteliste
 
-- [ ] Warteliste
+- [x] Datenmodell und Statuskonzept spezifiziert
+- [x] Warteliste
+- [x] Eigenes granulares Recht
+- [x] Suche, Filter und Prioritätssortierung
+- [x] Auditlog und Aktionshinweis
 
 ## Phase 11: Inventarverwaltung
 
@@ -176,5 +180,6 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 9 sowie die fachlich zu Phase 9 gehörende, vorgezogene
-Phase 12 sind abgeschlossen. Als Nächstes folgt Phase 10: Warteliste.
+Die Phasen 0 bis 10 sowie die fachlich zu Phase 9 gehörende, vorgezogene
+Phase 12 sind abgeschlossen. Als Nächstes folgt Phase 11:
+Inventarverwaltung.
