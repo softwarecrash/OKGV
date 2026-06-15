@@ -703,3 +703,13 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Gesamttests und Composer-Audit ausführen
 - [x] Nachbesserung vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
+
+## Nachbesserung Phase 20: Laravel-UI als Produktionsabhängigkeit
+
+- [x] Plesk-Fehler bei `Auth::routes()` ohne Dev-Pakete analysieren
+- [x] `laravel/ui` aus Dev-Abhängigkeiten in Produktionsabhängigkeiten verschieben
+- [x] Produktionsinstallation mit `--no-dev --optimize-autoloader` prüfen
+- [x] `artisan package:discover` ohne Dev-Pakete prüfen
+- [x] Gesamttests und Composer-Audit ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen

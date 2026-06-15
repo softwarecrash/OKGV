@@ -2,6 +2,21 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.65] - 2026-06-15
+
+### Laravel-UI als Produktionsabhängigkeit
+
+- `laravel/ui` ist nun eine normale Composer-Abhängigkeit, weil OKGV
+  `Auth::routes()` auch im Produktivbetrieb nutzt.
+- Plesk kann dadurch `composer install --no-dev --optimize-autoloader`
+  ausführen, ohne dass `artisan package:discover` wegen fehlender
+  Auth-Routen-Unterstützung fehlschlägt.
+- Die Produktionsinstallation ohne Dev-Pakete wurde mit anschließendem
+  `artisan package:discover` geprüft.
+- Insgesamt bestehen 203 Tests mit 1.221 Assertions.
+- Composer-Abhängigkeiten weisen keine bekannten Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.65` erhöht.
+
 ## [0.2.0.64] - 2026-06-15
 
 ### PHP-8.3-kompatibler Composer-Lockfile
