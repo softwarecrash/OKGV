@@ -1152,13 +1152,15 @@ Bildgröße gespeichert. Im WYSIWYG-Editor können berechtigte Benutzer:
 - die gesamte Fläche verschieben,
 - den letzten Punkt zurücknehmen,
 - Übersicht und Editor von 100 bis 400 Prozent zoomen,
-- den vergrößerten Kartenausschnitt über Scrollleisten oder einen
-  ausdrücklichen Hand-Modus mit gedrückter Maustaste verschieben,
+- den vergrößerten Kartenausschnitt über Scrollleisten oder unmittelbar mit
+  gedrückter Maustaste verschieben,
 - nur die Fläche entfernen, ohne den Parzellendatensatz zu löschen.
 
-Der Hand-Modus muss während des Verschiebens Parzellenlinks und
-Polygonbearbeitung sperren. Dadurch darf Ziehen weder eine Detailseite öffnen
-noch gespeicherte Flächen verändern.
+Die direkte Bedienung muss zwischen kurzem Klick und tatsächlicher
+Ziehbewegung unterscheiden. In der Übersicht öffnet ein kurzer Klick weiterhin
+die Parzellendetails. Im Editor verschiebt freie Bildfläche die Karte, während
+Eckpunkte und Polygonfläche bearbeitbar bleiben. Im Zeichenmodus dienen Klicks
+auf freie Bildfläche weiterhin der Punktsetzung.
 
 Wird das Hintergrundbild durch ein Bild mit anderer Größe ersetzt, skaliert
 OKGV bestehende Polygone proportional. Änderungen an Bild und Polygonen

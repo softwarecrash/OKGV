@@ -32,11 +32,6 @@
     cursor: grabbing;
 }
 
-.parcel-map-viewport.is-pannable .parcel-map-canvas,
-.parcel-map-viewport.is-panning .parcel-map-canvas {
-    pointer-events: none;
-}
-
 .parcel-map-toolbar {
     display: flex;
     flex-wrap: wrap;

@@ -399,9 +399,9 @@ Eckpunkte per Klick und verschieben Punkte oder die gesamte Fläche per
 Drag-and-drop. Das Entfernen einer Zeichnung löscht niemals die Parzelle.
 Übersicht und Editor lassen sich zwischen 100 und 400 Prozent vergrößern.
 Neben den Schaltflächen steht dafür Strg und Mausrad zur Verfügung; der
-vergrößerte Ausschnitt kann über Bildlaufleisten oder im Modus
-`Karte verschieben` mit gedrückter Maustaste bewegt werden. Der Modus sperrt
-vorübergehend Parzellenlinks und Polygonbearbeitung.
+vergrößerte Ausschnitt kann über Bildlaufleisten oder unmittelbar mit
+gedrückter Maustaste bewegt werden. Kurze Klicks öffnen Parzellen weiterhin;
+im Editor bleiben Eckpunkte und Polygonflächen direkt bearbeitbar.
 
 Screenshots oder Satellitenbilder aus Google Maps dürfen nicht automatisch
 als eigene Bilddatei gespeichert werden. Für Google-Satellitendaten wäre

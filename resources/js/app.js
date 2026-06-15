@@ -64,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const zoomIn = map.querySelector('[data-map-zoom-in]');
         const zoomOut = map.querySelector('[data-map-zoom-out]');
         const zoomReset = map.querySelector('[data-map-zoom-reset]');
-        const panToggle = map.querySelector('[data-map-pan-toggle]');
         const zoomLabel = map.querySelector('[data-map-zoom-label]');
 
         if (!(viewport instanceof HTMLElement)
@@ -72,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
             || !(zoomIn instanceof HTMLButtonElement)
             || !(zoomOut instanceof HTMLButtonElement)
             || !(zoomReset instanceof HTMLButtonElement)
-            || !(panToggle instanceof HTMLButtonElement)
             || !(zoomLabel instanceof HTMLElement)) {
             return;
         }
@@ -80,23 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const minimumZoom = 1;
         const maximumZoom = 4;
         const zoomStep = 0.25;
+        const isEditor = map.matches('[data-parcel-map-editor]');
         let zoom = minimumZoom;
-        let panActive = false;
         let panDrag = null;
         let suppressClick = false;
-
-        const setPanActive = (active) => {
-            panActive = active && zoom > minimumZoom;
-            map.dataset.mapPanActive = panActive ? 'true' : 'false';
-            panToggle.setAttribute('aria-pressed', String(panActive));
-            panToggle.classList.toggle('active', panActive);
-            viewport.classList.toggle('is-pannable', panActive);
-
-            if (!panActive) {
-                viewport.classList.remove('is-panning');
-                panDrag = null;
-            }
-        };
 
         const applyZoom = (nextZoom, focalPoint = null) => {
             const previousWidth = target.getBoundingClientRect().width;
@@ -114,11 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
             zoomLabel.textContent = `${Math.round(zoom * 100)} %`;
             zoomIn.disabled = zoom >= maximumZoom;
             zoomOut.disabled = zoom <= minimumZoom;
-            panToggle.disabled = zoom <= minimumZoom;
-
-            if (zoom <= minimumZoom) {
-                setPanActive(false);
-            }
+            viewport.classList.toggle('is-pannable', zoom > minimumZoom);
 
             requestAnimationFrame(() => {
                 if (zoom === minimumZoom) {
@@ -140,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
         zoomIn.addEventListener('click', () => applyZoom(zoom + zoomStep));
         zoomOut.addEventListener('click', () => applyZoom(zoom - zoomStep));
         zoomReset.addEventListener('click', () => applyZoom(minimumZoom));
-        panToggle.addEventListener('click', () => setPanActive(!panActive));
 
         viewport.addEventListener('wheel', (event) => {
             if (!event.ctrlKey && !event.metaKey) {
@@ -158,12 +138,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: false });
 
         viewport.addEventListener('pointerdown', (event) => {
-            if (!panActive || event.button !== 0) {
+            if (zoom <= minimumZoom || event.button !== 0) {
                 return;
             }
 
-            event.preventDefault();
-            event.stopPropagation();
+            const targetIsEditorControl = isEditor
+                && (map.dataset.mapDrawing === 'true'
+                    || event.target instanceof SVGCircleElement
+                    || event.target === map.querySelector('[data-map-polygon]'));
+
+            if (targetIsEditorControl) {
+                return;
+            }
+
             panDrag = {
                 pointerId: event.pointerId,
                 startX: event.clientX,
@@ -173,7 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 moved: false,
             };
             viewport.classList.add('is-panning');
-            viewport.setPointerCapture(event.pointerId);
         });
 
         viewport.addEventListener('pointermove', (event) => {
@@ -186,6 +172,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3) {
                 panDrag.moved = true;
+
+                if (!viewport.hasPointerCapture(event.pointerId)) {
+                    viewport.setPointerCapture(event.pointerId);
+                }
+            }
+
+            if (panDrag.moved) {
+                event.preventDefault();
             }
 
             viewport.scrollLeft = panDrag.scrollLeft - deltaX;
@@ -198,6 +192,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             suppressClick = panDrag.moved;
+            window.setTimeout(() => {
+                suppressClick = false;
+            }, 0);
 
             if (viewport.hasPointerCapture(event.pointerId)) {
                 viewport.releasePointerCapture(event.pointerId);
@@ -210,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         viewport.addEventListener('pointerup', stopPanning);
         viewport.addEventListener('pointercancel', stopPanning);
         viewport.addEventListener('click', (event) => {
-            if (!panActive && !suppressClick) {
+            if (!suppressClick) {
                 return;
             }
 
@@ -250,6 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let points = [];
         let drawing = false;
         let drag = null;
+        editor.dataset.mapDrawing = 'false';
 
         const dimensions = {
             width: Number(editor.dataset.width),
@@ -303,6 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
             form.action = option?.dataset.action ?? '';
             polygonElement.style.fill = option?.dataset.color ?? '#66BB6A';
             drawing = false;
+            editor.dataset.mapDrawing = 'false';
             removeInput.value = '0';
             drawButton.disabled = !selection.value;
             help.textContent = selection.value
@@ -315,6 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         drawButton?.addEventListener('click', () => {
             drawing = true;
+            editor.dataset.mapDrawing = 'true';
             points = [];
             removeInput.value = '0';
             help.textContent = 'Zeichenmodus: Klicke die Eckpunkte der Parzelle der Reihe nach an. Mindestens drei Punkte sind erforderlich.';
@@ -330,16 +330,13 @@ document.addEventListener('DOMContentLoaded', () => {
         clearButton?.addEventListener('click', () => {
             points = [];
             drawing = false;
+            editor.dataset.mapDrawing = 'false';
             removeInput.value = '1';
             help.textContent = 'Die Fläche wird beim Speichern aus dem Lageplan entfernt. Der Parzellendatensatz bleibt erhalten.';
             update();
         });
 
         svg.addEventListener('pointerdown', (event) => {
-            if (editor.dataset.mapPanActive === 'true') {
-                return;
-            }
-
             if (!selection.value) {
                 return;
             }

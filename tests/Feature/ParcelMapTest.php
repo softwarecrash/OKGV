@@ -196,8 +196,8 @@ class ParcelMapTest extends TestCase
             ->assertSee('data-map-zoom-in', false)
             ->assertSee('data-map-zoom-out', false)
             ->assertSee('data-map-zoom-reset', false)
-            ->assertSee('data-map-pan-toggle', false)
-            ->assertSee('Karte verschieben');
+            ->assertDontSee('data-map-pan-toggle', false)
+            ->assertSee('Greife den vergrößerten Plan');
 
         $this->actingAs($administrator)
             ->get(route('parcel-map.edit'))
@@ -205,8 +205,8 @@ class ParcelMapTest extends TestCase
             ->assertSee('data-parcel-map-editor', false)
             ->assertSee('data-parcel-map-zoom', false)
             ->assertSee('Strg und Mausrad')
-            ->assertSee('data-map-pan-toggle', false)
-            ->assertSee('Deaktiviere den Modus anschließend wieder');
+            ->assertDontSee('data-map-pan-toggle', false)
+            ->assertSee('Ziehe freie Bildfläche');
 
         $this->actingAs($administrator)
             ->put(route('parcel-map.polygon.update', $parcel), [

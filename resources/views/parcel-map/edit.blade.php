@@ -97,7 +97,6 @@
                     <button class="btn btn-sm btn-outline-secondary" type="button" data-map-zoom-reset>Einpassen</button>
                     <button class="btn btn-sm btn-outline-secondary" type="button" data-map-zoom-in title="Vergrößern">+</button>
                 </div>
-                <button class="btn btn-sm btn-outline-secondary" type="button" data-map-pan-toggle aria-pressed="false" disabled>Karte verschieben</button>
                 <span class="small text-secondary" data-map-zoom-label aria-live="polite">100 %</span>
             </div>
 
@@ -122,7 +121,7 @@
                     <g data-map-handles></g>
                 </svg>
             </div>
-            <p class="small text-secondary mt-2 mb-0">Nutze die Zoomschaltflächen oder Strg und Mausrad. Aktiviere „Karte verschieben“, um den Ausschnitt mit gedrückter Maustaste zu ziehen. Deaktiviere den Modus anschließend wieder, um Parzellenflächen zu bearbeiten.</p>
+            <p class="small text-secondary mt-2 mb-0">Nutze die Zoomschaltflächen oder Strg und Mausrad. Ziehe freie Bildfläche mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Eckpunkte und die markierte Parzellenfläche bleiben direkt bearbeitbar.</p>
 
             <form class="mt-3" method="POST" data-map-form>
                 @csrf

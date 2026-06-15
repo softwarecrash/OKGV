@@ -2,6 +2,25 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.51] - 2026-06-15
+
+### Direkte Lageplanbedienung
+
+- Der zusätzliche Schalter `Karte verschieben` wurde wieder entfernt.
+- Vergrößerte Lagepläne lassen sich nun unmittelbar mit gedrückter Maustaste
+  greifen und verschieben.
+- Ein kurzer Klick auf eine Parzelle öffnet in der Übersicht weiterhin die
+  Detailansicht; erst eine tatsächliche Ziehbewegung unterdrückt den Klick.
+- Im Editor verschiebt Ziehen auf freier Bildfläche den Kartenausschnitt,
+  während Eckpunkte und die ausgewählte Polygonfläche direkt bearbeitbar
+  bleiben.
+- Im aktiven Zeichenmodus bleiben Klicks auf freie Bildfläche ausschließlich
+  für neue Polygonpunkte reserviert.
+- Insgesamt bestehen 188 Tests mit 1.075 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.51` erhöht.
+
 ## [0.2.0.50] - 2026-06-15
 
 ### Lageplan mit der Maus verschieben

@@ -54,7 +54,6 @@
                             <button class="btn btn-sm btn-outline-secondary" type="button" data-map-zoom-reset>Einpassen</button>
                             <button class="btn btn-sm btn-outline-secondary" type="button" data-map-zoom-in title="Vergrößern">+</button>
                         </div>
-                        <button class="btn btn-sm btn-outline-secondary" type="button" data-map-pan-toggle aria-pressed="false" disabled>Karte verschieben</button>
                         <span class="small text-secondary" data-map-zoom-label aria-live="polite">100 %</span>
                     </div>
                     <div class="parcel-map-viewport" data-map-viewport>
@@ -109,7 +108,7 @@
                         </svg>
                     </div>
                 </div>
-                <p class="small text-secondary mt-3 mb-0">Vergrößere den Plan mit den Schaltflächen oder mit Strg und Mausrad. Aktiviere „Karte verschieben“, um den vergrößerten Ausschnitt mit gedrückter Maustaste zu ziehen. Wähle ohne aktiven Verschiebemodus eine Fläche aus, um die Parzellendetails zu öffnen.</p>
+                <p class="small text-secondary mt-3 mb-0">Vergrößere den Plan mit den Schaltflächen oder mit Strg und Mausrad. Greife den vergrößerten Plan mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Ein kurzer Klick auf eine Parzelle öffnet weiterhin ihre Details.</p>
             @endif
         </div>
     </div>
