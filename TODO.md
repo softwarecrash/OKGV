@@ -331,7 +331,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Fach-, Rechte- und Sicherheitstests ergänzen
 - [x] Gesamttests, Formatter, Build und Audits ausführen
 - [x] Phase 15 vollständig prüfen
-- [ ] Entwicklungsstand 0.2.0.43 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.43 veröffentlichen
 
 ## Vorgezogene Phase 12: Arbeitseinsätze
 
