@@ -20,6 +20,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Composer- und npm-Abhängigkeiten weisen keine bekannten
   Sicherheitswarnungen auf.
 - Entwicklungsstand auf `0.2.0.63` erhöht.
+- Entwicklungsstand `0.2.0.63` auf GitHub veröffentlicht.
 
 ## [0.2.0.62] - 2026-06-15
 
