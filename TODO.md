@@ -97,7 +97,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 ## Projektweite Standards
 
 - [x] Sichtbare Größe der Polygon-Eckpunktgriffe beim Zoomen konstant halten
-- [ ] Entwicklungsstand 0.2.0.52 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.52 veröffentlichen
 - [x] Zusätzlichen Lageplan-Verschiebeschalter entfernen
 - [x] Direktes Ziehen mit Klick-vs.-Bewegungserkennung ergänzen
 - [x] Direkte Polygonbearbeitung und Zeichenmodus konfliktfrei erhalten
