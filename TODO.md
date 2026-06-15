@@ -723,3 +723,12 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Fachtests, Gesamttests, Formatter und Audit ausführen
 - [x] Nachbesserung vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
+
+## Nachbesserung Phase 20: Plesk-Installationsnotizen
+
+- [x] Plesk-Pfade und Document-Root-Regel dokumentieren
+- [x] `.env` Mindestwerte für Demo-Hosting dokumentieren
+- [x] Artisan-Reihenfolge für Erstinstallation dokumentieren
+- [x] Admin- und Demo-Datenbefehle dokumentieren
+- [x] Update- und Fehlerbehebungsnotizen ergänzen
+- [x] Dokumentation prüfen und veröffentlichen

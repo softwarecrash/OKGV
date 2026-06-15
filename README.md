@@ -440,6 +440,9 @@ Parzellen.
 
 Die frühe Entwicklung erfolgt direkt im Linux-LXC. Docker- und Deployment-Artefakte werden erst nach Fertigstellung der Kernmodule erstellt.
 
+Eine kompakte Checkliste für die manuelle Plesk-Demo-Installation steht in
+[PLESK_SETUP.md](PLESK_SETUP.md).
+
 Die verbindliche Reihenfolge steht in [PHASE_PLAN.md](PHASE_PLAN.md), die
 Fachspezifikation in [PROJECT_SPEC.md](PROJECT_SPEC.md), Arbeitsregeln in
 [AGENTS.md](AGENTS.md) und der aktuelle Fortschritt in [TODO.md](TODO.md).

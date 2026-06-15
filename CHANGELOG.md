@@ -2,6 +2,18 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.67] - 2026-06-15
+
+### Plesk-Installationsnotizen
+
+- Neue Datei `PLESK_SETUP.md` dokumentiert Pfade, Document Root,
+  `.env`-Mindestwerte und die Artisan-Reihenfolge für die Erstinstallation.
+- Admin-Bootstrap, Demo-Seed, Demo-Purge und typische Plesk-Fehler sind als
+  kompakte Checkliste beschrieben.
+- Die README verweist auf die neue Plesk-Dokumentation.
+- Entwicklungsstand auf `0.2.0.67` erhöht.
+- Entwicklungsstand `0.2.0.67` auf GitHub veröffentlicht.
+
 ## [0.2.0.66] - 2026-06-15
 
 ### Nicht-interaktiver Administrator-Bootstrap
