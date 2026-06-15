@@ -22,6 +22,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 - Migrationen wurden auf MariaDB vorwärts und rückwärts geprüft.
 - Insgesamt bestehen 135 Tests mit 793 Assertions.
 - Entwicklungsstand auf `0.2.0.37` erhöht.
+- Entwicklungsstand `0.2.0.37` auf GitHub veröffentlicht.
 
 ## [0.2.0.36] - 2026-06-15
 
