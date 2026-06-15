@@ -318,6 +318,18 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Nachbesserung vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
 
+## Nachbesserung Projektbasis: HTTPS-Reverse-Proxy
+
+- [x] Ursache der blockierten HTTP-Assets hinter dem HTTPS-Proxy ermitteln
+- [x] Vertrauenswürdige Proxy-Adressen konfigurierbar machen
+- [x] Öffentliche URL, Produktionsmodus und sichere Cookies lokal konfigurieren
+- [x] HTTPS-Weiterleitungen und Asset-URLs über die öffentliche Domain prüfen
+- [x] Reverse-Proxy-Konfiguration verständlich dokumentieren
+- [x] Regressionstest für weitergereichtes HTTPS-Schema ergänzen
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen
+
 ## Nachbesserung Demo-Bestand: Perioden und Anmeldung
 
 - [x] Überschneidende echte und Demo-Abrechnungsperioden als Ursache bestätigen

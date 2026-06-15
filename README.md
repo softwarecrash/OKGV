@@ -141,6 +141,27 @@ php artisan serve
 Die Anwendung ist danach standardmäßig unter `http://127.0.0.1:8000` erreichbar.
 Für die Frontend-Entwicklung kann parallel `npm run dev` gestartet werden.
 
+### HTTPS über einen Reverse Proxy
+
+Wird OKGV über Nginx, OpenResty oder einen anderen Reverse Proxy unter einer
+HTTPS-Domain erreichbar gemacht, müssen in `.env` mindestens die öffentliche
+URL und die IP des unmittelbar vorgeschalteten Proxys eingetragen werden:
+
+```dotenv
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://okgv.example.de
+TRUSTED_PROXIES=192.0.2.10
+SESSION_SECURE_COOKIE=true
+```
+
+Mehrere vertrauenswürdige Proxy-Adressen oder CIDR-Netze werden durch Kommas
+getrennt. `TRUSTED_PROXIES=*` darf nur verwendet werden, wenn direkter Zugriff
+auf den Anwendungsserver durch Firewall oder Netzwerk ausgeschlossen ist.
+Nach Änderungen an diesen Werten muss `php artisan optimize:clear` ausgeführt
+werden. Der Proxy muss `X-Forwarded-Proto`, `X-Forwarded-Host` und
+`X-Forwarded-Port` korrekt setzen.
+
 Für Serienmails muss zusätzlich ein Queue-Worker laufen:
 
 ```bash

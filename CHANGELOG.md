@@ -2,6 +2,26 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.36] - 2026-06-15
+
+### HTTPS-Reverse-Proxy
+
+- Vertrauenswürdige Reverse-Proxy-Adressen können über `TRUSTED_PROXIES`
+  explizit konfiguriert werden.
+- Laravel berücksichtigt das weitergereichte HTTPS-Schema dadurch für
+  Weiterleitungen, Vite-Assets und weitere erzeugte URLs.
+- Die Beispielkonfiguration dokumentiert sichere Session-Cookies hinter
+  HTTPS.
+- Die öffentliche Testinstanz verwendet Produktionsmodus, deaktivierte
+  Fehlerdetails, ihre HTTPS-Adresse und ausschließlich den unmittelbar
+  vorgeschalteten Proxy als Vertrauensanker.
+- Die öffentliche Loginseite wurde auf HTTPS-Weiterleitung sowie HTTPS-URLs
+  für CSS, JavaScript und Navigation geprüft.
+- Ein Regressionstest deckt die Schemaerkennung über einen
+  vertrauenswürdigen Proxy ab.
+- Insgesamt bestehen 128 Tests mit 758 Assertions.
+- Entwicklungsstand auf `0.2.0.36` erhöht.
+
 ## [0.2.0.35] - 2026-06-15
 
 ### Anteilige Arbeitsstunden

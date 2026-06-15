@@ -47,6 +47,18 @@ class ProjectBasisTest extends TestCase
             ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     }
 
+    public function test_trusted_reverse_proxy_preserves_https_urls(): void
+    {
+        config()->set('trustedproxy.proxies', '192.0.2.10');
+
+        $this->withServerVariables([
+            'REMOTE_ADDR' => '192.0.2.10',
+        ])
+            ->withHeader('X-Forwarded-Proto', 'https')
+            ->get('/')
+            ->assertRedirect('https://localhost/login');
+    }
+
     public function test_successful_login_is_audited(): void
     {
         $user = User::factory()->create([

@@ -15,6 +15,10 @@ Domain: `okgv.de`
 - Jede Installation besitzt eine eigene Datenbank, Benutzer, Dateien, Konfiguration und Backups.
 - Während der frühen Entwicklung läuft OKGV direkt im Linux-LXC.
 - Docker und Produktionsdeployment beginnen erst nach Abschluss der Kernmodule.
+- Ein vorgeschalteter HTTPS-Reverse-Proxy wird ausschließlich über explizit
+  konfigurierte vertrauenswürdige Proxy-IP-Adressen akzeptiert. Laravel muss
+  das weitergereichte Schema für sichere Weiterleitungen, Asset-URLs und
+  Session-Cookies verwenden.
 
 ## Technologie
 
