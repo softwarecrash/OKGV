@@ -354,7 +354,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Fach-, Verschlüsselungs-, Upload- und Snapshot-Tests ergänzen
 - [x] Gesamttests, Formatter, Build und Audits ausführen
 - [x] Phase 16 vollständig prüfen
-- [ ] Entwicklungsstand 0.2.0.44 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.44 veröffentlichen
 
 ## Vorgezogene Phase 12: Arbeitseinsätze
 
