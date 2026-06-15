@@ -7,16 +7,24 @@
         @if (auth()->user()->role === App\Enums\UserRole::Tenant)
             Hier siehst du den Prüfstatus deiner Meldungen. Abgesendete Werte können nicht nachträglich verändert werden.
         @else
-            Prüfe Foto, Datum und Plausibilität. Erst eine Bestätigung übernimmt den Wert in die Zählerhistorie.
+            Prüfe Foto, Datum und Plausibilität. Erst eine Bestätigung übernimmt den Wert in die Zählerhistorie. Bearbeitete Meldungen bleiben als nachvollziehbare Historie sichtbar.
         @endif
     </p>
+    <x-validation-errors />
+    @if (session('review_error'))
+        <div class="alert alert-danger" role="alert" aria-live="polite">
+            <strong>Zählerstand konnte nicht bestätigt werden.</strong>
+            <div>{{ session('review_error') }}</div>
+            <div class="small mt-1">Prüfe den gemeldeten Wert und die bisherige Zählerhistorie. Ist die Meldung falsch, lehne sie mit einer verständlichen Begründung ab.</div>
+        </div>
+    @endif
     <div class="card border-0 shadow-sm">
         <div class="table-responsive">
             <table class="table align-middle mb-0">
                 <thead><tr><th>Parzelle / Zähler</th><th>Pächter</th><th>Datum</th><th>Stand</th><th>Foto</th><th>Status</th><th>Prüfung</th></tr></thead>
                 <tbody>
                     @forelse ($submissions as $submission)
-                        <tr>
+                        <tr @class(['table-danger' => (int) session('review_submission_id') === $submission->id])>
                             <td>{{ $submission->meter->parcel->parcel_number }} · {{ $submission->meter->meter_number }}</td>
                             <td>{{ $submission->submitter->member?->full_name ?? $submission->submitter->name }}</td>
                             <td>{{ $submission->reading_date->format('d.m.Y') }}</td>
@@ -41,11 +49,13 @@
                                 @can('review', $submission)
                                     <form class="d-flex gap-2 mb-2" method="POST" action="{{ route('meter-reading-submissions.approve', $submission) }}">
                                         @csrf
+                                        <input type="hidden" name="submission_id" value="{{ $submission->id }}">
                                         <input class="form-control form-control-sm" name="review_note" maxlength="255" placeholder="Prüfhinweis (optional)">
                                         <button class="btn btn-sm btn-success" onclick="return confirm('Stand bestätigen und in die Historie übernehmen?')">Bestätigen</button>
                                     </form>
                                     <form class="d-flex gap-2" method="POST" action="{{ route('meter-reading-submissions.reject', $submission) }}">
                                         @csrf
+                                        <input type="hidden" name="submission_id" value="{{ $submission->id }}">
                                         <input class="form-control form-control-sm" name="review_note" maxlength="255" required placeholder="Ablehnungsgrund">
                                         <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Meldung wirklich ablehnen?')">Ablehnen</button>
                                     </form>

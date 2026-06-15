@@ -354,9 +354,21 @@ class TenantPortalTest extends TestCase
             'reading_date' => now()->toDateString(),
         ]);
 
-        $this->actingAs($waterManager)
-            ->post(route('meter-reading-submissions.approve', $submission))
-            ->assertSessionHasErrors('reading_value');
+        $response = $this->actingAs($waterManager)
+            ->from(route('meter-reading-submissions.index'))
+            ->post(route('meter-reading-submissions.approve', $submission));
+        $response
+            ->assertSessionHas(
+                'review_error',
+                'Der Zählerstand darf nicht kleiner als der vorherige Stand sein.',
+            )
+            ->assertSessionHas('review_submission_id', $submission->id);
+
+        $this->followRedirects($response)
+            ->assertOk()
+            ->assertSee('Zählerstand konnte nicht bestätigt werden.')
+            ->assertSee('Der Zählerstand darf nicht kleiner als der vorherige Stand sein.')
+            ->assertSee('table-danger', false);
 
         $this->assertSame(
             MeterReadingSubmissionStatus::Pending,

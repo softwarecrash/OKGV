@@ -96,6 +96,10 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 ## Projektweite Standards
 
+- [x] Plausibilitätsfehler bei Zählerstandsfreigaben sichtbar ausgeben
+- [x] Betroffene Meldungszeile bei fehlgeschlagener Freigabe markieren
+- [x] Demo-Zählerstand oberhalb des vorhandenen letzten Stands anlegen
+- [ ] Entwicklungsstand 0.2.0.54 veröffentlichen
 - [x] Zählerstandsfotos geschützt im Modal statt als Download anzeigen
 - [x] Zoom und Verschieben in der privaten Fotovorschau ergänzen
 - [x] Inline-Ausgabe und Fremdzugriff durch Tests absichern

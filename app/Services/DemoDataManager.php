@@ -484,7 +484,7 @@ final class DemoDataManager
         DB::table('meter_reading_submissions')->insert([
             'meter_id' => $meterId,
             'submitted_by' => $userId,
-            'reading_value' => '205.5000',
+            'reading_value' => '207.5000',
             'reading_date' => '2026-06-10',
             'status' => MeterReadingSubmissionStatus::Pending->value,
             'notes' => 'Offene Demo-Zählerstandsmeldung.',

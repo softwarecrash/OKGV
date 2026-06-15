@@ -2,6 +2,27 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.54] - 2026-06-15
+
+### Rückmeldung beim Bestätigen von Zählerständen
+
+- Plausibilitätsfehler beim Bestätigen einer Zählerstandsmeldung werden nun
+  sichtbar oberhalb der Tabelle erklärt.
+- Die betroffene Meldung wird rot markiert, statt nach dem Neuladen scheinbar
+  unverändert ohne Rückmeldung stehen zu bleiben.
+- Der Hinweis erklärt, dass falsche Meldungen begründet abgelehnt und vom
+  Pächter neu eingereicht werden müssen.
+- Die Übersicht erläutert, dass erfolgreich bearbeitete Meldungen aus
+  Nachvollziehbarkeitsgründen weiterhin als Historie sichtbar bleiben.
+- Die Demo-Zählerstandsmeldung verwendet künftig einen Wert oberhalb des
+  bereits vorhandenen letzten Stands.
+- Die bestehende private Meldung `#5` wurde nicht verändert: Ihr Wert `205`
+  liegt unter dem vorhandenen Stand `206` und muss daher abgelehnt werden.
+- Insgesamt bestehen 188 Tests mit 1.094 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.54` erhöht.
+
 ## [0.2.0.53] - 2026-06-15
 
 ### Zählerstandsfotos prüfen

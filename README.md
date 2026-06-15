@@ -47,6 +47,8 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Private Dokumentdownloads für Mitglieder und aktuelle Parzellen
 - Prüfpflichtige Zählerstandsmeldungen mit optionalem privatem Foto und
   zoombarer geschützter Vorschau
+- Sichtbare Plausibilitätsfehler und dauerhaft nachvollziehbare
+  Zählerstandsmeldungshistorie
 - Kompakte Navigationsgruppen für Mitglieder, Zähler und Finanzen
 - Rollenabhängige Aktionspunkte für Vorgänge mit notwendiger Bearbeitung
 - Persistenter heller und dunkler Darstellungsmodus

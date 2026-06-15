@@ -11,6 +11,7 @@ use App\Services\MeterReadingSubmissionManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -62,11 +63,18 @@ class MeterReadingSubmissionController extends Controller
         MeterReadingSubmissionReviewRequest $request,
         MeterReadingSubmission $meterReadingSubmission,
     ): RedirectResponse {
-        $this->manager->approve(
-            $meterReadingSubmission,
-            $request->user(),
-            $request->validated('review_note'),
-        );
+        try {
+            $this->manager->approve(
+                $meterReadingSubmission,
+                $request->user(),
+                $request->validated('review_note'),
+            );
+        } catch (ValidationException $exception) {
+            return back()
+                ->withInput()
+                ->with('review_error', $exception->validator->errors()->first())
+                ->with('review_submission_id', $meterReadingSubmission->id);
+        }
 
         return back()->with('status', 'Zählerstand wurde bestätigt und in die Historie übernommen.');
     }

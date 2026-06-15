@@ -550,6 +550,13 @@ Plausibilität und erzeugt anschließend einen Zählerstand mit Quelle
 verknüpft und werden auditiert. Pächter können Meldungen nach dem Absenden
 nicht verändern oder löschen.
 
+Kann eine Meldung wegen Datum, Reihenfolge oder rückläufigem Wert nicht
+bestätigt werden, muss die Prüfübersicht den konkreten Grund sichtbar
+ausgeben und die betroffene Zeile markieren. Eine falsche Meldung wird
+begründet abgelehnt und anschließend vom Pächter neu eingereicht. Erfolgreich
+bestätigte und abgelehnte Meldungen bleiben als nachvollziehbare Historie
+sichtbar.
+
 #### Navigation und Aktionshinweise
 
 Die Hauptnavigation wird fachlich gruppiert:
