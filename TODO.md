@@ -333,6 +333,29 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Phase 15 vollständig prüfen
 - [x] Entwicklungsstand 0.2.0.43 veröffentlichen
 
+## Phase 16: Vereinseinstellungen und Vorlagenbranding
+
+- [x] Bestehende globale, SMTP- und SEPA-Konfiguration abgleichen
+- [x] Offiziellen Vereinsnamen, Anschrift und Ansprechpartner ergänzen
+- [x] Telefon, E-Mail-Adresse und Vereinswebseite ergänzen
+- [x] Sicher validierten Upload für JPEG-, PNG- und WebP-Logos ergänzen
+- [x] Vereinslogo privat speichern und kontrolliert ausliefern
+- [x] Verschlüsselte Bankverbindung für Rechnungen ergänzen
+- [x] Rechnungsbankverbindung klar vom SEPA-Lastschriftkonto trennen
+- [x] Standard-Zahlungsziel für neue Abrechnungsperioden ergänzen
+- [x] Konfigurierbare Dokumentfußzeile und E-Mail-Signatur ergänzen
+- [x] Vereinsdaten, Logo und Bankverbindung in PDFs verwenden
+- [x] Serienmails mit sicher dargestellter Vereinssignatur versehen
+- [x] Absenderdaten für Rechnungen, Briefe, Mahnungen und Serienmails historisieren
+- [x] Historische Logos bei Konfigurationswechseln erhalten
+- [x] Datenschutzinformationen um den verantwortlichen Verein ergänzen
+- [x] Administratorrechte und Auditlog beibehalten
+- [x] Migrationen auf MariaDB vorwärts und rückwärts prüfen
+- [x] Fach-, Verschlüsselungs-, Upload- und Snapshot-Tests ergänzen
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Phase 16 vollständig prüfen
+- [ ] Entwicklungsstand 0.2.0.44 veröffentlichen
+
 ## Vorgezogene Phase 12: Arbeitseinsätze
 
 - [x] Vorziehen von Phase 12 direkt nach Phase 9 dokumentieren

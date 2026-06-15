@@ -14,6 +14,7 @@ final class MailCampaignManager
     public function __construct(
         private readonly MailRecipientResolver $resolver,
         private readonly CommunicationMailConfigurator $configurator,
+        private readonly AssociationDocumentProfile $associationProfile,
     ) {}
 
     public function send(MailCampaign $campaign, User $actor): MailCampaign
@@ -43,6 +44,7 @@ final class MailCampaignManager
             $campaign->update([
                 'status' => MailCampaignStatus::Sending,
                 'recipient_count' => $resolvedRecipients->count(),
+                'association_snapshot' => $this->associationProfile->snapshot(),
             ]);
 
             return $campaign;

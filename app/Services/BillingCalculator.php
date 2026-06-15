@@ -26,6 +26,7 @@ final class BillingCalculator
 {
     public function __construct(
         private readonly ConsumptionCalculator $consumptionCalculator,
+        private readonly AssociationDocumentProfile $associationProfile,
     ) {}
 
     public function calculate(BillingPeriod $period, User $actor): BillingPeriod
@@ -124,6 +125,7 @@ final class BillingCalculator
             'issued_at' => $period->ends_at,
             'due_at' => $period->due_at,
             'total_amount' => '0.00',
+            'association_snapshot' => $this->associationProfile->snapshot(),
         ]);
 
         $this->snapshotRecipients($invoice, $member, $primaryTenancies, $rates);

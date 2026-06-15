@@ -11,10 +11,14 @@
         .amount { font-size: 14pt; font-weight: bold; }
         .cancelled { border: 2px solid #b02a37; color: #b02a37; font-weight: bold; padding: 4mm; }
         .footer { bottom: 8mm; color: #607d8b; font-size: 8pt; position: fixed; text-align: center; width: 100%; }
+        .logo { max-height: 20mm; max-width: 60mm; margin-bottom: 3mm; }
     </style>
 </head>
 <body>
-    <div>{{ config('app.name', 'OKGV') }}</div>
+    @if ($association['logo_data_uri'])
+        <img class="logo" src="{{ $association['logo_data_uri'] }}" alt="">
+    @endif
+    <div>{{ $association['name'] }}</div>
     @php($primaryRecipient = collect($notice->recipients)->firstWhere('is_primary', true) ?? collect($notice->recipients)->first())
     @if ($primaryRecipient)
         <p>
@@ -46,7 +50,21 @@
         <p>{!! nl2br(e($notice->note)) !!}</p>
     @endif
     <p>Falls die Zahlung inzwischen erfolgt ist, nimm bitte Kontakt mit dem Verein auf.</p>
-    <p>Mit freundlichen Grüßen<br>{{ config('app.name', 'OKGV') }}</p>
-    <div class="footer">Mahnung {{ $notice->notice_number }} · erstellt am {{ $notice->issued_at->format('d.m.Y') }}</div>
+    @if ($association['bank_iban'])
+        <p>
+            <strong>Bankverbindung:</strong>
+            {{ $association['bank_iban'] }}
+            @if ($association['bank_bic']) · {{ $association['bank_bic'] }}@endif
+        </p>
+    @endif
+    <p>Mit freundlichen Grüßen<br>{{ $association['name'] }}</p>
+    <div class="footer">
+        @if ($association['document_footer'])
+            {!! nl2br(e($association['document_footer'])) !!}
+        @else
+            Mahnung {{ $notice->notice_number }} · erstellt am {{ $notice->issued_at->format('d.m.Y') }}
+            @if ($association['email']) · {{ $association['email'] }}@endif
+        @endif
+    </div>
 </body>
 </html>

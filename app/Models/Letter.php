@@ -14,10 +14,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'city',
     'subject',
     'body',
+    'association_snapshot',
     'created_by',
 ])]
 class Letter extends Model
 {
+    protected function casts(): array
+    {
+        return [
+            'association_snapshot' => 'array',
+        ];
+    }
+
     public function member(): BelongsTo
     {
         return $this->belongsTo(Member::class);

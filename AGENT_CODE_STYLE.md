@@ -94,6 +94,22 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 - Auskunftsexporte dürfen keine Passworthashes, Sessiondaten oder unnötige
   Geheimnisse anderer Personen enthalten.
 
+### Vereinskonfiguration und Dokumente
+
+- Trenne den sichtbaren Systemnamen vom offiziellen Vereinsnamen und vom
+  Namen des SEPA-Gläubigers.
+- Speichere IBAN, BIC und vergleichbare Bankdaten verschlüsselt. Zeige
+  bestehende Geheimnisse in Formularen nicht im Klartext an.
+- Leere Geheimnisfelder behalten bestehende Werte bei; das Entfernen braucht
+  eine eigene, verständlich beschriftete Aktion.
+- Validiere Logos über Dateiendung, MIME-Typ und Größe und speichere sie im
+  privaten Storage.
+- Historische Rechnungen, Briefe, Mahnungen und versandte Nachrichten nutzen
+  einen Absendersnapshot. Aktuelle Konfigurationswerte dürfen alte Dokumente
+  nicht nachträglich verändern.
+- Lösche frühere Logos nicht, solange historische Snapshots sie referenzieren
+  können.
+
 ### Controller
 
 - Controller bleiben klein und koordinieren nur Request, Policy, Service, Model und Response.

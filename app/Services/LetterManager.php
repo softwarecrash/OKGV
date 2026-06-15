@@ -8,6 +8,10 @@ use App\Models\User;
 
 final class LetterManager
 {
+    public function __construct(
+        private readonly AssociationDocumentProfile $associationProfile,
+    ) {}
+
     /**
      * @param  array<string, mixed>  $data
      */
@@ -26,6 +30,7 @@ final class LetterManager
 
         $letter = Letter::create([
             ...$data,
+            'association_snapshot' => $this->associationProfile->snapshot(),
             'created_by' => $actor->id,
         ]);
 

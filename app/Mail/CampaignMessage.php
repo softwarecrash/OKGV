@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use App\Models\MailCampaign;
 use App\Models\MailCampaignRecipient;
+use App\Services\AssociationDocumentProfile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -26,6 +27,12 @@ class CampaignMessage extends Mailable
 
     public function content(): Content
     {
-        return new Content(view: 'mail.campaign');
+        return new Content(
+            view: 'mail.campaign',
+            with: [
+                'association' => app(AssociationDocumentProfile::class)
+                    ->resolve($this->campaign->association_snapshot),
+            ],
+        );
     }
 }

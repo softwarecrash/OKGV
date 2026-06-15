@@ -8,6 +8,10 @@ use Dompdf\Options;
 
 final class PaymentReminderPdfGenerator
 {
+    public function __construct(
+        private readonly AssociationDocumentProfile $profile,
+    ) {}
+
     public function render(Invoice $invoice): string
     {
         $invoice->loadMissing(['recipients', 'billingPeriod']);
@@ -17,7 +21,8 @@ final class PaymentReminderPdfGenerator
         $options->set('defaultFont', 'DejaVu Sans');
 
         $pdf = new Dompdf($options);
-        $pdf->loadHtml(view('invoices.payment-reminder-pdf', compact('invoice'))->render(), 'UTF-8');
+        $association = $this->profile->get();
+        $pdf->loadHtml(view('invoices.payment-reminder-pdf', compact('invoice', 'association'))->render(), 'UTF-8');
         $pdf->setPaper('A4');
         $pdf->render();
 

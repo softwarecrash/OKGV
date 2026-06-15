@@ -166,7 +166,11 @@ vorherigen Phase geprüft sein.
 
 ## Phase 16: Vereinseinstellungen
 
-- [ ] Vereinseinstellungen
+- [x] Vereinseinstellungen
+
+## Phase 16: PDF / Rechnungs vorlagen
+
+- [x] Individualisierbare rechnungen, pdf, mail mit eigenem logo, fußzeile uws
 
 ## Phase 17: Nummernkreise
 
@@ -191,6 +195,6 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 15 einschließlich DSGVO-Auskunft, Löschprüfung und
-freiwilligen Mitpächterfreigaben sind abgeschlossen. Als Nächstes folgt
-Phase 16: Vereinseinstellungen.
+Die Phasen 0 bis 16 einschließlich Vereinsstammdaten, Logo,
+Dokumentfußzeile, Mail-Signatur und historischen Absendersnapshots sind
+abgeschlossen. Als Nächstes folgt Phase 17: Nummernkreise.

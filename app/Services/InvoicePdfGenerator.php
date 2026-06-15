@@ -8,6 +8,10 @@ use Dompdf\Options;
 
 final class InvoicePdfGenerator
 {
+    public function __construct(
+        private readonly AssociationDocumentProfile $profile,
+    ) {}
+
     public function render(Invoice $invoice): string
     {
         $invoice->loadMissing(['member', 'recipients', 'billingPeriod', 'items.parcel']);
@@ -17,7 +21,8 @@ final class InvoicePdfGenerator
         $options->set('defaultFont', 'DejaVu Sans');
 
         $pdf = new Dompdf($options);
-        $pdf->loadHtml(view('invoices.pdf', compact('invoice'))->render(), 'UTF-8');
+        $association = $this->profile->resolve($invoice->association_snapshot);
+        $pdf->loadHtml(view('invoices.pdf', compact('invoice', 'association'))->render(), 'UTF-8');
         $pdf->setPaper('A4');
         $pdf->render();
 

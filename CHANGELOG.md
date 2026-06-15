@@ -2,6 +2,40 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.44] - 2026-06-15
+
+### Phase 16: Vereinseinstellungen und Vorlagenbranding
+
+- Die globale Konfiguration wurde um offiziellen Vereinsnamen, Anschrift,
+  Ansprechpartner, Telefon, E-Mail-Adresse und Webseite erweitert.
+- Der sichtbare Systemname und der rechtliche Vereinsname sind getrennt
+  konfigurierbar.
+- JPEG-, PNG- und WebP-Vereinslogos bis 2 MiB werden MIME-geprüft im privaten
+  Storage gespeichert und kontrolliert ausgeliefert.
+- Das aktive Logo erscheint in Navigation, Rechnungen, Briefen,
+  Zahlungserinnerungen und Mahnungen.
+- Eine eigene Dokumentfußzeile und E-Mail-Signatur können als sicher
+  dargestellter Text gepflegt werden.
+- Das Überweisungskonto für Rechnungen wurde von den SEPA-Lastschriftdaten
+  getrennt; IBAN und BIC werden verschlüsselt und in Formularen nicht im
+  Klartext angezeigt.
+- Leere Bankfelder behalten vorhandene Geheimnisse, während eine eigene
+  Auswahl die vollständige Rechnungsbankverbindung entfernt.
+- Ein Standard-Zahlungsziel wird bei neuen Abrechnungsperioden automatisch
+  nach dem gewählten Enddatum vorgeschlagen.
+- Rechnungen, Briefe, Mahnungen und Serienmails speichern historische
+  Absendersnapshots einschließlich Logo, Fußzeile und Bankverbindung.
+- Spätere Konfigurationsänderungen verändern bereits erzeugte Dokumente
+  nicht; historische Logodateien bleiben privat erhalten.
+- Die Datenschutzinformationen zeigen den verantwortlichen Verein mit
+  Kontaktanschrift.
+- Beide Migrationen wurden auf MariaDB erfolgreich vorwärts, rückwärts und
+  erneut vorwärts ausgeführt.
+- Insgesamt bestehen 175 Tests mit 990 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.44` erhöht.
+
 ## [0.2.0.43] - 2026-06-15
 
 ### Phase 15: DSGVO

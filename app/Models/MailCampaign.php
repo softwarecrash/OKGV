@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable([
     'subject',
     'body',
+    'association_snapshot',
     'recipient_group',
     'status',
     'recipient_count',
@@ -26,6 +27,7 @@ class MailCampaign extends Model
     {
         return [
             'recipient_group' => MailRecipientGroup::class,
+            'association_snapshot' => 'array',
             'status' => MailCampaignStatus::class,
             'recipient_count' => 'integer',
             'sent_count' => 'integer',

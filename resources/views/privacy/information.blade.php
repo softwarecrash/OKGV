@@ -14,6 +14,25 @@
                 </div>
             </div>
 
+            @php($associationSettings = App\Models\ApplicationSetting::current())
+            @if ($associationSettings->association_name)
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <h2 class="h5">Verantwortlicher Verein</h2>
+                        <address class="mb-0">
+                            <strong>{{ $associationSettings->association_name }}</strong><br>
+                            @if ($associationSettings->hasPostalAddress())
+                                {{ $associationSettings->street }}<br>
+                                {{ $associationSettings->zip }} {{ $associationSettings->city }}<br>
+                            @endif
+                            @if ($associationSettings->contact_name)Ansprechpartner: {{ $associationSettings->contact_name }}<br>@endif
+                            @if ($associationSettings->email)<a href="mailto:{{ $associationSettings->email }}">{{ $associationSettings->email }}</a><br>@endif
+                            @if ($associationSettings->phone){{ $associationSettings->phone }}@endif
+                        </address>
+                    </div>
+                </div>
+            @endif
+
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-body">
                     <h2 class="h5">Zwecke und Aufbewahrung</h2>

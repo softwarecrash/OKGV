@@ -25,6 +25,7 @@ use LogicException;
     'approved_at',
     'approved_by',
     'paid_at',
+    'association_snapshot',
 ])]
 class Invoice extends Model
 {
@@ -60,6 +61,7 @@ class Invoice extends Model
             'total_amount' => 'decimal:2',
             'approved_at' => 'datetime',
             'paid_at' => 'datetime',
+            'association_snapshot' => 'array',
         ];
     }
 

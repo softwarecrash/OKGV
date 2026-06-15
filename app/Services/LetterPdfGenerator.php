@@ -8,6 +8,10 @@ use Dompdf\Options;
 
 final class LetterPdfGenerator
 {
+    public function __construct(
+        private readonly AssociationDocumentProfile $profile,
+    ) {}
+
     public function render(Letter $letter): string
     {
         $options = new Options;
@@ -15,7 +19,8 @@ final class LetterPdfGenerator
         $options->set('defaultFont', 'DejaVu Sans');
 
         $pdf = new Dompdf($options);
-        $pdf->loadHtml(view('letters.pdf', compact('letter'))->render(), 'UTF-8');
+        $association = $this->profile->resolve($letter->association_snapshot);
+        $pdf->loadHtml(view('letters.pdf', compact('letter', 'association'))->render(), 'UTF-8');
         $pdf->setPaper('A4');
         $pdf->render();
 

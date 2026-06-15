@@ -1052,9 +1052,53 @@ Datenauskunft, Einwilligungsänderung, Löschantrag, Prüfung und
 Pseudonymisierung werden ohne unnötige personenbezogene Nutzdaten
 auditiert.
 
-### Phase 16 bis 18
+### Phase 16: Vereinseinstellungen und Vorlagenbranding
 
-Vereinseinstellungen, Nummernkreise, Pächterwechsel und später ein Lageplan.
+Die globale Konfiguration verwaltet neben dem frei sichtbaren Systemnamen
+die rechtlichen und organisatorischen Vereinsstammdaten:
+
+- offizieller Vereinsname,
+- Straße, Postleitzahl und Ort,
+- Ansprechpartner,
+- Telefon und E-Mail-Adresse,
+- optionale Vereinswebseite,
+- geprüftes Vereinslogo,
+- Bankverbindung für Überweisungsrechnungen,
+- Standard-Zahlungsziel,
+- Dokumentfußzeile,
+- E-Mail-Signatur,
+- Rechtevorlage für neue Vorstandsmitglieder,
+- Arbeitsstunden-Standardwerte,
+- SMTP und den schreibgeschützten Modulstatus.
+
+Der Systemname benennt die Installation in Navigation und Seitentitel. Der
+offizielle Vereinsname wird als rechtlicher Absender in Dokumenten genutzt.
+Beide Werte dürfen voneinander abweichen.
+
+JPEG-, PNG- und WebP-Logos bis 2 MiB werden MIME-geprüft im privaten Storage
+gespeichert und ausschließlich über eine kontrollierte Route ausgeliefert.
+Wird das aktive Logo ersetzt oder entfernt, bleiben von historischen
+Dokumentsnapshots referenzierte Dateien privat erhalten.
+
+IBAN und BIC des Überweisungskontos werden verschlüsselt gespeichert und in
+der Oberfläche nur maskiert dargestellt. Leere Geheimnisfelder verändern
+gespeicherte Werte nicht; eine eigene Auswahl entfernt die vollständige
+Bankverbindung. Dieses Rechnungsbankkonto ist fachlich vom SEPA-Konto samt
+Gläubiger-ID für Lastschriften getrennt.
+
+Das Standard-Zahlungsziel wird bei neuen Abrechnungsperioden nach Auswahl
+des Enddatums vorgeschlagen, kann aber je Periode angepasst werden.
+Dokumentfußzeile und E-Mail-Signatur sind reiner Text und werden vor der
+Ausgabe HTML-sicher escaped.
+
+Rechnungen, Briefe, Mahnungen und Serienmails speichern bei ihrer Erstellung
+beziehungsweise Versandfreigabe einen Snapshot der Vereins- und
+Bankangaben. Spätere Änderungen an Name, Anschrift, Logo, Fußzeile oder
+Bankkonto verändern bereits erzeugte historische Dokumente nicht.
+
+### Phase 17 bis 18
+
+Nummernkreise, Pächterwechsel und später ein Lageplan.
 
 ### Phase 12.1: Modulare Funktionsbereiche
 

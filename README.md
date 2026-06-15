@@ -346,6 +346,30 @@ Prüfung werden identifizierende Stammdaten und das Pächterkonto
 pseudonymisiert; notwendige historische Fachbezüge bleiben unter einer
 anonymen Referenz erhalten.
 
+## Vereinseinstellungen und Dokumentbranding
+
+Administratoren pflegen in der `Globalen Konfiguration` den sichtbaren
+Systemnamen sowie den offiziellen Vereinsnamen, Anschrift, Ansprechpartner,
+Telefon, E-Mail-Adresse, Webseite und das Vereinslogo. Der Systemname
+bezeichnet die Installation; der offizielle Vereinsname erscheint als
+Absender in Rechnungen und Schreiben.
+
+Das Logo darf JPEG, PNG oder WebP mit höchstens 2 MiB sein. Es wird geprüft,
+privat gespeichert und in Navigation sowie PDFs verwendet. Eine eigene
+Dokumentfußzeile und E-Mail-Signatur ermöglichen Vereinsregister-,
+Kontakt- oder Grußangaben ohne HTML-Ausführung.
+
+Die Bankverbindung für Überweisungsrechnungen wird verschlüsselt gespeichert.
+Sie ist bewusst vom SEPA-Lastschriftkonto und der Gläubiger-ID getrennt.
+IBAN und BIC müssen bei einer späteren Änderung neu eingegeben werden; leere
+Felder behalten bestehende Geheimnisse. Eine eigene Auswahl entfernt die
+gesamte Rechnungsbankverbindung.
+
+Das Standard-Zahlungsziel wird bei neuen Abrechnungsperioden vorgeschlagen.
+Rechnungen, Briefe, Mahnungen und Serienmails speichern einen historischen
+Snapshot ihrer Absender- und Brandingdaten. Spätere Konfigurationsänderungen
+verändern daher keine bereits erzeugten Dokumente.
+
 ## Entwicklung
 
 Die frühe Entwicklung erfolgt direkt im Linux-LXC. Docker- und Deployment-Artefakte werden erst nach Fertigstellung der Kernmodule erstellt.

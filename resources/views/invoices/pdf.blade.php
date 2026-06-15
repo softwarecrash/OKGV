@@ -7,6 +7,7 @@
         @page { margin: 22mm 18mm; }
         body { color: #263238; font-family: "DejaVu Sans", sans-serif; font-size: 10pt; }
         h1 { color: #2E7D32; font-size: 22pt; margin: 0 0 6mm; }
+        .logo { max-height: 22mm; max-width: 65mm; margin-bottom: 4mm; }
         .muted { color: #607d8b; }
         .draft { border: 2px solid #b26a00; color: #8a5200; font-size: 15pt; font-weight: bold; margin-bottom: 8mm; padding: 3mm; text-align: center; }
         .columns { margin: 8mm 0; width: 100%; }
@@ -24,8 +25,14 @@
         <div class="draft">ZWISCHENSTAND – NICHT FREIGEGEBEN</div>
     @endif
 
-    <h1>{{ config('app.name', 'OKGV') }}</h1>
-    <div class="muted">Open Kleingarten Verwaltung</div>
+    @if ($association['logo_data_uri'])
+        <img class="logo" src="{{ $association['logo_data_uri'] }}" alt="">
+    @endif
+    <h1>{{ $association['name'] }}</h1>
+    <div class="muted">
+        @if ($association['street']){{ $association['street'] }} · @endif
+        @if ($association['zip'] || $association['city']){{ $association['zip'] }} {{ $association['city'] }}@endif
+    </div>
 
     <table class="columns">
         <tr>
@@ -84,8 +91,24 @@
         </tbody>
     </table>
 
+    @if ($association['bank_iban'])
+        <div style="margin-top: 8mm;">
+            <strong>Bankverbindung für Überweisungen</strong><br>
+            @if ($association['bank_account_holder'])Kontoinhaber: {{ $association['bank_account_holder'] }}<br>@endif
+            IBAN: {{ $association['bank_iban'] }}
+            @if ($association['bank_bic']) · BIC: {{ $association['bank_bic'] }}@endif
+            @if ($association['bank_name'])<br>{{ $association['bank_name'] }}@endif
+        </div>
+    @endif
+
     <div class="footer">
-        {{ config('app.name', 'OKGV') }} · Die freie Verwaltungssoftware für Kleingartenvereine.
+        @if ($association['document_footer'])
+            {!! nl2br(e($association['document_footer'])) !!}
+        @else
+            {{ $association['name'] }}
+            @if ($association['email']) · {{ $association['email'] }}@endif
+            @if ($association['phone']) · {{ $association['phone'] }}@endif
+        @endif
     </div>
 </body>
 </html>

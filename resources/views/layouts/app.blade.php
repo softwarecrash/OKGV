@@ -23,6 +23,9 @@
         <nav class="navbar navbar-expand-lg bg-body shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
+                    @if (App\Models\ApplicationSetting::current()->logo_path)
+                        <img src="{{ route('association-logo.show') }}" alt="" height="30" class="me-2">
+                    @endif
                     {{ config('app.name', 'OKGV') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Navigation umschalten">

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApplicationSettingController;
+use App\Http\Controllers\AssociationLogoController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\BillingPeriodController;
 use App\Http\Controllers\BillingRateAssignmentController;
@@ -72,6 +73,8 @@ Route::get('freigabe/dokument/{token}', [PublicDocumentController::class, 'downl
 
 Route::view('datenschutzinformationen', 'privacy.information')
     ->name('privacy.information');
+Route::get('vereinslogo', [AssociationLogoController::class, 'show'])
+    ->name('association-logo.show');
 
 Route::get('/dashboard', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])

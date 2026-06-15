@@ -14,6 +14,10 @@ use Illuminate\Validation\ValidationException;
 
 final class DunningNoticeManager
 {
+    public function __construct(
+        private readonly AssociationDocumentProfile $associationProfile,
+    ) {}
+
     /**
      * @param  array{due_at: string, fee_amount: numeric-string|int|float, note?: string|null}  $data
      */
@@ -77,6 +81,7 @@ final class DunningNoticeManager
                     'is_primary' => $recipient->is_primary,
                     'position' => $recipient->position,
                 ])->values()->all(),
+                'association_snapshot' => $this->associationProfile->snapshot(),
                 'note' => $data['note'] ?? null,
                 'created_by' => $actor->id,
             ]);

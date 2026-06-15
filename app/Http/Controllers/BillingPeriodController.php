@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\FeatureModule;
 use App\Http\Requests\BillingPeriodRequest;
+use App\Models\ApplicationSetting;
 use App\Models\BillingPeriod;
 use App\Models\Member;
 use App\Models\Parcel;
@@ -42,6 +43,7 @@ class BillingPeriodController extends Controller
 
         return view('billing-periods.create', [
             'billingPeriod' => new BillingPeriod,
+            'defaultPaymentTermDays' => ApplicationSetting::current()->default_payment_term_days,
         ]);
     }
 
@@ -89,7 +91,10 @@ class BillingPeriodController extends Controller
         $this->authorize('update', $billingPeriod);
         abort_unless($billingPeriod->isEditable(), 403);
 
-        return view('billing-periods.edit', compact('billingPeriod'));
+        return view('billing-periods.edit', [
+            'billingPeriod' => $billingPeriod,
+            'defaultPaymentTermDays' => ApplicationSetting::current()->default_payment_term_days,
+        ]);
     }
 
     public function update(

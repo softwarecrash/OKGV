@@ -21,6 +21,7 @@ use LogicException;
     'previous_fees_amount',
     'total_due',
     'recipients',
+    'association_snapshot',
     'note',
     'created_by',
     'cancelled_at',
@@ -62,6 +63,7 @@ class DunningNotice extends Model
             'previous_fees_amount' => 'decimal:2',
             'total_due' => 'decimal:2',
             'recipients' => 'array',
+            'association_snapshot' => 'array',
             'cancelled_at' => 'datetime',
         ];
     }
