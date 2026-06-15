@@ -286,7 +286,9 @@ class WorkEventWorkflowTest extends TestCase
             'ends_at' => '2025-12-31',
             'due_at' => '2026-02-01',
         ]);
-        $member = Member::factory()->create();
+        $member = Member::factory()->create([
+            'joined_at' => '2020-01-01',
+        ]);
         $parcel = Parcel::factory()->create();
         ParcelTenant::factory()->create([
             'parcel_id' => $parcel->id,

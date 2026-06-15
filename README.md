@@ -308,4 +308,19 @@ Der projektweite Programmierstil ist in [AGENT_CODE_STYLE.md](AGENT_CODE_STYLE.m
 
 ## Lizenz
 
-OKGV ist Open Source und steht unter der MIT-Lizenz.
+OKGV ist freie Software und steht unter der
+[GNU Affero General Public License Version 3](LICENSE), kurz GNU AGPLv3.
+
+Wer OKGV verändert und über ein Netzwerk bereitstellt, muss den
+interagierenden Benutzern den vollständigen korrespondierenden Quellcode der
+tatsächlich betriebenen Version gemäß Abschnitt 13 der GNU AGPLv3 anbieten.
+Die Oberfläche zeigt dafür einen dauerhaften Link `Quellcode` an. Dessen Ziel
+wird über folgende Umgebungsvariable festgelegt:
+
+```dotenv
+APP_SOURCE_URL=https://github.com/softwarecrash/OKGV
+```
+
+Betreiber einer veränderten Version müssen diesen Wert auf die Bezugsquelle
+ihres vollständigen, zur laufenden Version passenden Quellcodes setzen.
+Lizenzen eingebundener Drittanbieter-Komponenten bleiben unberührt.

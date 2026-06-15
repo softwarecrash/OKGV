@@ -2,6 +2,25 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.41] - 2026-06-15
+
+### Lizenzierung
+
+- Die bisherige MIT-Lizenz des OKGV-Projektcodes wurde entfernt.
+- OKGV wird ab diesem Entwicklungsstand unter der GNU Affero General Public
+  License Version 3 (`AGPL-3.0-only`) veröffentlicht.
+- `LICENSE`, Composer- und npm-Paketmetadaten wurden entsprechend
+  aktualisiert.
+- README, Projektspezifikation und Agent-Regeln dokumentieren die GNU AGPLv3
+  sowie den unveränderten Fortbestand von Drittanbieter-Lizenzhinweisen.
+- Die Benutzeroberfläche bietet dauerhaft einen Quellcode-Link an, dessen
+  Ziel über `APP_SOURCE_URL` auf den Quellcode der tatsächlich betriebenen
+  Version gesetzt werden kann.
+- Ein Arbeitseinsatztest verwendet nun ein festes, zur Abrechnungsperiode
+  passendes Mitgliedseintrittsdatum und ist dadurch nicht mehr zufallsabhängig.
+- Insgesamt bestehen 154 Tests mit 887 Assertions.
+- Entwicklungsstand auf `0.2.0.41` erhöht.
+
 ## [0.2.0.40] - 2026-06-15
 
 ### Phase 12.1: Modularisierung

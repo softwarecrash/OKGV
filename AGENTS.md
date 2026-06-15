@@ -21,6 +21,11 @@
 - Ändere die dreiteilige Basisversion erst nach einer ausdrücklich beschlossenen neuen Versionierungsphase.
 - Erweitere bei Unklarheiten zuerst die Spezifikation.
 - Entferne keine Funktionen ohne dokumentierte Begründung.
+- Veröffentliche OKGV-Projektcode ausschließlich unter `AGPL-3.0-only`.
+- Entferne oder verändere keine Lizenz- und Urheberrechtshinweise von
+  Drittanbieter-Komponenten.
+- Halte den sichtbaren Quellcode-Link bei Änderungen an Layout oder
+  Deployment funktionsfähig.
 - Hardcode keine Geheimnisse oder personenbezogenen Daten.
 - Prüfe Berechtigungen immer serverseitig mit Policies oder Gates.
 - Verwende Form Requests für fachliche Schreiboperationen.

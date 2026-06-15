@@ -23,6 +23,17 @@ class UserGuidanceTest extends TestCase
             ->assertSee('Nur auf einem persönlichen Gerät verwenden.');
     }
 
+    public function test_layout_offers_the_configured_source_code_for_agpl_compliance(): void
+    {
+        config(['app.source_url' => 'https://source.example.test/okgv']);
+
+        $this->get(route('login'))
+            ->assertOk()
+            ->assertSee('GNU AGPLv3')
+            ->assertSee('https://source.example.test/okgv', false)
+            ->assertSee('Quellcode');
+    }
+
     public function test_master_data_forms_explain_history_and_visibility(): void
     {
         $administrator = User::factory()->administrator()->create();

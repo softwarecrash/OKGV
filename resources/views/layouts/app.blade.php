@@ -280,6 +280,12 @@
             @endif
             @yield('content')
         </main>
+
+        <footer class="container pb-4 text-center text-secondary small">
+            <span>GNU AGPLv3</span>
+            <span aria-hidden="true"> · </span>
+            <a href="{{ config('app.source_url') }}" rel="noopener noreferrer">Quellcode</a>
+        </footer>
     </div>
 </body>
 </html>

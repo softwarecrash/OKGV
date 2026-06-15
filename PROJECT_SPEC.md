@@ -8,6 +8,20 @@ Slogan: **Die freie Verwaltungssoftware für Kleingartenvereine.**
 
 Domain: `okgv.de`
 
+## Lizenz
+
+Der OKGV-Projektcode wird ausschließlich unter der GNU Affero General Public
+License Version 3 (`AGPL-3.0-only`) veröffentlicht. Die frühere MIT-Lizenz
+findet auf neue Veröffentlichungen keine Anwendung.
+
+Jede über ein Netzwerk angebotene Instanz zeigt dauerhaft einen
+Quellcode-Link. Bei unveränderten Installationen darf dieser auf das
+öffentliche OKGV-Repository verweisen. Betreiber veränderter Versionen müssen
+darüber den vollständigen korrespondierenden Quellcode der tatsächlich
+betriebenen Version gemäß Abschnitt 13 der GNU AGPLv3 bereitstellen.
+Lizenzhinweise von Abhängigkeiten und anderen Drittanbieter-Komponenten
+bleiben unverändert erhalten.
+
 ## Architektur
 
 - Eine Installation verwaltet genau einen Verein.

@@ -14,6 +14,17 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 - Verwende sichtbare Texte, Validierungsfehler und Beschriftungen auf Deutsch.
 - Kommentiere nur nicht offensichtliche Fach- oder Sicherheitslogik. Kommentare erklären das Warum, nicht den unmittelbar sichtbaren Code.
 
+## Lizenzierung
+
+- Neue OKGV-Projektdateien stehen unter `AGPL-3.0-only`.
+- Verwende in Paketmetadaten den SPDX-Ausdruck `AGPL-3.0-only`.
+- Bewahre Lizenz- und Urheberrechtshinweise eingebundener
+  Drittanbieter-Komponenten unverändert.
+- Der sichtbare Quellcode-Link muss auf den vollständigen Quellcode der
+  tatsächlich betriebenen Version konfigurierbar bleiben.
+- Änderungen an Lizenz, Lizenzhinweisen oder Quellcode-Angebot müssen in
+  README, Projektspezifikation und Changelog dokumentiert werden.
+
 ## PHP und Laravel
 
 - Halte PSR-4-Namensräume und die bestehende Verzeichnisstruktur ein.
