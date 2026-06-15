@@ -71,7 +71,17 @@
                 <tbody>
                     @foreach ($invoice->items as $item)
                         <tr>
-                            <td>{{ $item->description }}</td>
+                            <td>
+                                {{ $item->description }}
+                                @if (isset($item->metadata['settlement_type']))
+                                    <div class="small text-secondary">
+                                        {{ App\Enums\BillingSettlementType::from($item->metadata['settlement_type'])->label() }}
+                                        @if ($item->metadata['prorated'] ?? false)
+                                            · zeitanteilig {{ number_format((float) $item->metadata['proration_factor'] * 100, 2, ',', '.') }} %
+                                        @endif
+                                    </div>
+                                @endif
+                            </td>
                             <td class="text-end">{{ number_format((float) $item->quantity, 4, ',', '.') }}</td>
                             <td class="text-end">{{ number_format((float) $item->unit_price, 4, ',', '.') }} €</td>
                             <td class="text-end">{{ number_format((float) $item->total_amount, 2, ',', '.') }} €</td>

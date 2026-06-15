@@ -41,10 +41,28 @@
         <div class="form-text">Bestimmt, ob der Preis für Mitglieder, Parzellen oder nur ausgewählte Zuordnungen gilt.</div>
     </div>
     <div class="col-md-4">
+        <label class="form-label" for="settlement_type">Abrechnungsart</label>
+        <select class="form-select" id="settlement_type" name="settlement_type" required>
+            @foreach ($settlementTypes as $settlementType)
+                <option value="{{ $settlementType->value }}" @selected(old('settlement_type', $template->settlement_type?->value) === $settlementType->value)>{{ $settlementType->label() }}</option>
+            @endforeach
+        </select>
+        <div class="form-text">Vorauszahlung schlägt beim Übernehmen das Folgejahr vor. Nachberechnung verwendet den Zeitraum des Rechnungslaufs.</div>
+    </div>
+    <div class="col-md-4">
         <label class="form-label" for="default_amount">Vorschlagsbetrag in Euro</label>
         <input class="form-control" type="number" id="default_amount" name="default_amount"
                min="0" step="0.0001" value="{{ old('default_amount', $template->default_amount) }}">
         <div class="form-text">Optional. Der Betrag kann beim Übernehmen für jede Periode geändert werden.</div>
+    </div>
+    <div class="col-12">
+        <div class="form-check">
+            <input type="hidden" name="prorate" value="0">
+            <input class="form-check-input" type="checkbox" id="prorate" name="prorate" value="1"
+                   @checked(old('prorate', $template->prorate ?? false))>
+            <label class="form-check-label" for="prorate">Bei Ein- oder Austritt taggenau anteilig berechnen</label>
+            <div class="form-text">Empfohlen für Pacht, Versicherung, Beiträge und andere Jahreskosten. Verbrauchspreise werden bereits über den tatsächlichen Verbrauch abgegrenzt.</div>
+        </div>
     </div>
     <div class="col-12">
         <label class="form-label" for="description">Interne Beschreibung</label>

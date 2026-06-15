@@ -15,7 +15,10 @@
                                 <div class="card-body">
                                     <strong>{{ $template->name }}</strong>
                                     <div class="small text-secondary mt-1">
-                                        {{ $template->calculation_type->label() }} · {{ $template->scope->label() }}
+                                        {{ $template->calculation_type->label() }} · {{ $template->scope->label() }} · {{ $template->settlement_type->label() }}
+                                        @if ($template->prorate)
+                                            · anteilig
+                                        @endif
                                     </div>
                                     <div class="mt-2">
                                         {{ $template->default_amount !== null ? number_format((float) $template->default_amount, 4, ',', '.').' € vorgeschlagen' : 'Betrag bei Übernahme eingeben' }}
@@ -37,7 +40,7 @@
         </div>
     @else
         <div class="alert alert-success">
-            Vorlage <strong>{{ $selectedTemplate->name }}</strong> ausgewählt. Die Berechnungsregeln werden unverändert übernommen; passe unten nur den Betrag für {{ $billingPeriod->name }} an.
+            Vorlage <strong>{{ $selectedTemplate->name }}</strong> ausgewählt. Die Berechnungsregeln werden übernommen; prüfe unten Betrag und Leistungszeitraum für {{ $billingPeriod->name }}.
         </div>
     @endif
     <div class="card border-0 shadow-sm">

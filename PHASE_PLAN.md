@@ -59,6 +59,9 @@ vorherigen Phase geprüft sein.
 - [x] Versicherungen
 - [x] PDF-Rechnungen
 - [x] Konfigurierbare Preisvorlagen
+- [x] Taggenaue Abrechnung bei Ein- und Austritten
+- [x] Vorauszahlungen und Verbrauchsnachberechnungen in einem Rechnungslauf
+- [x] Eigene Leistungszeiträume je Preis
 
 ## Phase 4: SEPA
 

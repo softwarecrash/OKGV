@@ -330,3 +330,21 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Gesamttests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
+
+## Nachbesserung Phase 3: Zeitanteile und Leistungszeiträume
+
+- [x] Bestehende Behandlung von Eintritten, Austritten und Pächterwechseln prüfen
+- [x] Abrechnungsperiode als Rechnungslauf und Preise mit eigenem Leistungszeitraum spezifizieren
+- [x] Abrechnungsart Vorauszahlung und Nachberechnung ergänzen
+- [x] Taggenaue Zeitanteilsregel für Mitglieds- und Parzellenkosten ergänzen
+- [x] Pächterwechsel in getrennte Hauptpächteranteile aufteilen
+- [x] Verbrauch auf den tatsächlichen Pacht- und Leistungszeitraum begrenzen
+- [x] Preisvorlagen um Abrechnungsart und Zeitanteilsregel erweitern
+- [x] Leistungszeitraum und Zeitanteil in Oberfläche, Rechnung und PDF anzeigen
+- [x] Demo-Preise auf Vorauszahlung und Nachberechnung umstellen
+- [x] Migration auf MariaDB vorwärts und rückwärts prüfen
+- [x] Fachtests für Eintritt, Austritt, Pächterwechsel und gemischten Rechnungslauf ergänzen
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen
+- [ ] Eigenständige Gutschriften/Korrekturbelege für Änderungen nach Rechnungsfreigabe umsetzen

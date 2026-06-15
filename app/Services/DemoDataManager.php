@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\BillingPeriodStatus;
 use App\Enums\BillingRateScope;
 use App\Enums\BillingRateType;
+use App\Enums\BillingSettlementType;
 use App\Enums\MemberStatus;
 use App\Enums\MeterReadingSource;
 use App\Enums\MeterReadingSubmissionStatus;
@@ -432,11 +433,15 @@ final class DemoDataManager
 
         foreach ($periods as $year => $periodId) {
             foreach ([
-                ['LEASE_PER_SQM', 'Pacht je m²', BillingRateType::PerSquareMeter, BillingRateScope::Parcel, $amounts[$year][0]],
-                ['WATER_PER_M3', 'Wasser je m³', BillingRateType::PerCubicMeter, BillingRateScope::Parcel, $amounts[$year][1]],
-                ['ELECTRICITY_PER_KWH', 'Strom je kWh', BillingRateType::PerKilowattHour, BillingRateScope::Parcel, $amounts[$year][2]],
-                ['MEMBER_FEE', 'Mitgliedsbeitrag', BillingRateType::Fixed, BillingRateScope::Member, $amounts[$year][3]],
-            ] as [$code, $name, $type, $scope, $amount]) {
+                ['LEASE_PER_SQM', 'Pacht je m²', BillingRateType::PerSquareMeter, BillingRateScope::Parcel, BillingSettlementType::Advance, true, $amounts[$year][0]],
+                ['WATER_PER_M3', 'Wasser je m³', BillingRateType::PerCubicMeter, BillingRateScope::Parcel, BillingSettlementType::Arrears, false, $amounts[$year][1]],
+                ['ELECTRICITY_PER_KWH', 'Strom je kWh', BillingRateType::PerKilowattHour, BillingRateScope::Parcel, BillingSettlementType::Arrears, false, $amounts[$year][2]],
+                ['MEMBER_FEE', 'Mitgliedsbeitrag', BillingRateType::Fixed, BillingRateScope::Member, BillingSettlementType::Advance, true, $amounts[$year][3]],
+            ] as [$code, $name, $type, $scope, $settlementType, $prorate, $amount]) {
+                $serviceYear = $settlementType === BillingSettlementType::Advance
+                    ? $year + 1
+                    : $year;
+
                 DB::table('billing_rates')->insert([
                     'billing_period_id' => $periodId,
                     'code' => $code,
@@ -444,7 +449,11 @@ final class DemoDataManager
                     'description' => 'Automatisch erzeugter Demo-Preis.',
                     'calculation_type' => $type->value,
                     'scope' => $scope->value,
+                    'settlement_type' => $settlementType->value,
+                    'service_starts_at' => "{$serviceYear}-01-01",
+                    'service_ends_at' => "{$serviceYear}-12-31",
                     'amount' => $amount,
+                    'prorate' => $prorate,
                     'is_active' => true,
                     'created_at' => $now,
                     'updated_at' => $now,

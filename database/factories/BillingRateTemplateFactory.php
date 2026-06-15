@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\BillingRateScope;
 use App\Enums\BillingRateType;
+use App\Enums\BillingSettlementType;
 use App\Models\BillingRateTemplate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,7 +22,9 @@ class BillingRateTemplateFactory extends Factory
             'name' => fake()->words(3, true),
             'calculation_type' => BillingRateType::Fixed,
             'scope' => BillingRateScope::Member,
+            'settlement_type' => BillingSettlementType::Arrears,
             'default_amount' => fake()->randomFloat(4, 1, 500),
+            'prorate' => false,
             'is_active' => true,
         ];
     }

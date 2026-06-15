@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\BillingRateScope;
 use App\Enums\BillingRateType;
+use App\Enums\BillingSettlementType;
 use App\Models\BillingRate;
 use App\Models\BillingRateTemplate;
 use Illuminate\Foundation\Http\FormRequest;
@@ -46,7 +47,11 @@ class BillingRateRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:10000'],
             'calculation_type' => ['required', Rule::enum(BillingRateType::class)],
             'scope' => ['required', Rule::enum(BillingRateScope::class)],
+            'settlement_type' => ['required', Rule::enum(BillingSettlementType::class)],
+            'service_starts_at' => ['required', 'date'],
+            'service_ends_at' => ['required', 'date', 'after_or_equal:service_starts_at'],
             'amount' => ['required', 'numeric', 'decimal:0,4', 'min:0'],
+            'prorate' => ['sometimes', 'boolean'],
             'is_active' => ['sometimes', 'boolean'],
         ];
     }
@@ -80,6 +85,16 @@ class BillingRateRequest extends FormRequest
                         'Zugeordnete Kosten müssen Festbeträge oder manuelle Positionen sein.',
                     );
                 }
+
+                if (in_array($type, [
+                    BillingRateType::PerKilowattHour,
+                    BillingRateType::PerCubicMeter,
+                ], true) && $this->boolean('prorate')) {
+                    $validator->errors()->add(
+                        'prorate',
+                        'Verbrauchskosten werden bereits über den tatsächlichen Verbrauch im Leistungszeitraum abgegrenzt und nicht zusätzlich zeitanteilig gekürzt.',
+                    );
+                }
             },
         ];
     }
@@ -104,6 +119,19 @@ class BillingRateRequest extends FormRequest
             'calculation_type' => $template?->calculation_type->value
                 ?? $this->input('calculation_type'),
             'scope' => $template?->scope->value ?? $this->input('scope'),
+            'settlement_type' => $template?->settlement_type->value
+                ?? $this->input('settlement_type', BillingSettlementType::Arrears->value),
+            'service_starts_at' => $this->input(
+                'service_starts_at',
+                $this->route('billing_period')?->starts_at?->toDateString(),
+            ),
+            'service_ends_at' => $this->input(
+                'service_ends_at',
+                $this->route('billing_period')?->ends_at?->toDateString(),
+            ),
+            'prorate' => $template
+                ? $template->prorate
+                : $this->boolean('prorate'),
             'is_active' => $this->boolean('is_active'),
         ]);
     }

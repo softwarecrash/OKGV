@@ -27,6 +27,9 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Atomare Zählerwechsel und Verbrauch über mehrere Zählersegmente
 - Abrechnungsperioden mit historischen Preisen und Zusatzkosten
 - Reproduzierbare Rechnungen aus Flächen-, Verbrauchs- und Festkosten
+- Taggenaue Teilabrechnung bei Eintritten, Austritten und Pächterwechseln
+- Gemeinsamer Rechnungslauf für Vorauszahlungen und Verbrauchsnachberechnungen
+- Eigene Leistungszeiträume je Preis mit sichtbarer Herleitung auf Rechnung und PDF
 - Gemeinsame Rechnungen für Haupt- und Mitpächter mit historischen Empfängerdaten
 - Freigabeschutz für Rechnungen und serverseitige PDF-Ausgabe
 - Konfigurierbare Preisvorlagen für wiederkehrende Kostenarten
@@ -68,9 +71,13 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Globale Vereinsvorgaben für Pflichtstunden und Betrag je Fehlstunde
 - Prüfpflichtige Pächtermeldungen mit optionalem privatem Foto
 
-Freigegebene Rechnungen sind unveränderbar. Pächterwechsel innerhalb einer
-Periode werden bis zum vollständigen Übergabeprozess bewusst nicht automatisch
-abgerechnet.
+Freigegebene Rechnungen sind unveränderbar. Bei der Berechnung werden
+Mitgliedseintritte und -austritte anhand der Mitgliedschaft, Pächterwechsel
+anhand der dauerhaften Pächterhistorie taggenau berücksichtigt. Ein
+Rechnungslauf kann zum Beispiel Pacht und Versicherung für das Folgejahr als
+Vorauszahlung sowie Wasser und Strom für das zurückliegende Jahr als
+Nachberechnung enthalten. Für eine verbrauchsgenaue Aufteilung bei
+Pächterwechseln muss ein Übergabezählerstand vorhanden sein.
 
 Konten mit dem Recht `Abrechnungen und Rechnungen verwalten` finden unter
 `Finanzen` die Arbeitsstundenübersicht. Zusätzlich zeigt jede

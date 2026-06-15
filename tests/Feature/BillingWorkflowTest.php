@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Enums\BillingPeriodStatus;
 use App\Enums\BillingRateScope;
 use App\Enums\BillingRateType;
+use App\Enums\BillingSettlementType;
 use App\Enums\InvoiceStatus;
 use App\Enums\MeterStatus;
 use App\Enums\MeterType;
@@ -22,7 +23,6 @@ use App\Models\User;
 use App\Services\BillingCalculator;
 use App\Services\BillingPeriodManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Validation\ValidationException;
 use LogicException;
 use Tests\TestCase;
 
@@ -214,7 +214,84 @@ class BillingWorkflowTest extends TestCase
             ->assertDontSee('Andere Straße 9');
     }
 
-    public function test_calculation_rejects_tenant_change_within_period(): void
+    public function test_tenant_change_is_split_between_both_primary_tenants(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $period = BillingPeriod::factory()->create([
+            'starts_at' => '2025-01-01',
+            'ends_at' => '2025-12-31',
+            'due_at' => '2026-02-01',
+        ]);
+        $parcel = Parcel::factory()->create(['area_sqm' => '100.0000']);
+        $firstMember = Member::factory()->create(['joined_at' => '2020-01-01']);
+        $secondMember = Member::factory()->create(['joined_at' => '2025-07-01']);
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $firstMember->id,
+            'starts_at' => '2020-01-01',
+            'ends_at' => '2025-06-30',
+        ]);
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $secondMember->id,
+            'starts_at' => '2025-07-01',
+            'ends_at' => null,
+        ]);
+        BillingRate::factory()->create([
+            'billing_period_id' => $period->id,
+            'code' => 'LEASE_PER_SQM',
+            'calculation_type' => BillingRateType::PerSquareMeter,
+            'scope' => BillingRateScope::Parcel,
+            'amount' => '1.0000',
+            'prorate' => true,
+        ]);
+
+        app(BillingCalculator::class)->calculate($period, $administrator);
+
+        $this->assertDatabaseCount('invoices', 2);
+        $firstInvoice = Invoice::query()->where('member_id', $firstMember->id)->with('items')->firstOrFail();
+        $secondInvoice = Invoice::query()->where('member_id', $secondMember->id)->with('items')->firstOrFail();
+        $this->assertSame('49.59', $firstInvoice->total_amount);
+        $this->assertSame('50.41', $secondInvoice->total_amount);
+        $this->assertSame('0.49589041', $firstInvoice->items->first()->metadata['proration_factor']);
+        $this->assertSame('0.50410958', $secondInvoice->items->first()->metadata['proration_factor']);
+    }
+
+    public function test_member_fee_is_prorated_for_midyear_entry_and_exit(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $period = BillingPeriod::factory()->create([
+            'starts_at' => '2025-01-01',
+            'ends_at' => '2025-12-31',
+            'due_at' => '2026-02-01',
+        ]);
+        $member = Member::factory()->create([
+            'joined_at' => '2025-07-01',
+            'left_at' => '2025-09-30',
+        ]);
+        BillingRate::factory()->create([
+            'billing_period_id' => $period->id,
+            'code' => 'MEMBER_FEE',
+            'calculation_type' => BillingRateType::Fixed,
+            'scope' => BillingRateScope::Member,
+            'amount' => '120.0000',
+            'prorate' => true,
+        ]);
+
+        app(BillingCalculator::class)->calculate($period, $administrator);
+
+        $invoice = Invoice::query()->where('member_id', $member->id)->with('items')->firstOrFail();
+        $this->assertSame('30.25', $invoice->total_amount);
+        $this->assertSame('0.25205479', $invoice->items->first()->metadata['proration_factor']);
+        $this->assertSame([
+            [
+                'starts_at' => '2025-07-01',
+                'ends_at' => '2025-09-30',
+            ],
+        ], $invoice->items->first()->metadata['usage_periods']);
+    }
+
+    public function test_consumption_is_split_at_tenant_change_reading(): void
     {
         $administrator = User::factory()->administrator()->create();
         $period = BillingPeriod::factory()->create([
@@ -223,21 +300,109 @@ class BillingWorkflowTest extends TestCase
             'due_at' => '2026-02-01',
         ]);
         $parcel = Parcel::factory()->create();
+        $firstMember = Member::factory()->create(['joined_at' => '2020-01-01']);
+        $secondMember = Member::factory()->create(['joined_at' => '2025-07-01']);
         ParcelTenant::factory()->create([
             'parcel_id' => $parcel->id,
-            'member_id' => Member::factory(),
+            'member_id' => $firstMember->id,
             'starts_at' => '2020-01-01',
             'ends_at' => '2025-06-30',
         ]);
         ParcelTenant::factory()->create([
             'parcel_id' => $parcel->id,
-            'member_id' => Member::factory(),
+            'member_id' => $secondMember->id,
             'starts_at' => '2025-07-01',
-            'ends_at' => null,
+        ]);
+        $meter = Meter::factory()->create([
+            'parcel_id' => $parcel->id,
+            'type' => MeterType::Water,
+            'installed_at' => '2025-01-01',
+            'start_reading' => '0.0000',
+        ]);
+        foreach ([
+            ['2025-01-01', '0.0000'],
+            ['2025-06-30', '30.0000'],
+            ['2025-12-31', '80.0000'],
+        ] as [$date, $value]) {
+            MeterReading::factory()->create([
+                'meter_id' => $meter->id,
+                'reading_date' => $date,
+                'reading_value' => $value,
+            ]);
+        }
+        BillingRate::factory()->create([
+            'billing_period_id' => $period->id,
+            'code' => 'WATER_PER_M3',
+            'calculation_type' => BillingRateType::PerCubicMeter,
+            'scope' => BillingRateScope::Parcel,
+            'amount' => '2.0000',
         ]);
 
-        $this->expectException(ValidationException::class);
         app(BillingCalculator::class)->calculate($period, $administrator);
+
+        $this->assertSame(
+            '30.0000',
+            Invoice::query()->where('member_id', $firstMember->id)->firstOrFail()
+                ->items()->firstOrFail()->quantity,
+        );
+        $this->assertSame(
+            '50.0000',
+            Invoice::query()->where('member_id', $secondMember->id)->firstOrFail()
+                ->items()->firstOrFail()->quantity,
+        );
+    }
+
+    public function test_one_run_combines_advance_lease_and_arrears_consumption(): void
+    {
+        [$administrator, $period, $member, $parcel] = $this->billingScenario();
+        BillingRate::factory()->create([
+            'billing_period_id' => $period->id,
+            'code' => 'LEASE_PER_SQM',
+            'name' => 'Pacht',
+            'calculation_type' => BillingRateType::PerSquareMeter,
+            'scope' => BillingRateScope::Parcel,
+            'settlement_type' => BillingSettlementType::Advance,
+            'service_starts_at' => '2026-01-01',
+            'service_ends_at' => '2026-12-31',
+            'amount' => '0.5000',
+            'prorate' => true,
+        ]);
+        $waterRate = BillingRate::factory()->create([
+            'billing_period_id' => $period->id,
+            'code' => 'WATER_PER_M3',
+            'name' => 'Wasser',
+            'calculation_type' => BillingRateType::PerCubicMeter,
+            'scope' => BillingRateScope::Parcel,
+            'settlement_type' => BillingSettlementType::Arrears,
+            'service_starts_at' => '2025-01-01',
+            'service_ends_at' => '2025-12-31',
+            'amount' => '2.0000',
+        ]);
+        $meter = Meter::factory()->create([
+            'parcel_id' => $parcel->id,
+            'type' => MeterType::Water,
+            'installed_at' => '2025-01-01',
+            'start_reading' => '10.0000',
+        ]);
+        MeterReading::factory()->create([
+            'meter_id' => $meter->id,
+            'reading_date' => '2025-12-31',
+            'reading_value' => '25.0000',
+        ]);
+
+        app(BillingCalculator::class)->calculate($period, $administrator);
+
+        $invoice = Invoice::query()->with('items')->where('member_id', $member->id)->firstOrFail();
+        $this->assertCount(2, $invoice->items);
+        $this->assertStringContainsString(
+            '01.01.2026–31.12.2026',
+            $invoice->items->firstWhere('code', 'LEASE_PER_SQM')->description,
+        );
+        $this->assertSame(
+            'arrears',
+            $invoice->items->firstWhere('billing_rate_id', $waterRate->id)
+                ->metadata['settlement_type'],
+        );
     }
 
     public function test_invoice_pdf_is_generated_and_policy_protected(): void
@@ -263,7 +428,7 @@ class BillingWorkflowTest extends TestCase
             'ends_at' => '2025-12-31',
             'due_at' => '2026-02-01',
         ]);
-        $member = Member::factory()->create();
+        $member = Member::factory()->create(['joined_at' => '2020-01-01']);
         $parcel = Parcel::factory()->create(['area_sqm' => '100.5000']);
         ParcelTenant::factory()->create([
             'parcel_id' => $parcel->id,

@@ -16,6 +16,7 @@ use App\Models\Parcel;
 use App\Models\ParcelTenant;
 use App\Models\User;
 use App\Models\WorkHour;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -43,7 +44,6 @@ final class BillingCalculator
                 ]);
             }
 
-            $this->ensureNoTenantChanges($period);
             $period->invoices()->each(function (Invoice $invoice): void {
                 $invoice->items()->delete();
                 $invoice->recipients()->delete();
@@ -59,35 +59,20 @@ final class BillingCalculator
                 ->with('parcel')
                 ->get()
                 ->keyBy('parcel_id');
+            $members = Member::query()
+                ->with(['parcelTenancies.parcel'])
+                ->orderBy('id')
+                ->get();
 
-            $tenancies = ParcelTenant::query()
-                ->where('is_primary', true)
-                ->activeOn($period->ends_at)
-                ->with(['member', 'parcel'])
-                ->orderBy('member_id')
-                ->orderBy('parcel_id')
-                ->get()
-                ->groupBy('member_id');
-
-            foreach ($tenancies as $memberTenancies) {
-                $member = $memberTenancies->first()->member;
-                $parcels = $memberTenancies->pluck('parcel')->unique('id')->values();
-                $contractParties = ParcelTenant::query()
-                    ->whereIn('parcel_id', $parcels->pluck('id'))
-                    ->activeOn($period->ends_at)
-                    ->with('member')
-                    ->orderByDesc('is_primary')
-                    ->orderBy('starts_at')
-                    ->get()
-                    ->pluck('member')
-                    ->unique('id')
+            foreach ($members as $member) {
+                $primaryTenancies = $member->parcelTenancies
+                    ->where('is_primary', true)
                     ->values();
 
                 $this->createInvoice(
                     $period,
                     $member,
-                    $contractParties,
-                    $parcels,
+                    $primaryTenancies,
                     $rates,
                     $workHours,
                 );
@@ -95,7 +80,7 @@ final class BillingCalculator
 
             if ($period->invoices()->doesntExist()) {
                 throw ValidationException::withMessages([
-                    'status' => 'Für diese Periode wurden keine abrechnungsrelevanten Hauptpächter gefunden.',
+                    'status' => 'Für diese Periode wurden keine abrechnungsrelevanten Mitglieder oder Pächter gefunden.',
                 ]);
             }
 
@@ -115,39 +100,15 @@ final class BillingCalculator
         });
     }
 
-    private function ensureNoTenantChanges(BillingPeriod $period): void
-    {
-        $changedParcel = ParcelTenant::query()
-            ->select('parcel_id')
-            ->where('is_primary', true)
-            ->whereDate('starts_at', '<=', $period->ends_at)
-            ->where(function ($query) use ($period): void {
-                $query->whereNull('ends_at')
-                    ->orWhereDate('ends_at', '>=', $period->starts_at);
-            })
-            ->groupBy('parcel_id')
-            ->havingRaw('COUNT(*) > 1')
-            ->with('parcel:id,parcel_number')
-            ->first();
-
-        if ($changedParcel) {
-            throw ValidationException::withMessages([
-                'status' => "Parzelle {$changedParcel->parcel->parcel_number} hat innerhalb der Periode einen Pächterwechsel.",
-            ]);
-        }
-    }
-
     /**
-     * @param  Collection<int, Parcel>  $parcels
-     * @param  Collection<int, Member>  $contractParties
+     * @param  Collection<int, ParcelTenant>  $primaryTenancies
      * @param  Collection<int, BillingRate>  $rates
      * @param  Collection<int, WorkHour>  $workHours
      */
     private function createInvoice(
         BillingPeriod $period,
         Member $member,
-        Collection $contractParties,
-        Collection $parcels,
+        Collection $primaryTenancies,
         Collection $rates,
         Collection $workHours,
     ): void {
@@ -161,37 +122,28 @@ final class BillingCalculator
             'total_amount' => '0.00',
         ]);
 
-        $orderedRecipients = $contractParties
-            ->sortByDesc(fn (Member $contractParty): bool => $contractParty->is($member))
-            ->values();
-
-        foreach ($orderedRecipients as $position => $contractParty) {
-            $invoice->recipients()->create([
-                'member_id' => $contractParty->id,
-                'member_number' => $contractParty->member_number,
-                'first_name' => $contractParty->first_name,
-                'last_name' => $contractParty->last_name,
-                'street' => $contractParty->street,
-                'zip' => $contractParty->zip,
-                'city' => $contractParty->city,
-                'is_primary' => $contractParty->is($member),
-                'position' => $position,
-            ]);
-        }
-
+        $this->snapshotRecipients($invoice, $member, $primaryTenancies, $rates);
         $total = '0.00';
 
         foreach ($rates as $rate) {
             $total = bcadd(
                 $total,
                 match ($rate->scope) {
-                    BillingRateScope::Member => $this->addMemberRate($invoice, $rate),
-                    BillingRateScope::Parcel => $this->addParcelRate($invoice, $rate, $parcels, $period),
+                    BillingRateScope::Member => $this->addMemberRate(
+                        $invoice,
+                        $rate,
+                        $member,
+                    ),
+                    BillingRateScope::Parcel => $this->addParcelRate(
+                        $invoice,
+                        $rate,
+                        $primaryTenancies,
+                    ),
                     BillingRateScope::Assignment => $this->addAssignedRate(
                         $invoice,
                         $rate,
                         $member,
-                        $parcels,
+                        $primaryTenancies,
                     ),
                 },
                 2,
@@ -202,13 +154,269 @@ final class BillingCalculator
             $total,
             $this->addWorkHourPenalties(
                 $invoice,
-                $parcels,
+                $primaryTenancies
+                    ->filter(fn (ParcelTenant $tenancy) => $this->overlap(
+                        $tenancy->starts_at,
+                        $tenancy->ends_at,
+                        $period->ends_at,
+                        $period->ends_at,
+                    ))
+                    ->pluck('parcel')
+                    ->unique('id')
+                    ->values(),
                 $workHours,
             ),
             2,
         );
 
+        if ($invoice->items()->doesntExist()) {
+            $invoice->recipients()->delete();
+            $invoice->delete();
+
+            return;
+        }
+
         $invoice->update(['total_amount' => $total]);
+    }
+
+    /**
+     * @param  Collection<int, ParcelTenant>  $primaryTenancies
+     * @param  Collection<int, BillingRate>  $rates
+     */
+    private function snapshotRecipients(
+        Invoice $invoice,
+        Member $member,
+        Collection $primaryTenancies,
+        Collection $rates,
+    ): void {
+        $recipients = collect([$member]);
+        $serviceStart = $rates->min('service_starts_at');
+        $serviceEnd = $rates->max('service_ends_at');
+
+        if ($serviceStart && $serviceEnd) {
+            foreach ($primaryTenancies as $primaryTenancy) {
+                $primaryOverlap = $this->overlap(
+                    $primaryTenancy->starts_at,
+                    $primaryTenancy->ends_at,
+                    $serviceStart,
+                    $serviceEnd,
+                );
+
+                if (! $primaryOverlap) {
+                    continue;
+                }
+
+                $recipients = $recipients->merge(
+                    ParcelTenant::query()
+                        ->where('parcel_id', $primaryTenancy->parcel_id)
+                        ->whereDate('starts_at', '<=', $primaryOverlap['end'])
+                        ->where(function ($query) use ($primaryOverlap): void {
+                            $query->whereNull('ends_at')
+                                ->orWhereDate('ends_at', '>=', $primaryOverlap['start']);
+                        })
+                        ->with('member')
+                        ->get()
+                        ->pluck('member'),
+                );
+            }
+        }
+
+        $orderedRecipients = $recipients
+            ->filter()
+            ->unique('id')
+            ->sortByDesc(fn (Member $recipient): bool => $recipient->is($member))
+            ->values();
+
+        foreach ($orderedRecipients as $position => $recipient) {
+            $invoice->recipients()->create([
+                'member_id' => $recipient->id,
+                'member_number' => $recipient->member_number,
+                'first_name' => $recipient->first_name,
+                'last_name' => $recipient->last_name,
+                'street' => $recipient->street,
+                'zip' => $recipient->zip,
+                'city' => $recipient->city,
+                'is_primary' => $recipient->is($member),
+                'position' => $position,
+            ]);
+        }
+    }
+
+    private function addMemberRate(
+        Invoice $invoice,
+        BillingRate $rate,
+        Member $member,
+    ): string {
+        $overlap = $this->overlap(
+            $member->joined_at,
+            $member->left_at,
+            $rate->service_starts_at,
+            $rate->service_ends_at,
+        );
+
+        if (! $overlap) {
+            return '0.00';
+        }
+
+        $factor = $rate->prorate
+            ? $this->prorationFactor($overlap, $rate)
+            : '1.00000000';
+
+        return $this->createItem(
+            $invoice,
+            $rate,
+            null,
+            $factor,
+            $this->periodMetadata($rate, $overlap, $factor),
+        );
+    }
+
+    /**
+     * @param  Collection<int, ParcelTenant>  $primaryTenancies
+     */
+    private function addParcelRate(
+        Invoice $invoice,
+        BillingRate $rate,
+        Collection $primaryTenancies,
+    ): string {
+        $total = '0.00';
+
+        foreach ($primaryTenancies->groupBy('parcel_id') as $parcelTenancies) {
+            /** @var Parcel $parcel */
+            $parcel = $parcelTenancies->first()->parcel;
+            $overlaps = $parcelTenancies
+                ->map(fn (ParcelTenant $tenancy) => $this->overlap(
+                    $tenancy->starts_at,
+                    $tenancy->ends_at,
+                    $rate->service_starts_at,
+                    $rate->service_ends_at,
+                ))
+                ->filter()
+                ->values();
+
+            if ($overlaps->isEmpty()) {
+                continue;
+            }
+
+            $quantity = match ($rate->calculation_type) {
+                BillingRateType::Fixed, BillingRateType::Manual => $rate->prorate
+                    ? $this->combinedProrationFactor($overlaps, $rate)
+                    : '1.0000',
+                BillingRateType::PerSquareMeter => $rate->prorate
+                    ? bcmul(
+                        $parcel->area_sqm,
+                        $this->combinedProrationFactor($overlaps, $rate),
+                        8,
+                    )
+                    : $parcel->area_sqm,
+                BillingRateType::PerKilowattHour => $this->consumptionForOverlaps(
+                    $parcel,
+                    MeterType::Electricity,
+                    $overlaps,
+                ),
+                BillingRateType::PerCubicMeter => $this->consumptionForOverlaps(
+                    $parcel,
+                    MeterType::Water,
+                    $overlaps,
+                ),
+            };
+            $factor = $rate->prorate
+                ? $this->combinedProrationFactor($overlaps, $rate)
+                : '1.00000000';
+
+            $total = bcadd(
+                $total,
+                $this->createItem(
+                    $invoice,
+                    $rate,
+                    $parcel,
+                    $quantity,
+                    $this->periodMetadata($rate, null, $factor, $overlaps),
+                ),
+                2,
+            );
+        }
+
+        return $total;
+    }
+
+    /**
+     * @param  Collection<int, ParcelTenant>  $primaryTenancies
+     */
+    private function addAssignedRate(
+        Invoice $invoice,
+        BillingRate $rate,
+        Member $member,
+        Collection $primaryTenancies,
+    ): string {
+        $total = '0.00';
+        $assignments = $rate->assignments->filter(
+            fn (BillingRateAssignment $assignment) => $assignment->member_id === $member->id
+                || ($assignment->parcel_id
+                    && $primaryTenancies->contains('parcel_id', $assignment->parcel_id)),
+        );
+
+        foreach ($assignments as $assignment) {
+            if ($assignment->member_id) {
+                $overlap = $this->overlap(
+                    $member->joined_at,
+                    $member->left_at,
+                    $rate->service_starts_at,
+                    $rate->service_ends_at,
+                );
+
+                if (! $overlap) {
+                    continue;
+                }
+
+                $factor = $rate->prorate
+                    ? $this->prorationFactor($overlap, $rate)
+                    : '1.00000000';
+                $quantity = $rate->prorate
+                    ? bcmul($assignment->quantity, $factor, 8)
+                    : $assignment->quantity;
+                $metadata = $this->periodMetadata($rate, $overlap, $factor);
+            } else {
+                $parcelTenancies = $primaryTenancies
+                    ->where('parcel_id', $assignment->parcel_id);
+                $overlaps = $parcelTenancies
+                    ->map(fn (ParcelTenant $tenancy) => $this->overlap(
+                        $tenancy->starts_at,
+                        $tenancy->ends_at,
+                        $rate->service_starts_at,
+                        $rate->service_ends_at,
+                    ))
+                    ->filter()
+                    ->values();
+
+                if ($overlaps->isEmpty()) {
+                    continue;
+                }
+
+                $factor = $rate->prorate
+                    ? $this->combinedProrationFactor($overlaps, $rate)
+                    : '1.00000000';
+                $quantity = $rate->prorate
+                    ? bcmul($assignment->quantity, $factor, 8)
+                    : $assignment->quantity;
+                $metadata = $this->periodMetadata($rate, null, $factor, $overlaps);
+            }
+
+            $metadata['assignment_id'] = $assignment->id;
+            $total = bcadd(
+                $total,
+                $this->createItem(
+                    $invoice,
+                    $rate,
+                    $assignment->parcel,
+                    $quantity,
+                    $metadata,
+                ),
+                2,
+            );
+        }
+
+        return $total;
     }
 
     /**
@@ -252,82 +460,27 @@ final class BillingCalculator
         return $total;
     }
 
-    private function addMemberRate(Invoice $invoice, BillingRate $rate): string
-    {
-        return $this->createItem($invoice, $rate, null, '1.0000');
-    }
-
     /**
-     * @param  Collection<int, Parcel>  $parcels
+     * @param  Collection<int, array{start: CarbonInterface, end: CarbonInterface}>  $overlaps
      */
-    private function addParcelRate(
-        Invoice $invoice,
-        BillingRate $rate,
-        Collection $parcels,
-        BillingPeriod $period,
+    private function consumptionForOverlaps(
+        Parcel $parcel,
+        MeterType $type,
+        Collection $overlaps,
     ): string {
-        $total = '0.00';
-
-        foreach ($parcels as $parcel) {
-            $quantity = match ($rate->calculation_type) {
-                BillingRateType::Fixed, BillingRateType::Manual => '1.0000',
-                BillingRateType::PerSquareMeter => $parcel->area_sqm,
-                BillingRateType::PerKilowattHour => $this->consumptionCalculator->forParcel(
-                    $parcel->id,
-                    MeterType::Electricity->value,
-                    $period->starts_at,
-                    $period->ends_at,
-                ),
-                BillingRateType::PerCubicMeter => $this->consumptionCalculator->forParcel(
-                    $parcel->id,
-                    MeterType::Water->value,
-                    $period->starts_at,
-                    $period->ends_at,
-                ),
-            };
-
-            $total = bcadd(
+        return $overlaps->reduce(
+            fn (string $total, array $overlap): string => bcadd(
                 $total,
-                $this->createItem($invoice, $rate, $parcel, $quantity),
-                2,
-            );
-        }
-
-        return $total;
-    }
-
-    /**
-     * @param  Collection<int, Parcel>  $parcels
-     */
-    private function addAssignedRate(
-        Invoice $invoice,
-        BillingRate $rate,
-        Member $member,
-        Collection $parcels,
-    ): string {
-        $total = '0.00';
-        $parcelIds = $parcels->pluck('id')->all();
-
-        $assignments = $rate->assignments->filter(
-            fn (BillingRateAssignment $assignment) => $assignment->member_id === $member->id
-                || ($assignment->parcel_id && in_array($assignment->parcel_id, $parcelIds, true)),
+                $this->consumptionCalculator->forParcel(
+                    $parcel->id,
+                    $type->value,
+                    $overlap['start'],
+                    $overlap['end'],
+                ),
+                4,
+            ),
+            '0.0000',
         );
-
-        foreach ($assignments as $assignment) {
-            $total = bcadd(
-                $total,
-                $this->createItem(
-                    $invoice,
-                    $rate,
-                    $assignment->parcel,
-                    $assignment->quantity,
-                    ['assignment_id' => $assignment->id],
-                ),
-                2,
-            );
-        }
-
-        return $total;
     }
 
     /**
@@ -338,12 +491,17 @@ final class BillingCalculator
         BillingRate $rate,
         ?Parcel $parcel,
         string $quantity,
-        array $metadata = [],
+        array $metadata,
     ): string {
         $total = $this->roundMoney(bcmul($quantity, $rate->amount, 8));
         $description = $parcel
             ? "{$rate->name} - Parzelle {$parcel->parcel_number}"
             : $rate->name;
+        $description .= sprintf(
+            ' (%s–%s)',
+            $rate->service_starts_at->format('d.m.Y'),
+            $rate->service_ends_at->format('d.m.Y'),
+        );
 
         $invoice->items()->create([
             'billing_rate_id' => $rate->id,
@@ -354,10 +512,92 @@ final class BillingCalculator
             'quantity' => $quantity,
             'unit_price' => $rate->amount,
             'total_amount' => $total,
-            'metadata' => $metadata ?: null,
+            'metadata' => $metadata,
         ]);
 
         return $total;
+    }
+
+    /**
+     * @return array{start: CarbonInterface, end: CarbonInterface}|null
+     */
+    private function overlap(
+        CarbonInterface $startsAt,
+        ?CarbonInterface $endsAt,
+        CarbonInterface $serviceStartsAt,
+        CarbonInterface $serviceEndsAt,
+    ): ?array {
+        $start = $startsAt->gt($serviceStartsAt)
+            ? $startsAt->copy()
+            : $serviceStartsAt->copy();
+        $end = $endsAt && $endsAt->lt($serviceEndsAt)
+            ? $endsAt->copy()
+            : $serviceEndsAt->copy();
+
+        if ($start->gt($end)) {
+            return null;
+        }
+
+        return ['start' => $start, 'end' => $end];
+    }
+
+    /**
+     * @param  array{start: CarbonInterface, end: CarbonInterface}  $overlap
+     */
+    private function prorationFactor(array $overlap, BillingRate $rate): string
+    {
+        $usedDays = $overlap['start']->diffInDays($overlap['end']) + 1;
+        $serviceDays = $rate->service_starts_at->diffInDays($rate->service_ends_at) + 1;
+
+        return bcdiv((string) $usedDays, (string) $serviceDays, 8);
+    }
+
+    /**
+     * @param  Collection<int, array{start: CarbonInterface, end: CarbonInterface}>  $overlaps
+     */
+    private function combinedProrationFactor(
+        Collection $overlaps,
+        BillingRate $rate,
+    ): string {
+        return $overlaps->reduce(
+            fn (string $total, array $overlap): string => bcadd(
+                $total,
+                $this->prorationFactor($overlap, $rate),
+                8,
+            ),
+            '0.00000000',
+        );
+    }
+
+    /**
+     * @param  array{start: CarbonInterface, end: CarbonInterface}|null  $overlap
+     * @param  Collection<int, array{start: CarbonInterface, end: CarbonInterface}>|null  $overlaps
+     * @return array<string, mixed>
+     */
+    private function periodMetadata(
+        BillingRate $rate,
+        ?array $overlap,
+        string $factor,
+        ?Collection $overlaps = null,
+    ): array {
+        $usagePeriods = $overlaps
+            ? $overlaps->map(fn (array $range): array => [
+                'starts_at' => $range['start']->toDateString(),
+                'ends_at' => $range['end']->toDateString(),
+            ])->all()
+            : [[
+                'starts_at' => $overlap['start']->toDateString(),
+                'ends_at' => $overlap['end']->toDateString(),
+            ]];
+
+        return [
+            'settlement_type' => $rate->settlement_type->value,
+            'service_starts_at' => $rate->service_starts_at->toDateString(),
+            'service_ends_at' => $rate->service_ends_at->toDateString(),
+            'prorated' => $rate->prorate,
+            'proration_factor' => $factor,
+            'usage_periods' => $usagePeriods,
+        ];
     }
 
     private function nextInvoiceNumber(BillingPeriod $period): string

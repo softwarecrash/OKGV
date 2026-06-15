@@ -223,10 +223,12 @@ Abrechnungsperioden, historische Preise, flächen-, verbrauchs- und festpreisabh
 
 #### Abrechnungsperioden
 
-Eine Abrechnungsperiode besitzt eine eindeutige Bezeichnung, ein Start- und
-Enddatum, ein Fälligkeitsdatum und einen Status: `draft`, `calculated`,
-`approved` oder `archived`. Berechnung, Freigabe und Archivierung werden mit
-eigenen Zeitstempeln dokumentiert.
+Eine Abrechnungsperiode ist ein Rechnungslauf mit eindeutiger Bezeichnung,
+Start- und Enddatum, Fälligkeitsdatum und einem Status: `draft`,
+`calculated`, `approved` oder `archived`. Berechnung, Freigabe und
+Archivierung werden mit eigenen Zeitstempeln dokumentiert. Der fachliche
+Leistungszeitraum wird nicht pauschal aus dem Rechnungslauf abgeleitet,
+sondern für jeden Preis einzeln gespeichert.
 
 Abrechnungsperioden dürfen sich zeitlich nicht überschneiden. Preise,
 Zuordnungen und Periodendaten dürfen in den Status `draft` und `calculated`
@@ -251,7 +253,7 @@ konfigurierbare Preisvorlagen verwaltet werden. Administrator und Vorstand
 dürfen Vorlagen anlegen und bearbeiten; Kassierer dürfen aktive Vorlagen für
 Abrechnungsperioden verwenden. Eine Vorlage enthält internen Schlüssel,
 Bezeichnung, Beschreibung, Berechnungsart, Geltungsbereich, optionalen
-Vorschlagsbetrag und Aktivstatus.
+Vorschlagsbetrag, Abrechnungsart, Zeitanteilsregel und Aktivstatus.
 
 Beim Übernehmen einer Vorlage wird ein eigenständiger `billing_rates`-Snapshot
 für die gewählte Abrechnungsperiode erstellt. Die fachlichen Regeln stammen
@@ -265,6 +267,10 @@ Jeder Preis besitzt:
 - eine deutsche Bezeichnung und optionale Beschreibung
 - eine Berechnungsart: `fixed`, `per_sqm`, `per_kwh`, `per_m3` oder `manual`
 - einen Geltungsbereich: `member`, `parcel` oder `assignment`
+- eine Abrechnungsart: `advance` für Vorauszahlung oder `arrears` für
+  Nachberechnung
+- einen eigenen Leistungsbeginn und ein eigenes Leistungsende
+- die Regel, ob Ein- und Austritte taggenau anteilig berechnet werden
 - einen Dezimalbetrag mit vier Nachkommastellen
 - einen Aktivstatus
 
@@ -284,15 +290,36 @@ einem Mitglied oder einer Parzelle zugeordnet. Die Zuordnung speichert Menge
 und Notizen innerhalb der Abrechnungsperiode. Eine Zuordnung darf nicht
 gleichzeitig Mitglied und Parzelle referenzieren.
 
+#### Vorauszahlung und Nachberechnung
+
+Ein Rechnungslauf kann Preise mit unterschiedlichen Leistungszeiträumen
+enthalten. Damit können beispielsweise Pacht, Versicherung,
+Bereitstellungsgebühren und Mitgliedsbeiträge für das Folgejahr im Voraus
+berechnet werden, während Strom und Wasser für das zurückliegende Jahr nach
+dem tatsächlichen Verbrauch abgerechnet werden.
+
+Vorlagen mit `advance` schlagen beim Übernehmen den um ein Jahr verschobenen
+Zeitraum des Rechnungslaufs vor. Vorlagen mit `arrears` schlagen den Zeitraum
+des Rechnungslaufs vor. Beide Datumswerte bleiben im konkreten Preis sichtbar
+und prüfbar. Die Abrechnungsart ist zusätzlich Bestandteil des historischen
+Rechnungspositions-Snapshots.
+
+Verbrauchspreise werden nicht über einen pauschalen Zeitfaktor gekürzt. Sie
+verwenden ausschließlich Zählerstände aus dem Schnitt zwischen
+Leistungszeitraum und tatsächlichem Pachtzeitraum. Bei einem Pächterwechsel
+ist deshalb ein Zählerstand zum Übergabedatum erforderlich, um den Verbrauch
+beiden Vertragsparteien korrekt zuzuordnen.
+
 #### Rechnungserzeugung
 
-Eine Abrechnung wird für Mitglieder erzeugt, die am Ende der Periode
-Hauptpächter mindestens einer Parzelle sind. Die Parzellen dieses Mitglieds
-werden in einer gemeinsamen Rechnung zusammengefasst. Alle am Periodenende
-aktiven Haupt- und Mitpächter dieser Parzellen werden als gemeinsame
-Rechnungsempfänger übernommen. Mitgliedsbezogene Kosten werden einmal für den
-verantwortlichen Hauptpächter, parzellenbezogene Kosten für jede zugeordnete
-Parzelle berechnet.
+Eine Abrechnung wird für jedes Mitglied erzeugt, für das mindestens eine
+abrechnungsrelevante Position entsteht. Mitgliedsbezogene Kosten verwenden
+den Schnitt aus `joined_at`/`left_at` und dem Leistungszeitraum des Preises.
+Parzellenbezogene Kosten verwenden den Schnitt aus der Hauptpächterhistorie
+und dem Leistungszeitraum. Die Parzellen eines Mitglieds werden in einer
+gemeinsamen Rechnung zusammengefasst. Mitpächter, deren Vertragszeitraum die
+abgerechnete Hauptpacht überlappt, werden als gemeinsame Rechnungsempfänger
+gespeichert.
 
 Automatisch berechenbare Positionen:
 
@@ -302,10 +329,23 @@ Automatisch berechenbare Positionen:
 - zugeordnete Versicherungen, Sonderumlagen und Zusatzleistungen
 - manuelle Positionen mit dokumentierter Menge
 
-Pächterwechsel innerhalb einer Abrechnungsperiode werden bis zur Umsetzung
-des vollständigen Übergabeprozesses in Phase 17 nicht automatisch aufgeteilt.
-Die Berechnung muss solche Fälle erkennen und abbrechen, damit keine
-unbeabsichtigte Zuordnung entsteht.
+Bei aktivierter Zeitanteilsregel werden feste, flächenbezogene und
+zugeordnete Kosten taggenau berechnet. Der Faktor ist:
+
+`abrechnungsrelevante Kalendertage / Kalendertage des Leistungszeitraums`
+
+Start- und Endtag zählen jeweils mit. Pächterwechsel innerhalb eines
+Leistungszeitraums erzeugen getrennte Teilbeträge für die jeweiligen
+Hauptpächter. Mitgliedseintritt und -austritt werden unabhängig von der
+Pächterhistorie behandelt. Faktor, Leistungszeitraum und tatsächlich
+berücksichtigte Teilzeiträume werden in jeder Rechnungsposition gespeichert.
+
+Die anteilige Neuberechnung gilt für Entwürfe und berechnete Zwischenstände.
+Eine bereits freigegebene Vorauszahlungsrechnung bleibt unveränderbar. Wird
+ein Austritt oder Pächterwechsel erst nach der Freigabe bekannt, darf die
+Historie nicht umgeschrieben werden; eine spätere Gutschrift oder
+Korrekturrechnung benötigt einen eigenen, noch zu implementierenden
+Korrekturbeleg.
 
 Rechnungsnummern werden bis zur konfigurierbaren Nummernkreisverwaltung aus
 Phase 16 im Format `YYYY-NNNNN` je Kalenderjahr fortlaufend vergeben.

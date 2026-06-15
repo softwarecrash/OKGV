@@ -86,7 +86,7 @@ class BillingRateTemplateTest extends TestCase
                 'template' => $template->id,
             ]))
             ->assertOk()
-            ->assertSee('passe unten nur den Betrag')
+            ->assertSee('prüfe unten Betrag und Leistungszeitraum')
             ->assertSee('2.5000');
 
         $this->actingAs($board)
@@ -108,6 +108,9 @@ class BillingRateTemplateTest extends TestCase
         $this->assertSame('Wasserverbrauch', $rate->name);
         $this->assertSame(BillingRateType::PerCubicMeter, $rate->calculation_type);
         $this->assertSame(BillingRateScope::Parcel, $rate->scope);
+        $this->assertSame('arrears', $rate->settlement_type->value);
+        $this->assertSame($period->starts_at->toDateString(), $rate->service_starts_at->toDateString());
+        $this->assertSame($period->ends_at->toDateString(), $rate->service_ends_at->toDateString());
         $this->assertSame('2.7500', $rate->amount);
 
         $template->update([

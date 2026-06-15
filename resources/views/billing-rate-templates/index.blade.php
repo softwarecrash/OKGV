@@ -24,6 +24,7 @@
                         <th>Bezeichnung</th>
                         <th>Berechnung</th>
                         <th>Geltung</th>
+                        <th>Abrechnung</th>
                         <th>Vorschlag</th>
                         <th>Status</th>
                         <th></th>
@@ -35,6 +36,12 @@
                             <td><strong>{{ $template->name }}</strong><br><code>{{ $template->code }}</code></td>
                             <td>{{ $template->calculation_type->label() }}</td>
                             <td>{{ $template->scope->label() }}</td>
+                            <td>
+                                {{ $template->settlement_type->label() }}
+                                @if ($template->prorate)
+                                    <br><span class="small text-secondary">taggenau anteilig</span>
+                                @endif
+                            </td>
                             <td>{{ $template->default_amount !== null ? number_format((float) $template->default_amount, 4, ',', '.').' €' : 'Bei Übernahme eingeben' }}</td>
                             <td>{{ $template->is_active ? 'Aktiv' : 'Inaktiv' }}</td>
                             <td class="text-end">
@@ -45,7 +52,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center py-4">
+                            <td colspan="7" class="text-center py-4">
                                 <strong>Noch keine Preisvorlagen vorhanden.</strong><br>
                                 <span class="text-secondary">Lege häufig verwendete Kostenarten wie Pacht, Wasser oder Mitgliedsbeitrag einmalig als Vorlage an.</span>
                             </td>

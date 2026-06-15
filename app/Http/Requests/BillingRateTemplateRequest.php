@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\BillingRateScope;
 use App\Enums\BillingRateType;
+use App\Enums\BillingSettlementType;
 use App\Models\BillingRateTemplate;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -35,7 +36,9 @@ class BillingRateTemplateRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:10000'],
             'calculation_type' => ['required', Rule::enum(BillingRateType::class)],
             'scope' => ['required', Rule::enum(BillingRateScope::class)],
+            'settlement_type' => ['required', Rule::enum(BillingSettlementType::class)],
             'default_amount' => ['nullable', 'numeric', 'decimal:0,4', 'min:0'],
+            'prorate' => ['sometimes', 'boolean'],
             'is_active' => ['sometimes', 'boolean'],
         ];
     }
@@ -69,6 +72,16 @@ class BillingRateTemplateRequest extends FormRequest
                         'Zugeordnete Kosten müssen Festbeträge oder manuelle Positionen sein.',
                     );
                 }
+
+                if (in_array($type, [
+                    BillingRateType::PerKilowattHour,
+                    BillingRateType::PerCubicMeter,
+                ], true) && $this->boolean('prorate')) {
+                    $validator->errors()->add(
+                        'prorate',
+                        'Verbrauchskosten werden über den tatsächlichen Verbrauch abgegrenzt und dürfen nicht zusätzlich zeitanteilig gekürzt werden.',
+                    );
+                }
             },
         ];
     }
@@ -79,6 +92,11 @@ class BillingRateTemplateRequest extends FormRequest
 
         $this->merge([
             'code' => preg_replace('/\s+/', '_', $code),
+            'settlement_type' => $this->input(
+                'settlement_type',
+                BillingSettlementType::Arrears->value,
+            ),
+            'prorate' => $this->boolean('prorate'),
             'is_active' => $this->boolean('is_active'),
         ]);
     }

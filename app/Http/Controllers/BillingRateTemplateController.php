@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\BillingRateScope;
 use App\Enums\BillingRateType;
+use App\Enums\BillingSettlementType;
 use App\Http\Requests\BillingRateTemplateRequest;
 use App\Models\BillingRateTemplate;
 use App\Services\AuditLogger;
@@ -29,9 +30,14 @@ class BillingRateTemplateController extends Controller
         $this->authorize('create', BillingRateTemplate::class);
 
         return view('billing-rate-templates.create', [
-            'template' => new BillingRateTemplate(['is_active' => true]),
+            'template' => new BillingRateTemplate([
+                'is_active' => true,
+                'settlement_type' => BillingSettlementType::Arrears,
+                'prorate' => false,
+            ]),
             'types' => BillingRateType::cases(),
             'scopes' => BillingRateScope::cases(),
+            'settlementTypes' => BillingSettlementType::cases(),
         ]);
     }
 
@@ -52,6 +58,7 @@ class BillingRateTemplateController extends Controller
             'template' => $billingRateTemplate,
             'types' => BillingRateType::cases(),
             'scopes' => BillingRateScope::cases(),
+            'settlementTypes' => BillingSettlementType::cases(),
         ]);
     }
 

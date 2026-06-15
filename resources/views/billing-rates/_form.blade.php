@@ -23,6 +23,8 @@
         <input type="hidden" name="name" value="{{ $selectedTemplate->name }}">
         <input type="hidden" name="calculation_type" value="{{ $selectedTemplate->calculation_type->value }}">
         <input type="hidden" name="scope" value="{{ $selectedTemplate->scope->value }}">
+        <input type="hidden" name="settlement_type" value="{{ $selectedTemplate->settlement_type->value }}">
+        <input type="hidden" name="prorate" value="{{ $selectedTemplate->prorate ? 1 : 0 }}">
         <input type="hidden" name="description" value="{{ $selectedTemplate->description }}">
         <input type="hidden" name="is_active" value="1">
 
@@ -30,7 +32,12 @@
             <div class="border rounded p-3 h-100">
                 <div class="small text-secondary">Kostenart</div>
                 <strong>{{ $selectedTemplate->name }}</strong>
-                <div class="mt-2">{{ $selectedTemplate->calculation_type->label() }} · {{ $selectedTemplate->scope->label() }}</div>
+                <div class="mt-2">
+                    {{ $selectedTemplate->calculation_type->label() }} · {{ $selectedTemplate->scope->label() }} · {{ $selectedTemplate->settlement_type->label() }}
+                    @if ($selectedTemplate->prorate)
+                        · taggenau anteilig
+                    @endif
+                </div>
                 @if ($selectedTemplate->description)
                     <div class="small text-secondary mt-2">{{ $selectedTemplate->description }}</div>
                 @endif
@@ -75,10 +82,28 @@
         <div class="form-text">Mitglied = einmal je Person; Parzelle = je zugeordneter Parzelle; Zuordnung = nur für ausgewählte Personen oder Parzellen.</div>
     </div>
     <div class="col-md-4">
+        <label class="form-label" for="settlement_type">Abrechnungsart</label>
+        <select class="form-select" id="settlement_type" name="settlement_type" required>
+            @foreach ($settlementTypes as $settlementType)
+                <option value="{{ $settlementType->value }}" @selected(old('settlement_type', $billingRate->settlement_type?->value) === $settlementType->value)>{{ $settlementType->label() }}</option>
+            @endforeach
+        </select>
+        <div class="form-text">Kennzeichnet, ob vor dem Leistungszeitraum oder nach dem tatsächlichen Verbrauch abgerechnet wird.</div>
+    </div>
+    <div class="col-md-4">
         <label class="form-label" for="amount">Betrag in Euro</label>
         <input class="form-control" type="number" id="amount" name="amount" min="0" step="0.0001" required
                value="{{ old('amount', $billingRate->amount) }}">
         <div class="form-text">Preis pro gewählter Einheit. Vier Nachkommastellen sind möglich.</div>
+    </div>
+    <div class="col-12">
+        <div class="form-check">
+            <input type="hidden" name="prorate" value="0">
+            <input class="form-check-input" type="checkbox" id="prorate" name="prorate" value="1"
+                   @checked(old('prorate', $billingRate->prorate ?? false))>
+            <label class="form-check-label" for="prorate">Bei Ein- oder Austritt taggenau anteilig berechnen</label>
+            <div class="form-text">Für Jahresbeiträge, Pacht, Versicherung und Grundgebühren. Bei Wasser und Strom nicht aktivieren.</div>
+        </div>
     </div>
     <div class="col-12">
         <label class="form-label" for="description">Beschreibung</label>
@@ -95,6 +120,18 @@
         </div>
     </div>
     @endif
+    <div class="col-md-6">
+        <label class="form-label" for="service_starts_at">Leistungszeitraum von</label>
+        <input class="form-control" type="date" id="service_starts_at" name="service_starts_at" required
+               value="{{ old('service_starts_at', $billingRate->service_starts_at?->format('Y-m-d')) }}">
+        <div class="form-text">Für diesen Zeitraum wird die Position fachlich berechnet, unabhängig vom Rechnungsdatum.</div>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label" for="service_ends_at">Leistungszeitraum bis</label>
+        <input class="form-control" type="date" id="service_ends_at" name="service_ends_at" required
+               value="{{ old('service_ends_at', $billingRate->service_ends_at?->format('Y-m-d')) }}">
+        <div class="form-text">Bei Vorauszahlung kann hier das Folgejahr, bei Verbrauch das zurückliegende Ablesejahr stehen.</div>
+    </div>
 </div>
 
 <div class="d-flex gap-2 mt-4">

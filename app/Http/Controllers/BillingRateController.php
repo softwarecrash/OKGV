@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\BillingRateScope;
 use App\Enums\BillingRateType;
+use App\Enums\BillingSettlementType;
 use App\Http\Requests\BillingRateRequest;
 use App\Models\BillingPeriod;
 use App\Models\BillingRate;
@@ -30,9 +31,22 @@ class BillingRateController extends Controller
             ->where('is_active', true)
             ->first();
 
-        $billingRate = new BillingRate(['is_active' => true]);
+        $billingRate = new BillingRate([
+            'is_active' => true,
+            'settlement_type' => BillingSettlementType::Arrears,
+            'service_starts_at' => $billingPeriod->starts_at,
+            'service_ends_at' => $billingPeriod->ends_at,
+            'prorate' => false,
+        ]);
 
         if ($selectedTemplate) {
+            $serviceStartsAt = $selectedTemplate->settlement_type === BillingSettlementType::Advance
+                ? $billingPeriod->starts_at->addYear()
+                : $billingPeriod->starts_at;
+            $serviceEndsAt = $selectedTemplate->settlement_type === BillingSettlementType::Advance
+                ? $billingPeriod->ends_at->addYear()
+                : $billingPeriod->ends_at;
+
             $billingRate->forceFill([
                 'billing_rate_template_id' => $selectedTemplate->id,
                 'code' => $selectedTemplate->code,
@@ -40,7 +54,11 @@ class BillingRateController extends Controller
                 'description' => $selectedTemplate->description,
                 'calculation_type' => $selectedTemplate->calculation_type,
                 'scope' => $selectedTemplate->scope,
+                'settlement_type' => $selectedTemplate->settlement_type,
+                'service_starts_at' => $serviceStartsAt,
+                'service_ends_at' => $serviceEndsAt,
                 'amount' => $selectedTemplate->default_amount,
+                'prorate' => $selectedTemplate->prorate,
             ]);
         }
 
@@ -54,6 +72,7 @@ class BillingRateController extends Controller
                 ->get(),
             'types' => BillingRateType::cases(),
             'scopes' => BillingRateScope::cases(),
+            'settlementTypes' => BillingSettlementType::cases(),
         ]);
     }
 
@@ -91,6 +110,7 @@ class BillingRateController extends Controller
             'selectedTemplate' => null,
             'types' => BillingRateType::cases(),
             'scopes' => BillingRateScope::cases(),
+            'settlementTypes' => BillingSettlementType::cases(),
         ]);
     }
 

@@ -6,7 +6,7 @@
 <x-validation-errors />
 
 <div class="alert alert-info">
-    Eine Abrechnungsperiode umfasst einen eindeutigen Zeitraum. Änderungen an einem bereits berechneten Zwischenstand verwerfen die bisherigen Rechnungsentwürfe automatisch. Nach der Freigabe ist keine Änderung mehr möglich.
+    Eine Abrechnungsperiode ist ein eindeutiger Rechnungslauf. Jeder Preis erhält zusätzlich seinen eigenen Leistungszeitraum, sodass Vorauszahlungen für das Folgejahr und Verbrauchskosten für das zurückliegende Jahr gemeinsam abgerechnet werden können. Änderungen an einem berechneten Zwischenstand verwerfen die bisherigen Rechnungsentwürfe.
 </div>
 
 <div class="mb-3">
@@ -20,13 +20,13 @@
         <label class="form-label" for="starts_at">Beginn</label>
         <input class="form-control" type="date" id="starts_at" name="starts_at" required
                value="{{ old('starts_at', $billingPeriod->starts_at?->format('Y-m-d')) }}">
-        <div class="form-text">Erster Tag des abzurechnenden Verbrauchs- und Nutzungszeitraums.</div>
+        <div class="form-text">Erster Tag des Rechnungslaufs. Der fachliche Leistungszeitraum wird später je Preis festgelegt.</div>
     </div>
     <div class="col-md-4">
         <label class="form-label" for="ends_at">Ende</label>
         <input class="form-control" type="date" id="ends_at" name="ends_at" required
                value="{{ old('ends_at', $billingPeriod->ends_at?->format('Y-m-d')) }}">
-        <div class="form-text">Letzter Tag der Periode. Zeiträume dürfen sich nicht überschneiden.</div>
+        <div class="form-text">Letzter Tag des Rechnungslaufs. Rechnungsläufe dürfen sich nicht überschneiden.</div>
     </div>
     <div class="col-md-4">
         <label class="form-label" for="due_at">Fälligkeit</label>

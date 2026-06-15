@@ -2,6 +2,42 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.34] - 2026-06-15
+
+### Abrechnungszeiträume
+
+- Abrechnungsperioden dienen jetzt als Rechnungslauf; jeder Preis speichert
+  einen eigenen historischen Leistungszeitraum.
+- Preise und Preisvorlagen unterscheiden zwischen Vorauszahlung und
+  Nachberechnung.
+- Vorauszahlungsvorlagen schlagen das Folgejahr vor, während
+  Nachberechnungsvorlagen den Zeitraum des Rechnungslaufs verwenden.
+- Pacht, Versicherung, Beiträge und andere feste oder flächenbezogene Kosten
+  können bei Ein- und Austritten taggenau anteilig berechnet werden.
+
+### Pächterwechsel und Verbrauch
+
+- Pächterwechsel blockieren die Abrechnung nicht mehr. Parzellenkosten werden
+  anhand der dauerhaften Hauptpächterhistorie auf die jeweiligen
+  Nutzungszeiträume verteilt.
+- Mitgliedskosten verwenden unabhängig davon Eintritts- und Austrittsdatum
+  des Mitglieds.
+- Strom- und Wasserverbrauch werden auf den Schnitt aus Leistungszeitraum und
+  tatsächlichem Pachtzeitraum begrenzt.
+- Leistungszeitraum, Abrechnungsart, Zeitanteilsfaktor und verwendete
+  Teilzeiträume werden in Rechnungspositionen historisch gespeichert und in
+  Oberfläche sowie PDF angezeigt.
+
+### Demo-Daten
+
+- Demo-Pacht und Demo-Mitgliedsbeiträge werden als Vorauszahlung für das
+  Folgejahr angelegt.
+- Demo-Wasser und Demo-Strom werden als verbrauchsabhängige Nachberechnung des
+  laufenden Jahres angelegt.
+- Migration wurde auf MariaDB vorwärts und rückwärts geprüft.
+- Insgesamt bestehen 123 Tests mit 742 Assertions.
+- Entwicklungsstand auf `0.2.0.34` erhöht.
+
 ## [0.2.0.33] - 2026-06-14
 
 ### Demo-Daten

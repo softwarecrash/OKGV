@@ -61,7 +61,7 @@
         <div class="card-header">Preise</div>
         <div class="table-responsive">
             <table class="table align-middle mb-0">
-                <thead><tr><th>Code</th><th>Bezeichnung</th><th>Berechnung</th><th>Geltung</th><th>Betrag</th><th></th></tr></thead>
+                <thead><tr><th>Code</th><th>Bezeichnung</th><th>Berechnung</th><th>Geltung</th><th>Leistungszeitraum</th><th>Betrag</th><th></th></tr></thead>
                 <tbody>
                     @forelse ($billingPeriod->rates as $rate)
                         <tr>
@@ -69,6 +69,15 @@
                             <td>{{ $rate->name }} @unless($rate->is_active)<span class="badge text-bg-secondary">inaktiv</span>@endunless</td>
                             <td>{{ $rate->calculation_type->label() }}</td>
                             <td>{{ $rate->scope->label() }}</td>
+                            <td>
+                                {{ $rate->service_starts_at->format('d.m.Y') }}–{{ $rate->service_ends_at->format('d.m.Y') }}
+                                <div class="small text-secondary">
+                                    {{ $rate->settlement_type->label() }}
+                                    @if ($rate->prorate)
+                                        · anteilig
+                                    @endif
+                                </div>
+                            </td>
                             <td>{{ number_format((float) $rate->amount, 4, ',', '.') }} €</td>
                             <td class="text-end">
                                 @if ($billingPeriod->isEditable())
@@ -80,7 +89,7 @@
                         </tr>
                         @if ($rate->scope === App\Enums\BillingRateScope::Assignment)
                             <tr>
-                                <td colspan="6" class="bg-body-tertiary">
+                                <td colspan="7" class="bg-body-tertiary">
                                     <strong>Zuordnungen</strong>
                                     @forelse ($rate->assignments as $assignment)
                                         <div class="d-flex justify-content-between align-items-center mt-2">
@@ -134,7 +143,7 @@
                             </tr>
                         @endif
                     @empty
-                        <tr><td colspan="6" class="text-center py-4"><strong>Noch keine Preise angelegt.</strong><br><span class="text-secondary">Lege zuerst alle benötigten Kostenarten an, bevor du die Abrechnung berechnest.</span></td></tr>
+                        <tr><td colspan="7" class="text-center py-4"><strong>Noch keine Preise angelegt.</strong><br><span class="text-secondary">Lege zuerst alle benötigten Kostenarten mit ihrem jeweiligen Leistungszeitraum an, bevor du die Abrechnung berechnest.</span></td></tr>
                     @endforelse
                 </tbody>
             </table>
