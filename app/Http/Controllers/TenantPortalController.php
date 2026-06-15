@@ -11,14 +11,20 @@ use App\Models\Document;
 use App\Models\Invoice;
 use App\Models\MeterReadingSubmission;
 use App\Models\WorkHourSubmission;
+use App\Services\ActionIndicatorService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class TenantPortalController extends Controller
 {
+    public function __construct(
+        private readonly ActionIndicatorService $actionIndicatorService,
+    ) {}
+
     public function index(Request $request): View
     {
         abort_unless($request->user()->role === UserRole::Tenant, 403);
+        $actionIndicators = $this->actionIndicatorService->forUser($request->user());
 
         $member = $request->user()->member()
             ->with([
@@ -43,6 +49,7 @@ class TenantPortalController extends Controller
                 'documents' => collect(),
                 'submissions' => collect(),
                 'workHourSubmissions' => collect(),
+                'actionIndicators' => $actionIndicators,
             ]);
         }
 
@@ -97,6 +104,7 @@ class TenantPortalController extends Controller
             'documents',
             'submissions',
             'workHourSubmissions',
+            'actionIndicators',
         ));
     }
 }

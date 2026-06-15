@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\MeterReadingSubmissionStatus;
 use Database\Factories\MeterReadingSubmissionFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -58,5 +59,29 @@ class MeterReadingSubmission extends Model
     public function meterReading(): BelongsTo
     {
         return $this->belongsTo(MeterReading::class);
+    }
+
+    public function scopeUnresolvedRejectedForUser(Builder $query, int $userId): Builder
+    {
+        return $query
+            ->where('submitted_by', $userId)
+            ->where('status', MeterReadingSubmissionStatus::Rejected)
+            ->whereNotExists(function ($query): void {
+                $query->selectRaw('1')
+                    ->from('meter_reading_submissions as later_submission')
+                    ->whereColumn(
+                        'later_submission.submitted_by',
+                        'meter_reading_submissions.submitted_by',
+                    )
+                    ->whereColumn(
+                        'later_submission.meter_id',
+                        'meter_reading_submissions.meter_id',
+                    )
+                    ->whereColumn(
+                        'later_submission.id',
+                        '>',
+                        'meter_reading_submissions.id',
+                    );
+            });
     }
 }

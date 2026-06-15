@@ -59,8 +59,7 @@ final class ActionIndicatorService
                 ->where('status', MeterReadingSubmissionStatus::Pending)
                 ->count(),
             $user->role === UserRole::Tenant => MeterReadingSubmission::query()
-                ->where('submitted_by', $user->id)
-                ->where('status', MeterReadingSubmissionStatus::Rejected)
+                ->unresolvedRejectedForUser($user->id)
                 ->count(),
             default => 0,
         };

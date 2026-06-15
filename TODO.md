@@ -546,6 +546,17 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Eingabegrenzen und Fehlermeldung durch Regressionstests absichern
 - [x] Entwicklungsstand 0.2.0.57 veröffentlichen
 
+## Nachbesserung Phase 5: Nachvollziehbare Aktionshinweise
+
+- [x] Falsche Aktionspunkte beim Demo-Pächter Anna Apfelbaum analysieren
+- [x] Erneut eingereichte Zählerstände als erledigte Pächteraufgabe werten
+- [x] Wirklich offene Ablehnungen im Pächterportal konkret benennen
+- [x] Betroffene Meldung in der Zählerstandsübersicht hervorheben
+- [x] Direkten Zugang zur korrigierten Meldung ergänzen
+- [x] Offene und durch Neueinreichung erledigte Fälle durch Tests absichern
+- [x] Punkt-Beschriftungen in korrekter Ein- und Mehrzahl ausgeben
+- [x] Gesamttests, Formatter und Audits ausführen
+
 ## Nachbesserung Phase 12: Arbeitseinsatz anlegen
 
 - [x] Anlegebutton in der Arbeitseinsatzübersicht ergänzen

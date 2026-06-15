@@ -581,6 +581,14 @@ abgelehnte eigene Zählerstandsmeldungen sowie offene oder zurückgegebene
 eigene Rechnungen. Künftige Phasen verwenden dasselbe System für weitere
 handlungsbedürftige Vorgänge.
 
+Eine abgelehnte eigene Zählerstandsmeldung gilt nur bis zur nächsten Meldung
+desselben Pächters für denselben Zähler als offen. Sobald ein korrigierter
+Stand erneut eingereicht wurde, verschwindet der Aktionshinweis unabhängig
+davon, ob die neue Meldung noch geprüft wird oder bereits bestätigt ist.
+Jeder Aktionspunkt muss auf seiner Zielseite durch eine verständliche
+Aufgabenbox, einen weiteren Punkt oder eine hervorgehobene Zeile eindeutig
+erklärbar sein.
+
 Die Oberfläche unterstützt einen hellen und einen dunklen Darstellungsmodus.
 Die Auswahl wird lokal im Browser gespeichert, gilt bereits vor dem
 Seitenaufbau und kann jederzeit über einen Schalter im Benutzermenü geändert

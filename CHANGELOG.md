@@ -2,6 +2,26 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.59] - 2026-06-15
+
+### Nachvollziehbare Aktionshinweise für Pächter
+
+- Abgelehnte Zählerstandsmeldungen zählen nur noch bis zur nächsten Meldung
+  desselben Pächters für denselben Zähler als offene Aufgabe.
+- Anna Apfelbaums bestätigte Meldung `#6` erledigt damit die früheren
+  Ablehnungen `#4` und `#5`; ihre falschen Punkte bei „Mein Portal“ und
+  „Zählerstandsmeldungen“ verschwinden.
+- Wirklich noch offene Ablehnungen werden im Pächterportal konkret benannt
+  und mit einem Punkt an der betroffenen Karte markiert.
+- Die Meldungsübersicht hebt die betroffene Zeile hervor, zeigt den
+  Ablehnungsgrund und führt direkt zur korrigierten Meldung.
+- Punkt-Beschriftungen verwenden bei genau einer Aufgabe die korrekte
+  deutsche Einzahl.
+- Insgesamt bestehen 198 Tests mit 1.183 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.59` erhöht.
+
 ## [0.2.0.58] - 2026-06-15
 
 ### Phase 18: Pächterwechsel

@@ -68,7 +68,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('tenant-portal.index') }}">
                                         Mein Portal
-                                        <x-action-indicator :count="$actionIndicators['total']" label="offene Aufgaben" />
+                                        <x-action-indicator
+                                            :count="$actionIndicators['total']"
+                                            :label="$actionIndicators['total'] === 1 ? 'offene Aufgabe' : 'offene Aufgaben'" />
                                     </a>
                                 </li>
                             @endif
@@ -116,7 +118,9 @@
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                         Zähler
-                                        <x-action-indicator :count="$actionIndicators['meters_group']" label="offene Zählerstandsmeldungen" />
+                                        <x-action-indicator
+                                            :count="$actionIndicators['meters_group']"
+                                            :label="$actionIndicators['meters_group'] === 1 ? 'offene Zählerstandsmeldung' : 'offene Zählerstandsmeldungen'" />
                                     </a>
                                     <ul class="dropdown-menu">
                                         @if ($canViewMeters)
@@ -126,7 +130,9 @@
                                             <li>
                                                 <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('meter-reading-submissions.index') }}">
                                                     Zählerstandsmeldungen
-                                                    <x-action-indicator :count="$actionIndicators['meter_readings']" label="offene Zählerstandsmeldungen" />
+                                                    <x-action-indicator
+                                                        :count="$actionIndicators['meter_readings']"
+                                                        :label="$actionIndicators['meter_readings'] === 1 ? 'offene Zählerstandsmeldung' : 'offene Zählerstandsmeldungen'" />
                                                 </a>
                                             </li>
                                         @endif

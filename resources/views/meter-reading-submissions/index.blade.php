@@ -11,6 +11,16 @@
         @endif
     </p>
     <x-validation-errors />
+    @if (auth()->user()->role === App\Enums\UserRole::Tenant && $actionIndicators['meter_readings'] > 0)
+        <div class="alert alert-warning" role="status">
+            <strong>
+                {{ $actionIndicators['meter_readings'] }}
+                {{ $actionIndicators['meter_readings'] === 1 ? 'Meldung wurde' : 'Meldungen wurden' }}
+                abgelehnt und muss erneut eingereicht werden.
+            </strong>
+            <div>Die betroffene Meldung ist unten hervorgehoben. Beachte den Ablehnungsgrund und melde anschließend einen korrigierten Stand.</div>
+        </div>
+    @endif
     @if (session('review_error'))
         <div class="alert alert-danger" role="alert" aria-live="polite">
             <strong>Zählerstand konnte nicht bestätigt werden.</strong>
@@ -24,7 +34,10 @@
                 <thead><tr><th>Parzelle / Zähler</th><th>Pächter</th><th>Datum</th><th>Vorheriger Stand</th><th>Gemeldeter Stand</th><th>Foto</th><th>Status</th><th>Prüfung</th></tr></thead>
                 <tbody>
                     @forelse ($submissions as $submission)
-                        <tr @class(['table-danger' => (int) session('review_submission_id') === $submission->id])>
+                        <tr @class([
+                            'table-danger' => (int) session('review_submission_id') === $submission->id,
+                            'table-warning' => $submission->requires_tenant_action,
+                        ])>
                             <td>{{ $submission->meter->parcel->parcel_number }} · {{ $submission->meter->meter_number }}</td>
                             <td>{{ $submission->submitter->member?->full_name ?? $submission->submitter->name }}</td>
                             <td>{{ $submission->reading_date->format('d.m.Y') }}</td>
@@ -75,7 +88,18 @@
                                         <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Meldung wirklich ablehnen?')">Ablehnen</button>
                                     </form>
                                 @else
-                                    {{ $submission->review_note ?? '–' }}
+                                    @if ($submission->requires_tenant_action)
+                                        <div class="d-flex align-items-center gap-1 fw-semibold text-warning-emphasis">
+                                            <x-action-indicator :count="1" label="erneute Meldung erforderlich" />
+                                            Erneute Meldung erforderlich
+                                        </div>
+                                        <div class="small mt-1">{{ $submission->review_note ?: 'Bitte reiche einen korrigierten Zählerstand ein.' }}</div>
+                                        <a class="btn btn-sm btn-warning mt-2" href="{{ route('meter-reading-submissions.create', $submission->meter) }}">
+                                            Korrigierten Stand melden
+                                        </a>
+                                    @else
+                                        {{ $submission->review_note ?? '–' }}
+                                    @endif
                                 @endcan
                             </td>
                         </tr>

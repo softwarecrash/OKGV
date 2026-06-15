@@ -9,6 +9,7 @@ use App\Enums\RegistrationRequestStatus;
 use App\Enums\UserRole;
 use App\Models\Invoice;
 use App\Models\Member;
+use App\Models\Meter;
 use App\Models\MeterReadingSubmission;
 use App\Models\RegistrationRequest;
 use App\Models\User;
@@ -43,7 +44,7 @@ class NavigationExperienceTest extends TestCase
             ->assertSee('Zählerstandsmeldungen')
             ->assertSee('Finanzen')
             ->assertSee('2 wartende Registrierungen')
-            ->assertSee('1 offene Zählerstandsmeldungen')
+            ->assertSee('1 offene Zählerstandsmeldung')
             ->assertDontSee('Rechteverwaltung');
     }
 
@@ -97,6 +98,32 @@ class NavigationExperienceTest extends TestCase
             ->assertSee('data-theme-toggle', false)
             ->assertSee('js/theme-init.js')
             ->assertSee('Darstellungsmodus wechseln');
+    }
+
+    public function test_newer_meter_submission_resolves_tenant_action_indicator(): void
+    {
+        $tenant = User::factory()->create(['role' => UserRole::Tenant]);
+        $meter = Meter::factory()->create();
+        MeterReadingSubmission::factory()->create([
+            'meter_id' => $meter->id,
+            'submitted_by' => $tenant->id,
+            'status' => MeterReadingSubmissionStatus::Rejected,
+        ]);
+
+        $this->assertSame(
+            1,
+            app(ActionIndicatorService::class)->forUser($tenant)['meter_readings'],
+        );
+
+        MeterReadingSubmission::factory()->create([
+            'meter_id' => $meter->id,
+            'submitted_by' => $tenant->id,
+            'status' => MeterReadingSubmissionStatus::Pending,
+        ]);
+
+        $indicators = app(ActionIndicatorService::class)->forUser($tenant);
+        $this->assertSame(0, $indicators['meter_readings']);
+        $this->assertSame(0, $indicators['total']);
     }
 
     public function test_board_member_logs_out_through_a_native_post_form(): void

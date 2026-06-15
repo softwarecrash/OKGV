@@ -7,6 +7,7 @@ use App\Http\Requests\MeterReadingSubmissionRequest;
 use App\Http\Requests\MeterReadingSubmissionReviewRequest;
 use App\Models\Meter;
 use App\Models\MeterReadingSubmission;
+use App\Services\ActionIndicatorService;
 use App\Services\MeterReadingSubmissionManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MeterReadingSubmissionController extends Controller
 {
-    public function __construct(private readonly MeterReadingSubmissionManager $manager) {}
+    public function __construct(
+        private readonly MeterReadingSubmissionManager $manager,
+        private readonly ActionIndicatorService $actionIndicatorService,
+    ) {}
 
     public function index(Request $request): View
     {
@@ -38,8 +42,16 @@ class MeterReadingSubmissionController extends Controller
             ->orderByRaw("status = 'pending' desc")
             ->latest()
             ->paginate(20);
+        $unresolvedRejectedIds = $request->user()->role === UserRole::Tenant
+            ? MeterReadingSubmission::query()
+                ->unresolvedRejectedForUser($request->user()->id)
+                ->pluck('id')
+            : collect();
+        $actionIndicators = $this->actionIndicatorService->forUser($request->user());
 
-        $submissions->getCollection()->each(function (MeterReadingSubmission $submission): void {
+        $submissions->getCollection()->each(function (
+            MeterReadingSubmission $submission,
+        ) use ($unresolvedRejectedIds): void {
             $previousReading = $submission->meter->readings
                 ->filter(fn ($reading): bool => $reading->reading_date->lt($submission->reading_date))
                 ->sortByDesc('reading_date')
@@ -60,9 +72,16 @@ class MeterReadingSubmissionController extends Controller
                 'is_below_previous_reading',
                 bccomp($submission->reading_value, $previousValue, 4) < 0,
             );
+            $submission->setAttribute(
+                'requires_tenant_action',
+                $unresolvedRejectedIds->contains($submission->id),
+            );
         });
 
-        return view('meter-reading-submissions.index', compact('submissions'));
+        return view('meter-reading-submissions.index', compact(
+            'submissions',
+            'actionIndicators',
+        ));
     }
 
     public function create(Meter $meter): View

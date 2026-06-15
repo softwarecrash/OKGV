@@ -392,6 +392,55 @@ class TenantPortalTest extends TestCase
         $this->assertDatabaseCount('meter_readings', 1);
     }
 
+    public function test_unresolved_rejection_is_visible_until_tenant_resubmits(): void
+    {
+        [$tenant, , $parcel] = $this->tenantScenario();
+        $meter = Meter::factory()->create([
+            'parcel_id' => $parcel->id,
+            'installed_at' => now()->subYear(),
+            'status' => MeterStatus::Active,
+        ]);
+        $rejected = MeterReadingSubmission::factory()->create([
+            'meter_id' => $meter->id,
+            'submitted_by' => $tenant->id,
+            'status' => MeterReadingSubmissionStatus::Rejected,
+            'review_note' => 'Bitte Foto und Zählerstand erneut prüfen.',
+        ]);
+
+        $this->actingAs($tenant)
+            ->get(route('tenant-portal.index'))
+            ->assertOk()
+            ->assertSee('Aufgabe benötigt')
+            ->assertSee('deine Aufmerksamkeit.')
+            ->assertSee('1 abgelehnte Zählerstandsmeldung');
+
+        $this->actingAs($tenant)
+            ->get(route('meter-reading-submissions.index'))
+            ->assertOk()
+            ->assertSee('Erneute Meldung erforderlich')
+            ->assertSee('Bitte Foto und Zählerstand erneut prüfen.')
+            ->assertSee('Korrigierten Stand melden')
+            ->assertSee('table-warning', false);
+
+        MeterReadingSubmission::factory()->create([
+            'meter_id' => $meter->id,
+            'submitted_by' => $tenant->id,
+            'status' => MeterReadingSubmissionStatus::Pending,
+            'reading_value' => bcadd($rejected->reading_value, '1.0000', 4),
+        ]);
+
+        $this->actingAs($tenant)
+            ->get(route('tenant-portal.index'))
+            ->assertOk()
+            ->assertDontSee('Aufgabe benötigt deine Aufmerksamkeit.');
+
+        $this->actingAs($tenant)
+            ->get(route('meter-reading-submissions.index'))
+            ->assertOk()
+            ->assertDontSee('Erneute Meldung erforderlich')
+            ->assertDontSee('Korrigierten Stand melden');
+    }
+
     /**
      * @return array{User, Member, Parcel}
      */

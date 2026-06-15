@@ -5,6 +5,36 @@
     <h1 class="h2 mb-2">Mein Pächterportal</h1>
     <p class="text-secondary mb-4">Hier findest du ausschließlich die Daten, die deinem eigenen Mitgliedskonto zugeordnet sind.</p>
 
+    @if ($actionIndicators['total'] > 0)
+        <div class="alert alert-warning" role="status">
+            <strong>
+                {{ $actionIndicators['total'] }}
+                {{ $actionIndicators['total'] === 1 ? 'Aufgabe benötigt' : 'Aufgaben benötigen' }}
+                deine Aufmerksamkeit.
+            </strong>
+            <div class="d-flex flex-wrap gap-2 mt-2">
+                @if ($actionIndicators['meter_readings'] > 0)
+                    <a class="alert-link" href="{{ route('meter-reading-submissions.index') }}">
+                        {{ $actionIndicators['meter_readings'] }}
+                        {{ $actionIndicators['meter_readings'] === 1 ? 'abgelehnte Zählerstandsmeldung' : 'abgelehnte Zählerstandsmeldungen' }}
+                    </a>
+                @endif
+                @if ($actionIndicators['work_hour_submissions'] > 0)
+                    <a class="alert-link" href="{{ route('work-hour-submissions.index') }}">
+                        {{ $actionIndicators['work_hour_submissions'] }}
+                        {{ $actionIndicators['work_hour_submissions'] === 1 ? 'abgelehnte Arbeitsstundenmeldung' : 'abgelehnte Arbeitsstundenmeldungen' }}
+                    </a>
+                @endif
+                @if ($actionIndicators['invoices'] > 0)
+                    <a class="alert-link" href="{{ route('invoices.index') }}">
+                        {{ $actionIndicators['invoices'] }}
+                        {{ $actionIndicators['invoices'] === 1 ? 'offene Rechnung' : 'offene Rechnungen' }}
+                    </a>
+                @endif
+            </div>
+        </div>
+    @endif
+
     @unless ($member)
         <div class="alert alert-warning">Dein Benutzerkonto ist noch keinem Mitglied zugeordnet. Bitte wende dich an den Vorstand.</div>
     @else
@@ -54,7 +84,13 @@
             <div class="col-lg-6">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center"><h2 class="h5">Letzte Rechnungen</h2><a href="{{ route('invoices.index') }}">Alle</a></div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h2 class="h5">
+                                Letzte Rechnungen
+                                <x-action-indicator :count="$actionIndicators['invoices']" label="offene Rechnungen" />
+                            </h2>
+                            <a href="{{ route('invoices.index') }}">Alle</a>
+                        </div>
                         @forelse ($invoices as $invoice)
                             <div class="d-flex justify-content-between border-top py-2">
                                 <a href="{{ route('invoices.show', $invoice) }}">{{ $invoice->invoice_number }}</a>
@@ -85,7 +121,13 @@
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center"><h2 class="h5">Letzte Zählerstandsmeldungen</h2><a href="{{ route('meter-reading-submissions.index') }}">Alle</a></div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h2 class="h5">
+                                Letzte Zählerstandsmeldungen
+                                <x-action-indicator :count="$actionIndicators['meter_readings']" label="abgelehnte Zählerstandsmeldungen" />
+                            </h2>
+                            <a href="{{ route('meter-reading-submissions.index') }}">Alle</a>
+                        </div>
                         @forelse ($submissions as $submission)
                             <div class="border-top py-2">{{ $submission->meter->type->label() }} · {{ $submission->reading_date->format('d.m.Y') }} · {{ $submission->reading_value }} · <strong>{{ $submission->status->label() }}</strong></div>
                         @empty
@@ -100,7 +142,10 @@
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h2 class="h5">Letzte Arbeitsstundenmeldungen</h2>
+                            <h2 class="h5">
+                                Letzte Arbeitsstundenmeldungen
+                                <x-action-indicator :count="$actionIndicators['work_hour_submissions']" label="abgelehnte Arbeitsstundenmeldungen" />
+                            </h2>
                             <a href="{{ route('work-hour-submissions.index') }}">Alle</a>
                         </div>
                         @forelse ($workHourSubmissions as $submission)
