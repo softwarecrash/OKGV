@@ -375,7 +375,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Migration ausschließlich nicht löschend auf Entwicklungsdatenbank anwenden
 - [x] Gesamttests, Formatter, Build und Audits ausführen
 - [x] Phase 17 vollständig prüfen
-- [ ] Entwicklungsstand 0.2.0.45 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.45 veröffentlichen
 
 ## Vorgezogene Phase 12: Arbeitseinsätze
 
