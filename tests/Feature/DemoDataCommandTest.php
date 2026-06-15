@@ -45,10 +45,7 @@ class DemoDataCommandTest extends TestCase
             5,
             Parcel::query()
                 ->where('parcel_number', 'like', 'DEMO-%')
-                ->whereNotNull('map_x')
-                ->whereNotNull('map_y')
-                ->whereNotNull('map_width')
-                ->whereNotNull('map_height')
+                ->whereNotNull('map_polygon')
                 ->count(),
         );
         $this->assertSame(11, Meter::query()->where('meter_number', 'like', 'DEMO-%')->count());

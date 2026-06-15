@@ -342,6 +342,14 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::resource('members', MemberController::class)->except('destroy');
     Route::get('lageplan', [ParcelMapController::class, 'index'])
         ->name('parcel-map.index');
+    Route::get('lageplan/hintergrund', [ParcelMapController::class, 'background'])
+        ->name('parcel-map.background');
+    Route::get('lageplan/bearbeiten', [ParcelMapController::class, 'edit'])
+        ->name('parcel-map.edit');
+    Route::put('lageplan/hintergrund', [ParcelMapController::class, 'updateBackground'])
+        ->name('parcel-map.background.update');
+    Route::put('lageplan/parzellen/{parcel}', [ParcelMapController::class, 'updatePolygon'])
+        ->name('parcel-map.polygon.update');
     Route::resource('parcels', ParcelController::class)->except('destroy');
     Route::get('meters/{meter}/replace', [MeterReplacementController::class, 'create'])
         ->middleware('module:meters')

@@ -8,6 +8,7 @@ use App\Enums\MeterReadingSource;
 use App\Enums\MeterStatus;
 use App\Enums\MeterType;
 use App\Enums\ParcelStatus;
+use App\Models\ApplicationSetting;
 use App\Models\Invoice;
 use App\Models\Member;
 use App\Models\Meter;
@@ -133,8 +134,19 @@ final class CsvDataTransferService
             'location_description',
             'notes',
         ];
+        $rectangleParcelHeaders = [
+            'parcel_number',
+            'area_sqm',
+            'status',
+            'location_description',
+            'map_x',
+            'map_y',
+            'map_width',
+            'map_height',
+            'notes',
+        ];
         $usesLegacyParcelHeaders = $type === DataTransferType::Parcels
-            && $headers === $legacyParcelHeaders;
+            && in_array($headers, [$legacyParcelHeaders, $rectangleParcelHeaders], true);
 
         if ($headers !== $type->headers() && ! $usesLegacyParcelHeaders) {
             fclose($handle);
@@ -166,13 +178,24 @@ final class CsvDataTransferService
             ));
 
             if ($usesLegacyParcelHeaders) {
-                $row = [
-                    ...$row,
-                    'map_x' => null,
-                    'map_y' => null,
-                    'map_width' => null,
-                    'map_height' => null,
-                ];
+                $row['map_polygon'] = $headers === $rectangleParcelHeaders
+                    && filled($row['map_x'] ?? null)
+                    && filled($row['map_y'] ?? null)
+                    && filled($row['map_width'] ?? null)
+                    && filled($row['map_height'] ?? null)
+                        ? json_encode([
+                            ['x' => (int) $row['map_x'], 'y' => (int) $row['map_y']],
+                            ['x' => (int) $row['map_x'] + (int) $row['map_width'], 'y' => (int) $row['map_y']],
+                            ['x' => (int) $row['map_x'] + (int) $row['map_width'], 'y' => (int) $row['map_y'] + (int) $row['map_height']],
+                            ['x' => (int) $row['map_x'], 'y' => (int) $row['map_y'] + (int) $row['map_height']],
+                        ], JSON_THROW_ON_ERROR)
+                        : null;
+                unset(
+                    $row['map_x'],
+                    $row['map_y'],
+                    $row['map_width'],
+                    $row['map_height'],
+                );
             }
 
             $row['_line'] = (string) $line;
@@ -248,27 +271,34 @@ final class CsvDataTransferService
                 'area_sqm' => ['required', 'numeric', 'decimal:0,2', 'gt:0', 'max:99999999.99'],
                 'status' => ['required', Rule::enum(ParcelStatus::class)],
                 'location_description' => ['nullable', 'string', 'max:255'],
-                'map_x' => ['nullable', 'required_with:map_y,map_width,map_height', 'integer', 'between:0,1199'],
-                'map_y' => ['nullable', 'required_with:map_x,map_width,map_height', 'integer', 'between:0,799'],
-                'map_width' => ['nullable', 'required_with:map_x,map_y,map_height', 'integer', 'between:20,1200'],
-                'map_height' => ['nullable', 'required_with:map_x,map_y,map_width', 'integer', 'between:20,800'],
+                'map_polygon' => ['nullable', 'json'],
                 'notes' => ['nullable', 'string', 'max:10000'],
             ]);
+            $data['map_polygon'] = $data['map_polygon']
+                ? json_decode($data['map_polygon'], true, flags: JSON_THROW_ON_ERROR)
+                : null;
 
-            if ($data['map_x'] !== null
-                && (int) $data['map_x'] + (int) $data['map_width'] > 1200) {
-                $this->rowError(
-                    $row,
-                    'Die Lageplanfläche ragt rechts über die Zeichenfläche hinaus.',
-                );
-            }
+            if ($data['map_polygon'] !== null) {
+                $settings = ApplicationSetting::current();
 
-            if ($data['map_y'] !== null
-                && (int) $data['map_y'] + (int) $data['map_height'] > 800) {
-                $this->rowError(
-                    $row,
-                    'Die Lageplanfläche ragt unten über die Zeichenfläche hinaus.',
-                );
+                if (count($data['map_polygon']) < 3 || count($data['map_polygon']) > 100) {
+                    $this->rowError($row, 'Die Lageplanfläche benötigt 3 bis 100 Punkte.');
+                }
+
+                foreach ($data['map_polygon'] as $point) {
+                    if (! is_array($point)
+                        || ! is_numeric($point['x'] ?? null)
+                        || ! is_numeric($point['y'] ?? null)
+                        || $point['x'] < 0
+                        || $point['y'] < 0
+                        || $point['x'] > $settings->map_background_width
+                        || $point['y'] > $settings->map_background_height) {
+                        $this->rowError(
+                            $row,
+                            'Die Lageplanfläche enthält einen ungültigen oder außerhalb des Bilds liegenden Punkt.',
+                        );
+                    }
+                }
             }
 
             $parcel = Parcel::query()->where('parcel_number', $data['parcel_number'])->first();
@@ -438,8 +468,11 @@ final class CsvDataTransferService
         foreach (Parcel::query()->orderBy('parcel_number')->cursor() as $parcel) {
             yield [
                 $parcel->parcel_number, $parcel->area_sqm, $parcel->status->value,
-                $parcel->location_description, $parcel->map_x, $parcel->map_y,
-                $parcel->map_width, $parcel->map_height, $parcel->notes,
+                $parcel->location_description,
+                $parcel->map_polygon
+                    ? json_encode($parcel->map_polygon, JSON_THROW_ON_ERROR)
+                    : null,
+                $parcel->notes,
             ];
         }
     }

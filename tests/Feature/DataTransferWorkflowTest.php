@@ -164,6 +164,7 @@ class DataTransferWorkflowTest extends TestCase
     {
         Storage::fake('local');
         Storage::disk('local')->put('documents/vertrag.pdf', 'private document');
+        Storage::disk('local')->put('association/parcel-map/plan.jpg', 'private map');
         $administrator = User::factory()->administrator()->create();
         $database = Mockery::mock(DatabaseDumpService::class);
         $database->shouldReceive('dump')
@@ -180,6 +181,7 @@ class DataTransferWorkflowTest extends TestCase
         $this->assertSame(trim(file_get_contents(base_path('VERSION'))), $manifest['version']);
         $this->assertSame('database dump', $archive->getFromName('database.sql'));
         $this->assertSame('private document', $archive->getFromName('files/documents/vertrag.pdf'));
+        $this->assertSame('private map', $archive->getFromName('files/association/parcel-map/plan.jpg'));
         $this->assertSame(
             hash('sha256', 'private document'),
             $manifest['checksums']['files/documents/vertrag.pdf'],
@@ -242,7 +244,7 @@ class DataTransferWorkflowTest extends TestCase
             ->streamedContent();
 
         $this->assertStringContainsString(
-            'parcel_number;area_sqm;status;location_description;map_x;map_y;map_width;map_height;notes',
+            'parcel_number;area_sqm;status;location_description;map_polygon;notes',
             $content,
         );
     }
@@ -265,8 +267,7 @@ class DataTransferWorkflowTest extends TestCase
 
         $this->assertDatabaseHas('parcels', [
             'parcel_number' => 'ALT-01',
-            'map_x' => null,
-            'map_y' => null,
+            'map_polygon' => null,
         ]);
     }
 }

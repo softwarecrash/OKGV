@@ -1130,18 +1130,33 @@ werden auditiert und sind ausschließlich Administratoren erlaubt.
 
 Pächterwechsel, Übergabeprozess und später ein SVG-Lageplan.
 
-### Phase 19: SVG-Lageplan
+### Phase 19: Bildbasierter Polygon-Lageplan
 
-Der Lageplan wird serverseitig aus validierten Parzellenstammdaten erzeugt.
-Es werden keine hochgeladenen oder frei eingegebenen SVG-Fragmente
-ausgeführt. Die feste Zeichenfläche besitzt ein Koordinatensystem von
-`1200 × 800` Einheiten.
+Der Lageplan verwendet ein privat gespeichertes Luftbild, einen
+Katasterauszug oder einen selbst erstellten Plan als Hintergrund. Erlaubt
+sind geprüfte JPEG-, PNG- und WebP-Dateien. Quelle und Nutzungsrecht müssen
+beim Upload dokumentiert und ausdrücklich bestätigt werden.
 
-Jede Parzelle kann optional mit ganzzahliger X- und Y-Position sowie Breite
-und Höhe auf dem Lageplan platziert werden. Fehlt eine dieser Angaben, gilt
-die Parzelle als noch nicht platziert und erscheint in einer gesonderten
-Liste. Änderungen der Lageplanposition werden wie andere
-Parzellenänderungen auditiert.
+Ein Screenshot oder heruntergeladenes Satellitenbild aus Google Maps gilt
+nicht automatisch als frei speicher- und weiterverwendbar. Google-
+Satellitendaten dürfen nur über eine nach den Google-Maps-Bedingungen
+zulässige API-Einbindung angezeigt werden. OKGV kopiert oder speichert keine
+Google-Kartenkacheln.
+
+Jede Parzelle wird als Polygon mit 3 bis 100 Punkten relativ zur tatsächlichen
+Bildgröße gespeichert. Im WYSIWYG-Editor können berechtigte Benutzer:
+
+- eine Parzelle auswählen,
+- durch Klicks eine beliebige Fläche zeichnen,
+- einzelne Eckpunkte per Drag-and-drop verschieben,
+- die gesamte Fläche verschieben,
+- den letzten Punkt zurücknehmen,
+- nur die Fläche entfernen, ohne den Parzellendatensatz zu löschen.
+
+Wird das Hintergrundbild durch ein Bild mit anderer Größe ersetzt, skaliert
+OKGV bestehende Polygone proportional. Änderungen an Bild und Polygonen
+werden auditiert. Frühere Rechteckkoordinaten werden einmalig verlustfrei in
+vierpunktige Polygone überführt.
 
 Die Darstellung verwendet folgende Statusgruppen:
 
@@ -1157,7 +1172,8 @@ Benutzer diese Parzelle sehen darf.
 Benutzer mit Leserecht für sämtliche Stammdaten sehen den vollständigen
 Lageplan. Pächter sehen ausschließlich aktuell selbst zugeordnete
 Parzellen. Bearbeiten dürfen den Lageplan nur Benutzer mit bestehendem
-Parzellen-Schreibrecht.
+Parzellen-Schreibrecht. Hintergrundbild und Vereinslogo sind Bestandteil
+vollständiger Backups.
 
 ### Phase 12.1: Modulare Funktionsbereiche
 

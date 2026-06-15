@@ -190,13 +190,16 @@ vorherigen Phase geprüft sein.
 
 ## Phase 19: Lageplan
 
-- [x] Serverseitig erzeugter SVG-Lageplan
-- [x] Validierte Position und Größe je Parzelle
+- [x] Privates Luft- oder Lagebild mit dokumentiertem Nutzungsrecht
+- [x] WYSIWYG-Polygoneditor für beliebige Parzellenformen
+- [x] Eckpunkte und gesamte Flächen per Drag-and-drop verschieben
+- [x] Validierte Polygonpunkte relativ zur Bildgröße
 - [x] Statusfarben mit zusätzlicher Textkennzeichnung
 - [x] Klickbare Parzellen mit geschützten Detaillinks
 - [x] Liste noch nicht platzierter Parzellen
 - [x] Pächterisolation und bestehende Stammdatenrechte
-- [x] Lageplanwerte in Parzellen-CSV-Import und -Export
+- [x] Polygonpunkte in Parzellen-CSV-Import und -Export
+- [x] Hintergrundbild in Backup und Restore
 
 ## Phase 20: Deployment
 

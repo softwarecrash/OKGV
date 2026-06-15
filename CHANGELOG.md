@@ -2,6 +2,47 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.47] - 2026-06-15
+
+### Nachbesserung Phase 19: Luftbild und WYSIWYG-Polygoneditor
+
+- Der einfache Rechteckplan wurde durch einen bildbasierten
+  WYSIWYG-Polygoneditor ersetzt.
+- Administratoren und berechtigte Stammdatenverwalter können ein privates
+  JPEG-, PNG- oder WebP-Luftbild beziehungsweise einen Lageplan bis 15 MiB
+  hinterlegen.
+- Quelle und Nutzungsrecht des Hintergrundbilds müssen dokumentiert und beim
+  Upload ausdrücklich bestätigt werden.
+- Die Oberfläche weist darauf hin, dass Google-Maps-Satellitenbilder nicht
+  automatisch als eigene Bilddateien gespeichert werden dürfen und eine
+  vertragskonforme API-Einbindung benötigen.
+- Parzellen können mit 3 bis 100 Punkten beliebig geformt werden.
+- Ein WYSIWYG-Editor unterstützt Punktsetzung, Rückgängig, das Ziehen
+  einzelner Eckpunkte und das Verschieben der gesamten Fläche.
+- Das Entfernen einer Zeichnung löscht ausschließlich das Polygon; Mitglied,
+  Pächterhistorie, Parzelle und alle Fachdaten bleiben erhalten.
+- Beim Austausch des Hintergrundbilds werden vorhandene Polygone proportional
+  auf die neue Bildgröße skaliert.
+- Die Anzeige legt statusfarbige, klickbare Polygone über das private
+  Hintergrundbild und behält Pächterisolation sowie Detaillinks bei.
+- Frühere Rechteckdaten wurden additiv in vierpunktige Polygone überführt.
+- Nach der Migration bestehen weiterhin 6 Benutzer, 6 Parzellen und alle
+  5 Demo-Parzellen; alle Demo-Flächen besitzen ein Polygon.
+- CSV-Import und -Export verwenden Polygonpunkte. Frühere fünfspaltige und
+  neunspaltige Parzellen-CSV-Dateien bleiben importierbar.
+- Vollständige Backups sichern nun den privaten `association`-Ordner mit
+  Vereinslogo und Lageplanbild.
+- Hintergrundwechsel und Polygonänderungen werden auditiert.
+- Unlesbare oder außerhalb von 400 × 300 bis 12000 × 12000 Pixel liegende
+  Hintergrundbilder werden mit einer verständlichen Formularmeldung
+  abgewiesen.
+- Die additive Migration wurde isoliert vorwärts, rückwärts und erneut
+  vorwärts geprüft sowie ausschließlich vorwärts auf MariaDB angewendet.
+- Insgesamt bestehen 187 Tests mit 1.061 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.47` erhöht.
+
 ## [0.2.0.46] - 2026-06-15
 
 ### Phase 19: SVG-Lageplan

@@ -398,6 +398,33 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Phase 19 vollständig prüfen
 - [x] Entwicklungsstand 0.2.0.46 veröffentlichen
 
+## Nachbesserung Phase 19: Luftbild und WYSIWYG-Polygoneditor
+
+- [x] Rechtecklösung als unzureichend dokumentieren
+- [x] Bestehende Test- und Demo-Daten vollständig erhalten
+- [x] Vorhandene Rechtecke automatisch in vierpunktige Polygone migrieren
+- [x] Privaten Upload für JPEG-, PNG- und WebP-Hintergrundbilder ergänzen
+- [x] Bildquelle und bestätigtes Nutzungsrecht verpflichtend speichern
+- [x] Google-Maps-Lizenzgrenze und API-Anforderung verständlich erklären
+- [x] Beliebige Polygone mit 3 bis 100 Punkten speichern
+- [x] WYSIWYG-Zeichenmodus per Mausklick implementieren
+- [x] Eckpunkte per Drag-and-drop verschiebbar machen
+- [x] Gesamte Polygonfläche verschiebbar machen
+- [x] Rückgängig- und Flächen-entfernen-Funktion ergänzen
+- [x] Parzellendatensatz beim Entfernen einer Zeichnung erhalten
+- [x] Bestehende Polygone bei neuem Bildformat proportional skalieren
+- [x] Viewer auf Hintergrundbild und Polygone umstellen
+- [x] CSV-Import und -Export auf Polygonpunkte umstellen
+- [x] Alte fünf- und neunspaltige Parzellen-CSV weiterhin akzeptieren
+- [x] Hintergrundbild und Vereinslogo in Backup und Restore aufnehmen
+- [x] Auditlogs und Rechteprüfung ergänzen
+- [x] Additive Migration isoliert vorwärts und rückwärts prüfen
+- [x] Additive Migration vorwärts auf MariaDB anwenden
+- [x] Vorhandene 6 Benutzer, 6 Parzellen und 5 Demo-Parzellen nach Migration prüfen
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand 0.2.0.47 veröffentlichen
+
 ## Vorgezogene Phase 12: Arbeitseinsätze
 
 - [x] Vorziehen von Phase 12 direkt nach Phase 9 dokumentieren

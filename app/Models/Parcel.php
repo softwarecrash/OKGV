@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'map_y',
     'map_width',
     'map_height',
+    'map_polygon',
     'notes',
 ])]
 class Parcel extends Model
@@ -36,6 +37,7 @@ class Parcel extends Model
             'map_y' => 'integer',
             'map_width' => 'integer',
             'map_height' => 'integer',
+            'map_polygon' => 'array',
         ];
     }
 
@@ -99,9 +101,7 @@ class Parcel extends Model
 
     public function isPlacedOnMap(): bool
     {
-        return $this->map_x !== null
-            && $this->map_y !== null
-            && $this->map_width !== null
-            && $this->map_height !== null;
+        return is_array($this->map_polygon)
+            && count($this->map_polygon) >= 3;
     }
 }

@@ -33,4 +33,9 @@ class ParcelPolicy
     {
         return $user->canManageMasterData();
     }
+
+    public function manageMap(User $user): bool
+    {
+        return $user->canManageMasterData();
+    }
 }

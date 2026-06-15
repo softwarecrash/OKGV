@@ -20,6 +20,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'logo_original_name',
     'logo_mime',
     'logo_size',
+    'map_background_path',
+    'map_background_original_name',
+    'map_background_mime',
+    'map_background_size',
+    'map_background_width',
+    'map_background_height',
+    'map_background_source',
     'bank_account_holder',
     'bank_name',
     'bank_iban',
@@ -42,6 +49,8 @@ class ApplicationSetting extends Model
             'bank_iban' => 'encrypted',
             'bank_bic' => 'encrypted',
             'default_payment_term_days' => 'integer',
+            'map_background_width' => 'integer',
+            'map_background_height' => 'integer',
         ];
     }
 

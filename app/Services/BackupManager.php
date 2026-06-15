@@ -16,6 +16,7 @@ final class BackupManager
     private const FORMAT = 'okgv-backup-v1';
 
     private const PRIVATE_DIRECTORIES = [
+        'association',
         'documents',
         'meter-reading-submissions',
         'work-hour-submissions',

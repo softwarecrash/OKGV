@@ -131,6 +131,12 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 
 - Erzeuge SVG-Ausgaben aus validierten strukturierten Daten. Führe keine
   hochgeladenen oder frei eingegebenen SVG-, HTML- oder Skriptfragmente aus.
+- Speichere Lageplan-Hintergründe nur als MIME- und größenvalidierte
+  Rasterbilder im privaten Storage.
+- Verlange eine dokumentierte Bildquelle und eine ausdrückliche Bestätigung
+  des Nutzungsrechts. Stelle Kartenanbieterinhalte nicht als frei nutzbar dar.
+- Binde Google-Maps-Inhalte nur über eine vertragskonforme API ein; speichere
+  keine Google-Kartenkacheln oder Screenshots als eigenes Kartenmaterial.
 - Escape sichtbare Beschriftungen und Linkziele über Blade.
 - Farbe darf nie die einzige Statusinformation sein. Ergänze lesbare Labels,
   SVG-`title`-Elemente und zugängliche Beschreibungen.
@@ -138,6 +144,8 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
   auf Listenansichten an. Ein Lageplan darf keine fremden Parzellen
   offenlegen.
 - Validiere Koordinaten, Größen und Zeichenflächengrenzen serverseitig.
+- Das Entfernen einer grafischen Fläche darf niemals den zugehörigen
+  Parzellen- oder Historieneintrag löschen.
 - Übernimm neue Lageplandaten in bestehende Import-, Export- und
   Backupkonzepte.
 

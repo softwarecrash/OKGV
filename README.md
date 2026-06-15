@@ -387,21 +387,26 @@ eigene Nummer erhalten; ein leeres Feld aktiviert die automatische Vergabe.
 
 ## Lageplan
 
-Der Bereich `Lageplan` zeigt die für das angemeldete Konto sichtbaren
-Parzellen als responsive SVG-Grafik. Ein Klick auf eine Fläche öffnet die
-Parzellendetails. Grün steht für freie oder vergebene, Gelb für reservierte
-oder gekündigte und Rot für gesperrte Parzellen; Nummer und Status sind
-zusätzlich als Text verfügbar.
+Der Bereich `Lageplan` legt beliebig geformte Parzellen als klickbare
+Polygone über ein privat gespeichertes Luft- oder Lagebild. Grün steht für
+freie oder vergebene, Gelb für reservierte oder gekündigte und Rot für
+gesperrte Parzellen; Nummer und Status sind zusätzlich als Text verfügbar.
 
-Berechtigte Stammdatenverwalter tragen X-Position, Y-Position, Breite und
-Höhe im Parzellenformular ein. Unvollständige oder über die Zeichenfläche
-hinausragende Angaben werden verständlich abgelehnt. Noch nicht platzierte
-Parzellen erscheinen unterhalb des Plans. Pächter sehen ausschließlich
-aktuell eigene Parzellen.
+Berechtigte Stammdatenverwalter laden im Bearbeitungsmodus ein eigenes oder
+ausdrücklich lizenziertes JPEG-, PNG- oder WebP-Bild hoch und dokumentieren
+Quelle sowie Nutzungsrecht. Danach wählen sie eine Parzelle, setzen ihre
+Eckpunkte per Klick und verschieben Punkte oder die gesamte Fläche per
+Drag-and-drop. Das Entfernen einer Zeichnung löscht niemals die Parzelle.
 
-Die vier Lageplanwerte sind Bestandteil des Parzellen-CSV-Imports und
--Exports. Der Lageplan selbst wird serverseitig erzeugt; OKGV führt keine
-hochgeladenen SVG-Dateien oder frei eingegebenen SVG-Fragmente aus.
+Screenshots oder Satellitenbilder aus Google Maps dürfen nicht automatisch
+als eigene Bilddatei gespeichert werden. Für Google-Satellitendaten wäre
+eine gesonderte, vertragskonforme Google-Maps-API-Einbindung erforderlich.
+
+Polygonpunkte sind Bestandteil des Parzellen-CSV-Imports und -Exports.
+Frühere CSV-Dateien ohne Lageplan oder mit Rechteckkoordinaten bleiben
+importierbar. Hintergrundbild und Vereinslogo werden im privaten
+`association`-Ordner gesichert. Pächter sehen ausschließlich aktuell eigene
+Parzellen.
 
 ## Entwicklung
 

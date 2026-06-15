@@ -107,6 +107,12 @@ final class DemoDataManager
                     'map_y' => $mapPositions[$index][1],
                     'map_width' => $mapPositions[$index][2],
                     'map_height' => $mapPositions[$index][3],
+                    'map_polygon' => json_encode([
+                        ['x' => $mapPositions[$index][0], 'y' => $mapPositions[$index][1]],
+                        ['x' => $mapPositions[$index][0] + $mapPositions[$index][2], 'y' => $mapPositions[$index][1]],
+                        ['x' => $mapPositions[$index][0] + $mapPositions[$index][2], 'y' => $mapPositions[$index][1] + $mapPositions[$index][3]],
+                        ['x' => $mapPositions[$index][0], 'y' => $mapPositions[$index][1] + $mapPositions[$index][3]],
+                    ], JSON_THROW_ON_ERROR),
                     'notes' => 'Automatisch erzeugte Demo-Parzelle.',
                     'created_at' => $now,
                     'updated_at' => $now,

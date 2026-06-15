@@ -7,6 +7,38 @@
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
 
+.parcel-map-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 75vh;
+    touch-action: none;
+    user-select: none;
+}
+
+.parcel-map-editor-frame {
+    overflow: auto;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    background: var(--bs-tertiary-bg);
+}
+
+.parcel-map-editor-polygon {
+    fill-opacity: 0.42;
+    stroke: #ffffff;
+    stroke-width: 3;
+    vector-effect: non-scaling-stroke;
+    cursor: move;
+}
+
+.parcel-map-editor-handle {
+    fill: #ffffff;
+    stroke: #2e7d32;
+    stroke-width: 4;
+    vector-effect: non-scaling-stroke;
+    cursor: grab;
+}
+
 .navbar-brand {
     color: $primary;
     font-weight: 700;
