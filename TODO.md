@@ -713,3 +713,13 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Gesamttests und Composer-Audit ausführen
 - [x] Nachbesserung vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
+
+## Nachbesserung Phase 20: Nicht-interaktiver Administrator-Bootstrap
+
+- [x] Administratorzugangsdaten über `.env` konfigurierbar machen
+- [x] `okgv:create-admin` ohne Rückfragen in Plesk nutzbar machen
+- [x] Bestehendes Administratorkonto idempotent aktualisieren
+- [x] Optionalen `--password` Parameter ergänzen
+- [x] Fachtests, Gesamttests, Formatter und Audit ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen

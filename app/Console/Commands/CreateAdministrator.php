@@ -11,21 +11,26 @@ use Illuminate\Validation\Rules\Password;
 
 class CreateAdministrator extends Command
 {
-    protected $signature = 'okgv:create-admin {email?} {--name=}';
+    protected $signature = 'okgv:create-admin {email?} {--name=} {--password=}';
 
     protected $description = 'Create the first OKGV administrator account';
 
     public function handle(): int
     {
-        $email = $this->argument('email') ?: $this->ask('E-Mail-Adresse');
-        $name = $this->option('name') ?: $this->ask('Name');
-        $password = $this->secret('Passwort');
-        $passwordConfirmation = $this->secret('Passwort wiederholen');
+        $email = $this->argument('email') ?: config('admin.email') ?: $this->ask('E-Mail-Adresse');
+        $name = $this->option('name') ?: config('admin.name') ?: $this->ask('Name');
+        $password = $this->option('password') ?: config('admin.password');
+        $passwordConfirmation = $password ?: null;
+
+        if ($password === null) {
+            $password = $this->secret('Passwort');
+            $passwordConfirmation = $this->secret('Passwort wiederholen');
+        }
 
         $validator = Validator::make(
             compact('email', 'name', 'password', 'passwordConfirmation'),
             [
-                'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+                'email' => ['required', 'email', 'max:255'],
                 'name' => ['required', 'string', 'max:255'],
                 'password' => ['required', 'same:passwordConfirmation', Password::defaults()],
             ],
@@ -39,15 +44,19 @@ class CreateAdministrator extends Command
             return self::FAILURE;
         }
 
-        User::create([
+        $user = User::query()->firstOrNew(['email' => $email]);
+        $created = ! $user->exists;
+
+        $user->forceFill([
             'name' => $name,
-            'email' => $email,
             'password' => Hash::make($password),
             'role' => UserRole::Administrator,
-            'email_verified_at' => now(),
-        ]);
+            'email_verified_at' => $user->email_verified_at ?? now(),
+        ])->save();
 
-        $this->info('Administrator wurde erstellt.');
+        $this->info($created
+            ? 'Administrator wurde erstellt.'
+            : 'Administrator wurde aktualisiert.');
 
         return self::SUCCESS;
     }

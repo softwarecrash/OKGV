@@ -2,6 +2,21 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.66] - 2026-06-15
+
+### Nicht-interaktiver Administrator-Bootstrap
+
+- Administratorzugangsdaten können über `OKGV_ADMIN_EMAIL`,
+  `OKGV_ADMIN_NAME` und `OKGV_ADMIN_PASSWORD` in `.env` gesetzt werden.
+- `php artisan okgv:create-admin` kann dadurch in Plesk ohne interaktive
+  Eingaben ausgeführt werden.
+- Ein bestehendes Konto mit dieser E-Mail-Adresse wird idempotent zum
+  Administratorkonto aktualisiert.
+- Für manuelle Aufrufe steht zusätzlich `--password=` zur Verfügung.
+- Insgesamt bestehen 206 Tests mit 1.235 Assertions.
+- Composer-Abhängigkeiten weisen keine bekannten Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.66` erhöht.
+
 ## [0.2.0.65] - 2026-06-15
 
 ### Laravel-UI als Produktionsabhängigkeit

@@ -152,6 +152,18 @@ php artisan okgv:create-admin
 php artisan serve
 ```
 
+Für nicht-interaktive Umgebungen wie Plesk können Administratorzugangsdaten
+vorher in `.env` gesetzt werden:
+
+```dotenv
+OKGV_ADMIN_EMAIL=admin@example.de
+OKGV_ADMIN_NAME="OKGV Administrator"
+OKGV_ADMIN_PASSWORD="EinSicheresPasswort123!"
+```
+
+`php artisan okgv:create-admin` legt dann den Administrator an oder
+aktualisiert das bestehende Konto mit dieser E-Mail-Adresse.
+
 Die Anwendung ist danach standardmäßig unter `http://127.0.0.1:8000` erreichbar.
 Für die Frontend-Entwicklung kann parallel `npm run dev` gestartet werden.
 
