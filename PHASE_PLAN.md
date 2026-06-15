@@ -161,7 +161,8 @@ vorherigen Phase geprüft sein.
 
 ## Phase 15: DSGVO
 
-- [ ] DSGVO-Funktionen
+- [x] DSGVO-Funktionen
+- [x] Funktion zur einstellung ob andere pächter meine daten und welche sehen dürfen (opt in)
 
 ## Phase 16: Vereinseinstellungen
 
@@ -190,6 +191,6 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 14 einschließlich der zusammengefassten Datenübertragung,
-manuellen Backups und Wiederherstellung sind abgeschlossen. Als Nächstes
-folgt Phase 15: DSGVO-Funktionen.
+Die Phasen 0 bis 15 einschließlich DSGVO-Auskunft, Löschprüfung und
+freiwilligen Mitpächterfreigaben sind abgeschlossen. Als Nächstes folgt
+Phase 16: Vereinseinstellungen.

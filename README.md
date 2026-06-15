@@ -205,6 +205,7 @@ OKGV_MODULE_COMMUNICATION=true
 OKGV_MODULE_WAITING_LIST=true
 OKGV_MODULE_INVENTORY=true
 OKGV_MODULE_DATA_TRANSFER=true
+OKGV_PRIVACY_RETENTION_YEARS=10
 ```
 
 Arbeitsstunden benötigen Abrechnung, Arbeitseinsätze benötigen
@@ -317,6 +318,33 @@ insbesondere derselbe `APP_KEY` erforderlich, da andernfalls verschlüsselte
 SMTP- und Bankdaten nicht mehr lesbar sind. Produktive Betreiber benötigen
 zusätzlich einen externen, automatisierten Backupplan; die manuelle
 Serverablage allein schützt nicht gegen einen vollständigen Serverausfall.
+
+## Datenschutz und Löschprüfung
+
+Jedes angemeldete Mitglied findet im Benutzermenü den Bereich `Datenschutz`.
+Dort kann es eine maschinenlesbare JSON-Auskunft herunterladen, eine
+Löschprüfung beantragen und einzelne Kontaktdaten freiwillig für aktuell
+gemeinsam eingetragene Mitpächter derselben Parzelle freigeben. Sämtliche
+Freigaben sind standardmäßig deaktiviert und können jederzeit vollständig
+widerrufen werden. Es gibt kein vereinsweites öffentliches
+Mitgliederverzeichnis.
+
+Vorstandsmitglieder benötigen das granulare Recht
+`Datenschutzanfragen verwalten`, um fremde Auskünfte und Löschanfragen zu
+prüfen. Die endgültige Pseudonymisierung bleibt Administratoren vorbehalten
+und verlangt das aktuelle Passwort sowie eine ausdrückliche
+Sicherheitsbestätigung.
+
+Eine Löschprüfung berücksichtigt mindestens Archivierung, Austrittsdatum,
+Pächterhistorie, offene oder noch aufzubewahrende Rechnungen, aktive
+SEPA-Mandate, Dokumente und offene Inventarausgaben. Die technische
+Mindestaufbewahrung wird mit `OKGV_PRIVACY_RETENTION_YEARS` konfiguriert und
+beträgt standardmäßig zehn Jahre. Dieser Wert ersetzt keine rechtliche
+Prüfung durch den betreibenden Verein. Sind Aufbewahrungsgründe vorhanden,
+wird die Anfrage mit verständlichen Gründen blockiert. Nach erfolgreicher
+Prüfung werden identifizierende Stammdaten und das Pächterkonto
+pseudonymisiert; notwendige historische Fachbezüge bleiben unter einer
+anonymen Referenz erhalten.
 
 ## Entwicklung
 

@@ -8,6 +8,14 @@
             <span class="text-secondary">{{ $member->member_number }} · {{ $member->status->label() }}</span>
         </div>
         <div class="d-flex gap-2">
+            @if (auth()->user()->canManagePrivacy())
+                <a class="btn btn-outline-secondary" href="{{ route('privacy.export', $member) }}">Datenauskunft</a>
+                <form method="POST" action="{{ route('privacy-erasure-requests.store') }}">
+                    @csrf
+                    <input type="hidden" name="member_id" value="{{ $member->id }}">
+                    <button class="btn btn-outline-danger" type="submit">Löschprüfung anlegen</button>
+                </form>
+            @endif
             @can('update', $member)
                 <a class="btn btn-primary" href="{{ route('members.edit', $member) }}">Bearbeiten</a>
             @endcan

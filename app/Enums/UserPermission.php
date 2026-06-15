@@ -20,6 +20,7 @@ enum UserPermission: string
     case ManageWaitingList = 'manage_waiting_list';
     case ManageInventory = 'manage_inventory';
     case ManageDataTransfer = 'manage_data_transfer';
+    case ManagePrivacy = 'manage_privacy';
 
     public function label(): string
     {
@@ -40,6 +41,7 @@ enum UserPermission: string
             self::ManageWaitingList => 'Warteliste verwalten',
             self::ManageInventory => 'Inventar verwalten',
             self::ManageDataTransfer => 'CSV-Daten übertragen',
+            self::ManagePrivacy => 'Datenschutzanfragen verwalten',
         };
     }
 
@@ -62,6 +64,7 @@ enum UserPermission: string
             self::ManageWaitingList => 'Erlaubt den Zugriff auf Interessenten, Kontaktdaten, Prioritäten und Bearbeitungsstatus.',
             self::ManageInventory => 'Erlaubt Gegenstände, Ausgaben, Rückgaben und die Inventarhistorie zu verwalten.',
             self::ManageDataTransfer => 'Erlaubt geprüfte CSV-Importe und Exporte. Vollständige Backups bleiben Administratoren vorbehalten.',
+            self::ManagePrivacy => 'Erlaubt Auskunftsexporte und die Prüfung von Löschanfragen. Die endgültige Pseudonymisierung bleibt Administratoren vorbehalten.',
         };
     }
 

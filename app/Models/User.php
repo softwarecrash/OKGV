@@ -189,6 +189,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasPermission(UserPermission::ManageDataTransfer);
     }
 
+    public function canManagePrivacy(): bool
+    {
+        return $this->hasPermission(UserPermission::ManagePrivacy);
+    }
+
     public function sendEmailVerificationNotification(): void
     {
         $this->notify(new VerifyEmailNotification);

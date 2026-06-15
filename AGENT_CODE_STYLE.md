@@ -79,6 +79,21 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 - Vollständige Backups und Restore bleiben unabhängig von granularen
   Vorstandsrechten ausschließlich Administratoren vorbehalten.
 
+### Datenschutz
+
+- Personenbezogene Daten werden standardmäßig nicht mit anderen Mitgliedern
+  geteilt. Jede Freigabe braucht ein ausdrückliches, feldbezogenes Opt-in.
+- Prüfe bei Freigaben zusätzlich serverseitig den konkreten fachlichen Bezug,
+  beispielsweise eine aktuell gemeinsam belegte Parzelle.
+- Archivierung, Löschanfrage und Pseudonymisierung sind getrennte Zustände und
+  dürfen in Code oder Benutzertexten nicht gleichgesetzt werden.
+- Lösche historisch oder gesetzlich aufzubewahrende Fachdatensätze nicht
+  stillschweigend. Dokumentiere blockierende Gründe verständlich.
+- Destruktive Datenschutzaktionen bleiben Administratoren vorbehalten,
+  verlangen eine erneute Passwortprüfung und werden auditiert.
+- Auskunftsexporte dürfen keine Passworthashes, Sessiondaten oder unnötige
+  Geheimnisse anderer Personen enthalten.
+
 ### Controller
 
 - Controller bleiben klein und koordinieren nur Request, Policy, Service, Model und Response.

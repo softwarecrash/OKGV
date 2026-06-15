@@ -261,6 +261,10 @@
                                         </a>
                                         <div class="dropdown-divider"></div>
                                     @endif
+                                    <a class="dropdown-item" href="{{ route('privacy.index') }}">
+                                        Datenschutz
+                                    </a>
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -289,6 +293,8 @@
 
         <footer class="container pb-4 text-center text-secondary small">
             <span>GNU AGPLv3</span>
+            <span aria-hidden="true"> · </span>
+            <a href="{{ route('privacy.information') }}">Datenschutzinformationen</a>
             <span aria-hidden="true"> · </span>
             <a href="{{ config('app.source_url') }}" rel="noopener noreferrer">Quellcode</a>
         </footer>

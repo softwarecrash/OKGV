@@ -1014,10 +1014,47 @@ Wiederherstellung wird automatisch ein Sicherheitsbackup des aktuellen
 Zustands angelegt. Backup-Erstellung, Downloadschutz, Löschung und Restore
 sind serverseitig geschützt und auditiert.
 
-### Phase 15 bis 18
+### Phase 15: DSGVO
 
-DSGVO, Vereinseinstellungen, Nummernkreise, Pächterwechsel und später ein
-Lageplan.
+Der Datenschutzbereich ist eine Kernfunktion und kann nicht als Fachmodul
+abgeschaltet werden. Mitglieder können ihre gespeicherten strukturierten
+Daten als JSON-Auskunft herunterladen. Berechtigte Vorstandsmitglieder
+benötigen das granulare Recht `Datenschutzanfragen verwalten`, um Auskünfte
+für andere Mitglieder und Löschanfragen zu prüfen. Die endgültige
+Pseudonymisierung bleibt Administratoren vorbehalten.
+
+Löschanfragen werden dauerhaft mit Antragsteller, Prüfzeitpunkt,
+Prüfvermerk, Status und konkreten Aufbewahrungsgründen dokumentiert.
+Archivierung allein ist keine Löschung. Eine Pseudonymisierung ist erst
+zulässig, wenn das Mitglied archiviert ist, die konfigurierte
+Mindestaufbewahrung seit dem Austritt abgelaufen ist und keine aktiven
+Pächterzuordnungen, offenen oder aufzubewahrenden Rechnungen, aktiven
+SEPA-Mandate, mitgliedsbezogenen Dokumente oder offenen Inventarausgaben
+bestehen. Interne Vereinskonten werden nicht automatisch pseudonymisiert.
+
+Die Mindestaufbewahrung wird über `OKGV_PRIVACY_RETENTION_YEARS`
+konfiguriert und beträgt technisch konservativ zehn Jahre. Sie ist keine
+abschließende Rechtsberatung; der betreibende Verein muss die für seine
+Unterlagen tatsächlich geltenden gesetzlichen und vertraglichen Fristen
+prüfen. Nach erfolgreicher Prüfung werden Mitgliedsstammdaten,
+Kommunikationsempfänger, alte Rechnungsempfänger und Bankdaten
+pseudonymisiert. Historische Fachbezüge bleiben unter einer anonymen
+Referenz erhalten.
+
+Mitglieder können separat für Name, E-Mail, Telefon, Mobilnummer und
+Postanschrift einwilligen, dass aktuell gemeinsam eingetragene Mitpächter
+derselben Parzelle diese Angaben sehen. Jede Freigabe ist standardmäßig
+deaktiviert, freiwillig, feldbezogen und jederzeit widerrufbar. Eine
+vereinsweite Freigabe oder ein öffentliches Mitgliederverzeichnis ist
+ausgeschlossen.
+
+Datenauskunft, Einwilligungsänderung, Löschantrag, Prüfung und
+Pseudonymisierung werden ohne unnötige personenbezogene Nutzdaten
+auditiert.
+
+### Phase 16 bis 18
+
+Vereinseinstellungen, Nummernkreise, Pächterwechsel und später ein Lageplan.
 
 ### Phase 12.1: Modulare Funktionsbereiche
 

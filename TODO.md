@@ -315,6 +315,24 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Phase 13 und 14 vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
 
+## Phase 15: DSGVO
+
+- [x] Datenmodell und Rechtekonzept für Datenschutzfunktionen spezifizieren
+- [x] Granulares Recht zur Verwaltung von Datenschutzanfragen ergänzen
+- [x] Persönlichen maschinenlesbaren Auskunftsexport implementieren
+- [x] Öffentliche Datenschutzinformationen ergänzen
+- [x] Löschanträge mit dokumentierter Aufbewahrungsprüfung implementieren
+- [x] Konfigurierbare Mindestaufbewahrung und Pseudonymisierung ergänzen
+- [x] Aktive Verträge, offene Rechnungen, SEPA, Dokumente und Ausgaben als Löschhindernisse prüfen
+- [x] Freiwillige feldbezogene Datenfreigabe für aktuelle Mitpächter ergänzen
+- [x] Freigaben standardmäßig deaktivieren und jederzeit widerrufbar machen
+- [x] Auditlog für Export, Freigaben, Löschprüfung und Pseudonymisierung ergänzen
+- [x] Migration auf MariaDB vorwärts und rückwärts prüfen
+- [x] Fach-, Rechte- und Sicherheitstests ergänzen
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Phase 15 vollständig prüfen
+- [ ] Entwicklungsstand 0.2.0.43 veröffentlichen
+
 ## Vorgezogene Phase 12: Arbeitseinsätze
 
 - [x] Vorziehen von Phase 12 direkt nach Phase 9 dokumentieren

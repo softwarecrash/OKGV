@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Fillable([
     'user_id',
@@ -87,6 +88,16 @@ class Member extends Model
     public function inventoryLoans(): HasMany
     {
         return $this->hasMany(InventoryLoan::class);
+    }
+
+    public function privacySetting(): HasOne
+    {
+        return $this->hasOne(MemberPrivacySetting::class);
+    }
+
+    public function privacyErasureRequests(): HasMany
+    {
+        return $this->hasMany(PrivacyErasureRequest::class);
     }
 
     public function parcels(): BelongsToMany

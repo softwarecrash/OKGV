@@ -29,6 +29,8 @@ use App\Http\Controllers\PaymentReminderController;
 use App\Http\Controllers\PaymentReturnController;
 use App\Http\Controllers\PermissionProfileController;
 use App\Http\Controllers\PortalDocumentController;
+use App\Http\Controllers\PrivacyController;
+use App\Http\Controllers\PrivacyErasureRequestController;
 use App\Http\Controllers\PublicDocumentController;
 use App\Http\Controllers\RegistrationRequestController;
 use App\Http\Controllers\SepaMandateController;
@@ -68,11 +70,29 @@ Route::get('freigabe/dokument/{token}', [PublicDocumentController::class, 'downl
     ->middleware(['module:documents', 'throttle:30,1'])
     ->name('documents.public');
 
+Route::view('datenschutzinformationen', 'privacy.information')
+    ->name('privacy.information');
+
 Route::get('/dashboard', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function (): void {
+    Route::get('datenschutz', [PrivacyController::class, 'index'])
+        ->name('privacy.index');
+    Route::put('datenschutz/freigaben', [PrivacyController::class, 'update'])
+        ->name('privacy.settings.update');
+    Route::get('datenschutz/auskunft/{member}', [PrivacyController::class, 'export'])
+        ->middleware('throttle:10,1')
+        ->name('privacy.export');
+    Route::post('datenschutz/loeschanfragen', [PrivacyErasureRequestController::class, 'store'])
+        ->middleware('throttle:5,10')
+        ->name('privacy-erasure-requests.store');
+    Route::post('datenschutz/loeschanfragen/{privacy_erasure_request}/pruefen', [PrivacyErasureRequestController::class, 'review'])
+        ->name('privacy-erasure-requests.review');
+    Route::post('datenschutz/loeschanfragen/{privacy_erasure_request}/pseudonymisieren', [PrivacyErasureRequestController::class, 'anonymize'])
+        ->middleware('throttle:3,10')
+        ->name('privacy-erasure-requests.anonymize');
     Route::get('paechterportal', [TenantPortalController::class, 'index'])
         ->middleware('module:tenant_portal')
         ->name('tenant-portal.index');

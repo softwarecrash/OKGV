@@ -2,6 +2,40 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.43] - 2026-06-15
+
+### Phase 15: DSGVO
+
+- Ein zentraler Datenschutzbereich mit öffentlicher Datenschutzinformation
+  und persönlichem, maschinenlesbarem JSON-Auskunftsexport wurde ergänzt.
+- Pächter können Name, E-Mail, Telefon, Mobilnummer und Anschrift einzeln und
+  freiwillig für aktuell gemeinsam eingetragene Mitpächter derselben Parzelle
+  freigeben.
+- Sämtliche Datenfreigaben sind standardmäßig deaktiviert und jederzeit
+  vollständig widerrufbar; ein vereinsweites Mitgliederverzeichnis entsteht
+  nicht.
+- Das granulare Recht `Datenschutzanfragen verwalten` erlaubt berechtigten
+  Vorstandsmitgliedern fremde Auskünfte und Löschanfragen zu bearbeiten.
+- Löschanträge speichern Antragsteller, Status, Prüfvermerk,
+  Aufbewahrungsgründe und Abschluss nachvollziehbar.
+- Die automatische Löschprüfung berücksichtigt Archivierung, Austritt,
+  Pächterhistorie, Rechnungen, SEPA-Mandate, Dokumente, Inventarausgaben und
+  interne Vereinskonten.
+- Die technische Mindestaufbewahrung ist über
+  `OKGV_PRIVACY_RETENTION_YEARS` konfigurierbar und ersetzt ausdrücklich keine
+  rechtliche Prüfung des betreibenden Vereins.
+- Eine endgültige Pseudonymisierung bleibt Administratoren vorbehalten,
+  verlangt Passwort und Sicherheitsbestätigung und erhält notwendige
+  historische Fachbezüge unter einer anonymen Referenz.
+- Auskunft, Freigabeänderung, Löschantrag, Prüfung und Pseudonymisierung
+  werden auditiert.
+- Die Migration wurde auf MariaDB erfolgreich vorwärts, rückwärts und erneut
+  vorwärts ausgeführt.
+- Insgesamt bestehen 169 Tests mit 963 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.43` erhöht.
+
 ## [0.2.0.42] - 2026-06-15
 
 ### Phase 13 und 14: Datenübertragung, Backup und Restore
