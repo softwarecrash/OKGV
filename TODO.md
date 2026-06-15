@@ -328,7 +328,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Regressionstest für weitergereichtes HTTPS-Schema ergänzen
 - [x] Gesamttests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen
-- [ ] Entwicklungsstand veröffentlichen
+- [x] Entwicklungsstand veröffentlichen
 
 ## Nachbesserung Demo-Bestand: Perioden und Anmeldung
 

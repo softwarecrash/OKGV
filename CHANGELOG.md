@@ -21,6 +21,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
   vertrauenswürdigen Proxy ab.
 - Insgesamt bestehen 128 Tests mit 758 Assertions.
 - Entwicklungsstand auf `0.2.0.36` erhöht.
+- Entwicklungsstand `0.2.0.36` auf GitHub veröffentlicht.
 
 ## [0.2.0.35] - 2026-06-15
 
