@@ -7,7 +7,7 @@
 @endif
 
 <div class="alert alert-info">
-    Fehlstunden und Strafzahlung werden automatisch berechnet. Mehr geleistete als geforderte Stunden führen nicht zu einem negativen Betrag.
+    Fehlstunden und Strafzahlung werden automatisch berechnet. Die reguläre Pflicht wird aus dem jährlichen Vereinswert und den Belegungstagen der Parzelle ermittelt.
 </div>
 
 <div class="mb-3">
@@ -48,7 +48,19 @@
             <span class="input-group-text">Std.</span>
             @error('hours_required')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
-        <div class="form-text">Die laut Vereinsregelung zu leistenden Stunden.</div>
+        <div class="form-text">
+            @if ($workHour->exists)
+                Jahreswert {{ number_format((float) $workHour->base_hours_required, 2, ',', '.') }} Std.
+                × {{ number_format((float) $workHour->occupancy_factor * 100, 2, ',', '.') }} % Belegung.
+                @if ($workHour->hours_required_overridden)
+                    Dieser Pflichtwert wurde manuell abweichend festgelegt.
+                @else
+                    Eine Änderung dieses Feldes wird als manuelle Abweichung gespeichert.
+                @endif
+            @else
+                Für manuell angelegte Konten wird dieser Wert als individuelle Vorgabe gespeichert.
+            @endif
+        </div>
     </div>
     <div class="col-md-4">
         <label class="form-label" for="hours_done">Zusätzlich manuell anerkannte Stunden</label>

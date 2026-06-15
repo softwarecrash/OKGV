@@ -13,7 +13,10 @@ use LogicException;
 #[Fillable([
     'billing_period_id',
     'parcel_id',
+    'base_hours_required',
     'hours_required',
+    'occupancy_factor',
+    'hours_required_overridden',
     'hours_done',
     'manual_hours_done',
     'event_hours_done',
@@ -51,7 +54,10 @@ class WorkHour extends Model
     protected function casts(): array
     {
         return [
+            'base_hours_required' => 'decimal:2',
             'hours_required' => 'decimal:2',
+            'occupancy_factor' => 'decimal:8',
+            'hours_required_overridden' => 'boolean',
             'hours_done' => 'decimal:2',
             'manual_hours_done' => 'decimal:2',
             'event_hours_done' => 'decimal:2',

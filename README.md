@@ -62,7 +62,8 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - PDF-Mahnungen und begründete, historisierte Stornierungen
 - Pächterzugriff auf eigene Mahnhistorie
 - Arbeitsstundenkonten je Parzelle und Abrechnungsperiode
-- Automatische Arbeitsstundenkonten für zum Periodenstichtag verpachtete Parzellen
+- Automatische Arbeitsstundenkonten für innerhalb der Periode verpachtete Parzellen
+- Taggenau anteilige Pflichtstunden bei unterjähriger Verpachtung
 - Automatisch berechnete Fehlstunden und Strafzahlungen
 - Historische Fehlstundenpositionen auf Einzel- und Gemeinschaftsrechnungen
 - Arbeitseinsatztermine mit Teilnehmer- und Anwesenheitsstatus
@@ -82,11 +83,13 @@ Pächterwechseln muss ein Übergabezählerstand vorhanden sein.
 Konten mit dem Recht `Abrechnungen und Rechnungen verwalten` finden unter
 `Finanzen` die Arbeitsstundenübersicht. Zusätzlich zeigt jede
 Parzellendetailansicht die periodischen Arbeitsstundenkonten; berechtigte
-Konten können dort manuell anerkannte Stunden direkt pflegen. Pflichtstunden,
-geleistete Stunden und
+Konten können dort manuell anerkannte Stunden direkt pflegen. Die jährlichen
+Pflichtstunden werden anhand der tatsächlichen Belegungstage der Parzelle
+anteilig berechnet; mehrere gleichzeitige Mitpächter erhöhen die Pflicht
+nicht. Pflichtstunden, geleistete Stunden und
 der Betrag je Fehlstunde werden pro Parzelle und Periode geführt. Die globale
-Konfiguration stellt Vereinsvorgaben bereit, aus denen alle vergebenen
-Parzellen beim Anlegen einer Periode automatisch ihr Konto erhalten.
+Konfiguration stellt Vereinsvorgaben bereit, aus denen alle innerhalb einer
+Periode vergebenen Parzellen automatisch ihr Konto erhalten.
 Nachträgliche Pächterzuordnungen ergänzen passende bearbeitbare Perioden
 ebenfalls automatisch. Fehlstunden und Strafbetrag berechnet OKGV
 automatisch. Bei der nächsten

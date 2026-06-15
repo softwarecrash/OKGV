@@ -12,6 +12,7 @@ use App\Models\ParcelTenant;
 use App\Models\User;
 use App\Models\WorkHour;
 use App\Models\WorkHourSubmission;
+use App\Services\WorkHourManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -68,7 +69,10 @@ class WorkHourSubmissionWorkflowTest extends TestCase
             $this->assertDatabaseHas('work_hours', [
                 'billing_period_id' => $period->id,
                 'parcel_id' => $parcel->id,
+                'base_hours_required' => 12,
                 'hours_required' => 12,
+                'occupancy_factor' => 1,
+                'hours_required_overridden' => false,
                 'penalty_rate' => 18.5,
             ]);
         }
@@ -77,7 +81,104 @@ class WorkHourSubmissionWorkflowTest extends TestCase
             ->get(route('billing-periods.show', $period))
             ->assertOk()
             ->assertDontSee('Parzellenkonten vorbereiten')
-            ->assertSee('Konten werden für verpachtete Parzellen automatisch angelegt.');
+            ->assertSee('Konten werden für im Zeitraum verpachtete Parzellen automatisch');
+    }
+
+    public function test_required_hours_are_prorated_for_midyear_occupancy(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        ApplicationSetting::current()->update([
+            'default_work_hours_required' => '10.00',
+        ]);
+        $period = BillingPeriod::factory()->create([
+            'starts_at' => '2025-01-01',
+            'ends_at' => '2025-12-31',
+        ]);
+        $parcel = Parcel::factory()->create();
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => Member::factory(),
+            'starts_at' => '2025-07-01',
+            'ends_at' => '2025-12-31',
+            'is_primary' => true,
+        ]);
+
+        app(WorkHourManager::class)->initializePeriod($period, $administrator);
+
+        $workHour = WorkHour::query()->firstOrFail();
+        $this->assertSame('10.00', $workHour->base_hours_required);
+        $this->assertSame('0.50410958', $workHour->occupancy_factor);
+        $this->assertSame('5.04', $workHour->hours_required);
+        $this->assertFalse($workHour->hours_required_overridden);
+    }
+
+    public function test_continuous_tenant_change_keeps_the_full_parcel_obligation(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        ApplicationSetting::current()->update([
+            'default_work_hours_required' => '10.00',
+        ]);
+        $period = BillingPeriod::factory()->create([
+            'starts_at' => '2025-01-01',
+            'ends_at' => '2025-12-31',
+        ]);
+        $parcel = Parcel::factory()->create();
+
+        foreach ([
+            ['2025-01-01', '2025-06-30'],
+            ['2025-07-01', '2025-12-31'],
+        ] as [$startsAt, $endsAt]) {
+            ParcelTenant::factory()->create([
+                'parcel_id' => $parcel->id,
+                'member_id' => Member::factory(),
+                'starts_at' => $startsAt,
+                'ends_at' => $endsAt,
+                'is_primary' => true,
+            ]);
+        }
+
+        app(WorkHourManager::class)->initializePeriod($period, $administrator);
+
+        $workHour = WorkHour::query()->firstOrFail();
+        $this->assertSame('1.00000000', $workHour->occupancy_factor);
+        $this->assertSame('10.00', $workHour->hours_required);
+    }
+
+    public function test_manual_required_hours_remain_unchanged_when_occupancy_changes(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        ApplicationSetting::current()->update([
+            'default_work_hours_required' => '10.00',
+        ]);
+        $period = BillingPeriod::factory()->create([
+            'starts_at' => '2025-01-01',
+            'ends_at' => '2025-12-31',
+        ]);
+        $parcel = Parcel::factory()->create();
+        $tenancy = ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => Member::factory(),
+            'starts_at' => '2025-01-01',
+            'ends_at' => '2025-12-31',
+            'is_primary' => true,
+        ]);
+        $manager = app(WorkHourManager::class);
+        $manager->initializePeriod($period, $administrator);
+        $workHour = WorkHour::query()->firstOrFail();
+        $manager->save($period, [
+            'parcel_id' => $parcel->id,
+            'hours_required' => '8.00',
+            'hours_done' => '0.00',
+            'penalty_rate' => '20.00',
+        ], $administrator, $workHour);
+
+        $tenancy->update(['starts_at' => '2025-07-01']);
+        $manager->synchronizeTenancy($tenancy, $administrator);
+
+        $workHour = $workHour->fresh();
+        $this->assertSame('0.50410958', $workHour->occupancy_factor);
+        $this->assertSame('8.00', $workHour->hours_required);
+        $this->assertTrue($workHour->hours_required_overridden);
     }
 
     public function test_tenant_submission_with_private_photo_is_approved_for_parcel_account(): void

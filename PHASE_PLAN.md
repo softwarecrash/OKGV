@@ -111,6 +111,8 @@ vorherigen Phase geprüft sein.
 - [x] Strafzahlungen
 - [x] Parzellenbezogene Konten statt Einzelkonten je Mitpächter
 - [x] Globale Vereinsvorgaben und automatische Parzellenkonten
+- [x] Pflichtstunden bei unterjähriger Verpachtung taggenau anteilig berechnen
+- [x] Fehlstundenbetrag bei Pächterwechsel nach Hauptpächtertagen aufteilen
 - [x] Prüfpflichtige Pächtermeldungen mit optionalem Foto
 - [x] Arbeitsstundenübersicht und Direkterfassung in der Parzellendetailansicht
 

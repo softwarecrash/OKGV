@@ -229,6 +229,76 @@ class WorkHourWorkflowTest extends TestCase
         );
     }
 
+    public function test_penalty_is_split_between_primary_tenants_by_occupancy_days(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $period = BillingPeriod::factory()->create([
+            'name' => 'Abrechnung 2025',
+            'starts_at' => '2025-01-01',
+            'ends_at' => '2025-12-31',
+            'due_at' => '2026-02-01',
+        ]);
+        $parcel = Parcel::factory()->create();
+        $firstMember = Member::factory()->create();
+        $secondMember = Member::factory()->create();
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $firstMember->id,
+            'starts_at' => '2025-01-01',
+            'ends_at' => '2025-06-30',
+            'is_primary' => true,
+        ]);
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $secondMember->id,
+            'starts_at' => '2025-07-01',
+            'ends_at' => '2025-12-31',
+            'is_primary' => true,
+        ]);
+        BillingRate::factory()->create([
+            'billing_period_id' => $period->id,
+            'code' => 'MEMBER_FEE',
+            'name' => 'Mitgliedsbeitrag',
+            'calculation_type' => BillingRateType::Fixed,
+            'scope' => BillingRateScope::Member,
+            'amount' => '1.0000',
+        ]);
+        WorkHour::factory()->create([
+            'billing_period_id' => $period->id,
+            'parcel_id' => $parcel->id,
+            'hours_required' => '10.00',
+            'hours_done' => '0.00',
+            'hours_missing' => '10.00',
+            'penalty_rate' => '10.00',
+            'penalty_amount' => '100.00',
+        ]);
+
+        app(BillingCalculator::class)->calculate($period, $administrator);
+
+        $firstPenalty = Invoice::query()
+            ->where('member_id', $firstMember->id)
+            ->firstOrFail()
+            ->items()
+            ->where('code', 'WORK_HOURS_PENALTY')
+            ->firstOrFail();
+        $secondPenalty = Invoice::query()
+            ->where('member_id', $secondMember->id)
+            ->firstOrFail()
+            ->items()
+            ->where('code', 'WORK_HOURS_PENALTY')
+            ->firstOrFail();
+
+        $this->assertSame('49.59', $firstPenalty->total_amount);
+        $this->assertSame('50.41', $secondPenalty->total_amount);
+        $this->assertSame(181, $firstPenalty->metadata['tenant_occupied_days']);
+        $this->assertSame(184, $secondPenalty->metadata['tenant_occupied_days']);
+        $this->assertEquals(100.00, bcadd(
+            $firstPenalty->total_amount,
+            $secondPenalty->total_amount,
+            2,
+        ));
+    }
+
     public function test_only_billing_managers_can_access_work_hours_and_open_items_are_indicated(): void
     {
         $administrator = User::factory()->administrator()->create();

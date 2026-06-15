@@ -749,12 +749,20 @@ noch eine Gutschrift.
 
 Die globale Vereinskonfiguration enthält Pflichtstunden je Parzelle und
 Betrag je Fehlstunde. Beim Anlegen oder zeitlichen Ändern einer
-Abrechnungsperiode werden für alle zum Periodenende vergebenen Parzellen
-automatisch Konten mit diesen Werten angelegt. Entsteht oder ändert sich
-später eine Pächterzuordnung, ergänzt OKGV die Konten aller passenden,
-bearbeitbaren Perioden automatisch. Die Werte werden als historischer
-Periodenstand kopiert. Vorhandene Konten und abgeschlossene Perioden werden
-dabei nicht überschrieben.
+Abrechnungsperiode werden für alle innerhalb des Zeitraums wenigstens einen
+Tag vergebenen Parzellen automatisch Konten angelegt. Die
+Vereins-Pflichtstunden sind ein Jahreswert und werden taggenau mit dem Anteil
+der belegten Kalendertage an den Kalendertagen der Abrechnungsperiode
+multipliziert. Überschneidende Mitpächterzeiträume zählen je Parzelle nur
+einmal. Ein lückenloser Pächterwechsel innerhalb des Jahres lässt die volle
+Parzellenpflicht bestehen; Leerstandszeiten reduzieren sie.
+
+Entsteht oder ändert sich später eine Pächterzuordnung, synchronisiert OKGV
+die Konten aller passenden, bearbeitbaren Perioden automatisch. Jahreswert,
+Belegungsfaktor und errechnete Pflichtstunden werden historisch gespeichert.
+Eine ausdrücklich manuell geänderte Pflichtstundenzahl bleibt als
+gekennzeichnete Abweichung erhalten. Freigegebene und archivierte Perioden
+werden nicht überschrieben.
 
 Die Parzellendetailansicht zeigt die Arbeitsstundenkonten aller Perioden mit
 Pflichtstunden, manuell anerkannten Stunden, Arbeitseinsätzen,
@@ -769,11 +777,13 @@ auch den vollständigen Zeitraum jeder Abrechnungsperiode.
 
 Bei der Berechnung einer Abrechnungsperiode werden positive Strafbeträge als
 eigene Rechnungsposition `WORK_HOURS_PENALTY` übernommen. Die Position
-speichert Parzelle, Pflichtstunden, geleistete Stunden, Fehlstunden,
-Stundensatz und Gesamtbetrag als historischen Snapshot.
+speichert Parzelle, Pflichtstunden, Belegungsfaktor, geleistete Stunden,
+Fehlstunden, Stundensatz und Gesamtbetrag als historischen Snapshot.
 
 Stehen mehrere Mitglieder gemeinsam im Pachtvertrag, entsteht genau eine
 Fehlstundenposition für die Parzelle auf der gemeinsamen Rechnung.
+Wechselt der Hauptpächter innerhalb der Periode, wird der Strafbetrag nach
+den jeweiligen Hauptpächtertagen auf die Rechnungen aufgeteilt.
 Freigegebene Rechnungen und ihre Fehlstundenpositionen bleiben unveränderlich.
 
 #### Rechte und Änderungen
@@ -852,7 +862,8 @@ Das Arbeitsstundenkonto trennt:
 
 Korrektur, Abwesenheit oder Absage berechnen den automatischen Anteil neu.
 Existiert wider Erwarten noch kein Arbeitsstundenkonto, wird es aus den
-globalen Vereinsvorgaben angelegt. Pflichtstunden und Strafsatz bleiben als
+globalen Vereinsvorgaben und den Belegungstagen der Parzelle angelegt.
+Jahreswert, Belegungsfaktor, Pflichtstunden und Strafsatz bleiben als
 historischer Wert der jeweiligen Periode erhalten.
 
 #### Rechte, Historie und Aktionshinweise

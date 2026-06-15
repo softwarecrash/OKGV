@@ -22,7 +22,10 @@ class WorkHourFactory extends Factory
         return [
             'billing_period_id' => BillingPeriod::factory(),
             'parcel_id' => Parcel::factory(),
+            'base_hours_required' => number_format($required, 2, '.', ''),
             'hours_required' => number_format($required, 2, '.', ''),
+            'occupancy_factor' => '1.00000000',
+            'hours_required_overridden' => true,
             'manual_hours_done' => number_format($done, 2, '.', ''),
             'event_hours_done' => '0.00',
             'submission_hours_done' => '0.00',

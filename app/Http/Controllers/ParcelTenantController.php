@@ -80,12 +80,16 @@ class ParcelTenantController extends Controller
     ): RedirectResponse {
         [$parcelTenant, $createdAccounts] = DB::transaction(
             function () use ($request, $parcelTenant): array {
+                $previousParcelId = $parcelTenant->parcel_id;
                 $parcelTenant = $this->tenancyManager->save(
                     $request->validated(),
                     $parcelTenant,
                 );
-                $createdAccounts = $this->workHourManager->synchronizeTenancy(
-                    $parcelTenant,
+                $createdAccounts = $this->workHourManager->synchronizeParcels(
+                    array_values(array_unique([
+                        $previousParcelId,
+                        $parcelTenant->parcel_id,
+                    ])),
                     $request->user(),
                 );
                 AuditLogger::log('parcel_tenant.updated', $request->user(), $parcelTenant, [

@@ -56,7 +56,15 @@
                                 </a>
                             </td>
                             <td>Parzelle {{ $workHour->parcel->parcel_number }}</td>
-                            <td>{{ number_format((float) $workHour->hours_required, 2, ',', '.') }} Std.</td>
+                            <td>
+                                {{ number_format((float) $workHour->hours_required, 2, ',', '.') }} Std.
+                                <div class="small text-secondary">
+                                    {{ number_format((float) $workHour->occupancy_factor * 100, 2, ',', '.') }} % Belegung
+                                    @if ($workHour->hours_required_overridden)
+                                        · manuell
+                                    @endif
+                                </div>
+                            </td>
                             <td>{{ number_format((float) $workHour->manual_hours_done, 2, ',', '.') }} Std.</td>
                             <td>{{ number_format((float) $workHour->event_hours_done, 2, ',', '.') }} Std.</td>
                             <td>{{ number_format((float) $workHour->hours_done, 2, ',', '.') }} Std.</td>

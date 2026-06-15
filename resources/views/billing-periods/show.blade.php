@@ -153,7 +153,7 @@
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
             <span>Arbeitsstunden</span>
-            <span class="text-secondary small">Konten werden für verpachtete Parzellen automatisch angelegt. Fehlstunden werden beim Berechnen als Rechnungsposition übernommen.</span>
+            <span class="text-secondary small">Konten werden für im Zeitraum verpachtete Parzellen automatisch und nach Belegungstagen anteilig angelegt. Fehlstunden werden beim Berechnen als Rechnungsposition übernommen.</span>
         </div>
         <div class="table-responsive">
             <table class="table align-middle mb-0">
@@ -175,7 +175,15 @@
                     @forelse ($billingPeriod->workHours->sortBy(fn ($entry) => $entry->parcel->parcel_number) as $workHour)
                         <tr>
                             <td>Parzelle {{ $workHour->parcel->parcel_number }}</td>
-                            <td>{{ number_format((float) $workHour->hours_required, 2, ',', '.') }} Std.</td>
+                            <td>
+                                {{ number_format((float) $workHour->hours_required, 2, ',', '.') }} Std.
+                                <div class="small text-secondary">
+                                    {{ number_format((float) $workHour->occupancy_factor * 100, 2, ',', '.') }} % Belegung
+                                    @if ($workHour->hours_required_overridden)
+                                        · manuell
+                                    @endif
+                                </div>
+                            </td>
                             <td>{{ number_format((float) $workHour->manual_hours_done, 2, ',', '.') }} Std.</td>
                             <td>{{ number_format((float) $workHour->event_hours_done, 2, ',', '.') }} Std.</td>
                             <td>{{ number_format((float) $workHour->submission_hours_done, 2, ',', '.') }} Std.</td>
@@ -198,8 +206,8 @@
                     @empty
                         <tr>
                             <td colspan="10" class="text-center py-4">
-                                <strong>Für den Periodenstichtag ist keine Parzelle verpachtet.</strong><br>
-                                <span class="text-secondary">Sobald eine passende Pächterzuordnung besteht, wird das Arbeitsstundenkonto automatisch angelegt.</span>
+                                <strong>In dieser Periode ist keine Parzelle verpachtet.</strong><br>
+                                <span class="text-secondary">Sobald eine Pächterzuordnung den Zeitraum berührt, wird das Arbeitsstundenkonto automatisch angelegt.</span>
                             </td>
                         </tr>
                     @endforelse

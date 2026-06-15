@@ -348,3 +348,19 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Nachbesserung vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
 - [ ] Eigenständige Gutschriften/Korrekturbelege für Änderungen nach Rechnungsfreigabe umsetzen
+
+## Nachbesserung Phase 9: Anteilige Pflichtstunden
+
+- [x] Jährliche Pflichtstunden und Belegungsfaktor historisch speichern
+- [x] Belegungstage einer Parzelle ohne Doppelzählung von Mitpächtern ermitteln
+- [x] Pflichtstunden bei unterjährigem Eintritt und Austritt taggenau berechnen
+- [x] Lückenlosen Pächterwechsel als volle Parzellenbelegung behandeln
+- [x] Manuelle Pflichtstundenabweichungen vor automatischem Überschreiben schützen
+- [x] Alte und neue Parzelle bei einer geänderten Pächterzuordnung synchronisieren
+- [x] Fehlstundenbetrag bei Pächterwechsel nach Hauptpächtertagen aufteilen
+- [x] Belegungsanteil und manuelle Abweichung in der Oberfläche erklären
+- [x] Fachtests für Teiljahr, Wechsel, manuelle Abweichung und Rechnungsaufteilung ergänzen
+- [x] Migration auf MariaDB vorwärts und rückwärts prüfen
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen

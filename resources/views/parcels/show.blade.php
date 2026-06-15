@@ -88,7 +88,7 @@
         @if ($parcel->workHours->isEmpty())
             <div class="card-body">
                 <strong>Noch kein Arbeitsstundenkonto vorhanden.</strong>
-                <div class="text-secondary">Konten werden automatisch angelegt, sobald die Parzelle am Stichtag einer Abrechnungsperiode verpachtet ist.</div>
+                <div class="text-secondary">Konten werden automatisch angelegt, sobald die Parzelle innerhalb einer Abrechnungsperiode verpachtet ist.</div>
             </div>
         @else
             <div class="table-responsive">
@@ -122,7 +122,15 @@
                                         · {{ $workHour->billingPeriod->status->label() }}
                                     </div>
                                 </td>
-                                <td>{{ number_format((float) $workHour->hours_required, 2, ',', '.') }} Std.</td>
+                                <td>
+                                    {{ number_format((float) $workHour->hours_required, 2, ',', '.') }} Std.
+                                    <div class="small text-secondary">
+                                        {{ number_format((float) $workHour->occupancy_factor * 100, 2, ',', '.') }} % Belegung
+                                        @if ($workHour->hours_required_overridden)
+                                            · manuell
+                                        @endif
+                                    </div>
+                                </td>
                                 <td>
                                     @can('update', $workHour)
                                         <form class="d-flex align-items-center gap-2" method="POST" action="{{ route('work-hours.update', $workHour) }}">

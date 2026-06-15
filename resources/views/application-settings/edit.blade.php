@@ -47,11 +47,11 @@
             <fieldset>
                 <legend class="h5">Arbeitsstunden je Parzelle</legend>
                 <p class="text-secondary">
-                    Diese Werte werden als Vorlage in neue Abrechnungsperioden kopiert. Bereits angelegte Periodenkonten ändern sich dadurch nicht rückwirkend.
+                    Die Pflichtstunden gelten als Jahreswert je Parzelle. Bei unterjähriger Verpachtung wird der Wert automatisch nach belegten Kalendertagen anteilig berechnet. Bereits angelegte Periodenkonten ändern sich durch neue Vorgabewerte nicht rückwirkend.
                 </p>
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label" for="default_work_hours_required">Pflichtstunden je Parzelle</label>
+                        <label class="form-label" for="default_work_hours_required">Jährliche Pflichtstunden je Parzelle</label>
                         <div class="input-group">
                             <input class="form-control @error('default_work_hours_required') is-invalid @enderror"
                                    id="default_work_hours_required"

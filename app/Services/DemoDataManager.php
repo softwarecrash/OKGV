@@ -531,7 +531,10 @@ final class DemoDataManager
                 DB::table('work_hours')->insert([
                     'billing_period_id' => $periodId,
                     'parcel_id' => $parcelId,
+                    'base_hours_required' => '10.00',
                     'hours_required' => '10.00',
+                    'occupancy_factor' => '1.00000000',
+                    'hours_required_overridden' => false,
                     'manual_hours_done' => $manualHours,
                     'event_hours_done' => $eventHours,
                     'submission_hours_done' => $submissionHours,

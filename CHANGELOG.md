@@ -2,6 +2,28 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.35] - 2026-06-15
+
+### Anteilige Arbeitsstunden
+
+- Die globalen Pflichtstunden gelten als Jahreswert je Parzelle und werden bei
+  unterjähriger Verpachtung taggenau nach belegten Kalendertagen berechnet.
+- Gleichzeitige Mitpächter werden nicht doppelt gezählt; ein lückenloser
+  Pächterwechsel erhält die volle Jahrespflicht der Parzelle.
+- Jahreswert, Belegungsfaktor und eine mögliche manuelle Abweichung werden
+  historisch am Arbeitsstundenkonto gespeichert.
+- Änderungen an Pächterzeiträumen synchronisieren betroffene bearbeitbare
+  Abrechnungsperioden; manuelle Sonderwerte bleiben dabei erhalten.
+- Fehlstundenbeträge werden bei einem Hauptpächterwechsel nach den jeweiligen
+  Belegungstagen auf die Rechnungen aufgeteilt.
+- Oberfläche und globale Konfiguration erklären die automatische
+  Zeitanteilsberechnung und kennzeichnen manuell abweichende Pflichtstunden.
+- Fachtests decken Teiljahre, lückenlose Wechsel, manuelle Abweichungen und
+  die Rechnungsaufteilung ab.
+- Migration wurde auf MariaDB vorwärts und rückwärts geprüft.
+- Insgesamt bestehen 127 Tests mit 756 Assertions.
+- Entwicklungsstand auf `0.2.0.35` erhöht.
+
 ## [0.2.0.34] - 2026-06-15
 
 ### Abrechnungszeiträume

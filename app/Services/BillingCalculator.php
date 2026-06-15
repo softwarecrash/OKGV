@@ -154,17 +154,9 @@ final class BillingCalculator
             $total,
             $this->addWorkHourPenalties(
                 $invoice,
-                $primaryTenancies
-                    ->filter(fn (ParcelTenant $tenancy) => $this->overlap(
-                        $tenancy->starts_at,
-                        $tenancy->ends_at,
-                        $period->ends_at,
-                        $period->ends_at,
-                    ))
-                    ->pluck('parcel')
-                    ->unique('id')
-                    ->values(),
+                $primaryTenancies,
                 $workHours,
+                $period,
             ),
             2,
         );
@@ -420,44 +412,121 @@ final class BillingCalculator
     }
 
     /**
-     * @param  Collection<int, Parcel>  $parcels
+     * @param  Collection<int, ParcelTenant>  $primaryTenancies
      * @param  Collection<int, WorkHour>  $workHours
      */
     private function addWorkHourPenalties(
         Invoice $invoice,
-        Collection $parcels,
+        Collection $primaryTenancies,
         Collection $workHours,
+        BillingPeriod $period,
     ): string {
         $total = '0.00';
 
-        foreach ($parcels as $parcel) {
+        foreach ($primaryTenancies->groupBy('parcel_id') as $memberTenancies) {
+            /** @var Parcel $parcel */
+            $parcel = $memberTenancies->first()->parcel;
             $workHour = $workHours->get($parcel->id);
 
             if (! $workHour || bccomp($workHour->penalty_amount, '0.00', 2) <= 0) {
                 continue;
             }
 
+            $memberDays = $this->occupiedDays(
+                $memberTenancies,
+                $period->starts_at,
+                $period->ends_at,
+            );
+            $allPrimaryTenancies = ParcelTenant::query()
+                ->where('parcel_id', $parcel->id)
+                ->where('is_primary', true)
+                ->whereDate('starts_at', '<=', $period->ends_at)
+                ->where(function ($query) use ($period): void {
+                    $query->whereNull('ends_at')
+                        ->orWhereDate('ends_at', '>=', $period->starts_at);
+                })
+                ->get();
+            $totalDays = $this->occupiedDays(
+                $allPrimaryTenancies,
+                $period->starts_at,
+                $period->ends_at,
+            );
+
+            if ($memberDays === 0 || $totalDays === 0) {
+                continue;
+            }
+
+            $share = bcdiv((string) $memberDays, (string) $totalDays, 8);
+            $hoursMissing = bcmul((string) $workHour->hours_missing, $share, 4);
+            $penaltyAmount = $this->roundMoney(
+                bcmul((string) $workHour->penalty_amount, $share, 8),
+            );
             $invoice->items()->create([
                 'billing_rate_id' => null,
                 'parcel_id' => $parcel->id,
                 'code' => 'WORK_HOURS_PENALTY',
                 'description' => "Fehlende Arbeitsstunden - Parzelle {$parcel->parcel_number}",
                 'calculation_type' => BillingRateType::Manual,
-                'quantity' => $workHour->hours_missing,
+                'quantity' => $hoursMissing,
                 'unit_price' => $workHour->penalty_rate,
-                'total_amount' => $workHour->penalty_amount,
+                'total_amount' => $penaltyAmount,
                 'metadata' => [
                     'work_hour_id' => $workHour->id,
                     'parcel_id' => $parcel->id,
                     'hours_required' => $workHour->hours_required,
                     'hours_done' => $workHour->hours_done,
+                    'occupancy_factor' => $workHour->occupancy_factor,
+                    'tenant_share' => $share,
+                    'tenant_occupied_days' => $memberDays,
+                    'primary_tenant_days' => $totalDays,
                 ],
             ]);
 
-            $total = bcadd($total, $workHour->penalty_amount, 2);
+            $total = bcadd($total, $penaltyAmount, 2);
         }
 
         return $total;
+    }
+
+    /**
+     * @param  Collection<int, ParcelTenant>  $tenancies
+     */
+    private function occupiedDays(
+        Collection $tenancies,
+        CarbonInterface $startsAt,
+        CarbonInterface $endsAt,
+    ): int {
+        $ranges = $tenancies
+            ->map(fn (ParcelTenant $tenancy) => $this->overlap(
+                $tenancy->starts_at,
+                $tenancy->ends_at,
+                $startsAt,
+                $endsAt,
+            ))
+            ->filter()
+            ->sortBy('start')
+            ->values();
+        $merged = $ranges->reduce(function (Collection $result, array $range): Collection {
+            $last = $result->last();
+
+            if (! $last || $range['start']->gt($last['end']->copy()->addDay())) {
+                return $result->push($range);
+            }
+
+            if ($range['end']->gt($last['end'])) {
+                $result->pop();
+                $result->push([
+                    'start' => $last['start'],
+                    'end' => $range['end'],
+                ]);
+            }
+
+            return $result;
+        }, collect());
+
+        return $merged->sum(
+            fn (array $range): int => $range['start']->diffInDays($range['end']) + 1,
+        );
     }
 
     /**
