@@ -59,6 +59,28 @@ class ProjectBasisTest extends TestCase
             ->assertRedirect('https://localhost/login');
     }
 
+    public function test_session_cookie_security_follows_the_request_scheme(): void
+    {
+        config()->set('session.secure', null);
+        config()->set('trustedproxy.proxies', '192.0.2.10');
+
+        $httpSessionCookie = collect(
+            $this->get('/login')->headers->getCookies(),
+        )->first(fn ($cookie): bool => $cookie->getName() === config('session.cookie'));
+        $httpsSessionCookie = collect(
+            $this->withServerVariables(['REMOTE_ADDR' => '192.0.2.10'])
+                ->withHeader('X-Forwarded-Proto', 'https')
+                ->get('/login')
+                ->headers
+                ->getCookies(),
+        )->first(fn ($cookie): bool => $cookie->getName() === config('session.cookie'));
+
+        $this->assertNotNull($httpSessionCookie);
+        $this->assertNotNull($httpsSessionCookie);
+        $this->assertFalse($httpSessionCookie->isSecure());
+        $this->assertTrue($httpsSessionCookie->isSecure());
+    }
+
     public function test_successful_login_is_audited(): void
     {
         $user = User::factory()->create([

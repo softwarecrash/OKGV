@@ -347,6 +347,18 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Nachbesserung vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
 
+## Nachbesserung Projektbasis: 419 bei direktem HTTP-Zugang
+
+- [x] Betroffenen Rechteverwaltungs-POST über die LAN-IP reproduzieren
+- [x] Sicheres Cookie als Ursache des Sessionverlusts bestätigen
+- [x] Cookie-Sicherheit automatisch an HTTP oder HTTPS anpassen
+- [x] Öffentliche HTTPS-Cookies weiterhin mit `Secure` prüfen
+- [x] Login und Rechteformular über die direkte LAN-IP prüfen
+- [x] Regressionstest für beide Request-Schemata ergänzen
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen
+
 ## Nachbesserung Demo-Bestand: Perioden und Anmeldung
 
 - [x] Überschneidende echte und Demo-Abrechnungsperioden als Ursache bestätigen

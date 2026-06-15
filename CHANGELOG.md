@@ -2,6 +2,26 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.38] - 2026-06-15
+
+### Session und CSRF
+
+- Session- und CSRF-Cookies folgen auf der Testinstanz automatisch dem
+  tatsächlichen Request-Schema.
+- Über die öffentliche HTTPS-Domain bleiben Cookies mit `Secure` geschützt.
+- Beim direkten HTTP-Zugang im internen Netz werden Cookies wieder an den
+  Server gesendet, sodass Formulare wie die Rechteverwaltung nicht mehr mit
+  HTTP 419 abbrechen.
+- Der vollständige LAN-Ablauf aus Anmeldung, Rechteverwaltung und
+  Formular-POST wurde ohne Änderung vorhandener Benutzerrechte geprüft.
+- Ein Regressionstest deckt das unterschiedliche Cookie-Verhalten für HTTP
+  und weitergereichtes HTTPS ab.
+- Der Session-Cookie-Name der laufenden Testinstanz wurde einmalig geändert,
+  damit ein altes, unbrauchbares `Secure`-Cookie der LAN-IP den nächsten
+  Login nicht blockiert.
+- Insgesamt bestehen 136 Tests mit 797 Assertions.
+- Entwicklungsstand auf `0.2.0.38` erhöht.
+
 ## [0.2.0.37] - 2026-06-15
 
 ### Phase 10: Warteliste

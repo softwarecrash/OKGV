@@ -19,6 +19,10 @@ Domain: `okgv.de`
   konfigurierte vertrauenswürdige Proxy-IP-Adressen akzeptiert. Laravel muss
   das weitergereichte Schema für sichere Weiterleitungen, Asset-URLs und
   Session-Cookies verwenden.
+- In einer öffentlich erreichbaren Testinstanz mit zusätzlichem direktem
+  HTTP-Zugang im internen Netz folgt das `Secure`-Attribut des Session-Cookies
+  automatisch dem erkannten Request-Schema. Produktive Installationen sollen
+  ausschließlich HTTPS anbieten.
 
 ## Technologie
 

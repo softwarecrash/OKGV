@@ -154,7 +154,7 @@ APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://okgv.example.de
 TRUSTED_PROXIES=192.0.2.10
-SESSION_SECURE_COOKIE=true
+SESSION_SECURE_COOKIE=null
 ```
 
 Mehrere vertrauenswürdige Proxy-Adressen oder CIDR-Netze werden durch Kommas
@@ -163,6 +163,18 @@ auf den Anwendungsserver durch Firewall oder Netzwerk ausgeschlossen ist.
 Nach Änderungen an diesen Werten muss `php artisan optimize:clear` ausgeführt
 werden. Der Proxy muss `X-Forwarded-Proto`, `X-Forwarded-Host` und
 `X-Forwarded-Port` korrekt setzen.
+
+`SESSION_SECURE_COOKIE=null` lässt Laravel das Cookie automatisch an das
+tatsächliche Schema anpassen. Dadurch bleibt es über HTTPS geschützt, während
+ein zusätzlicher direkter HTTP-Zugang im internen Testnetz weiterhin
+funktioniert. Produktive Installationen sollten ausschließlich HTTPS
+bereitstellen.
+
+Nach einer Umstellung von erzwungen sicheren Cookies auf den automatischen
+Modus kann ein Browser für eine zuvor direkt per HTTP aufgerufene Adresse
+noch ein unbrauchbares altes Cookie halten. In diesem Fall kann einmalig ein
+neuer `SESSION_COOKIE`-Name gesetzt oder das Cookie der betroffenen Adresse
+gelöscht werden.
 
 Für Serienmails muss zusätzlich ein Queue-Worker laufen:
 
