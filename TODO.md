@@ -100,7 +100,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Zoomsteuerung für WYSIWYG-Polygoneditor ergänzen
 - [x] Zoombereich scrollbar verschiebbar machen
 - [x] Strg-und-Mausrad-Zoom mit Fokus auf Mausposition ergänzen
-- [ ] Entwicklungsstand 0.2.0.49 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.49 veröffentlichen
 - [x] PHP-Uploadlimits an das 15-MiB-Lageplanlimit anpassen
 - [x] Fehlgeschlagene Uploads mit einer deutschen Meldung erklären
 - [x] Entwicklungsstand 0.2.0.48 veröffentlichen
