@@ -346,5 +346,5 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Fachtests für Eintritt, Austritt, Pächterwechsel und gemischten Rechnungslauf ergänzen
 - [x] Gesamttests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen
-- [ ] Entwicklungsstand veröffentlichen
+- [x] Entwicklungsstand veröffentlichen
 - [ ] Eigenständige Gutschriften/Korrekturbelege für Änderungen nach Rechnungsfreigabe umsetzen
