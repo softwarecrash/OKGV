@@ -661,4 +661,4 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Abgelehnte Meldung bis zur korrigierten Folgemeldung hervorheben
 - [x] Regressionstests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen
-- [ ] Entwicklungsstand veröffentlichen
+- [x] Entwicklungsstand veröffentlichen
