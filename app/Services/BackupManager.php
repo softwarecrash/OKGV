@@ -19,6 +19,7 @@ final class BackupManager
         'association',
         'documents',
         'meter-reading-submissions',
+        'tenant-transitions',
         'work-hour-submissions',
     ];
 

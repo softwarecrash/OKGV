@@ -185,8 +185,13 @@ vorherigen Phase geprüft sein.
 
 ## Phase 18: Pächterwechsel
 
-- [ ] Pächterwechsel
-- [ ] Übergabeprozess
+- [x] Pächterwechsel
+- [x] Übergabeprozess
+- [x] Haupt- und Mitpächter gemeinsam historisieren
+- [x] Übergabezählerstände verpflichtend erfassen
+- [x] Fotos und Dokumente privat ablegen
+- [x] Offene Forderungen ohne Übertragung snapshotten
+- [x] Transaktionssicherheit, Auditlog und Unveränderlichkeit
 
 ## Phase 19: Lageplan
 
@@ -212,6 +217,5 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 17 sowie die auf Wunsch vorgezogene Phase 19 sind
-abgeschlossen. Phase 18 mit Pächterwechsel und Übergabeprozess bleibt offen.
-Danach folgt Phase 20 mit Deployment und Produktionsdokumentation.
+Die Phasen 0 bis 19 sind abgeschlossen. Als nächste reguläre Phase folgt
+Phase 20 mit Deployment und Produktionsdokumentation.

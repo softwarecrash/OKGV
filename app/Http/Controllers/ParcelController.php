@@ -79,6 +79,11 @@ class ParcelController extends Controller
                 ->with('member')
                 ->latest('starts_at'),
         ];
+        if (request()->user()->canViewAllMasterData()) {
+            $relations['tenantTransitions'] = fn ($query) => $query
+                ->with('completer')
+                ->latest('transfer_date');
+        }
         if (FeatureModule::WorkHours->enabled()) {
             $relations['workHours'] = fn ($query) => $query
                 ->with('billingPeriod')

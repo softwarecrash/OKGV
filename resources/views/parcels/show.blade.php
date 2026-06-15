@@ -15,6 +15,13 @@
             @can('create', App\Models\ParcelTenant::class)
                 <a class="btn btn-outline-primary" href="{{ route('parcel-tenants.create', ['parcel_id' => $parcel->id]) }}">Pächter zuordnen</a>
             @endcan
+            @can('create', App\Models\TenantTransition::class)
+                @if ($parcel->tenancies->contains(fn ($tenancy) => $tenancy->is_primary
+                    && $tenancy->starts_at->lte(today())
+                    && ($tenancy->ends_at === null || $tenancy->ends_at->gte(today()))))
+                    <a class="btn btn-outline-warning" href="{{ route('tenant-transitions.create', ['parcel_id' => $parcel->id]) }}">Pächterwechsel</a>
+                @endif
+            @endcan
             @if (App\Enums\FeatureModule::Meters->enabled())
             @can('create', App\Models\Meter::class)
                 <a class="btn btn-outline-primary" href="{{ route('meters.create', ['parcel_id' => $parcel->id]) }}">Zähler anlegen</a>
@@ -66,6 +73,31 @@
             </div>
         </div>
     </div>
+    @can('viewAny', App\Models\TenantTransition::class)
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-header">Übergabehistorie</div>
+            <div class="list-group list-group-flush">
+                @forelse ($parcel->tenantTransitions as $transition)
+                    <a class="list-group-item list-group-item-action d-flex flex-wrap justify-content-between gap-2"
+                       href="{{ route('tenant-transitions.show', $transition) }}">
+                        <span>
+                            <strong>Übergabe am {{ $transition->transfer_date->format('d.m.Y') }}</strong>
+                            <span class="d-block small text-secondary">
+                                {{ collect($transition->outgoing_members_snapshot)->map(fn ($member) => $member['first_name'].' '.$member['last_name'])->implode(', ') }}
+                                → {{ collect($transition->incoming_members_snapshot)->map(fn ($member) => $member['first_name'].' '.$member['last_name'])->implode(', ') }}
+                            </span>
+                        </span>
+                        <span class="small text-secondary">{{ $transition->completer->name }}</span>
+                    </a>
+                @empty
+                    <div class="card-body">
+                        <strong>Noch kein Pächterwechsel historisiert.</strong>
+                        <div class="text-secondary">Ein geführter Übergabeprozess erscheint nach dem Abschluss dauerhaft hier.</div>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    @endcan
     @if (App\Enums\FeatureModule::Meters->enabled())
     <div class="card border-0 shadow-sm mt-4">
         <div class="card-header">Zähler</div>

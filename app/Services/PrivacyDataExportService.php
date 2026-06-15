@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\AuditLog;
 use App\Models\Member;
+use App\Models\TenantTransition;
 use Illuminate\Support\Facades\DB;
 
 final class PrivacyDataExportService
@@ -212,6 +213,31 @@ final class PrivacyDataExportService
                     'created_at',
                 ],
             ),
+            'tenant_transitions' => TenantTransition::query()
+                ->with('parcel')
+                ->orderBy('transfer_date')
+                ->get()
+                ->map(function (TenantTransition $transition) use ($member): ?array {
+                    $snapshots = collect([
+                        ...$transition->outgoing_members_snapshot,
+                        ...$transition->incoming_members_snapshot,
+                    ])->where('member_id', $member->id)->values();
+
+                    if ($snapshots->isEmpty()) {
+                        return null;
+                    }
+
+                    return [
+                        'id' => $transition->id,
+                        'transfer_date' => $transition->transfer_date,
+                        'parcel_number' => $transition->parcel->parcel_number,
+                        'member_snapshots' => $snapshots->all(),
+                        'completed_at' => $transition->completed_at,
+                    ];
+                })
+                ->filter()
+                ->values()
+                ->all(),
             'mail_history' => DB::table('mail_campaign_recipients')
                 ->where('member_id', $member->id)
                 ->orderBy('created_at')

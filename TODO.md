@@ -409,9 +409,31 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Phase 17 vollständig prüfen
 - [x] Entwicklungsstand 0.2.0.45 veröffentlichen
 
+## Phase 18: Pächterwechsel
+
+- [x] Bestehende Pächter-, Zähler-, Dokument- und Abrechnungslogik prüfen
+- [x] Unveränderlichen Übergabevorgang und Beziehungen migrieren
+- [x] Rechtekonzept auf bestehende Stammdatenrechte abbilden
+- [x] Bisherige Haupt- und Mitpächter zum Vortag beenden
+- [x] Neuen Hauptpächter und mehrere Mitpächter gemeinsam anlegen
+- [x] Übergabezählerstände für alle vorhandenen Zähler verpflichtend erfassen
+- [x] Chronologische Zählerstandsprüfung und Abrechnungsaufteilung beibehalten
+- [x] Offene Forderungen der bisherigen Vertragsparteien snapshotten
+- [x] Forderungsübertragung auf neue Pächter ausdrücklich ausschließen
+- [x] Fotos und Dokumente geprüft im privaten Storage speichern
+- [x] Übergabedateien in Backup und Restore aufnehmen
+- [x] Übergaben in den DSGVO-Auskunftsexport aufnehmen
+- [x] Geführte deutsche Oberfläche und Parzellenhistorie ergänzen
+- [x] Auditlog und atomaren Rollback implementieren
+- [x] Fach-, Rechte-, Datei- und Unveränderlichkeitstests ergänzen
+- [x] Migration ausschließlich nicht löschend auf MariaDB anwenden
+- [x] Bestehende Entwicklungsdaten vor und nach der Migration kontrollieren
+- [x] Gesamttests, Formatter, Asset-Build und Audits ausführen
+- [x] Phase 18 vollständig prüfen
+
 ## Phase 19: SVG-Lageplan
 
-- [x] Phase 18 auf ausdrücklichen Wunsch vorerst überspringen
+- [x] Phase wurde auf ausdrücklichen Wunsch vor Phase 18 umgesetzt
 - [x] Bestehendes Parzellenmodell und Rechtekonzept prüfen
 - [x] Sichere serverseitige SVG-Erzeugung ohne SVG-Uploads spezifizieren
 - [x] Zeichenfläche, Koordinaten und Statusfarben festlegen

@@ -88,6 +88,11 @@ class Parcel extends Model
         return $this->hasMany(WorkHourSubmission::class);
     }
 
+    public function tenantTransitions(): HasMany
+    {
+        return $this->hasMany(TenantTransition::class);
+    }
+
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
         return $query->when($search, function (Builder $query, string $search): void {

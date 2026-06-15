@@ -40,6 +40,7 @@ use App\Http\Controllers\SepaMandateController;
 use App\Http\Controllers\SepaSettingController;
 use App\Http\Controllers\TenantPortalController;
 use App\Http\Controllers\TenantRegistrationController;
+use App\Http\Controllers\TenantTransitionController;
 use App\Http\Controllers\UserPermissionController;
 use App\Http\Controllers\WaitingListEntryController;
 use App\Http\Controllers\WorkEventController;
@@ -372,6 +373,12 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::resource('parcel-tenants', ParcelTenantController::class)
         ->only(['create', 'store', 'edit', 'update'])
         ->parameters(['parcel-tenants' => 'parcel_tenant']);
+    Route::get('paechterwechsel/{tenant_transition}/dokumente/{document}', [TenantTransitionController::class, 'document'])
+        ->name('tenant-transitions.documents.download');
+    Route::resource('paechterwechsel', TenantTransitionController::class)
+        ->only(['index', 'create', 'store', 'show'])
+        ->parameters(['paechterwechsel' => 'tenant_transition'])
+        ->names('tenant-transitions');
     Route::resource('warteliste', WaitingListEntryController::class)
         ->except(['destroy'])
         ->parameters(['warteliste' => 'waiting_list_entry'])

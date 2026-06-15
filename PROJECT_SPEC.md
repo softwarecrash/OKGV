@@ -1151,9 +1151,48 @@ leer, verwendet OKGV den Nummernkreis. Rechnungen und hochgeladene Dokumente
 erhalten ihre Nummer immer serverseitig. Änderungen an den Einstellungen
 werden auditiert und sind ausschließlich Administratoren erlaubt.
 
-### Phase 18 bis 19
+### Phase 18: Pächterwechsel und Übergabeprozess
 
-Pächterwechsel, Übergabeprozess und später ein SVG-Lageplan.
+Ein Pächterwechsel ist ein eigenständiger, nach Abschluss unveränderlicher
+Vorgang. Bearbeiten dürfen ihn Administratoren und Vorstandsmitglieder mit
+dem bestehenden Recht zur Verwaltung der Stammdaten. Leseberechtigte
+Stammdatenkonten sehen die Übergabehistorie; Pächter erhalten keinen Zugriff
+auf interne Übergabenotizen oder Nachweise.
+
+Der geführte Prozess erfasst:
+
+- die Parzelle und das Übergabedatum,
+- sämtliche am Vortag aktiven bisherigen Vertragsparteien,
+- einen neuen Hauptpächter und optional mehrere neue Mitpächter,
+- genau einen Stand für jeden am Übergabetag vorhandenen Zähler,
+- optionale Übergabefotos und Übergabedokumente,
+- optionale interne Notizen,
+- einen Snapshot offener Forderungen der bisherigen Vertragsparteien.
+
+Der bisherige Pachtzeitraum endet am Kalendertag vor der Übergabe. Die neuen
+Pachtzeiträume beginnen am Übergabetag. Haupt- und Mitpächter werden
+gemeinsam historisiert. Der neue Hauptpächter muss sich vom bisherigen
+Hauptpächter unterscheiden. Künftige Übergaben werden nicht vorab
+abgeschlossen, weil Zählerstände und offene Forderungen erst am tatsächlichen
+Übergabetag belastbar feststehen.
+
+Alle fachlichen Änderungen erfolgen in einer Datenbanktransaktion mit
+Sperre der betroffenen Parzelle. Schlägt eine Pächterzuordnung, ein
+Zählerstand oder eine Dateiablage fehl, bleibt kein teilweise ausgeführter
+Wechsel zurück. Übergabezählerstände verwenden dieselben chronologischen
+Plausibilitätsregeln wie reguläre Zählerstände und sind für die
+Verbrauchsaufteilung maßgeblich.
+
+Offene, vorbereitete oder zurückgegebene Forderungen werden nur als
+historischer Snapshot dokumentiert. Sie verbleiben bei den bisherigen
+Vertragsparteien und werden niemals auf neue Pächter übertragen.
+Übergabefotos und -dokumente liegen im privaten Storage, erhalten eine
+Dokumentnummer und sind Bestandteil von Backup und Restore.
+
+Der Vorgang, seine Zählerstandsverknüpfungen und Dateinachweise können nicht
+hart gelöscht oder nachträglich umgeschrieben werden. Der Abschluss erzeugt
+einen Auditlog-Eintrag. Beteiligte Mitglieder finden den sie betreffenden
+Übergabesnapshot in ihrem DSGVO-Auskunftsexport.
 
 ### Phase 19: Bildbasierter Polygon-Lageplan
 

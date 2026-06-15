@@ -50,6 +50,7 @@
                                 $canViewMembers = auth()->user()->can('viewAny', App\Models\Member::class);
                                 $canViewRegistrations = $tenantPortalEnabled && auth()->user()->can('viewAny', App\Models\RegistrationRequest::class);
                                 $canViewWaitingList = $waitingListEnabled && auth()->user()->can('viewAny', App\Models\WaitingListEntry::class);
+                                $canViewTenantTransitions = auth()->user()->can('viewAny', App\Models\TenantTransition::class);
                                 $canViewMeters = $metersEnabled && auth()->user()->can('viewAny', App\Models\Meter::class);
                                 $canViewMeterSubmissions = $metersEnabled && auth()->user()->can('viewAny', App\Models\MeterReadingSubmission::class);
                                 $canViewBilling = $billingEnabled && auth()->user()->can('viewAny', App\Models\BillingPeriod::class);
@@ -71,7 +72,7 @@
                                     </a>
                                 </li>
                             @endif
-                            @if ($canViewMembers || $canViewRegistrations || $canViewWaitingList)
+                            @if ($canViewMembers || $canViewRegistrations || $canViewWaitingList || $canViewTenantTransitions)
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                         Mitglieder
@@ -96,6 +97,9 @@
                                                     <x-action-indicator :count="$actionIndicators['waiting_list']" label="offene Wartelisteneinträge" />
                                                 </a>
                                             </li>
+                                        @endif
+                                        @if ($canViewTenantTransitions)
+                                            <li><a class="dropdown-item" href="{{ route('tenant-transitions.index') }}">Pächterwechsel</a></li>
                                         @endif
                                     </ul>
                                 </li>

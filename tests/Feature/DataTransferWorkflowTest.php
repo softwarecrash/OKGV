@@ -165,6 +165,7 @@ class DataTransferWorkflowTest extends TestCase
         Storage::fake('local');
         Storage::disk('local')->put('documents/vertrag.pdf', 'private document');
         Storage::disk('local')->put('association/parcel-map/plan.jpg', 'private map');
+        Storage::disk('local')->put('tenant-transitions/uebergabe.pdf', 'private handover');
         $administrator = User::factory()->administrator()->create();
         $database = Mockery::mock(DatabaseDumpService::class);
         $database->shouldReceive('dump')
@@ -182,6 +183,7 @@ class DataTransferWorkflowTest extends TestCase
         $this->assertSame('database dump', $archive->getFromName('database.sql'));
         $this->assertSame('private document', $archive->getFromName('files/documents/vertrag.pdf'));
         $this->assertSame('private map', $archive->getFromName('files/association/parcel-map/plan.jpg'));
+        $this->assertSame('private handover', $archive->getFromName('files/tenant-transitions/uebergabe.pdf'));
         $this->assertSame(
             hash('sha256', 'private document'),
             $manifest['checksums']['files/documents/vertrag.pdf'],

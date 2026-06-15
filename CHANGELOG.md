@@ -2,6 +2,32 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.58] - 2026-06-15
+
+### Phase 18: Pächterwechsel
+
+- Ein geführter, transaktionssicherer Übergabeprozess beendet bisherige
+  Haupt- und Mitpächter zum Vortag und legt neue Vertragsparteien ab dem
+  Übergabetag an.
+- Übergabezählerstände werden für alle am Stichtag vorhandenen Zähler
+  verpflichtend und mit den bestehenden Plausibilitätsregeln gespeichert.
+- Offene Forderungen der bisherigen Vertragsparteien werden historisch
+  festgehalten, aber ausdrücklich nicht auf neue Pächter übertragen.
+- Bis zu zehn Fotos und zehn Dokumente können geprüft im privaten Storage
+  abgelegt und dem unveränderlichen Übergabevorgang zugeordnet werden.
+- Übergaben sind im Mitglieder-Menü und in der Parzellendetailansicht
+  auffindbar und erzeugen einen Auditlog-Eintrag.
+- Übergabedateien sind Bestandteil von Backup und Restore; beteiligte
+  Mitglieder erhalten ihren Snapshot im DSGVO-Auskunftsexport.
+- Ein fehlgeschlagener Teil des Ablaufs rollt Zuordnungen, Zählerstände,
+  Dokumente und Dateien vollständig zurück.
+- Die additive MariaDB-Migration erhielt alle vorhandenen Benutzer,
+  Mitglieder, Parzellen, Pächterzuordnungen, Zähler und Zählerstände.
+- Insgesamt bestehen 196 Tests mit 1.166 Assertions.
+- Produktions-Asset-Build, Formatter sowie Composer- und npm-Audits wurden
+  erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.58` erhöht.
+
 ## [0.2.0.57] - 2026-06-15
 
 ### Einfachere Eingabe gemeldeter Arbeitsstunden
