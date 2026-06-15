@@ -818,6 +818,11 @@ mit vorausgewählter Parzelle zur eigenen Arbeitsstundenmeldung. Zur
 eindeutigen Unterscheidung zeigt die Parzellendetailansicht neben dem Namen
 auch den vollständigen Zeitraum jeder Abrechnungsperiode.
 
+Pächter melden geleistete Arbeitszeit in Viertelstunden von 0,25 bis
+24 Stunden. Ganze Zahlen sowie deutsche Dezimaleingaben mit Komma werden
+akzeptiert und serverseitig normalisiert. Unzulässige Zwischenwerte erhalten
+eine verständliche Erklärung mit Eingabebeispielen.
+
 #### Abrechnung
 
 Bei der Berechnung einer Abrechnungsperiode werden positive Strafbeträge als

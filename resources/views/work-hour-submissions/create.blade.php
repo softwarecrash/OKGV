@@ -29,9 +29,21 @@
             <div class="col-md-4">
                 <label class="form-label" for="hours">Geleistete Stunden</label>
                 <div class="input-group">
-                    <input class="form-control" id="hours" name="hours" type="number" min="0.01" max="24" step="0.25" value="{{ old('hours') }}" required>
+                    <input class="form-control @error('hours') is-invalid @enderror"
+                           id="hours"
+                           name="hours"
+                           type="number"
+                           inputmode="decimal"
+                           min="0.25"
+                           max="24"
+                           step="0.25"
+                           placeholder="1"
+                           value="{{ old('hours') }}"
+                           aria-describedby="hours-help"
+                           required>
                     <span class="input-group-text">Std.</span>
                 </div>
+                <div class="form-text" id="hours-help">In Viertelstunden eingeben, zum Beispiel 1, 1,5 oder 2,25 Stunden.</div>
             </div>
             <div class="col-12">
                 <label class="form-label" for="description">Was wurde erledigt?</label>

@@ -235,6 +235,53 @@ class WorkHourSubmissionWorkflowTest extends TestCase
         $this->assertSame('110.00', $workHour->penalty_amount);
     }
 
+    public function test_tenant_can_enter_whole_and_comma_decimal_hours_in_quarter_hour_steps(): void
+    {
+        [$tenant, $parcel] = $this->tenantScenario();
+
+        $this->actingAs($tenant)
+            ->get(route('work-hour-submissions.create'))
+            ->assertOk()
+            ->assertSee('min="0.25"', false)
+            ->assertSee('step="0.25"', false)
+            ->assertSee('zum Beispiel 1, 1,5 oder 2,25 Stunden');
+
+        foreach (['1', '1,5'] as $index => $hours) {
+            $this->actingAs($tenant)
+                ->post(route('work-hour-submissions.store'), [
+                    'parcel_id' => $parcel->id,
+                    'worked_at' => '2025-06-'.($index + 10),
+                    'hours' => $hours,
+                    'description' => 'Gemeinschaftsfläche gepflegt.',
+                ])
+                ->assertRedirect(route('work-hour-submissions.index'))
+                ->assertSessionHasNoErrors();
+        }
+
+        $this->assertSame(
+            ['1.00', '1.50'],
+            WorkHourSubmission::query()->orderBy('id')->pluck('hours')->all(),
+        );
+    }
+
+    public function test_tenant_receives_a_clear_message_for_non_quarter_hour_values(): void
+    {
+        [$tenant, $parcel] = $this->tenantScenario();
+
+        $this->actingAs($tenant)
+            ->from(route('work-hour-submissions.create'))
+            ->post(route('work-hour-submissions.store'), [
+                'parcel_id' => $parcel->id,
+                'worked_at' => '2025-06-10',
+                'hours' => '1.10',
+                'description' => 'Gemeinschaftsfläche gepflegt.',
+            ])
+            ->assertRedirect(route('work-hour-submissions.create'))
+            ->assertSessionHasErrors([
+                'hours' => 'Bitte gib die Arbeitszeit in Viertelstunden ein, zum Beispiel 1, 1,5 oder 2,25 Stunden.',
+            ]);
+    }
+
     public function test_co_tenants_report_into_the_same_parcel_account(): void
     {
         [$firstTenant, $parcel, $period] = $this->tenantScenario();

@@ -518,6 +518,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Regressionstests ergänzen
 - [x] Gesamttests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen und veröffentlichen
+- [x] Arbeitsstundenfeld auf widerspruchsfreie Viertelstunden korrigieren
+- [x] Ganze Stunden und deutsche Dezimaleingaben verständlich unterstützen
+- [x] Eingabegrenzen und Fehlermeldung durch Regressionstests absichern
 
 ## Nachbesserung Phase 12: Arbeitseinsatz anlegen
 

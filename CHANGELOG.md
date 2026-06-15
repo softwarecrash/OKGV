@@ -2,6 +2,22 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.57] - 2026-06-15
+
+### Einfachere Eingabe gemeldeter Arbeitsstunden
+
+- Das Stundenfeld für Pächtermeldungen verwendet nun widerspruchsfreie
+  Viertelstundenschritte von `0,25` bis `24` Stunden.
+- Ganze Stunden wie `1` werden ohne Browserfehler akzeptiert.
+- Deutsche Dezimalwerte wie `1,5` werden serverseitig zuverlässig
+  normalisiert.
+- Ein Hilfetext nennt verständliche Beispiele; unzulässige Zwischenwerte
+  erhalten eine konkrete deutsche Fehlermeldung.
+- Insgesamt bestehen 191 Tests mit 1.120 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.57` erhöht.
+
 ## [0.2.0.56] - 2026-06-15
 
 ### Zuverlässige Abmeldung
