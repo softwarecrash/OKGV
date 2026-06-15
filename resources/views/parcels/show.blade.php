@@ -8,6 +8,7 @@
             <span class="text-secondary">{{ $parcel->status->label() }} · {{ number_format((float) $parcel->area_sqm, 2, ',', '.') }} m²</span>
         </div>
         <div class="d-flex gap-2">
+            <a class="btn btn-outline-secondary" href="{{ route('parcel-map.index') }}">Im Lageplan</a>
             @can('update', $parcel)
                 <a class="btn btn-primary" href="{{ route('parcels.edit', $parcel) }}">Bearbeiten</a>
             @endcan

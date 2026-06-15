@@ -16,6 +16,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'area_sqm',
     'status',
     'location_description',
+    'map_x',
+    'map_y',
+    'map_width',
+    'map_height',
     'notes',
 ])]
 class Parcel extends Model
@@ -28,6 +32,10 @@ class Parcel extends Model
         return [
             'area_sqm' => 'decimal:2',
             'status' => ParcelStatus::class,
+            'map_x' => 'integer',
+            'map_y' => 'integer',
+            'map_width' => 'integer',
+            'map_height' => 'integer',
         ];
     }
 
@@ -87,5 +95,13 @@ class Parcel extends Model
                     ->orWhere('location_description', 'like', "%{$search}%");
             });
         });
+    }
+
+    public function isPlacedOnMap(): bool
+    {
+        return $this->map_x !== null
+            && $this->map_y !== null
+            && $this->map_width !== null
+            && $this->map_height !== null;
     }
 }

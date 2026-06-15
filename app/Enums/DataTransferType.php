@@ -44,7 +44,7 @@ enum DataTransferType: string
             ],
             self::Parcels => [
                 'parcel_number', 'area_sqm', 'status', 'location_description',
-                'notes',
+                'map_x', 'map_y', 'map_width', 'map_height', 'notes',
             ],
             self::Meters => [
                 'parcel_number', 'type', 'meter_number', 'installed_at',
@@ -73,7 +73,10 @@ enum DataTransferType: string
                 '03643 12345', '0170 1234567', 'erika@example.de', '2024-01-01',
                 '', 'active', '',
             ],
-            self::Parcels => ['A-01', '320.50', 'free', 'Nordweg', ''],
+            self::Parcels => [
+                'A-01', '320.50', 'free', 'Nordweg', '100', '100', '180',
+                '220', '',
+            ],
             self::Meters => [
                 'A-01', 'water', 'W-10001', '2024-01-01', '', '0.0000', '',
                 'active', '',

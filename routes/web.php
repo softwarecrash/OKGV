@@ -25,6 +25,7 @@ use App\Http\Controllers\MeterReadingSubmissionController;
 use App\Http\Controllers\MeterReplacementController;
 use App\Http\Controllers\NumberSequenceController;
 use App\Http\Controllers\ParcelController;
+use App\Http\Controllers\ParcelMapController;
 use App\Http\Controllers\ParcelTenantController;
 use App\Http\Controllers\PaymentBatchController;
 use App\Http\Controllers\PaymentReminderController;
@@ -339,6 +340,8 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::patch('members/{member}/archive', [MemberController::class, 'archive'])
         ->name('members.archive');
     Route::resource('members', MemberController::class)->except('destroy');
+    Route::get('lageplan', [ParcelMapController::class, 'index'])
+        ->name('parcel-map.index');
     Route::resource('parcels', ParcelController::class)->except('destroy');
     Route::get('meters/{meter}/replace', [MeterReplacementController::class, 'create'])
         ->middleware('module:meters')

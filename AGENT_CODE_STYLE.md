@@ -127,6 +127,20 @@ Diese Datei ist für alle menschlichen und automatisierten Mitwirkenden verbindl
 - Erkläre Platzhalter, Vorschau, Jahreswechsel und mögliche Lücken in der
   sichtbaren Oberfläche für nichttechnische Benutzer.
 
+### SVG und Lageplan
+
+- Erzeuge SVG-Ausgaben aus validierten strukturierten Daten. Führe keine
+  hochgeladenen oder frei eingegebenen SVG-, HTML- oder Skriptfragmente aus.
+- Escape sichtbare Beschriftungen und Linkziele über Blade.
+- Farbe darf nie die einzige Statusinformation sein. Ergänze lesbare Labels,
+  SVG-`title`-Elemente und zugängliche Beschreibungen.
+- Wende dieselben Policies und Datensatzfilter auf grafische Übersichten wie
+  auf Listenansichten an. Ein Lageplan darf keine fremden Parzellen
+  offenlegen.
+- Validiere Koordinaten, Größen und Zeichenflächengrenzen serverseitig.
+- Übernimm neue Lageplandaten in bestehende Import-, Export- und
+  Backupkonzepte.
+
 ### Controller
 
 - Controller bleiben klein und koordinieren nur Request, Policy, Service, Model und Response.

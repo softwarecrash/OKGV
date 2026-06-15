@@ -61,6 +61,13 @@ final class DemoDataManager
             $members = [];
             $parcels = [];
             $users = [];
+            $mapPositions = [
+                [80, 80, 180, 210],
+                [290, 80, 180, 210],
+                [500, 80, 180, 210],
+                [185, 330, 180, 210],
+                [395, 330, 180, 210],
+            ];
 
             foreach ($accounts as $index => [$firstName, $lastName, $login, $role]) {
                 $email = "{$login}".self::EMAIL_SUFFIX;
@@ -96,6 +103,10 @@ final class DemoDataManager
                     'area_sqm' => 280 + ($index * 35),
                     'status' => ParcelStatus::Assigned->value,
                     'location_description' => 'Demoweg '.($index + 1),
+                    'map_x' => $mapPositions[$index][0],
+                    'map_y' => $mapPositions[$index][1],
+                    'map_width' => $mapPositions[$index][2],
+                    'map_height' => $mapPositions[$index][3],
                     'notes' => 'Automatisch erzeugte Demo-Parzelle.',
                     'created_at' => $now,
                     'updated_at' => $now,

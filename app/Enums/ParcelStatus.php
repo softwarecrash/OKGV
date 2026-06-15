@@ -20,4 +20,19 @@ enum ParcelStatus: string
             self::Blocked => 'Gesperrt',
         };
     }
+
+    public function mapColor(): string
+    {
+        return match ($this) {
+            self::Free => '#2E7D32',
+            self::Assigned => '#66BB6A',
+            self::Reserved, self::Terminated => '#F9A825',
+            self::Blocked => '#C62828',
+        };
+    }
+
+    public function mapTextColor(): string
+    {
+        return $this === self::Assigned ? '#263238' : '#FFFFFF';
+    }
 }

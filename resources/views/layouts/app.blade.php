@@ -104,6 +104,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('parcels.index') }}">Parzellen</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('parcel-map.index') }}">Lageplan</a>
+                                </li>
                             @endcan
                             @if ($canViewMeters || $canViewMeterSubmissions)
                                 <li class="nav-item dropdown">

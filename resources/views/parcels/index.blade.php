@@ -4,9 +4,12 @@
 <div class="container">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
         <h1 class="h2 mb-0">Parzellen</h1>
-        @can('create', App\Models\Parcel::class)
-            <a class="btn btn-primary" href="{{ route('parcels.create') }}">Parzelle anlegen</a>
-        @endcan
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-primary" href="{{ route('parcel-map.index') }}">Lageplan</a>
+            @can('create', App\Models\Parcel::class)
+                <a class="btn btn-primary" href="{{ route('parcels.create') }}">Parzelle anlegen</a>
+            @endcan
+        </div>
     </div>
     <form class="card card-body border-0 shadow-sm mb-4" method="GET">
         <div class="row g-2">

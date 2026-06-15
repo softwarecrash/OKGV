@@ -41,6 +41,16 @@ class DemoDataCommandTest extends TestCase
             ->count());
         $this->assertSame(5, Member::query()->where('member_number', 'like', 'DEMO-M-%')->count());
         $this->assertSame(5, Parcel::query()->where('parcel_number', 'like', 'DEMO-%')->count());
+        $this->assertSame(
+            5,
+            Parcel::query()
+                ->where('parcel_number', 'like', 'DEMO-%')
+                ->whereNotNull('map_x')
+                ->whereNotNull('map_y')
+                ->whereNotNull('map_width')
+                ->whereNotNull('map_height')
+                ->count(),
+        );
         $this->assertSame(11, Meter::query()->where('meter_number', 'like', 'DEMO-%')->count());
         $this->assertSame(42, MeterReading::query()
             ->whereHas('meter', fn ($query) => $query->where('meter_number', 'like', 'DEMO-%'))

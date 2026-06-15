@@ -19,6 +19,7 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - MariaDB-Unterstützung
 - Mitgliederverwaltung mit Suche und reversibler Archivierung
 - Parzellenverwaltung mit Status und Flächenangaben
+- Responsiver SVG-Lageplan mit klickbaren und statusfarbigen Parzellen
 - Dauerhafte Pächterhistorie mit Konfliktprüfung
 - Rollenabhängige Lese- und Schreibrechte
 - Wasser- und Stromzähler mit dauerhaftem Lebenszyklus
@@ -383,6 +384,24 @@ sind konfigurierbar. Bereits vergebene, manuell erfasste oder importierte
 Nummern bleiben unverändert und werden beim Weiterzählen übersprungen.
 Mitglieder und SEPA-Mandate können beim Anlegen weiterhin bewusst eine
 eigene Nummer erhalten; ein leeres Feld aktiviert die automatische Vergabe.
+
+## Lageplan
+
+Der Bereich `Lageplan` zeigt die für das angemeldete Konto sichtbaren
+Parzellen als responsive SVG-Grafik. Ein Klick auf eine Fläche öffnet die
+Parzellendetails. Grün steht für freie oder vergebene, Gelb für reservierte
+oder gekündigte und Rot für gesperrte Parzellen; Nummer und Status sind
+zusätzlich als Text verfügbar.
+
+Berechtigte Stammdatenverwalter tragen X-Position, Y-Position, Breite und
+Höhe im Parzellenformular ein. Unvollständige oder über die Zeichenfläche
+hinausragende Angaben werden verständlich abgelehnt. Noch nicht platzierte
+Parzellen erscheinen unterhalb des Plans. Pächter sehen ausschließlich
+aktuell eigene Parzellen.
+
+Die vier Lageplanwerte sind Bestandteil des Parzellen-CSV-Imports und
+-Exports. Der Lageplan selbst wird serverseitig erzeugt; OKGV führt keine
+hochgeladenen SVG-Dateien oder frei eingegebenen SVG-Fragmente aus.
 
 ## Entwicklung
 

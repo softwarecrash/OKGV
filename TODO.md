@@ -377,6 +377,27 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Phase 17 vollständig prüfen
 - [x] Entwicklungsstand 0.2.0.45 veröffentlichen
 
+## Phase 19: SVG-Lageplan
+
+- [x] Phase 18 auf ausdrücklichen Wunsch vorerst überspringen
+- [x] Bestehendes Parzellenmodell und Rechtekonzept prüfen
+- [x] Sichere serverseitige SVG-Erzeugung ohne SVG-Uploads spezifizieren
+- [x] Zeichenfläche, Koordinaten und Statusfarben festlegen
+- [x] Lageplankoordinaten an Parzellen ergänzen
+- [x] Parzellenformular um verständliche Lageplanfelder erweitern
+- [x] Responsiven SVG-Lageplan mit Detaillinks implementieren
+- [x] Nicht platzierte Parzellen verständlich aufführen
+- [x] Pächterisolation und Parzellenrechte beibehalten
+- [x] Navigation und Parzellendetailansicht ergänzen
+- [x] Lageplanwerte in Parzellen-CSV-Import und -Export übernehmen
+- [x] Demo-Parzellen auf dem Lageplan platzieren
+- [x] Auditlog und Tests ergänzen
+- [x] Migration isoliert vorwärts und rückwärts prüfen
+- [x] Migration ausschließlich vorwärts auf die Entwicklungsdatenbank anwenden
+- [x] Gesamttests, Formatter, Build und Audits ausführen
+- [x] Phase 19 vollständig prüfen
+- [ ] Entwicklungsstand 0.2.0.46 veröffentlichen
+
 ## Vorgezogene Phase 12: Arbeitseinsätze
 
 - [x] Vorziehen von Phase 12 direkt nach Phase 9 dokumentieren

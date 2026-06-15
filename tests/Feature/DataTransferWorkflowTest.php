@@ -242,8 +242,31 @@ class DataTransferWorkflowTest extends TestCase
             ->streamedContent();
 
         $this->assertStringContainsString(
-            'parcel_number;area_sqm;status;location_description;notes',
+            'parcel_number;area_sqm;status;location_description;map_x;map_y;map_width;map_height;notes',
             $content,
         );
+    }
+
+    public function test_legacy_parcel_csv_without_map_columns_remains_importable(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $csv = implode("\n", [
+            'parcel_number;area_sqm;status;location_description;notes',
+            'ALT-01;300.00;free;Alter Nordweg;Bestandsdatei',
+        ]);
+
+        $this->actingAs($administrator)
+            ->post(route('data-transfer.import'), [
+                'type' => 'parcels',
+                'file' => UploadedFile::fake()->createWithContent('parcels-alt.csv', $csv),
+            ])
+            ->assertRedirect()
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('parcels', [
+            'parcel_number' => 'ALT-01',
+            'map_x' => null,
+            'map_y' => null,
+        ]);
     }
 }

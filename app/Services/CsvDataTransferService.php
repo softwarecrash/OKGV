@@ -126,8 +126,17 @@ final class CsvDataTransferService
             fn (string $header): string => trim(str_replace("\xEF\xBB\xBF", '', $header)),
             $headers,
         );
+        $legacyParcelHeaders = [
+            'parcel_number',
+            'area_sqm',
+            'status',
+            'location_description',
+            'notes',
+        ];
+        $usesLegacyParcelHeaders = $type === DataTransferType::Parcels
+            && $headers === $legacyParcelHeaders;
 
-        if ($headers !== $type->headers()) {
+        if ($headers !== $type->headers() && ! $usesLegacyParcelHeaders) {
             fclose($handle);
             throw ValidationException::withMessages([
                 'file' => 'Die Spalten entsprechen nicht der Importvorlage. Lade die passende Vorlage herunter und übernimm deren Kopfzeile unverändert.',
@@ -155,6 +164,17 @@ final class CsvDataTransferService
                 fn ($value): ?string => trim((string) $value) === '' ? null : trim((string) $value),
                 $values,
             ));
+
+            if ($usesLegacyParcelHeaders) {
+                $row = [
+                    ...$row,
+                    'map_x' => null,
+                    'map_y' => null,
+                    'map_width' => null,
+                    'map_height' => null,
+                ];
+            }
+
             $row['_line'] = (string) $line;
             $rows[] = $row;
         }
@@ -228,8 +248,29 @@ final class CsvDataTransferService
                 'area_sqm' => ['required', 'numeric', 'decimal:0,2', 'gt:0', 'max:99999999.99'],
                 'status' => ['required', Rule::enum(ParcelStatus::class)],
                 'location_description' => ['nullable', 'string', 'max:255'],
+                'map_x' => ['nullable', 'required_with:map_y,map_width,map_height', 'integer', 'between:0,1199'],
+                'map_y' => ['nullable', 'required_with:map_x,map_width,map_height', 'integer', 'between:0,799'],
+                'map_width' => ['nullable', 'required_with:map_x,map_y,map_height', 'integer', 'between:20,1200'],
+                'map_height' => ['nullable', 'required_with:map_x,map_y,map_width', 'integer', 'between:20,800'],
                 'notes' => ['nullable', 'string', 'max:10000'],
             ]);
+
+            if ($data['map_x'] !== null
+                && (int) $data['map_x'] + (int) $data['map_width'] > 1200) {
+                $this->rowError(
+                    $row,
+                    'Die Lageplanfläche ragt rechts über die Zeichenfläche hinaus.',
+                );
+            }
+
+            if ($data['map_y'] !== null
+                && (int) $data['map_y'] + (int) $data['map_height'] > 800) {
+                $this->rowError(
+                    $row,
+                    'Die Lageplanfläche ragt unten über die Zeichenfläche hinaus.',
+                );
+            }
+
             $parcel = Parcel::query()->where('parcel_number', $data['parcel_number'])->first();
 
             if ($parcel) {
@@ -397,7 +438,8 @@ final class CsvDataTransferService
         foreach (Parcel::query()->orderBy('parcel_number')->cursor() as $parcel) {
             yield [
                 $parcel->parcel_number, $parcel->area_sqm, $parcel->status->value,
-                $parcel->location_description, $parcel->notes,
+                $parcel->location_description, $parcel->map_x, $parcel->map_y,
+                $parcel->map_width, $parcel->map_height, $parcel->notes,
             ];
         }
     }

@@ -190,7 +190,13 @@ vorherigen Phase geprüft sein.
 
 ## Phase 19: Lageplan
 
-- [ ] SVG-Lageplan
+- [x] Serverseitig erzeugter SVG-Lageplan
+- [x] Validierte Position und Größe je Parzelle
+- [x] Statusfarben mit zusätzlicher Textkennzeichnung
+- [x] Klickbare Parzellen mit geschützten Detaillinks
+- [x] Liste noch nicht platzierter Parzellen
+- [x] Pächterisolation und bestehende Stammdatenrechte
+- [x] Lageplanwerte in Parzellen-CSV-Import und -Export
 
 ## Phase 20: Deployment
 
@@ -202,6 +208,6 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 17 einschließlich konfigurierbarer Nummernkreise sind
-abgeschlossen. Als Nächstes folgt Phase 18: Pächterwechsel und
-Übergabeprozess.
+Die Phasen 0 bis 17 sowie die auf Wunsch vorgezogene Phase 19 sind
+abgeschlossen. Phase 18 mit Pächterwechsel und Übergabeprozess bleibt offen.
+Danach folgt Phase 20 mit Deployment und Produktionsdokumentation.

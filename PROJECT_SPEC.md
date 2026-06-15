@@ -1130,6 +1130,35 @@ werden auditiert und sind ausschließlich Administratoren erlaubt.
 
 Pächterwechsel, Übergabeprozess und später ein SVG-Lageplan.
 
+### Phase 19: SVG-Lageplan
+
+Der Lageplan wird serverseitig aus validierten Parzellenstammdaten erzeugt.
+Es werden keine hochgeladenen oder frei eingegebenen SVG-Fragmente
+ausgeführt. Die feste Zeichenfläche besitzt ein Koordinatensystem von
+`1200 × 800` Einheiten.
+
+Jede Parzelle kann optional mit ganzzahliger X- und Y-Position sowie Breite
+und Höhe auf dem Lageplan platziert werden. Fehlt eine dieser Angaben, gilt
+die Parzelle als noch nicht platziert und erscheint in einer gesonderten
+Liste. Änderungen der Lageplanposition werden wie andere
+Parzellenänderungen auditiert.
+
+Die Darstellung verwendet folgende Statusgruppen:
+
+- Grün: frei oder vergeben,
+- Gelb: reserviert oder gekündigt,
+- Rot: gesperrt.
+
+Farbe ist niemals die einzige Statusinformation. Jede Fläche zeigt die
+Parzellennummer und enthält eine zugängliche Textbeschreibung mit Status und
+Fläche. Ein Klick öffnet die Parzellendetailansicht, sofern der angemeldete
+Benutzer diese Parzelle sehen darf.
+
+Benutzer mit Leserecht für sämtliche Stammdaten sehen den vollständigen
+Lageplan. Pächter sehen ausschließlich aktuell selbst zugeordnete
+Parzellen. Bearbeiten dürfen den Lageplan nur Benutzer mit bestehendem
+Parzellen-Schreibrecht.
+
 ### Phase 12.1: Modulare Funktionsbereiche
 
 Die Stammdatenverwaltung für Mitglieder, Parzellen, Pächterhistorie,

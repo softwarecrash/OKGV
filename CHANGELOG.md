@@ -2,6 +2,40 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.46] - 2026-06-15
+
+### Phase 19: SVG-Lageplan
+
+- Phase 19 wurde auf ausdrücklichen Wunsch vor Phase 18 umgesetzt; der
+  Pächterwechsel aus Phase 18 bleibt weiterhin offen.
+- Parzellen können mit X- und Y-Position sowie Breite und Höhe auf einer
+  festen Zeichenfläche von `1200 × 800` Einheiten platziert werden.
+- Der responsive Lageplan wird vollständig serverseitig aus validierten
+  Stammdaten erzeugt und führt keine hochgeladenen SVG-Fragmente aus.
+- Grün kennzeichnet freie oder vergebene, Gelb reservierte oder gekündigte
+  und Rot gesperrte Parzellen.
+- Parzellennummer, Status und Fläche stehen zusätzlich als zugänglicher Text
+  bereit; ein Klick öffnet die geschützte Parzellendetailansicht.
+- Noch nicht platzierte Parzellen werden gesondert aufgeführt und können von
+  berechtigten Stammdatenverwaltern direkt bearbeitet werden.
+- Unvollständige Rechtecke und Flächen außerhalb der Zeichenfläche werden
+  mit verständlichen Meldungen abgelehnt.
+- Pächter sehen auf dem Lageplan ausschließlich aktuell selbst zugeordnete
+  Parzellen; bestehende Policies bleiben vollständig wirksam.
+- Navigation, Parzellenliste und Parzellendetailansicht wurden mit dem
+  Lageplan verknüpft.
+- Parzellen-CSV-Import und -Export enthalten die vier Lageplanwerte.
+- Frühere fünfspaltige Parzellen-CSV-Dateien bleiben importierbar und werden
+  ohne Lageplanposition übernommen.
+- Der löschbare Demo-Bestand erhält fünf Beispielpositionen; die bestehenden
+  Demo-Parzellen der Entwicklungsinstanz wurden ohne Neuaufbau platziert.
+- Die Migration wurde isoliert vorwärts, rückwärts und erneut vorwärts
+  geprüft sowie ausschließlich vorwärts auf MariaDB angewendet.
+- Insgesamt bestehen 184 Tests mit 1.039 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.46` erhöht.
+
 ## [0.2.0.45] - 2026-06-15
 
 ### Phase 17: Nummernkreise
