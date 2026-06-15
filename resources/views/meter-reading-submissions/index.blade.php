@@ -23,7 +23,15 @@
                             <td>{{ $submission->reading_value }}</td>
                             <td>
                                 @if ($submission->photo_path)
-                                    <a href="{{ route('meter-reading-submissions.photo', $submission) }}">Privates Foto</a>
+                                    <button
+                                        class="btn btn-sm btn-outline-primary"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#meter-reading-photo-modal"
+                                        data-private-photo-url="{{ route('meter-reading-submissions.photo', $submission) }}"
+                                        data-private-photo-name="{{ $submission->photo_original_name ?? 'Zählerstandsfoto' }}">
+                                        Foto ansehen
+                                    </button>
                                 @else
                                     –
                                 @endif
@@ -54,5 +62,39 @@
         </div>
     </div>
     <div class="mt-3">{{ $submissions->links() }}</div>
+</div>
+
+<div
+    class="modal fade"
+    id="meter-reading-photo-modal"
+    tabindex="-1"
+    aria-labelledby="meter-reading-photo-modal-title"
+    aria-hidden="true"
+    data-private-photo-modal>
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title fs-5" id="meter-reading-photo-modal-title">Zählerstandsfoto</h2>
+                    <div class="small text-secondary" data-private-photo-name></div>
+                </div>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Schließen"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                    <div class="btn-group" role="group" aria-label="Foto vergrößern oder verkleinern">
+                        <button class="btn btn-sm btn-outline-secondary" type="button" data-private-photo-zoom-out title="Verkleinern">−</button>
+                        <button class="btn btn-sm btn-outline-secondary" type="button" data-private-photo-reset>Einpassen</button>
+                        <button class="btn btn-sm btn-outline-secondary" type="button" data-private-photo-zoom-in title="Vergrößern">+</button>
+                    </div>
+                    <span class="small text-secondary" data-private-photo-zoom-label aria-live="polite">100 %</span>
+                </div>
+                <div class="private-photo-viewport" data-private-photo-viewport>
+                    <img class="private-photo-image" alt="Privates Zählerstandsfoto" data-private-photo-image>
+                </div>
+                <p class="small text-secondary mt-2 mb-0">Vergrößere das Foto mit den Schaltflächen oder Strg und Mausrad. Ein vergrößertes Foto kannst du mit gedrückter Maustaste verschieben.</p>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection

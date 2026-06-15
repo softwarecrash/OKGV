@@ -59,6 +59,38 @@
     cursor: grab;
 }
 
+.private-photo-viewport {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: auto;
+    min-height: 20rem;
+    max-height: 70vh;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    background: #101410;
+    overscroll-behavior: contain;
+}
+
+.private-photo-viewport.is-zoomed {
+    justify-content: flex-start;
+    cursor: grab;
+    touch-action: none;
+}
+
+.private-photo-viewport.is-panning {
+    cursor: grabbing;
+}
+
+.private-photo-image {
+    display: block;
+    max-width: none;
+    width: 100%;
+    height: auto;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
 .navbar-brand {
     color: $primary;
     font-weight: 700;

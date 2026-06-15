@@ -266,6 +266,32 @@ class TenantPortalTest extends TestCase
         $this->actingAs($foreignTenant)
             ->get(route('meter-reading-submissions.photo', $submission))
             ->assertForbidden();
+        $this->actingAs($waterManager)
+            ->get(route('meter-reading-submissions.index'))
+            ->assertOk()
+            ->assertSee('Foto ansehen')
+            ->assertSee('data-private-photo-modal', false)
+            ->assertSee('data-private-photo-zoom-in', false)
+            ->assertSee('data-private-photo-zoom-out', false)
+            ->assertSee('data-private-photo-reset', false)
+            ->assertSee(
+                route('meter-reading-submissions.photo', $submission),
+                false,
+            );
+        $photoResponse = $this->actingAs($waterManager)
+            ->get(route('meter-reading-submissions.photo', $submission));
+        $photoResponse
+            ->assertOk()
+            ->assertHeader('Content-Type', 'image/jpeg')
+            ->assertHeader('X-Content-Type-Options', 'nosniff');
+        $this->assertStringStartsWith(
+            'inline;',
+            $photoResponse->headers->get('Content-Disposition'),
+        );
+        $this->assertStringContainsString(
+            'zaehler.jpg',
+            $photoResponse->headers->get('Content-Disposition'),
+        );
         $this->actingAs($tenant)
             ->post(route('meter-reading-submissions.approve', $submission))
             ->assertForbidden();

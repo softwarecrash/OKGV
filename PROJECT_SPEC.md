@@ -534,6 +534,13 @@ sind JPEG, PNG und WebP bis 8 MiB. Uploads werden anhand von MIME-Typ und
 Größe geprüft, erhalten serverseitig erzeugte Dateinamen und liegen im
 privaten Storage.
 
+Berechtigte Prüfer und der meldende Pächter sehen ein Foto innerhalb einer
+geschützten Modalvorschau statt über einen erzwungenen Download. Die Vorschau
+unterstützt Zoom und das Verschieben eines vergrößerten Ausschnitts. Das Bild
+wird erst beim Öffnen geladen und beim Schließen aus dem Modal entfernt. Die
+private Route liefert ausschließlich nach erfolgreicher Policy-Prüfung eine
+Inline-Antwort mit korrektem MIME-Typ und `nosniff`.
+
 Eine Meldung ist zunächst `pending` und verändert die abrechnungsrelevante
 Zählerhistorie nicht. Administrator, Vorstand oder Wasserwart können sie
 bestätigen oder mit Begründung ablehnen. Bei Bestätigung prüft dieselbe

@@ -431,4 +431,149 @@ document.addEventListener('DOMContentLoaded', () => {
         svg.addEventListener('pointercancel', stopDragging);
         update();
     });
+
+    document.querySelectorAll('[data-private-photo-modal]').forEach((modal) => {
+        const image = modal.querySelector('[data-private-photo-image]');
+        const name = modal.querySelector('[data-private-photo-name]');
+        const viewport = modal.querySelector('[data-private-photo-viewport]');
+        const zoomIn = modal.querySelector('[data-private-photo-zoom-in]');
+        const zoomOut = modal.querySelector('[data-private-photo-zoom-out]');
+        const reset = modal.querySelector('[data-private-photo-reset]');
+        const zoomLabel = modal.querySelector('[data-private-photo-zoom-label]');
+
+        if (!(image instanceof HTMLImageElement)
+            || !(name instanceof HTMLElement)
+            || !(viewport instanceof HTMLElement)
+            || !(zoomIn instanceof HTMLButtonElement)
+            || !(zoomOut instanceof HTMLButtonElement)
+            || !(reset instanceof HTMLButtonElement)
+            || !(zoomLabel instanceof HTMLElement)) {
+            return;
+        }
+
+        const minimumZoom = 1;
+        const maximumZoom = 5;
+        const zoomStep = 0.25;
+        let zoom = minimumZoom;
+        let panDrag = null;
+
+        const applyZoom = (nextZoom, focalPoint = null) => {
+            const previousWidth = image.getBoundingClientRect().width;
+            const previousHeight = image.getBoundingClientRect().height;
+            zoom = Math.max(minimumZoom, Math.min(maximumZoom, nextZoom));
+
+            const relativeX = focalPoint
+                ? (viewport.scrollLeft + focalPoint.x) / Math.max(previousWidth, 1)
+                : (viewport.scrollLeft + (viewport.clientWidth / 2)) / Math.max(previousWidth, 1);
+            const relativeY = focalPoint
+                ? (viewport.scrollTop + focalPoint.y) / Math.max(previousHeight, 1)
+                : (viewport.scrollTop + (viewport.clientHeight / 2)) / Math.max(previousHeight, 1);
+
+            image.style.width = `${zoom * 100}%`;
+            zoomLabel.textContent = `${Math.round(zoom * 100)} %`;
+            zoomIn.disabled = zoom >= maximumZoom;
+            zoomOut.disabled = zoom <= minimumZoom;
+            viewport.classList.toggle('is-zoomed', zoom > minimumZoom);
+
+            requestAnimationFrame(() => {
+                if (zoom === minimumZoom) {
+                    viewport.scrollTo({ left: 0, top: 0 });
+
+                    return;
+                }
+
+                const currentWidth = image.getBoundingClientRect().width;
+                const currentHeight = image.getBoundingClientRect().height;
+                const offsetX = focalPoint?.x ?? viewport.clientWidth / 2;
+                const offsetY = focalPoint?.y ?? viewport.clientHeight / 2;
+
+                viewport.scrollLeft = Math.max(0, (relativeX * currentWidth) - offsetX);
+                viewport.scrollTop = Math.max(0, (relativeY * currentHeight) - offsetY);
+            });
+        };
+
+        modal.addEventListener('show.bs.modal', (event) => {
+            const trigger = event.relatedTarget;
+
+            if (!(trigger instanceof HTMLElement)) {
+                return;
+            }
+
+            image.src = trigger.dataset.privatePhotoUrl ?? '';
+            name.textContent = trigger.dataset.privatePhotoName ?? '';
+            applyZoom(minimumZoom);
+        });
+
+        modal.addEventListener('hidden.bs.modal', () => {
+            image.removeAttribute('src');
+            name.textContent = '';
+            panDrag = null;
+            viewport.classList.remove('is-panning');
+            applyZoom(minimumZoom);
+        });
+
+        zoomIn.addEventListener('click', () => applyZoom(zoom + zoomStep));
+        zoomOut.addEventListener('click', () => applyZoom(zoom - zoomStep));
+        reset.addEventListener('click', () => applyZoom(minimumZoom));
+
+        viewport.addEventListener('wheel', (event) => {
+            if (!event.ctrlKey && !event.metaKey) {
+                return;
+            }
+
+            event.preventDefault();
+            const bounds = viewport.getBoundingClientRect();
+
+            applyZoom(
+                zoom + (event.deltaY < 0 ? zoomStep : -zoomStep),
+                {
+                    x: event.clientX - bounds.left,
+                    y: event.clientY - bounds.top,
+                },
+            );
+        }, { passive: false });
+
+        viewport.addEventListener('pointerdown', (event) => {
+            if (zoom <= minimumZoom || event.button !== 0) {
+                return;
+            }
+
+            event.preventDefault();
+            panDrag = {
+                pointerId: event.pointerId,
+                startX: event.clientX,
+                startY: event.clientY,
+                scrollLeft: viewport.scrollLeft,
+                scrollTop: viewport.scrollTop,
+            };
+            viewport.classList.add('is-panning');
+            viewport.setPointerCapture(event.pointerId);
+        });
+
+        viewport.addEventListener('pointermove', (event) => {
+            if (!panDrag || panDrag.pointerId !== event.pointerId) {
+                return;
+            }
+
+            viewport.scrollLeft = panDrag.scrollLeft - (event.clientX - panDrag.startX);
+            viewport.scrollTop = panDrag.scrollTop - (event.clientY - panDrag.startY);
+        });
+
+        const stopPanning = (event) => {
+            if (!panDrag || panDrag.pointerId !== event.pointerId) {
+                return;
+            }
+
+            if (viewport.hasPointerCapture(event.pointerId)) {
+                viewport.releasePointerCapture(event.pointerId);
+            }
+
+            panDrag = null;
+            viewport.classList.remove('is-panning');
+        };
+
+        viewport.addEventListener('pointerup', stopPanning);
+        viewport.addEventListener('pointercancel', stopPanning);
+        applyZoom(minimumZoom);
+    });
 });

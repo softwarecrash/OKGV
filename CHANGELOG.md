@@ -2,6 +2,26 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.53] - 2026-06-15
+
+### Zählerstandsfotos prüfen
+
+- Private Fotos aus Zählerstandsmeldungen werden bei der Prüfung nicht mehr
+  als Download geöffnet.
+- Die geschützte Fotoroute liefert zulässige Bilddateien mit Inline-
+  Darstellung, privatem Cache-Header und `nosniff` aus.
+- Ein Bootstrap-Modal zeigt das Foto innerhalb der Meldungsübersicht und lädt
+  es erst beim Öffnen.
+- Die Vorschau lässt sich von 100 bis 500 Prozent vergrößern, über Strg und
+  Mausrad zoomen und mit gedrückter Maustaste verschieben.
+- Beim Schließen des Modals wird die private Bildquelle wieder entfernt.
+- Bestehende Policy-Prüfungen verhindern weiterhin jeden Zugriff auf fremde
+  Meldungsfotos.
+- Insgesamt bestehen 188 Tests mit 1.090 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.53` erhöht.
+
 ## [0.2.0.52] - 2026-06-15
 
 ### Konstante Editor-Griffe

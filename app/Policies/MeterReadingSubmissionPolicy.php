@@ -28,7 +28,7 @@ class MeterReadingSubmissionPolicy
             && $submission->status === MeterReadingSubmissionStatus::Pending;
     }
 
-    public function downloadPhoto(User $user, MeterReadingSubmission $submission): bool
+    public function viewPhoto(User $user, MeterReadingSubmission $submission): bool
     {
         return $this->view($user, $submission) && $submission->photo_path !== null;
     }

@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MeterReadingSubmissionController extends Controller
@@ -85,16 +86,28 @@ class MeterReadingSubmissionController extends Controller
 
     public function photo(MeterReadingSubmission $meterReadingSubmission): StreamedResponse
     {
-        $this->authorize('downloadPhoto', $meterReadingSubmission);
+        $this->authorize('viewPhoto', $meterReadingSubmission);
         abort_unless(
             Storage::disk('local')->exists($meterReadingSubmission->photo_path),
             404,
         );
 
-        return Storage::disk('local')->download(
+        $fileName = $meterReadingSubmission->photo_original_name
+            ?: 'zaehlerstandsfoto';
+
+        return Storage::disk('local')->response(
             $meterReadingSubmission->photo_path,
-            $meterReadingSubmission->photo_original_name,
-            ['Content-Type' => $meterReadingSubmission->photo_mime],
+            $fileName,
+            [
+                'Content-Type' => $meterReadingSubmission->photo_mime,
+                'Content-Disposition' => HeaderUtils::makeDisposition(
+                    'inline',
+                    $fileName,
+                    'zaehlerstandsfoto',
+                ),
+                'Cache-Control' => 'private, max-age=3600',
+                'X-Content-Type-Options' => 'nosniff',
+            ],
         );
     }
 }

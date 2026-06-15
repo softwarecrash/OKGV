@@ -96,6 +96,10 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 ## Projektweite Standards
 
+- [x] Zählerstandsfotos geschützt im Modal statt als Download anzeigen
+- [x] Zoom und Verschieben in der privaten Fotovorschau ergänzen
+- [x] Inline-Ausgabe und Fremdzugriff durch Tests absichern
+- [ ] Entwicklungsstand 0.2.0.53 veröffentlichen
 - [x] Sichtbare Größe der Polygon-Eckpunktgriffe beim Zoomen konstant halten
 - [x] Entwicklungsstand 0.2.0.52 veröffentlichen
 - [x] Zusätzlichen Lageplan-Verschiebeschalter entfernen
