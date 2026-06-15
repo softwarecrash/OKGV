@@ -702,4 +702,4 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Produktionsinstallation ohne Dev-Pakete trocken prüfen
 - [x] Gesamttests und Composer-Audit ausführen
 - [x] Nachbesserung vollständig prüfen
-- [ ] Entwicklungsstand veröffentlichen
+- [x] Entwicklungsstand veröffentlichen
