@@ -494,6 +494,16 @@ werden mit Bearbeiter, Zeitpunkt und optionaler Begründung historisiert und
 auditiert. Kassierer, Wasserwart und Gartenwart dürfen Registrierungsanfragen
 nicht bearbeiten.
 
+Die Prüfübersicht bewertet ausschließlich die freigabefähigen Mitglieder der
+angegebenen Parzelle anhand von E-Mail und Namen. Der beste plausible Treffer
+wird als unverbindliche Empfehlung markiert; eine automatische Freigabe oder
+globale Zuordnung allein anhand der E-Mail findet nicht statt. Vor der
+Freigabe zeigt die Oberfläche Mitglieds- und Registrierungsadresse gemeinsam.
+Bei abweichenden E-Mail-Adressen entscheidet der Prüfer ausdrücklich, ob die
+bisherige Kontaktadresse im Mitgliedsstammsatz erhalten bleibt oder durch die
+Registrierungsadresse ersetzt wird. Die Login-Adresse des neuen Kontos ist
+immer die anschließend zu bestätigende Registrierungsadresse.
+
 Nach der Freigabe wird über den in `.env` konfigurierten Laravel-Mailer eine
 deutsche Bestätigungsnachricht versendet. Das neue Konto bleibt bis zur
 Bestätigung der signierten, zeitlich begrenzten E-Mail-Adresse für alle

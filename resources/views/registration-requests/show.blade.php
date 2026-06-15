@@ -19,6 +19,19 @@
 
     @can('review', $registrationRequest)
         <div class="alert alert-warning">Vergleiche die Angaben mit dem Pachtvertrag oder einem anderen verlässlichen Vereinsnachweis. Wähle nur die tatsächlich anfragende Person aus.</div>
+        @if ($recommendedCandidate)
+            <div class="alert alert-success">
+                <strong>Empfohlene Zuordnung:</strong>
+                {{ $recommendedCandidate->member_number }} · {{ $recommendedCandidate->full_name }}
+                @if ($recommendedCandidate->registration_email_matches)
+                    <span class="badge text-bg-success ms-1">E-Mail stimmt überein</span>
+                @endif
+                @if ($recommendedCandidate->registration_first_name_matches && $recommendedCandidate->registration_last_name_matches)
+                    <span class="badge text-bg-success ms-1">Name stimmt überein</span>
+                @endif
+                <div class="small mt-1">Die Empfehlung ist nur eine Prüfhilfe. Die verbindliche Zuordnung bleibt beim Vorstand.</div>
+            </div>
+        @endif
         <div class="row g-4">
             <div class="col-lg-7">
                 <form class="card card-body border-0 shadow-sm" method="POST" action="{{ route('registration-requests.approve', $registrationRequest) }}">
@@ -26,13 +39,59 @@
                     <x-validation-errors />
                     <h2 class="h5">Konto freigeben</h2>
                     <label class="form-label" for="member_id">Mitglied der Parzelle zuordnen</label>
-                    <select class="form-select" id="member_id" name="member_id" required>
+                    <select
+                        class="form-select"
+                        id="member_id"
+                        name="member_id"
+                        data-registration-member-select
+                        data-registration-email="{{ $registrationRequest->email }}"
+                        required>
                         <option value="">Bitte auswählen</option>
                         @foreach ($candidates as $member)
-                            <option value="{{ $member->id }}" @selected(old('member_id') == $member->id)>{{ $member->member_number }} · {{ $member->full_name }}</option>
+                            <option
+                                value="{{ $member->id }}"
+                                data-member-number="{{ $member->member_number }}"
+                                data-member-name="{{ $member->full_name }}"
+                                data-member-email="{{ $member->email }}"
+                                @selected((string) old('member_id', $recommendedCandidate?->id) === (string) $member->id)>
+                                {{ $member->member_number }} · {{ $member->full_name }}
+                                @if ($member->registration_recommended)
+                                    · Empfohlen
+                                @endif
+                            </option>
                         @endforeach
                     </select>
                     <div class="form-text mb-3">Angezeigt werden nur aktuelle Pächter dieser Parzelle ohne vorhandenes Benutzerkonto.</div>
+                    <div class="border rounded p-3 mb-3 d-none" data-registration-member-preview>
+                        <h3 class="h6">Vergleich vor der Freigabe</h3>
+                        <dl class="row small mb-0">
+                            <dt class="col-sm-5">Ausgewähltes Mitglied</dt>
+                            <dd class="col-sm-7" data-registration-member-name></dd>
+                            <dt class="col-sm-5">E-Mail im Mitglied</dt>
+                            <dd class="col-sm-7" data-registration-member-email></dd>
+                            <dt class="col-sm-5">Registrierungs-/Login-E-Mail</dt>
+                            <dd class="col-sm-7">{{ $registrationRequest->email }}</dd>
+                        </dl>
+                    </div>
+                    <fieldset class="border rounded p-3 mb-3 d-none" data-registration-email-choice>
+                        <legend class="h6 float-none w-auto px-2">Abweichende Kontakt-E-Mail</legend>
+                        <p class="small text-secondary">Die Login-Adresse ist immer die bestätigte Registrierungsadresse. Entscheide zusätzlich, welche E-Mail im Mitgliedsstammsatz stehen soll.</p>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" id="member_email_keep" name="member_email_action" value="keep" @checked(old('member_email_action', 'keep') === 'keep')>
+                            <label class="form-check-label" for="member_email_keep">
+                                Bestehende Kontakt-E-Mail beibehalten
+                                <span class="d-block small text-secondary" data-registration-existing-email></span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="member_email_registration" name="member_email_action" value="use_registration" @checked(old('member_email_action') === 'use_registration')>
+                            <label class="form-check-label" for="member_email_registration">
+                                Registrierungsadresse als Kontakt-E-Mail übernehmen
+                                <span class="d-block small text-secondary">{{ $registrationRequest->email }}</span>
+                            </label>
+                        </div>
+                    </fieldset>
+                    <input type="hidden" name="member_email_action" value="keep" data-registration-email-default>
                     @if ($candidates->isEmpty())
                         <div class="alert alert-danger">Es gibt kein freigabefähiges Mitglied. Prüfe zuerst Pächterhistorie und bestehende Kontoverknüpfungen.</div>
                     @endif

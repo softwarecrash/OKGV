@@ -2,6 +2,25 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.63] - 2026-06-15
+
+### Sichere Zuordnung registrierter Pächter
+
+- Registrierungsanfragen bewerten bestehende, noch kontolose Pächter der
+  angegebenen Parzelle anhand von E-Mail und Namen.
+- Der plausibelste Treffer wird als unverbindliche Empfehlung angezeigt;
+  die verbindliche Auswahl bleibt bei Vorstand oder Administration.
+- Mitglieds- und Registrierungsadresse werden vor der Freigabe gemeinsam
+  dargestellt.
+- Bei abweichender E-Mail kann die bestehende Kontaktadresse erhalten oder
+  die Registrierungsadresse in den Mitgliedsstammsatz übernommen werden.
+- Das Benutzerkonto verwendet immer die anschließend zu verifizierende
+  Registrierungsadresse.
+- Insgesamt bestehen 203 Tests mit 1.221 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.63` erhöht.
+
 ## [0.2.0.62] - 2026-06-15
 
 ### Fachlich korrekte Erinnerung an Zählerendstände

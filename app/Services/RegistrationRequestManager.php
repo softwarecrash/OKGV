@@ -17,8 +17,15 @@ final class RegistrationRequestManager
         Member $member,
         User $actor,
         ?string $reviewNote = null,
+        string $memberEmailAction = 'keep',
     ): User {
-        $user = DB::transaction(function () use ($registrationRequest, $member, $actor, $reviewNote): User {
+        $user = DB::transaction(function () use (
+            $registrationRequest,
+            $member,
+            $actor,
+            $reviewNote,
+            $memberEmailAction,
+        ): User {
             $registrationRequest = RegistrationRequest::query()
                 ->lockForUpdate()
                 ->findOrFail($registrationRequest->id);
@@ -60,7 +67,13 @@ final class RegistrationRequestManager
                 'role' => UserRole::Tenant,
             ]);
 
-            $member->update(['user_id' => $user->id]);
+            $previousMemberEmail = $member->email;
+            $member->update([
+                'user_id' => $user->id,
+                'email' => $memberEmailAction === 'use_registration'
+                    ? $registrationRequest->email
+                    : $member->email,
+            ]);
             $registrationRequest->update([
                 'status' => RegistrationRequestStatus::Approved,
                 'reviewed_by' => $actor->id,
@@ -72,6 +85,8 @@ final class RegistrationRequestManager
             AuditLogger::log('tenant.registration.approved', $actor, $registrationRequest, [
                 'member_id' => $member->id,
                 'user_id' => $user->id,
+                'member_email_action' => $memberEmailAction,
+                'member_email_changed' => $previousMemberEmail !== $member->email,
             ]);
 
             return $user;

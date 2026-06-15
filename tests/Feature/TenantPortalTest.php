@@ -108,6 +108,120 @@ class TenantPortalTest extends TestCase
         ]);
     }
 
+    public function test_registration_review_recommends_matching_existing_member(): void
+    {
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $parcel = Parcel::factory()->create(['parcel_number' => 'C-12']);
+        $matchingMember = Member::factory()->create([
+            'member_number' => 'M-100',
+            'first_name' => 'Erika',
+            'last_name' => 'Mustermann',
+            'email' => 'erika@example.test',
+        ]);
+        $otherMember = Member::factory()->create([
+            'member_number' => 'M-101',
+            'first_name' => 'Erik',
+            'last_name' => 'Muster',
+            'email' => 'andere@example.test',
+        ]);
+        foreach ([$matchingMember, $otherMember] as $member) {
+            ParcelTenant::factory()->create([
+                'parcel_id' => $parcel->id,
+                'member_id' => $member->id,
+                'starts_at' => now()->subYear(),
+            ]);
+        }
+        $registrationRequest = RegistrationRequest::factory()->create([
+            'first_name' => 'Erika',
+            'last_name' => 'Mustermann',
+            'email' => 'erika@example.test',
+            'parcel_id' => $parcel->id,
+            'parcel_number' => $parcel->parcel_number,
+        ]);
+
+        $this->actingAs($board)
+            ->get(route('registration-requests.show', $registrationRequest))
+            ->assertOk()
+            ->assertSee('Empfohlene Zuordnung:')
+            ->assertSee('M-100')
+            ->assertSee('E-Mail stimmt überein')
+            ->assertSee('Name stimmt überein')
+            ->assertSee('data-registration-member-select', false)
+            ->assertSee('value="'.$matchingMember->id.'"', false);
+    }
+
+    public function test_board_can_choose_registration_email_for_existing_member_contact(): void
+    {
+        Notification::fake();
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $parcel = Parcel::factory()->create();
+        $member = Member::factory()->create([
+            'email' => 'alt@example.test',
+        ]);
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $member->id,
+            'starts_at' => now()->subYear(),
+        ]);
+        $registrationRequest = RegistrationRequest::factory()->create([
+            'parcel_id' => $parcel->id,
+            'parcel_number' => $parcel->parcel_number,
+            'email' => 'neu@example.test',
+        ]);
+
+        $this->actingAs($board)
+            ->post(route('registration-requests.approve', $registrationRequest), [
+                'member_id' => $member->id,
+                'member_email_action' => 'use_registration',
+            ])
+            ->assertRedirect(route('registration-requests.index'));
+
+        $member->refresh();
+        $this->assertSame('neu@example.test', $member->email);
+        $this->assertSame(
+            'neu@example.test',
+            User::query()->findOrFail($member->user_id)->email,
+        );
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'tenant.registration.approved',
+            'subject_id' => $registrationRequest->id,
+        ]);
+    }
+
+    public function test_board_can_keep_existing_member_contact_email(): void
+    {
+        Notification::fake();
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $parcel = Parcel::factory()->create();
+        $member = Member::factory()->create([
+            'email' => 'kontakt@example.test',
+        ]);
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $member->id,
+            'starts_at' => now()->subYear(),
+        ]);
+        $registrationRequest = RegistrationRequest::factory()->create([
+            'parcel_id' => $parcel->id,
+            'parcel_number' => $parcel->parcel_number,
+            'email' => 'login@example.test',
+        ]);
+
+        $this->actingAs($board)
+            ->post(route('registration-requests.approve', $registrationRequest), [
+                'member_id' => $member->id,
+                'member_email_action' => 'keep',
+            ])
+            ->assertRedirect(route('registration-requests.index'));
+
+        $member->refresh();
+        $this->assertSame('kontakt@example.test', $member->email);
+        $this->assertSame(
+            'login@example.test',
+            User::query()->findOrFail($member->user_id)->email,
+        );
+    }
+
     public function test_approval_rejects_member_from_another_parcel(): void
     {
         $board = User::factory()->create(['role' => UserRole::Board]);

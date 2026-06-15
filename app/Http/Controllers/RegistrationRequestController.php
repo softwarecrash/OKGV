@@ -6,13 +6,17 @@ use App\Http\Requests\RegistrationApprovalRequest;
 use App\Http\Requests\RegistrationRejectionRequest;
 use App\Models\Member;
 use App\Models\RegistrationRequest;
+use App\Services\RegistrationCandidateMatcher;
 use App\Services\RegistrationRequestManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class RegistrationRequestController extends Controller
 {
-    public function __construct(private readonly RegistrationRequestManager $manager) {}
+    public function __construct(
+        private readonly RegistrationRequestManager $manager,
+        private readonly RegistrationCandidateMatcher $candidateMatcher,
+    ) {}
 
     public function index(): View
     {
@@ -31,16 +35,21 @@ class RegistrationRequestController extends Controller
     {
         $this->authorize('view', $registrationRequest);
 
-        $candidates = Member::query()
+        $candidates = $this->candidateMatcher->rank(Member::query()
             ->whereNull('user_id')
             ->whereHas('parcelTenancies', fn ($query) => $query
                 ->activeOn()
                 ->where('parcel_id', $registrationRequest->parcel_id))
             ->orderBy('last_name')
             ->orderBy('first_name')
-            ->get();
+            ->get(), $registrationRequest);
+        $recommendedCandidate = $candidates->firstWhere('registration_recommended', true);
 
-        return view('registration-requests.show', compact('registrationRequest', 'candidates'));
+        return view('registration-requests.show', compact(
+            'registrationRequest',
+            'candidates',
+            'recommendedCandidate',
+        ));
     }
 
     public function approve(
@@ -52,6 +61,7 @@ class RegistrationRequestController extends Controller
             Member::query()->findOrFail($request->integer('member_id')),
             $request->user(),
             $request->validated('review_note'),
+            $request->validated('member_email_action'),
         );
 
         return redirect()->route('registration-requests.index')

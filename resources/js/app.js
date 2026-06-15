@@ -81,6 +81,49 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const registrationMemberSelect = document.querySelector('[data-registration-member-select]');
+
+    if (registrationMemberSelect instanceof HTMLSelectElement) {
+        const preview = document.querySelector('[data-registration-member-preview]');
+        const previewName = document.querySelector('[data-registration-member-name]');
+        const previewEmail = document.querySelector('[data-registration-member-email]');
+        const emailChoice = document.querySelector('[data-registration-email-choice]');
+        const existingEmail = document.querySelector('[data-registration-existing-email]');
+        const defaultEmailAction = document.querySelector('[data-registration-email-default]');
+        const registrationEmail = registrationMemberSelect.dataset.registrationEmail ?? '';
+
+        const updateRegistrationMemberPreview = () => {
+            const option = registrationMemberSelect.selectedOptions.item(0);
+            const memberName = option?.dataset.memberName ?? '';
+            const memberEmail = option?.dataset.memberEmail ?? '';
+            const hasSelection = registrationMemberSelect.value !== '';
+            const emailsDiffer = hasSelection
+                && memberEmail.toLocaleLowerCase() !== registrationEmail.toLocaleLowerCase();
+
+            preview?.classList.toggle('d-none', !hasSelection);
+            emailChoice?.classList.toggle('d-none', !emailsDiffer);
+
+            if (previewName instanceof HTMLElement) {
+                previewName.textContent = memberName;
+            }
+
+            if (previewEmail instanceof HTMLElement) {
+                previewEmail.textContent = memberEmail || 'Keine E-Mail hinterlegt';
+            }
+
+            if (existingEmail instanceof HTMLElement) {
+                existingEmail.textContent = memberEmail || 'Keine E-Mail hinterlegt';
+            }
+
+            if (defaultEmailAction instanceof HTMLInputElement) {
+                defaultEmailAction.disabled = emailsDiffer;
+            }
+        };
+
+        registrationMemberSelect.addEventListener('change', updateRegistrationMemberPreview);
+        updateRegistrationMemberPreview();
+    }
+
     document.querySelectorAll('[data-parcel-map-zoom]').forEach((map) => {
         const viewport = map.querySelector('[data-map-viewport]');
         const target = map.querySelector('[data-map-zoom-target]');

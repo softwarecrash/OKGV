@@ -681,3 +681,15 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Regressionstests, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
+
+## Nachbesserung Phase 5: Sichere Zuordnung bestehender Mitglieder
+
+- [x] Registrierungs- und Freigabeablauf auf Dublettenrisiken prüfen
+- [x] Kandidaten ausschließlich auf die angegebene Parzelle begrenzen
+- [x] Treffer nach E-Mail und Namen bewerten und Empfehlung anzeigen
+- [x] Mitglieds- und Registrierungsdaten vor Freigabe gegenüberstellen
+- [x] Entscheidung bei abweichender Kontakt-E-Mail ergänzen
+- [x] Kontoverknüpfung und E-Mail-Entscheidung auditieren
+- [x] Fachtests, Gesamttests, Formatter, Build und Audits ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen
