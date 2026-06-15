@@ -308,11 +308,13 @@
         </main>
 
         <footer class="container pb-4 text-center text-secondary small">
+            <span>Version {{ config('app.version') }}</span>
+            <span aria-hidden="true"> · </span>
             <span>GNU AGPLv3</span>
             <span aria-hidden="true"> · </span>
             <a href="{{ route('privacy.information') }}">Datenschutzinformationen</a>
             <span aria-hidden="true"> · </span>
-            <a href="{{ config('app.source_url') }}" rel="noopener noreferrer">Quellcode</a>
+            <a href="{{ config('app.source_url') }}" target="_blank" rel="noopener noreferrer">GitHub</a>
         </footer>
     </div>
 </body>

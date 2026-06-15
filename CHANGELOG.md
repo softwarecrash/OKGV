@@ -2,6 +2,17 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.69] - 2026-06-15
+
+### System-Footer ergänzt
+
+- Der System-Footer zeigt jetzt die aktuelle Version aus der `VERSION`-Datei.
+- Der bisherige Link `Quellcode` heißt jetzt `GitHub` und öffnet in einem
+  neuen Browser-Tab.
+- Der Projektbasis-Test besteht weiterhin mit 9 Tests und 25 Assertions.
+- Entwicklungsstand auf `0.2.0.69` erhöht.
+- Entwicklungsstand `0.2.0.69` auf GitHub veröffentlicht.
+
 ## [0.2.0.68] - 2026-06-15
 
 ### Plesk-Vite-Build dokumentiert

@@ -739,3 +739,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Expliziten `build` Skriptaufruf dokumentieren
 - [x] Fehler `Vite manifest not found` ergänzen
 - [x] Dokumentation prüfen und veröffentlichen
+
+## Nachbesserung Phase 0: System-Footer
+
+- [x] Aktuelle Versionsnummer im System-Footer anzeigen
+- [x] Quellcode-Link als GitHub-Link in neuem Tab öffnen
+- [x] Änderung prüfen und veröffentlichen
