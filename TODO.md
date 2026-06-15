@@ -671,3 +671,13 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Regressionstest, Formatter, Build und Audits ausführen
 - [x] Nachbesserung vollständig prüfen
 - [x] Entwicklungsstand veröffentlichen
+
+## Nachbesserung Phase 7: Fehlende Zählerendstände
+
+- [x] Kalenderjahreslogik der Serienmail-Empfängergruppe prüfen
+- [x] Gruppe an die letzte beendete Abrechnungsperiode koppeln
+- [x] Pächter- und Zählerstatus zum Periodenende berücksichtigen
+- [x] Gruppe während laufender Perioden leer halten
+- [x] Regressionstests, Formatter, Build und Audits ausführen
+- [x] Nachbesserung vollständig prüfen
+- [ ] Entwicklungsstand veröffentlichen

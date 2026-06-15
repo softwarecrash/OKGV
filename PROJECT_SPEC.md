@@ -703,7 +703,8 @@ Zustellungen. Unterstützte Empfängergruppen sind:
 - aktuelle Pächter,
 - Administratoren und Vorstandsmitglieder,
 - Empfänger offener oder zurückgegebener Rechnungen,
-- aktuelle Pächter von aktiven Zählern ohne Stand im laufenden Kalenderjahr.
+- Pächter aktiver Zähler ohne Endstand zur letzten beendeten
+  Abrechnungsperiode.
 
 Vor dem Versand werden Name, E-Mail-Adresse und optionaler Mitgliedsbezug je
 Empfänger als Snapshot gespeichert. Doppelte E-Mail-Adressen werden innerhalb
@@ -711,6 +712,13 @@ einer Kampagne zusammengeführt. Datensätze ohne E-Mail-Adresse werden nicht
 angeschrieben. Ein Versand wird je Empfänger mit Status, Zeitpunkt und
 verständlicher Fehlerangabe historisiert. Passwörter und SMTP-Geheimnisse
 werden weder in der Kampagne noch im Auditlog gespeichert.
+
+Die Empfängergruppe für fehlende Zählerstände wird erst nach Ende der
+letzten noch bearbeitbaren Abrechnungsperiode gebildet. Sie enthält Pächter,
+deren am Periodenende aktive Zähler keinen Endstand mit dem Datum des
+Periodenendes besitzen. Während einer laufenden Periode bleibt diese Gruppe
+leer. Die Meldung darf nach dem Stichtag eingereicht werden; maßgeblich ist
+das Ablesedatum.
 
 #### PDF-Briefe
 

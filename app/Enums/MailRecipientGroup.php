@@ -17,7 +17,7 @@ enum MailRecipientGroup: string
             self::CurrentTenants => 'Alle aktuellen Pächter',
             self::Board => 'Administrator und Vorstand',
             self::OpenInvoices => 'Empfänger offener Rechnungen',
-            self::MissingMeterReadings => 'Fehlende Zählerstände im laufenden Jahr',
+            self::MissingMeterReadings => 'Fehlende Endstände der letzten Abrechnungsperiode',
         };
     }
 
@@ -28,7 +28,7 @@ enum MailRecipientGroup: string
             self::CurrentTenants => 'Mitglieder mit einer aktuell laufenden Pächterzuordnung.',
             self::Board => 'Bestätigte Konten mit Rolle Administrator oder Vorstand.',
             self::OpenInvoices => 'Mitglieder mit freigegebenen, offenen oder zurückgegebenen Rechnungen.',
-            self::MissingMeterReadings => 'Aktuelle Pächter aktiver Zähler ohne Ablesung seit Jahresbeginn.',
+            self::MissingMeterReadings => 'Pächter aktiver Zähler ohne Endstand zur letzten beendeten, noch bearbeitbaren Abrechnungsperiode.',
         };
     }
 

@@ -235,6 +235,6 @@ class ModuleConfigurationTest extends TestCase
             ->get(route('mail-campaigns.create'))
             ->assertOk()
             ->assertDontSee('Empfänger offener Rechnungen')
-            ->assertDontSee('Fehlende Zählerstände im laufenden Jahr');
+            ->assertDontSee('Fehlende Endstände der letzten Abrechnungsperiode');
     }
 }

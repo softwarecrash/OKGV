@@ -12,6 +12,7 @@ use App\Enums\UserRole;
 use App\Mail\CampaignMessage;
 use App\Mail\SmtpTestMessage;
 use App\Models\AuditLog;
+use App\Models\BillingPeriod;
 use App\Models\CommunicationSetting;
 use App\Models\Invoice;
 use App\Models\InvoiceRecipient;
@@ -19,6 +20,7 @@ use App\Models\Letter;
 use App\Models\MailCampaign;
 use App\Models\Member;
 use App\Models\Meter;
+use App\Models\MeterReading;
 use App\Models\Parcel;
 use App\Models\ParcelTenant;
 use App\Models\User;
@@ -218,6 +220,10 @@ class CommunicationWorkflowTest extends TestCase
 
     public function test_dynamic_recipient_groups_find_current_tenants_open_invoices_and_missing_readings(): void
     {
+        $period = BillingPeriod::factory()->create([
+            'starts_at' => now()->subYear()->startOfYear(),
+            'ends_at' => now()->subYear()->endOfYear(),
+        ]);
         $member = Member::factory()->create(['email' => 'tenant@example.test']);
         $parcel = Parcel::factory()->create();
         ParcelTenant::factory()->create([
@@ -226,7 +232,10 @@ class CommunicationWorkflowTest extends TestCase
             'starts_at' => now()->subYear(),
             'ends_at' => null,
         ]);
-        Meter::factory()->create(['parcel_id' => $parcel->id]);
+        $meter = Meter::factory()->create([
+            'parcel_id' => $parcel->id,
+            'installed_at' => $period->starts_at,
+        ]);
         $invoice = $this->approvedInvoice(now()->subDay()->toDateString(), $member);
 
         $resolver = app(MailRecipientResolver::class);
@@ -243,7 +252,36 @@ class CommunicationWorkflowTest extends TestCase
             ['tenant@example.test'],
             $resolver->resolve(MailRecipientGroup::MissingMeterReadings)->pluck('email')->all(),
         );
+        MeterReading::factory()->create([
+            'meter_id' => $meter->id,
+            'reading_date' => $period->ends_at,
+        ]);
+        $this->assertEmpty(
+            $resolver->resolve(MailRecipientGroup::MissingMeterReadings),
+        );
         $this->assertTrue($invoice->canReceivePaymentReminder());
+    }
+
+    public function test_missing_meter_reading_group_stays_empty_during_running_period(): void
+    {
+        BillingPeriod::factory()->create([
+            'starts_at' => now()->startOfYear(),
+            'ends_at' => now()->endOfYear(),
+        ]);
+        $member = Member::factory()->create(['email' => 'tenant@example.test']);
+        $parcel = Parcel::factory()->create();
+        ParcelTenant::factory()->create([
+            'member_id' => $member->id,
+            'parcel_id' => $parcel->id,
+            'starts_at' => now()->subYear(),
+            'ends_at' => null,
+        ]);
+        Meter::factory()->create(['parcel_id' => $parcel->id]);
+
+        $this->assertEmpty(
+            app(MailRecipientResolver::class)
+                ->resolve(MailRecipientGroup::MissingMeterReadings),
+        );
     }
 
     public function test_letter_keeps_address_snapshot_and_generates_pdf(): void

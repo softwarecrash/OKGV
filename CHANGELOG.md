@@ -2,6 +2,22 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.62] - 2026-06-15
+
+### Fachlich korrekte Erinnerung an Zählerendstände
+
+- Die Serienmail-Gruppe sucht nicht mehr während des laufenden Jahres nach
+  beliebigen fehlenden Ablesungen.
+- Maßgeblich ist nun die letzte beendete, noch bearbeitbare
+  Abrechnungsperiode und ein fehlender Endstand am Periodenende.
+- Pächterzuordnung, Zählerstatus und Installationsdatum werden zum
+  Periodenende ausgewertet.
+- Während einer laufenden Abrechnungsperiode bleibt die Empfängergruppe leer.
+- Insgesamt bestehen 200 Tests mit 1.205 Assertions.
+- Composer- und npm-Abhängigkeiten weisen keine bekannten
+  Sicherheitswarnungen auf.
+- Entwicklungsstand auf `0.2.0.62` erhöht.
+
 ## [0.2.0.61] - 2026-06-15
 
 ### Automatische Empfängeranschrift bei PDF-Briefen

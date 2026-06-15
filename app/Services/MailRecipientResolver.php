@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
+use App\Enums\BillingPeriodStatus;
 use App\Enums\InvoicePaymentStatus;
 use App\Enums\InvoiceStatus;
 use App\Enums\MailRecipientGroup;
 use App\Enums\MemberStatus;
 use App\Enums\MeterStatus;
 use App\Enums\UserRole;
+use App\Models\BillingPeriod;
 use App\Models\Member;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -88,16 +90,28 @@ final class MailRecipientResolver
 
     private function missingMeterReadings(): Collection
     {
-        $yearStart = now()->startOfYear()->toDateString();
+        $period = BillingPeriod::query()
+            ->whereDate('ends_at', '<', today())
+            ->whereIn('status', [
+                BillingPeriodStatus::Draft,
+                BillingPeriodStatus::Calculated,
+            ])
+            ->latest('ends_at')
+            ->first();
+
+        if (! $period) {
+            return collect();
+        }
 
         return Member::query()
             ->with('user')
             ->whereHas('parcelTenancies', fn ($tenancies) => $tenancies
-                ->activeOn()
+                ->activeOn($period->ends_at)
                 ->whereHas('parcel.meters', fn ($meters) => $meters
                     ->where('status', MeterStatus::Active)
+                    ->whereDate('installed_at', '<=', $period->ends_at)
                     ->whereDoesntHave('readings', fn ($readings) => $readings
-                        ->whereDate('reading_date', '>=', $yearStart))))
+                        ->whereDate('reading_date', $period->ends_at))))
             ->get()
             ->map(fn (Member $member): array => $this->memberRecipient($member));
     }
