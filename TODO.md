@@ -100,7 +100,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Paketmetadaten auf `AGPL-3.0-only` aktualisieren
 - [x] Lizenzanforderungen in README, Projektspezifikation und Agent-Regeln dokumentieren
 - [x] Konfigurierbaren Quellcode-Link für Netzwerkbereitstellungen ergänzen
-- [ ] Entwicklungsstand 0.2.0.41 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.41 veröffentlichen
 - [x] Verbindliche Code-Style-Richtlinie für Agents erstellen
 - [x] Code-Style-Richtlinie aus `AGENTS.md` referenzieren
 - [x] Entwicklungsstand 0.2.0.2 veröffentlichen

@@ -20,6 +20,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
   passendes Mitgliedseintrittsdatum und ist dadurch nicht mehr zufallsabhängig.
 - Insgesamt bestehen 154 Tests mit 887 Assertions.
 - Entwicklungsstand auf `0.2.0.41` erhöht.
+- Entwicklungsstand `0.2.0.41` auf GitHub veröffentlicht.
 
 ## [0.2.0.40] - 2026-06-15
 
