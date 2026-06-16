@@ -2,6 +2,19 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.73] - 2026-06-16
+
+### Demo-Login robuster gemacht
+
+- Die Demo-Ausfüllhilfe wird zusätzlich als eigene Datei
+  `public/js/demo-login.js` direkt auf der Loginseite geladen.
+- Die Demo-Zugangskarten funktionieren damit auch dann, wenn das Vite-Bundle
+  auf dem Demo-Hosting noch nicht neu gebaut wurde.
+- Die Login- und Projektbasis-Tests bestehen mit 17 Tests und 68 Assertions.
+- Der Asset-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.73` erhöht.
+- Entwicklungsstand `0.2.0.73` auf GitHub veröffentlicht.
+
 ## [0.2.0.72] - 2026-06-16
 
 ### Demo-Modus abgesichert

@@ -58,23 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.querySelectorAll('[data-demo-login]').forEach((button) => {
-        button.addEventListener('click', () => {
-            const emailInput = document.getElementById('email');
-            const passwordInput = document.getElementById('password');
-
-            if (emailInput instanceof HTMLInputElement) {
-                emailInput.value = button.dataset.demoEmail ?? '';
-            }
-
-            if (passwordInput instanceof HTMLInputElement) {
-                passwordInput.value = button.dataset.demoPassword ?? '';
-            }
-
-            passwordInput?.focus();
-        });
-    });
-
     const letterMemberSelect = document.getElementById('member_id');
     const letterRecipientFields = document.querySelector('[data-letter-recipient-fields]');
 

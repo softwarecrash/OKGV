@@ -767,3 +767,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] SMTP-Konfiguration und Testmails im Demo-Modus sperren
 - [x] Mailversand im Demo-Modus serverseitig blockieren
 - [x] Tests, Build und Veröffentlichung abschließen
+
+## Nachbesserung Phase 0: Demo-Login robust machen
+
+- [x] Demo-Ausfüllhilfe als externe Login-JavaScript-Datei bereitstellen
+- [x] Demo-Ausfüllhilfe unabhängig vom Vite-Bundle laden
+- [x] Tests, Build und Veröffentlichung abschließen

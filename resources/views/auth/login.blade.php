@@ -133,3 +133,9 @@
     </div>
 </div>
 @endsection
+
+@if (config('demo.enabled'))
+    @push('scripts')
+        <script src="{{ asset('js/demo-login.js') }}" defer></script>
+    @endpush
+@endif

@@ -68,6 +68,7 @@ class UserGuidanceTest extends TestCase
             ->assertSee('data-demo-email="vorstand.demo@okgv.test"', false)
             ->assertSee('data-demo-email="paechter1.demo@okgv.test"', false)
             ->assertSee('data-demo-password="Demo1234!"', false)
+            ->assertSee('js/demo-login.js', false)
             ->assertSee('Der Demo-Modus blockiert externen Mailversand');
     }
 
