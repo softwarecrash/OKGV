@@ -2,6 +2,17 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.77] - 2026-06-16
+
+### Login-Hinweis entfernt
+
+- Der Hinweis `Nur auf einem persönlichen Gerät verwenden.` unter der
+  Angemeldet-bleiben-Option wurde entfernt.
+- Die Login- und Projektbasis-Tests bestehen weiterhin mit 17 Tests und
+  71 Assertions.
+- Entwicklungsstand auf `0.2.0.77` erhöht.
+- Entwicklungsstand `0.2.0.77` auf GitHub veröffentlicht.
+
 ## [0.2.0.76] - 2026-06-16
 
 ### Demo-Login weiter reduziert

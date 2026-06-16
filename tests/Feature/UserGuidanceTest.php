@@ -20,7 +20,7 @@ class UserGuidanceTest extends TestCase
             ->assertSee('aria-label="Passwort anzeigen"', false)
             ->assertDontSee('Verwende die E-Mail-Adresse, die deinem OKGV-Konto zugeordnet ist.')
             ->assertDontSee('Das Passwort wird verdeckt eingegeben und nicht im Klartext gespeichert.')
-            ->assertSee('Nur auf einem persönlichen Gerät verwenden.');
+            ->assertDontSee('Nur auf einem persönlichen Gerät verwenden.');
     }
 
     public function test_layout_offers_the_configured_source_code_for_agpl_compliance(): void

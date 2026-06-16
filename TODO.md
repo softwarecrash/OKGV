@@ -789,3 +789,8 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 - [x] Passwort-vergessen-Link im Demo-Modus ausblenden
 - [x] Änderung prüfen und veröffentlichen
+
+## Nachbesserung Phase 0: Login-Hinweis entfernen
+
+- [x] Hinweis unter Angemeldet-bleiben-Option entfernen
+- [x] Änderung prüfen und veröffentlichen

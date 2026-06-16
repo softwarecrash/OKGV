@@ -98,7 +98,6 @@
                                     <label class="form-check-label" for="remember">
                                         {{ __('Remember Me') }}
                                     </label>
-                                    <div class="form-text">Nur auf einem persönlichen Gerät verwenden.</div>
                                 </div>
                             </div>
                         </div>
