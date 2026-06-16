@@ -114,6 +114,10 @@ lokal ausführen und anschließend `public/build` per Dateimanager hochladen.
 Das Laravel Toolkit erzeugt `public/build` nicht automatisch. Der
 Frontend-Build muss in Plesk ausdrücklich ausgeführt werden.
 
+Wichtig: Node.js ist bei OKGV nur ein Build-Werkzeug. Die Domain darf nicht
+dauerhaft als Node.js-Anwendung laufen, sonst sucht Plesk nach einer
+`app.js` und Laravel startet nicht.
+
 Im Plesk-Bereich `Node.js`:
 
 ```text
@@ -128,6 +132,8 @@ Danach:
 1. `npm-Installation` ausführen.
 2. `Skript ausführen` öffnen.
 3. Als Skriptname `build` eintragen.
+4. Prüfen, ob `public/build/manifest.json` erzeugt wurde.
+5. Node.js für die Domain wieder deaktivieren.
 
 Nicht `vite build` direkt eintragen. Das Projekt definiert in `package.json`:
 
@@ -160,6 +166,25 @@ php artisan optimize
 
 Falls Plesk dort `npm` nicht findet, den Build über den Node.js-Bereich
 ausführen oder lokal erzeugen und `public/build` hochladen.
+
+### Kurzablauf nach frischem Plesk-Setup
+
+1. Domain-Document-Root auf `/demo.okgv.de/public` setzen.
+2. Node.js kurz aktivieren, nur um `npm-Installation` und das Skript `build`
+   auszuführen.
+3. Prüfen:
+
+```bash
+ls -la public/build/manifest.json
+```
+
+4. Node.js wieder deaktivieren.
+5. Laravel über PHP/Laravel Toolkit betreiben.
+
+Wenn nach dem Deaktivieren von Node.js der Fehler `Vite manifest not found`
+erscheint, fehlt nur der Frontend-Build. Wenn stattdessen eine
+Passenger-Seite erscheint und Plesk `app.js` sucht, ist Node.js noch als
+Anwendungsserver aktiv.
 
 ## Typische Fehler
 
@@ -200,6 +225,12 @@ npm run build
 
 Oder lokal bauen und den Ordner `public/build` nach
 `/demo.okgv.de/public/build` hochladen.
+
+### Passenger sucht `app.js`
+
+Plesk behandelt die Domain noch als Node.js-Anwendung. OKGV ist eine
+Laravel/PHP-Anwendung. Node.js in Plesk deaktivieren und sicherstellen, dass
+der Domain-Dokumentenstamm auf `public` zeigt.
 
 ### Plesk-Defaultseite erscheint
 

@@ -751,3 +751,10 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] GitHub-Link mit kleinem GitHub-Logo ergänzen
 - [x] Optionalen Spenden-Link über `.env` konfigurieren
 - [x] Änderung prüfen und veröffentlichen
+
+## Nachbesserung Phase 20: Plesk Node.js Kurzablauf
+
+- [x] Node.js als reines Build-Werkzeug dokumentieren
+- [x] Deaktivieren von Node.js nach dem Build dokumentieren
+- [x] Passenger-Fehler bei aktivem Node.js erklären
+- [x] Dokumentation prüfen und veröffentlichen

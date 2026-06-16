@@ -2,6 +2,20 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.71] - 2026-06-16
+
+### Plesk Node.js Kurzablauf ergänzt
+
+- `PLESK_SETUP.md` beschreibt jetzt ausdrücklich, dass Node.js bei OKGV nur
+  für den Frontend-Build genutzt wird.
+- Der funktionierende Ablauf `Node.js aktivieren`, `npm-Installation`,
+  Skript `build`, Manifest prüfen und `Node.js deaktivieren` ist
+  dokumentiert.
+- Die typischen Fehler `Vite manifest not found` und Passenger sucht
+  `app.js` sind voneinander abgegrenzt.
+- Entwicklungsstand auf `0.2.0.71` erhöht.
+- Entwicklungsstand `0.2.0.71` auf GitHub veröffentlicht.
+
 ## [0.2.0.70] - 2026-06-16
 
 ### Footer um GitHub-Icon und Spendenlink erweitert
