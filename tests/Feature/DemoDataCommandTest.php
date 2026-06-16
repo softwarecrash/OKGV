@@ -83,6 +83,38 @@ class DemoDataCommandTest extends TestCase
         }
     }
 
+    public function test_demo_seed_uses_configured_login_emails_for_visible_demo_accounts(): void
+    {
+        config([
+            'demo.board_email' => 'vorstand.demo@demo.okgv.de',
+            'demo.tenant_email' => 'paechter1.demo@demo.okgv.de',
+        ]);
+
+        $this->artisan('okgv:demo-seed', ['--force' => true])->assertSuccessful();
+
+        foreach ([
+            'vorstand.demo@demo.okgv.de',
+            'paechter1.demo@demo.okgv.de',
+            'paechter2.demo@okgv.test',
+            'paechter3.demo@okgv.test',
+            'paechter4.demo@okgv.test',
+        ] as $email) {
+            $this->post(route('login'), [
+                'email' => $email,
+                'password' => 'Demo1234!',
+            ])->assertRedirect('/dashboard');
+
+            $this->assertAuthenticatedAs(User::query()->where('email', $email)->firstOrFail());
+            $this->post(route('logout'))->assertRedirect('/');
+            $this->assertGuest();
+        }
+
+        $this->artisan('okgv:demo-purge', ['--force' => true])->assertSuccessful();
+
+        $this->assertDatabaseMissing('users', ['email' => 'vorstand.demo@demo.okgv.de']);
+        $this->assertDatabaseMissing('users', ['email' => 'paechter1.demo@demo.okgv.de']);
+    }
+
     public function test_demo_seed_rejects_overlapping_real_billing_period(): void
     {
         BillingPeriod::factory()->create([

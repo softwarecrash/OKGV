@@ -12,6 +12,8 @@ return [
         ? is_string($password) && trim($password) !== ''
         : (bool) $explicitMode,
     'password' => $password,
+    'board_email' => env('OKGV_DEMO_BOARD_EMAIL', 'vorstand.demo@okgv.test'),
+    'tenant_email' => env('OKGV_DEMO_TENANT_EMAIL', 'paechter1.demo@okgv.test'),
     'accounts' => [
         [
             'label' => 'Administrator',

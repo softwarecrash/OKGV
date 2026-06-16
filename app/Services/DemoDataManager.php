@@ -52,11 +52,11 @@ final class DemoDataManager
         return DB::transaction(function () use ($password): array {
             $now = now();
             $accounts = [
-                ['Vorstand', 'Demo', 'vorstand', UserRole::Board],
-                ['Anna', 'Apfelbaum', 'paechter1', UserRole::Tenant],
-                ['Bernd', 'Bienenstock', 'paechter2', UserRole::Tenant],
-                ['Clara', 'Gartenweg', 'paechter3', UserRole::Tenant],
-                ['Daniel', 'Sonnenblume', 'paechter4', UserRole::Tenant],
+                ['Vorstand', 'Demo', $this->demoEmail('board_email', 'vorstand'), UserRole::Board],
+                ['Anna', 'Apfelbaum', $this->demoEmail('tenant_email', 'paechter1'), UserRole::Tenant],
+                ['Bernd', 'Bienenstock', 'paechter2'.self::EMAIL_SUFFIX, UserRole::Tenant],
+                ['Clara', 'Gartenweg', 'paechter3'.self::EMAIL_SUFFIX, UserRole::Tenant],
+                ['Daniel', 'Sonnenblume', 'paechter4'.self::EMAIL_SUFFIX, UserRole::Tenant],
             ];
             $members = [];
             $parcels = [];
@@ -69,8 +69,7 @@ final class DemoDataManager
                 [395, 330, 180, 210],
             ];
 
-            foreach ($accounts as $index => [$firstName, $lastName, $login, $role]) {
-                $email = "{$login}".self::EMAIL_SUFFIX;
+            foreach ($accounts as $index => [$firstName, $lastName, $email, $role]) {
                 $userId = DB::table('users')->insertGetId([
                     'name' => "{$firstName} {$lastName}",
                     'email' => $email,
@@ -162,6 +161,13 @@ final class DemoDataManager
             $memberIds = DB::table('members')
                 ->where('member_number', 'like', self::MEMBER_PREFIX.'%')
                 ->pluck('id');
+            $userIds = $userIds
+                ->merge(DB::table('members')
+                    ->where('member_number', 'like', self::MEMBER_PREFIX.'%')
+                    ->whereNotNull('user_id')
+                    ->pluck('user_id'))
+                ->unique()
+                ->values();
             $parcelIds = DB::table('parcels')
                 ->where('parcel_number', 'like', self::PARCEL_PREFIX.'%')
                 ->pluck('id');
@@ -284,6 +290,9 @@ final class DemoDataManager
             DB::table('sessions')->whereIn('user_id', $userIds)->delete();
             DB::table('password_reset_tokens')
                 ->where('email', 'like', '%'.self::EMAIL_SUFFIX)
+                ->orWhereIn('email', DB::table('users')
+                    ->select('email')
+                    ->whereIn('id', $userIds))
                 ->delete();
             DB::table('audit_logs')->whereIn('user_id', $userIds)->delete();
             DB::table('users')->whereIn('id', $userIds)->delete();
@@ -304,6 +313,17 @@ final class DemoDataManager
         }
 
         return $counts;
+    }
+
+    private function demoEmail(string $configKey, string $fallbackLogin): string
+    {
+        $configuredEmail = config("demo.{$configKey}");
+
+        if (is_string($configuredEmail) && trim($configuredEmail) !== '') {
+            return trim($configuredEmail);
+        }
+
+        return $fallbackLogin.self::EMAIL_SUFFIX;
     }
 
     /**

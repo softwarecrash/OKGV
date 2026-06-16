@@ -2,6 +2,18 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.78] - 2026-06-16
+
+### Demo-Mailadressen synchronisiert
+
+- Der Demo-Seed erzeugt Vorstand und den angezeigten Pächterzugang jetzt mit
+  den konfigurierten Adressen `OKGV_DEMO_BOARD_EMAIL` und
+  `OKGV_DEMO_TENANT_EMAIL`.
+- Der Demo-Purge entfernt auch konfigurierte Demo-Benutzer zuverlässig.
+- Demo- und Login-Tests bestehen mit 12 Tests und 161 Assertions.
+- Entwicklungsstand `0.2.0.78` auf GitHub veröffentlicht.
+- Entwicklungsstand auf `0.2.0.78` erhöht.
+
 ## [0.2.0.77] - 2026-06-16
 
 ### Login-Hinweis entfernt

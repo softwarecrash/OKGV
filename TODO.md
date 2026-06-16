@@ -794,3 +794,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 - [x] Hinweis unter Angemeldet-bleiben-Option entfernen
 - [x] Änderung prüfen und veröffentlichen
+
+## Nachbesserung Phase 0: Demo-Mailadressen synchronisieren
+
+- [x] Demo-Seed nutzt konfigurierte Vorstand- und Pächter-Mailadressen
+- [x] Demo-Purge entfernt konfigurierte Demo-Benutzer zuverlässig
+- [x] Änderung prüfen und veröffentlichen
