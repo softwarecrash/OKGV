@@ -69,7 +69,9 @@ class UserGuidanceTest extends TestCase
             ->assertSee('data-demo-email="paechter1.demo@okgv.test"', false)
             ->assertSee('data-demo-password="Demo1234!"', false)
             ->assertSee('js/demo-login.js', false)
-            ->assertSee('Der Demo-Modus blockiert externen Mailversand');
+            ->assertDontSee('Der Demo-Modus blockiert externen Mailversand')
+            ->assertDontSee('Noch kein Pächterkonto?')
+            ->assertDontSee('Zugang mit Parzellennummer beantragen');
     }
 
     public function test_master_data_forms_explain_history_and_visibility(): void

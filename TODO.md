@@ -778,3 +778,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 - [x] GitHub-Icon im Footer an Textgrundlinie ausrichten
 - [x] Änderung prüfen und veröffentlichen
+
+## Nachbesserung Phase 0: Demo-Login aufräumen
+
+- [x] Technischen Mailversand-Hinweis aus Demo-Login entfernen
+- [x] Pächterregistrierungslink im Demo-Modus ausblenden
+- [x] Änderung prüfen und veröffentlichen

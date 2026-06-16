@@ -2,6 +2,18 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.75] - 2026-06-16
+
+### Demo-Login aufgeräumt
+
+- Der technische Hinweis zum blockierten Mailversand wird in der
+  Demo-Loginmaske nicht mehr angezeigt.
+- Der Link zur Pächterregistrierung wird im Demo-Modus ausgeblendet.
+- Die Login- und Projektbasis-Tests bestehen weiterhin mit 17 Tests und
+  70 Assertions.
+- Entwicklungsstand auf `0.2.0.75` erhöht.
+- Entwicklungsstand `0.2.0.75` auf GitHub veröffentlicht.
+
 ## [0.2.0.74] - 2026-06-16
 
 ### Footer-Ausrichtung korrigiert

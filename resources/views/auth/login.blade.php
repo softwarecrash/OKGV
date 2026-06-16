@@ -32,9 +32,6 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="small mt-3">
-                        Der Demo-Modus blockiert externen Mailversand und schützt die SMTP-Konfiguration.
-                    </div>
                 </div>
             @endif
 
@@ -120,13 +117,15 @@
                             </div>
                         </div>
                     </form>
-                    <hr>
-                    <p class="mb-0 text-center">
-                        Noch kein Pächterkonto?
-                        @if (App\Enums\FeatureModule::TenantPortal->enabled())
-                            <a href="{{ route('tenant-registration.create') }}">Zugang mit Parzellennummer beantragen</a>
-                        @endif
-                    </p>
+                    @unless (config('demo.enabled'))
+                        <hr>
+                        <p class="mb-0 text-center">
+                            Noch kein Pächterkonto?
+                            @if (App\Enums\FeatureModule::TenantPortal->enabled())
+                                <a href="{{ route('tenant-registration.create') }}">Zugang mit Parzellennummer beantragen</a>
+                            @endif
+                        </p>
+                    @endunless
                 </div>
             </div>
         </div>
