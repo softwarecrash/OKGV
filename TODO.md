@@ -773,3 +773,8 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Demo-Ausfüllhilfe als externe Login-JavaScript-Datei bereitstellen
 - [x] Demo-Ausfüllhilfe unabhängig vom Vite-Bundle laden
 - [x] Tests, Build und Veröffentlichung abschließen
+
+## Nachbesserung Phase 0: Footer-Ausrichtung
+
+- [x] GitHub-Icon im Footer an Textgrundlinie ausrichten
+- [x] Änderung prüfen und veröffentlichen
