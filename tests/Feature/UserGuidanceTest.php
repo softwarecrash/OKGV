@@ -71,7 +71,8 @@ class UserGuidanceTest extends TestCase
             ->assertSee('js/demo-login.js', false)
             ->assertDontSee('Der Demo-Modus blockiert externen Mailversand')
             ->assertDontSee('Noch kein Pächterkonto?')
-            ->assertDontSee('Zugang mit Parzellennummer beantragen');
+            ->assertDontSee('Zugang mit Parzellennummer beantragen')
+            ->assertDontSee('Passwort vergessen');
     }
 
     public function test_master_data_forms_explain_history_and_visibility(): void

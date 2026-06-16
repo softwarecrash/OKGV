@@ -2,6 +2,16 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.76] - 2026-06-16
+
+### Demo-Login weiter reduziert
+
+- Der Link `Passwort vergessen?` wird im Demo-Modus nicht mehr angezeigt.
+- Die Login- und Projektbasis-Tests bestehen weiterhin mit 17 Tests und
+  71 Assertions.
+- Entwicklungsstand auf `0.2.0.76` erhöht.
+- Entwicklungsstand `0.2.0.76` auf GitHub veröffentlicht.
+
 ## [0.2.0.75] - 2026-06-16
 
 ### Demo-Login aufgeräumt
