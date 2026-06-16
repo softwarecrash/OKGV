@@ -56,6 +56,8 @@ return [
 
     'source_url' => env('APP_SOURCE_URL', 'https://github.com/softwarecrash/OKGV'),
 
+    'donation_url' => env('APP_DONATION_URL'),
+
     'version' => trim((string) file_get_contents(base_path('VERSION'))),
 
     /*

@@ -745,3 +745,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Aktuelle Versionsnummer im System-Footer anzeigen
 - [x] Quellcode-Link als GitHub-Link in neuem Tab öffnen
 - [x] Änderung prüfen und veröffentlichen
+
+## Nachbesserung Phase 0: Footer-Spendenlink
+
+- [x] GitHub-Link mit kleinem GitHub-Logo ergänzen
+- [x] Optionalen Spenden-Link über `.env` konfigurieren
+- [x] Änderung prüfen und veröffentlichen

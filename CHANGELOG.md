@@ -2,6 +2,18 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.70] - 2026-06-16
+
+### Footer um GitHub-Icon und Spendenlink erweitert
+
+- Der GitHub-Link im System-Footer zeigt jetzt ein kleines GitHub-Logo.
+- Über `APP_DONATION_URL` kann optional ein Spenden-Link im Footer angezeigt
+  werden.
+- Bleibt `APP_DONATION_URL` leer, wird kein Spenden-Link ausgegeben.
+- Der Projektbasis-Test besteht weiterhin mit 9 Tests und 25 Assertions.
+- Entwicklungsstand auf `0.2.0.70` erhöht.
+- Entwicklungsstand `0.2.0.70` auf GitHub veröffentlicht.
+
 ## [0.2.0.69] - 2026-06-15
 
 ### System-Footer ergänzt
