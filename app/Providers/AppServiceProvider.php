@@ -100,6 +100,10 @@ class AppServiceProvider extends ServiceProvider
     {
         app(ModuleManager::class)->ensureValidConfiguration();
 
+        if (config('demo.enabled')) {
+            config(['mail.default' => 'log']);
+        }
+
         Paginator::useBootstrapFive();
 
         RateLimiter::for('smtp-tests', function ($request): Limit {

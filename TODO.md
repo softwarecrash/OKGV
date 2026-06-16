@@ -758,3 +758,12 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Deaktivieren von Node.js nach dem Build dokumentieren
 - [x] Passenger-Fehler bei aktivem Node.js erklären
 - [x] Dokumentation prüfen und veröffentlichen
+
+## Nachbesserung Phase 0: Demo-Modus absichern
+
+- [x] OKGV-Favicon im Layout einbinden
+- [x] Demo-Modus über `.env` konfigurierbar machen
+- [x] Demo-Zugangsdaten im Login anklickbar anzeigen
+- [x] SMTP-Konfiguration und Testmails im Demo-Modus sperren
+- [x] Mailversand im Demo-Modus serverseitig blockieren
+- [x] Tests, Build und Veröffentlichung abschließen

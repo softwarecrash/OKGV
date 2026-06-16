@@ -4,6 +4,40 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            @php
+                $demoAccounts = collect(config('demo.accounts', []))
+                    ->filter(fn (array $account): bool => filled($account['email'] ?? null) && filled($account['password'] ?? null))
+                    ->values();
+            @endphp
+
+            @if (config('demo.enabled') && $demoAccounts->isNotEmpty())
+                <div class="alert alert-info shadow-sm">
+                    <h2 class="h5">Demo-Zugangsdaten</h2>
+                    <p class="mb-3">
+                        Diese Installation läuft im Demo-Modus. Wähle einen Zugang aus,
+                        um E-Mail-Adresse und Passwort automatisch einzutragen.
+                    </p>
+                    <div class="row g-2">
+                        @foreach ($demoAccounts as $account)
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-primary w-100 h-100 text-start"
+                                        type="button"
+                                        data-demo-login
+                                        data-demo-email="{{ $account['email'] }}"
+                                        data-demo-password="{{ $account['password'] }}">
+                                    <strong>{{ $account['label'] }}</strong><br>
+                                    <span class="small">{{ $account['email'] }}</span><br>
+                                    <span class="small text-secondary">{{ $account['description'] }}</span>
+                                </button>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="small mt-3">
+                        Der Demo-Modus blockiert externen Mailversand und schützt die SMTP-Konfiguration.
+                    </div>
+                </div>
+            @endif
+
             <div class="card">
                 <div class="card-header">Bei {{ config('app.name', 'OKGV') }} anmelden</div>
 

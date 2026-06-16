@@ -10,6 +10,12 @@ final class CommunicationMailConfigurator
 {
     public function apply(): CommunicationSetting
     {
+        if (config('demo.enabled')) {
+            throw ValidationException::withMessages([
+                'smtp_enabled' => 'Der Mailversand ist im Demo-Modus deaktiviert.',
+            ]);
+        }
+
         $settings = CommunicationSetting::current();
 
         if (! $settings->smtp_enabled) {

@@ -9,6 +9,8 @@
 
     <title>{{ config('app.name', 'OKGV') }}</title>
 
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+
     <script src="{{ asset('js/theme-init.js') }}"></script>
 
     <!-- Fonts -->

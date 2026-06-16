@@ -19,6 +19,14 @@ class CommunicationSettingController extends Controller
 
     public function update(CommunicationSettingRequest $request): RedirectResponse
     {
+        if (config('demo.enabled')) {
+            return redirect()
+                ->route('application-settings.edit', ['section' => 'smtp'])
+                ->withErrors([
+                    'smtp_enabled' => 'SMTP-Einstellungen sind im Demo-Modus gesperrt.',
+                ]);
+        }
+
         $settings = CommunicationSetting::current();
         $data = $request->validated();
         $clearCredentials = $data['clear_credentials'];
@@ -56,6 +64,14 @@ class CommunicationSettingController extends Controller
 
     public function test(SmtpTestRequest $request): RedirectResponse
     {
+        if (config('demo.enabled')) {
+            return redirect()
+                ->route('application-settings.edit', ['section' => 'smtp'])
+                ->withErrors([
+                    'test_email' => 'Testmails sind im Demo-Modus deaktiviert.',
+                ]);
+        }
+
         $this->configurator->apply();
         $recipient = $request->validated('test_email');
 

@@ -113,6 +113,50 @@ class CommunicationWorkflowTest extends TestCase
         Mail::assertSent(SmtpTestMessage::class, 1);
     }
 
+    public function test_demo_mode_blocks_smtp_settings_and_test_mails(): void
+    {
+        Mail::fake();
+        config(['demo.enabled' => true]);
+        $administrator = User::factory()->administrator()->create();
+
+        $this->actingAs($administrator)
+            ->get(route('application-settings.edit', ['section' => 'smtp']))
+            ->assertOk()
+            ->assertSee('Diese Installation läuft im Demo-Modus')
+            ->assertSee('SMTP-Einstellungen speichern')
+            ->assertSee('disabled', false);
+
+        $this->actingAs($administrator)
+            ->put(route('communication-settings.update'), [
+                'smtp_enabled' => true,
+                'smtp_scheme' => 'smtp',
+                'smtp_host' => 'smtp.example.test',
+                'smtp_port' => 587,
+                'smtp_username' => 'mailer@example.test',
+                'smtp_password' => 'VerySecretPassword',
+                'clear_credentials' => false,
+                'from_address' => 'verein@example.test',
+                'from_name' => 'KGV Test',
+            ])
+            ->assertRedirect(route('application-settings.edit', ['section' => 'smtp']))
+            ->assertSessionHasErrors([
+                'smtp_enabled' => 'SMTP-Einstellungen sind im Demo-Modus gesperrt.',
+            ]);
+
+        $this->assertFalse(CommunicationSetting::current()->smtp_enabled);
+
+        $this->actingAs($administrator)
+            ->post(route('communication-settings.test'), [
+                'test_email' => 'extern@example.test',
+            ])
+            ->assertRedirect(route('application-settings.edit', ['section' => 'smtp']))
+            ->assertSessionHasErrors([
+                'test_email' => 'Testmails sind im Demo-Modus deaktiviert.',
+            ]);
+
+        Mail::assertNothingSent();
+    }
+
     public function test_smtp_test_rate_limit_returns_to_form_with_german_message(): void
     {
         Mail::fake();

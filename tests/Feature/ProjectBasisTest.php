@@ -47,6 +47,13 @@ class ProjectBasisTest extends TestCase
             ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     }
 
+    public function test_layout_uses_okgv_favicon(): void
+    {
+        $this->get('/login')
+            ->assertOk()
+            ->assertSee('href="http://localhost/favicon.svg"', false);
+    }
+
     public function test_trusted_reverse_proxy_preserves_https_urls(): void
     {
         config()->set('trustedproxy.proxies', '192.0.2.10');

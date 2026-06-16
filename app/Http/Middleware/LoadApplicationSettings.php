@@ -29,7 +29,8 @@ class LoadApplicationSettings
             }
         }
 
-        if (Schema::hasTable('communication_settings')
+        if (! config('demo.enabled')
+            && Schema::hasTable('communication_settings')
             && CommunicationSetting::query()->where('smtp_enabled', true)->exists()) {
             $this->mailConfigurator->apply();
         }

@@ -286,10 +286,17 @@
         <h2 class="h4 mb-1">SMTP-Einstellungen</h2>
         <p class="text-secondary mb-3">Mailserver für Kontobestätigungen und Serienmails konfigurieren.</p>
 
-        <div class="alert alert-warning">
-            Die Zugangsdaten werden verschlüsselt gespeichert. Das Passwort wird nicht angezeigt
-            und bleibt unverändert, wenn das Passwortfeld leer ist.
-        </div>
+        @if (config('demo.enabled'))
+            <div class="alert alert-info">
+                Diese Installation läuft im Demo-Modus. SMTP-Einstellungen und Testmails sind gesperrt,
+                damit öffentlich zugängliche Testkonten keinen Mailversand auslösen können.
+            </div>
+        @else
+            <div class="alert alert-warning">
+                Die Zugangsdaten werden verschlüsselt gespeichert. Das Passwort wird nicht angezeigt
+                und bleibt unverändert, wenn das Passwortfeld leer ist.
+            </div>
+        @endif
 
         <form method="POST" action="{{ route('communication-settings.update') }}" class="card border-0 shadow-sm">
             @csrf
@@ -298,7 +305,8 @@
                 <input type="hidden" name="smtp_enabled" value="0">
                 <div class="form-check form-switch mb-4">
                     <input class="form-check-input" type="checkbox" id="smtp_enabled" name="smtp_enabled" value="1"
-                           @checked(old('smtp_enabled', $communicationSettings->smtp_enabled))>
+                           @checked(old('smtp_enabled', $communicationSettings->smtp_enabled))
+                           @disabled(config('demo.enabled'))>
                     <label class="form-check-label" for="smtp_enabled">SMTP-Versand aktivieren</label>
                 </div>
 
@@ -306,16 +314,19 @@
                     <div class="col-lg-6">
                         <label class="form-label" for="smtp_host">SMTP-Server</label>
                         <input class="form-control" id="smtp_host" name="smtp_host" required maxlength="255"
-                               value="{{ old('smtp_host', $communicationSettings->smtp_host) }}" placeholder="smtp.example.de">
+                               value="{{ old('smtp_host', $communicationSettings->smtp_host) }}" placeholder="smtp.example.de"
+                               @disabled(config('demo.enabled'))>
                     </div>
                     <div class="col-lg-3">
                         <label class="form-label" for="smtp_port">Port</label>
                         <input class="form-control" id="smtp_port" name="smtp_port" type="number" min="1" max="65535" required
-                               value="{{ old('smtp_port', $communicationSettings->smtp_port) }}">
+                               value="{{ old('smtp_port', $communicationSettings->smtp_port) }}"
+                               @disabled(config('demo.enabled'))>
                     </div>
                     <div class="col-lg-3">
                         <label class="form-label" for="smtp_scheme">Verbindung</label>
-                        <select class="form-select" id="smtp_scheme" name="smtp_scheme" required>
+                        <select class="form-select" id="smtp_scheme" name="smtp_scheme" required
+                                @disabled(config('demo.enabled'))>
                             <option value="smtp" @selected(old('smtp_scheme', $communicationSettings->smtp_scheme) === 'smtp')>SMTP / STARTTLS</option>
                             <option value="smtps" @selected(old('smtp_scheme', $communicationSettings->smtp_scheme) === 'smtps')>SMTPS</option>
                         </select>
@@ -323,36 +334,41 @@
                     <div class="col-lg-6">
                         <label class="form-label" for="smtp_username">Benutzername</label>
                         <input class="form-control" id="smtp_username" name="smtp_username" maxlength="255"
-                               value="{{ old('smtp_username', $communicationSettings->smtp_username) }}" autocomplete="username">
+                               value="{{ old('smtp_username', $communicationSettings->smtp_username) }}" autocomplete="username"
+                               @disabled(config('demo.enabled'))>
                     </div>
                     <div class="col-lg-6">
                         <label class="form-label" for="smtp_password">Passwort</label>
                         <input class="form-control" id="smtp_password" name="smtp_password" type="password" maxlength="255"
-                               autocomplete="new-password">
+                               autocomplete="new-password"
+                               @disabled(config('demo.enabled'))>
                         <div class="form-text">Leer lassen, um das vorhandene Passwort beizubehalten.</div>
                     </div>
                     <div class="col-lg-6">
                         <label class="form-label" for="from_address">Absenderadresse</label>
                         <input class="form-control" id="from_address" name="from_address" type="email" required maxlength="255"
-                               value="{{ old('from_address', $communicationSettings->from_address) }}">
+                               value="{{ old('from_address', $communicationSettings->from_address) }}"
+                               @disabled(config('demo.enabled'))>
                     </div>
                     <div class="col-lg-6">
                         <label class="form-label" for="from_name">Absendername</label>
                         <input class="form-control" id="from_name" name="from_name" required maxlength="255"
-                               value="{{ old('from_name', $communicationSettings->from_name) }}">
+                               value="{{ old('from_name', $communicationSettings->from_name) }}"
+                               @disabled(config('demo.enabled'))>
                     </div>
                 </div>
 
                 <input type="hidden" name="clear_credentials" value="0">
                 <div class="form-check mt-3">
-                    <input class="form-check-input" type="checkbox" id="clear_credentials" name="clear_credentials" value="1">
+                    <input class="form-check-input" type="checkbox" id="clear_credentials" name="clear_credentials" value="1"
+                           @disabled(config('demo.enabled'))>
                     <label class="form-check-label" for="clear_credentials">Gespeicherten Benutzernamen und Passwort entfernen</label>
                 </div>
 
                 <x-validation-errors />
             </div>
             <div class="card-footer bg-body border-0">
-                <button class="btn btn-primary">SMTP-Einstellungen speichern</button>
+                <button class="btn btn-primary" @disabled(config('demo.enabled'))>SMTP-Einstellungen speichern</button>
             </div>
         </form>
 
@@ -365,8 +381,9 @@
                     <input class="form-control @error('test_email') is-invalid @enderror"
                            id="test_email" name="test_email" type="email" required maxlength="255"
                            value="{{ old('test_email', auth()->user()->email) }}"
-                           placeholder="empfaenger@example.de">
-                    <button class="btn btn-outline-primary">Testmail senden</button>
+                           placeholder="empfaenger@example.de"
+                           @disabled(config('demo.enabled'))>
+                    <button class="btn btn-outline-primary" @disabled(config('demo.enabled'))>Testmail senden</button>
                     @error('test_email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
                 <div class="form-text">

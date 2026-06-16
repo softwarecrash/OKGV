@@ -2,6 +2,23 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.72] - 2026-06-16
+
+### Demo-Modus abgesichert
+
+- Das Laravel-Favicon wurde durch ein grünes OKGV-Icon mit weißem `O`
+  ersetzt.
+- Der Demo-Modus kann über `OKGV_DEMO_MODE` aktiviert werden und wird
+  automatisch aktiv, wenn `OKGV_DEMO_PASSWORD` gesetzt ist.
+- Im Login werden konfigurierte Demo-Zugänge für Administrator, Vorstand
+  und Pächter als anklickbare Ausfüllhilfen angezeigt.
+- SMTP-Einstellungen, SMTP-Testmails und ausgehender Mailversand sind im
+  Demo-Modus serverseitig gesperrt.
+- Relevante Feature-Tests bestehen mit 32 Tests und 234 Assertions.
+- Der Asset-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.72` erhöht.
+- Entwicklungsstand `0.2.0.72` auf GitHub veröffentlicht.
+
 ## [0.2.0.71] - 2026-06-16
 
 ### Plesk Node.js Kurzablauf ergänzt

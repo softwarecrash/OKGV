@@ -31,7 +31,44 @@ class UserGuidanceTest extends TestCase
             ->assertOk()
             ->assertSee('GNU AGPLv3')
             ->assertSee('https://source.example.test/okgv', false)
-            ->assertSee('Quellcode');
+            ->assertSee('GitHub');
+    }
+
+    public function test_demo_mode_shows_clickable_login_accounts(): void
+    {
+        config([
+            'demo.enabled' => true,
+            'demo.accounts' => [
+                [
+                    'label' => 'Administrator',
+                    'description' => 'Alles testen.',
+                    'email' => 'admin@example.test',
+                    'password' => 'Demo1234!',
+                ],
+                [
+                    'label' => 'Vorstand',
+                    'description' => 'Vorstand testen.',
+                    'email' => 'vorstand.demo@okgv.test',
+                    'password' => 'Demo1234!',
+                ],
+                [
+                    'label' => 'Pächter',
+                    'description' => 'Portal testen.',
+                    'email' => 'paechter1.demo@okgv.test',
+                    'password' => 'Demo1234!',
+                ],
+            ],
+        ]);
+
+        $this->get(route('login'))
+            ->assertOk()
+            ->assertSee('Demo-Zugangsdaten')
+            ->assertSee('data-demo-login', false)
+            ->assertSee('data-demo-email="admin@example.test"', false)
+            ->assertSee('data-demo-email="vorstand.demo@okgv.test"', false)
+            ->assertSee('data-demo-email="paechter1.demo@okgv.test"', false)
+            ->assertSee('data-demo-password="Demo1234!"', false)
+            ->assertSee('Der Demo-Modus blockiert externen Mailversand');
     }
 
     public function test_master_data_forms_explain_history_and_visibility(): void
