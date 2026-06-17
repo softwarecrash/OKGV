@@ -99,6 +99,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 ## Projektweite Standards
 
+- [x] Mail-Beispieldaten in `.env.example` auskommentiert dokumentieren
+- [x] Verbindliche Mailkonfiguration aus `.env` im Webinterface sperren
+- [x] Entwicklungsstand 0.2.0.86 vorbereiten
 - [x] Sendmail als Mailversand für Webhosting ergänzen
 - [x] Plesk-Hinweise für Sendmail dokumentieren
 - [x] Entwicklungsstand 0.2.0.85 vorbereiten

@@ -144,6 +144,64 @@ class CommunicationWorkflowTest extends TestCase
             ->assertSee('/usr/sbin/sendmail -t -i');
     }
 
+    public function test_env_managed_mail_settings_are_read_only_in_ui(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        config([
+            'mail.default' => 'smtp',
+            'mail.okgv.managed_by_env' => true,
+            'mail.mailers.smtp.scheme' => 'smtps',
+            'mail.mailers.smtp.host' => 'smtp.env.example',
+            'mail.mailers.smtp.port' => 465,
+            'mail.mailers.smtp.username' => 'env-mailer@example.test',
+            'mail.mailers.smtp.password' => 'EnvSecretPassword',
+            'mail.from.address' => 'env-from@example.test',
+            'mail.from.name' => 'Env OKGV',
+        ]);
+
+        app(CommunicationMailConfigurator::class)->apply();
+        $mailerConfig = config('mail.mailers.okgv_smtp');
+
+        $this->assertSame('smtp', $mailerConfig['transport']);
+        $this->assertSame('smtps', $mailerConfig['scheme']);
+        $this->assertSame('smtp.env.example', $mailerConfig['host']);
+        $this->assertSame(465, $mailerConfig['port']);
+        $this->assertSame('env-mailer@example.test', $mailerConfig['username']);
+        $this->assertSame('EnvSecretPassword', $mailerConfig['password']);
+
+        $this->actingAs($administrator)
+            ->get(route('application-settings.edit', ['section' => 'smtp']))
+            ->assertOk()
+            ->assertSee('Der Mailversand wird durch die')
+            ->assertSee('smtp.env.example')
+            ->assertSee('env-mailer@example.test')
+            ->assertSee('Env OKGV')
+            ->assertSee('disabled', false)
+            ->assertDontSee('EnvSecretPassword');
+
+        $this->actingAs($administrator)
+            ->put(route('communication-settings.update'), [
+                'smtp_enabled' => true,
+                'mailer_transport' => 'smtp',
+                'smtp_scheme' => 'smtp',
+                'smtp_host' => 'changed.example.test',
+                'smtp_port' => 587,
+                'smtp_username' => null,
+                'smtp_password' => null,
+                'clear_credentials' => false,
+                'from_address' => 'changed@example.test',
+                'from_name' => 'Changed',
+            ])
+            ->assertRedirect(route('application-settings.edit', ['section' => 'smtp']))
+            ->assertSessionHasErrors([
+                'smtp_enabled' => 'Der Mailversand wird durch die .env-Datei verwaltet und kann hier nicht geändert werden.',
+            ]);
+
+        $this->assertDatabaseMissing('communication_settings', [
+            'smtp_host' => 'changed.example.test',
+        ]);
+    }
+
     public function test_administrator_can_send_smtp_test_to_custom_validated_address(): void
     {
         Mail::fake();

@@ -27,6 +27,14 @@ class CommunicationSettingController extends Controller
                 ]);
         }
 
+        if (config('mail.okgv.managed_by_env')) {
+            return redirect()
+                ->route('application-settings.edit', ['section' => 'smtp'])
+                ->withErrors([
+                    'smtp_enabled' => 'Der Mailversand wird durch die .env-Datei verwaltet und kann hier nicht geändert werden.',
+                ]);
+        }
+
         $settings = CommunicationSetting::current();
         $data = $request->validated();
         $clearCredentials = $data['clear_credentials'];

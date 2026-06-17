@@ -282,6 +282,8 @@
         </div>
     </form>
 
+    @php($mailSettingsLocked = config('demo.enabled') || config('mail.okgv.managed_by_env'))
+
     <section class="mt-5" id="smtp">
         <h2 class="h4 mb-1">Mailversand</h2>
         <p class="text-secondary mb-3">Mailserver oder Sendmail für Kontobestätigungen und Serienmails konfigurieren.</p>
@@ -290,6 +292,11 @@
             <div class="alert alert-info">
                 Diese Installation läuft im Demo-Modus. Mailversand und Testmails sind gesperrt,
                 damit öffentlich zugängliche Testkonten keinen Mailversand auslösen können.
+            </div>
+        @elseif (config('mail.okgv.managed_by_env'))
+            <div class="alert alert-info">
+                Der Mailversand wird durch die <code>.env</code>-Datei verwaltet. Die Werte werden hier angezeigt,
+                können aber nicht im Webinterface geändert werden.
             </div>
         @else
             <div class="alert alert-warning">
@@ -306,7 +313,7 @@
                 <div class="form-check form-switch mb-4">
                     <input class="form-check-input" type="checkbox" id="smtp_enabled" name="smtp_enabled" value="1"
                            @checked(old('smtp_enabled', $communicationSettings->smtp_enabled))
-                           @disabled(config('demo.enabled'))>
+                           @disabled($mailSettingsLocked)>
                     <label class="form-check-label" for="smtp_enabled">Mailversand aktivieren</label>
                 </div>
 
@@ -314,7 +321,7 @@
                     <div class="col-lg-6">
                         <label class="form-label" for="mailer_transport">Versandart</label>
                         <select class="form-select" id="mailer_transport" name="mailer_transport" required
-                                @disabled(config('demo.enabled'))>
+                                @disabled($mailSettingsLocked)>
                             <option value="smtp" @selected(old('mailer_transport', $communicationSettings->mailer_transport) === 'smtp')>SMTP-Server</option>
                             <option value="sendmail" @selected(old('mailer_transport', $communicationSettings->mailer_transport) === 'sendmail')>Sendmail des Webhostings</option>
                         </select>
@@ -325,25 +332,25 @@
                         <input class="form-control" id="sendmail_path" name="sendmail_path" maxlength="255"
                                value="{{ old('sendmail_path', $communicationSettings->sendmail_path ?: config('mail.mailers.sendmail.path')) }}"
                                placeholder="/usr/sbin/sendmail -bs -i"
-                               @disabled(config('demo.enabled'))>
+                               @disabled($mailSettingsLocked)>
                         <div class="form-text">Nur bei Versandart Sendmail relevant. Der Standard passt auf vielen Linux-Hostings.</div>
                     </div>
                     <div class="col-lg-6">
                         <label class="form-label" for="smtp_host">SMTP-Server</label>
                         <input class="form-control" id="smtp_host" name="smtp_host" maxlength="255"
                                value="{{ old('smtp_host', $communicationSettings->smtp_host) }}" placeholder="smtp.example.de"
-                               @disabled(config('demo.enabled'))>
+                               @disabled($mailSettingsLocked)>
                     </div>
                     <div class="col-lg-3">
                         <label class="form-label" for="smtp_port">Port</label>
                         <input class="form-control" id="smtp_port" name="smtp_port" type="number" min="1" max="65535"
                                value="{{ old('smtp_port', $communicationSettings->smtp_port) }}"
-                               @disabled(config('demo.enabled'))>
+                               @disabled($mailSettingsLocked)>
                     </div>
                     <div class="col-lg-3">
                         <label class="form-label" for="smtp_scheme">Verbindung</label>
                         <select class="form-select" id="smtp_scheme" name="smtp_scheme" required
-                                @disabled(config('demo.enabled'))>
+                                @disabled($mailSettingsLocked)>
                             <option value="smtp" @selected(old('smtp_scheme', $communicationSettings->smtp_scheme) === 'smtp')>SMTP / STARTTLS</option>
                             <option value="smtps" @selected(old('smtp_scheme', $communicationSettings->smtp_scheme) === 'smtps')>SMTPS</option>
                             <option value="none" @selected(old('smtp_scheme', $communicationSettings->smtp_scheme) === 'none')>SMTP ohne Verschlüsselung</option>
@@ -354,40 +361,40 @@
                         <label class="form-label" for="smtp_username">Benutzername</label>
                         <input class="form-control" id="smtp_username" name="smtp_username" maxlength="255"
                                value="{{ old('smtp_username', $communicationSettings->smtp_username) }}" autocomplete="username"
-                               @disabled(config('demo.enabled'))>
+                               @disabled($mailSettingsLocked)>
                     </div>
                     <div class="col-lg-6">
                         <label class="form-label" for="smtp_password">Passwort</label>
                         <input class="form-control" id="smtp_password" name="smtp_password" type="password" maxlength="255"
                                autocomplete="new-password"
-                               @disabled(config('demo.enabled'))>
+                               @disabled($mailSettingsLocked)>
                         <div class="form-text">Leer lassen, um das vorhandene Passwort beizubehalten.</div>
                     </div>
                     <div class="col-lg-6">
                         <label class="form-label" for="from_address">Absenderadresse</label>
                         <input class="form-control" id="from_address" name="from_address" type="email" required maxlength="255"
                                value="{{ old('from_address', $communicationSettings->from_address) }}"
-                               @disabled(config('demo.enabled'))>
+                               @disabled($mailSettingsLocked)>
                     </div>
                     <div class="col-lg-6">
                         <label class="form-label" for="from_name">Absendername</label>
                         <input class="form-control" id="from_name" name="from_name" required maxlength="255"
                                value="{{ old('from_name', $communicationSettings->from_name) }}"
-                               @disabled(config('demo.enabled'))>
+                               @disabled($mailSettingsLocked)>
                     </div>
                 </div>
 
                 <input type="hidden" name="clear_credentials" value="0">
                 <div class="form-check mt-3">
                     <input class="form-check-input" type="checkbox" id="clear_credentials" name="clear_credentials" value="1"
-                           @disabled(config('demo.enabled'))>
+                           @disabled($mailSettingsLocked)>
                     <label class="form-check-label" for="clear_credentials">Gespeicherten Benutzernamen und Passwort entfernen</label>
                 </div>
 
                 <x-validation-errors />
             </div>
             <div class="card-footer bg-body border-0">
-                <button class="btn btn-primary" @disabled(config('demo.enabled'))>Mailversand speichern</button>
+                <button class="btn btn-primary" @disabled($mailSettingsLocked)>Mailversand speichern</button>
             </div>
         </form>
 

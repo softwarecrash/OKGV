@@ -728,8 +728,16 @@ bereitstellt. Testversand ist pro Benutzer auf zehn Nachrichten pro Minute
 begrenzt. Bei Überschreitung bleibt die Person auf der Konfigurationsseite
 und erhält eine verständliche deutsche Meldung. Eine
 erfolgreiche Testmeldung bestätigt ausdrücklich nur die Annahme durch den
-konfigurierten Mailtransport. Die vom Transport zurückgegebene Message-ID wird für die
-Nachverfolgung beim Mailanbieter auditiert.
+konfigurierten Mailtransport. Die vom Transport zurückgegebene Message-ID wird
+für die Nachverfolgung beim Mailanbieter auditiert.
+
+Wenn `MAIL_MAILER=smtp` oder `MAIL_MAILER=sendmail` aktiv in der `.env`
+gesetzt ist, gilt die Mailkonfiguration als serverseitig verwaltet. OKGV
+übernimmt dann Host, Port, Schema, Sendmail-Pfad, Zugangsdaten und
+Absenderdaten aus der `.env`, zeigt sie in der globalen Konfiguration nur
+schreibgeschützt an und blockiert Änderungen über das Webinterface. Sind diese
+Werte auskommentiert oder ist `MAIL_MAILER=log` aktiv, bleibt die
+Mailkonfiguration im Webinterface bearbeitbar.
 
 #### Serienmails
 

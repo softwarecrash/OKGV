@@ -116,6 +116,21 @@ bereit. Das ist auf Plesk oft die einfachere Variante, wenn `localhost` wegen
 TLS-Zertifikaten meckert oder für jede Subdomain kein eigener SMTP-Host
 konfiguriert werden soll.
 
+Wenn die Mailwerte in `.env` aktiv gesetzt werden, sind sie in OKGV
+verbindlich und im Webinterface nur lesbar. Das ist sinnvoll, wenn ein
+Hoster die Vorgaben zentral festlegt:
+
+```dotenv
+MAIL_MAILER=sendmail
+MAIL_SENDMAIL_PATH="/usr/sbin/sendmail -bs -i"
+MAIL_FROM_ADDRESS="noreply@deine-domain.example"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+Wer den Mailversand lieber in OKGV unter `Globale Konfiguration` pflegen
+möchte, lässt die `MAIL_*` Beispielwerte in `.env` auskommentiert oder nutzt
+`MAIL_MAILER=log`.
+
 In OKGV unter `Globale Konfiguration` -> `Mailversand`:
 
 ```text

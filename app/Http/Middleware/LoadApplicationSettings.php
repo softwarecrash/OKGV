@@ -22,16 +22,18 @@ class LoadApplicationSettings
             $systemName = ApplicationSetting::query()->value('system_name');
 
             if ($systemName) {
-                config([
-                    'app.name' => $systemName,
-                    'mail.from.name' => $systemName,
-                ]);
+                config(['app.name' => $systemName]);
+
+                if (! config('mail.okgv.managed_by_env')) {
+                    config(['mail.from.name' => $systemName]);
+                }
             }
         }
 
         if (! config('demo.enabled')
-            && Schema::hasTable('communication_settings')
-            && CommunicationSetting::query()->where('smtp_enabled', true)->exists()) {
+            && (config('mail.okgv.managed_by_env')
+                || (Schema::hasTable('communication_settings')
+                    && CommunicationSetting::query()->where('smtp_enabled', true)->exists()))) {
             $this->mailConfigurator->apply();
         }
 

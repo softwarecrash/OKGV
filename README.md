@@ -280,6 +280,13 @@ verwendet Laravel die Werte aus `.env`. Mit dem voreingestellten
 geschrieben. Sobald die verschlüsselte Mailkonfiguration aktiviert ist,
 verwenden Bestätigungsmails und Serienmails diese Einstellungen.
 
+Alternativ kann der Mailversand vollständig über `.env` vorgegeben werden.
+Wenn `MAIL_MAILER=smtp` oder `MAIL_MAILER=sendmail` aktiv gesetzt ist, übernimmt
+OKGV diese Werte verbindlich, zeigt sie in der Oberfläche nur lesbar an und
+verhindert Änderungen im Webinterface. Bleiben die Mailwerte auskommentiert
+oder steht `MAIL_MAILER=log`, kann die Konfiguration im Webinterface gepflegt
+werden.
+
 Administratoren finden unter ihrem Benutzermenü die `Rechteverwaltung` und
 die `Globale Konfiguration`. Dort können registrierte Konten zum Vorstand
 hochgestuft, einzelne Rechte oder Vorlagen vergeben, der sichtbare

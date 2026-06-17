@@ -115,4 +115,19 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | OKGV Managed Mail Settings
+    |--------------------------------------------------------------------------
+    |
+    | If MAIL_MAILER is explicitly set to smtp or sendmail, OKGV treats the
+    | mail settings from .env as authoritative. Administrators can view and
+    | test the settings in the UI, but cannot overwrite them in the database.
+    |
+    */
+
+    'okgv' => [
+        'managed_by_env' => in_array(env('MAIL_MAILER'), ['smtp', 'sendmail'], true),
+    ],
+
 ];

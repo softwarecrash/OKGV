@@ -2,6 +2,22 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.86] - 2026-06-17
+
+### Verbindliche Mailkonfiguration aus `.env`
+
+- Die Beispielkonfiguration enthält jetzt auskommentierte SMTP- und
+  Sendmail-Beispiele mit Platzhalterdaten.
+- Wenn `MAIL_MAILER=smtp` oder `MAIL_MAILER=sendmail` aktiv in `.env`
+  gesetzt ist, übernimmt OKGV diese Werte verbindlich.
+- In diesem Modus zeigt das Webinterface die Maildaten nur noch
+  schreibgeschützt an und blockiert Änderungen an der Datenbankkonfiguration.
+- Der Systemname überschreibt den Absendernamen nicht mehr, wenn der
+  Mailversand durch `.env` verwaltet wird.
+- Die komplette Testsuite besteht mit 223 Tests und 1423 Assertions; der
+  Frontend-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.86` erhöht.
+
 ## [0.2.0.85] - 2026-06-17
 
 ### Sendmail für Webhosting
