@@ -24,7 +24,7 @@ class RegistrationRequestController extends Controller
 
         return view('registration-requests.index', [
             'registrationRequests' => RegistrationRequest::query()
-                ->with(['parcel', 'reviewer'])
+                ->with(['parcel', 'reviewer', 'user'])
                 ->orderByRaw("status = 'pending' desc")
                 ->latest()
                 ->paginate(20),
@@ -34,6 +34,7 @@ class RegistrationRequestController extends Controller
     public function show(RegistrationRequest $registrationRequest): View
     {
         $this->authorize('view', $registrationRequest);
+        $registrationRequest->loadMissing('user');
 
         $memberQuery = Member::query()
             ->whereNull('user_id')

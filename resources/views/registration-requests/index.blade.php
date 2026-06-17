@@ -7,19 +7,31 @@
     <div class="card border-0 shadow-sm">
         <div class="table-responsive">
             <table class="table align-middle mb-0">
-                <thead><tr><th>Name</th><th>E-Mail</th><th>Parzelle</th><th>Eingang</th><th>Status</th><th></th></tr></thead>
+                <thead><tr><th>Name</th><th>E-Mail</th><th>Parzelle</th><th>Konto</th><th>Eingang</th><th>Status</th><th></th></tr></thead>
                 <tbody>
                     @forelse ($registrationRequests as $entry)
                         <tr>
                             <td>{{ $entry->full_name }}</td>
                             <td>{{ $entry->email }}</td>
                             <td>{{ $entry->parcel_number ?? 'Keine angegeben' }}</td>
+                            <td>
+                                @if ($entry->user)
+                                    <span class="badge text-bg-success">angelegt</span>
+                                    @if ($entry->user->hasVerifiedEmail())
+                                        <span class="badge text-bg-success">E-Mail bestätigt</span>
+                                    @else
+                                        <span class="badge text-bg-warning">E-Mail offen</span>
+                                    @endif
+                                @else
+                                    <span class="badge text-bg-secondary">ältere Anfrage</span>
+                                @endif
+                            </td>
                             <td>{{ $entry->created_at->format('d.m.Y H:i') }}</td>
                             <td>{{ $entry->status->label() }}</td>
                             <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ route('registration-requests.show', $entry) }}">Prüfen</a></td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="text-center py-4"><strong>Keine Registrierungsanfragen vorhanden.</strong></td></tr>
+                        <tr><td colspan="7" class="text-center py-4"><strong>Keine Registrierungsanfragen vorhanden.</strong></td></tr>
                     @endforelse
                 </tbody>
             </table>

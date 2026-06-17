@@ -2,6 +2,25 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.93] - 2026-06-17
+
+### Registrierungsflow vereinfacht
+
+- Öffentliche Zugangsanfragen erzeugen jetzt sofort ein Benutzerkonto und
+  verknüpfen es mit der wartenden Registrierungsanfrage.
+- Die Freigabe erzeugt kein zweites Konto mehr, sondern aktiviert das bereits
+  angelegte Konto fachlich und verknüpft es optional mit einem Mitglied.
+- Wenn die Bestätigungsmail nicht zugestellt wird, kann die Freigabe die
+  E-Mail-Bestätigung übernehmen, sobald der Vorstand oder Administrator die
+  Identität anderweitig geprüft hat.
+- Abgelehnte wartende Anfragen entfernen automatisch das noch nicht
+  verknüpfte temporäre Benutzerkonto.
+- Verifikationsmails verwenden den OKGV-Mailer, wenn dieser geladen ist,
+  damit sie denselben Transport wie erfolgreiche Testmails nutzen.
+- Die komplette Testsuite besteht mit 231 Tests und 1480 Assertions; der
+  Frontend-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.93` erhöht.
+
 ## [0.2.0.92] - 2026-06-17
 
 ### Registrierung ohne Parzellennummer

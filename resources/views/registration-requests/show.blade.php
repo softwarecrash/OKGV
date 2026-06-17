@@ -9,6 +9,19 @@
                 <dt class="col-sm-3">Angegebener Name</dt><dd class="col-sm-9">{{ $registrationRequest->full_name }}</dd>
                 <dt class="col-sm-3">E-Mail</dt><dd class="col-sm-9">{{ $registrationRequest->email }}</dd>
                 <dt class="col-sm-3">Parzelle</dt><dd class="col-sm-9">{{ $registrationRequest->parcel_number ?? 'Keine angegeben' }}</dd>
+                <dt class="col-sm-3">Benutzerkonto</dt>
+                <dd class="col-sm-9">
+                    @if ($registrationRequest->user)
+                        Bereits angelegt
+                        @if ($registrationRequest->user->hasVerifiedEmail())
+                            · E-Mail bestätigt
+                        @else
+                            · E-Mail noch nicht bestätigt
+                        @endif
+                    @else
+                        Noch nicht angelegt (ältere Anfrage)
+                    @endif
+                </dd>
                 <dt class="col-sm-3">Status</dt><dd class="col-sm-9">{{ $registrationRequest->status->label() }}</dd>
                 @if ($registrationRequest->reviewed_at)
                     <dt class="col-sm-3">Bearbeitet</dt><dd class="col-sm-9">{{ $registrationRequest->reviewed_at->format('d.m.Y H:i') }}{{ $registrationRequest->review_note ? ' · '.$registrationRequest->review_note : '' }}</dd>
@@ -21,6 +34,7 @@
         <div class="alert alert-warning">
             Vergleiche die Angaben mit dem Pachtvertrag oder einem anderen verlässlichen Vereinsnachweis.
             Wenn keine Parzellennummer angegeben wurde, kann das Konto ohne Mitgliedsverknüpfung freigegeben und später zugeordnet oder hochgestuft werden.
+            Bei der Freigabe wird eine noch offene E-Mail-Bestätigung übernommen, wenn die Identität anderweitig geprüft wurde.
         </div>
         @if ($recommendedCandidate)
             <div class="alert alert-success">

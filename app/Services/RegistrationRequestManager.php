@@ -64,18 +64,33 @@ final class RegistrationRequestManager
                 }
             }
 
-            if (User::query()->where('email', $registrationRequest->email)->exists()) {
+            $user = $registrationRequest->user;
+
+            if (User::query()
+                ->where('email', $registrationRequest->email)
+                ->when($user !== null, fn ($query) => $query->whereKeyNot($user->id))
+                ->exists()) {
                 throw ValidationException::withMessages([
                     'email' => 'Für diese E-Mail-Adresse existiert bereits ein Benutzerkonto.',
                 ]);
             }
 
-            $user = User::create([
-                'name' => $member?->full_name ?? $registrationRequest->full_name,
-                'email' => $registrationRequest->email,
-                'password' => $registrationRequest->password,
-                'role' => UserRole::Tenant,
-            ]);
+            if ($user === null) {
+                $user = User::create([
+                    'name' => $member?->full_name ?? $registrationRequest->full_name,
+                    'email' => $registrationRequest->email,
+                    'password' => $registrationRequest->password,
+                    'role' => UserRole::Tenant,
+                ]);
+            } else {
+                $user->update([
+                    'name' => $member?->full_name ?? $registrationRequest->full_name,
+                ]);
+            }
+
+            if (! $user->hasVerifiedEmail()) {
+                $user->markEmailAsVerified();
+            }
 
             $previousMemberEmail = $member?->email;
 
@@ -106,8 +121,6 @@ final class RegistrationRequestManager
             return $user;
         });
 
-        $user->sendEmailVerificationNotification();
-
         return $user;
     }
 
@@ -127,6 +140,7 @@ final class RegistrationRequestManager
                 ]);
             }
 
+            $user = $registrationRequest->user;
             $registrationRequest->update([
                 'status' => RegistrationRequestStatus::Rejected,
                 'reviewed_by' => $actor->id,
@@ -134,6 +148,10 @@ final class RegistrationRequestManager
                 'review_note' => $reviewNote,
                 'password' => null,
             ]);
+
+            if ($user !== null && $user->member === null && $user->role === UserRole::Tenant) {
+                $user->delete();
+            }
 
             AuditLogger::log('tenant.registration.rejected', $actor, $registrationRequest);
 

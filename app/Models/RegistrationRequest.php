@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'first_name',
     'last_name',
     'email',
+    'user_id',
     'parcel_id',
     'parcel_number',
     'password',
@@ -40,6 +41,11 @@ class RegistrationRequest extends Model
     public function parcel(): BelongsTo
     {
         return $this->belongsTo(Parcel::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function reviewer(): BelongsTo

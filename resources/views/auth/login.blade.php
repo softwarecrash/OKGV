@@ -119,9 +119,9 @@
                     @unless (config('demo.enabled'))
                         <hr>
                         <p class="mb-0 text-center">
-                            Noch kein Pächterkonto?
+                            Noch kein Konto?
                             @if (App\Enums\FeatureModule::TenantPortal->enabled())
-                                <a href="{{ route('tenant-registration.create') }}">Zugang mit Parzellennummer beantragen</a>
+                                <a href="{{ route('tenant-registration.create') }}">Zugang beantragen</a>
                             @endif
                         </p>
                     @endunless

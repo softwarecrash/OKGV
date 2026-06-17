@@ -43,7 +43,8 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Zahlungsstatus und historisierte Rücklastschriften
 - Zugangsanfragen mit optionaler Parzellennummer und verbindlicher Freigabe
   durch Vorstand oder Administrator
-- E-Mail-Verifizierung nach Freigabe eines neuen Kontos
+- Benutzerkonto entsteht direkt bei der Anfrage; Freigabe aktiviert die
+  fachliche Zuordnung und kann eine offene E-Mail-Bestätigung übernehmen
 - Aufstufung freigegebener Pächterkonten zu Vorstandsmitgliedern
 - Ein Konto kann gleichzeitig technischer Administrator und Pächter sein
 - Granulare Vorstandsrechte mit konfigurierbaren Rechtevorlagen

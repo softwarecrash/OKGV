@@ -35,6 +35,7 @@ class TenantPortalTest extends TestCase
 
     public function test_public_registration_waits_for_board_approval(): void
     {
+        Notification::fake();
         $parcel = Parcel::factory()->create(['parcel_number' => 'A-17']);
 
         $this->post(route('tenant-registration.store'), [
@@ -48,8 +49,12 @@ class TenantPortalTest extends TestCase
 
         $registrationRequest = RegistrationRequest::query()->firstOrFail();
         $this->assertSame(RegistrationRequestStatus::Pending, $registrationRequest->status);
-        $this->assertTrue(Hash::check('SicheresPasswort123', $registrationRequest->password));
-        $this->assertDatabaseCount('users', 0);
+        $this->assertNull($registrationRequest->password);
+        $user = User::query()->where('email', 'erika@example.test')->firstOrFail();
+        $this->assertSame($user->id, $registrationRequest->user_id);
+        $this->assertFalse($user->hasVerifiedEmail());
+        $this->assertTrue(Hash::check('SicheresPasswort123', $user->password));
+        Notification::assertSentTo($user, VerifyEmailNotification::class);
 
         $this->post(route('tenant-registration.store'), [
             'first_name' => 'Erika',
@@ -63,6 +68,8 @@ class TenantPortalTest extends TestCase
 
     public function test_public_registration_can_be_submitted_without_parcel_number(): void
     {
+        Notification::fake();
+
         $this->post(route('tenant-registration.store'), [
             'first_name' => 'Technik',
             'last_name' => 'Helfer',
@@ -76,7 +83,9 @@ class TenantPortalTest extends TestCase
         $this->assertNull($registrationRequest->parcel_id);
         $this->assertNull($registrationRequest->parcel_number);
         $this->assertSame(RegistrationRequestStatus::Pending, $registrationRequest->status);
-        $this->assertDatabaseCount('users', 0);
+        $this->assertDatabaseHas('users', [
+            'email' => 'technik@example.test',
+        ]);
     }
 
     public function test_board_can_approve_registration_without_member_or_parcel(): void
@@ -101,8 +110,8 @@ class TenantPortalTest extends TestCase
         $user = User::query()->where('email', 'technik@example.test')->firstOrFail();
         $this->assertSame('Technik Helfer', $user->name);
         $this->assertSame(UserRole::Tenant, $user->role);
-        $this->assertFalse($user->hasVerifiedEmail());
-        Notification::assertSentTo($user, VerifyEmailNotification::class);
+        $this->assertTrue($user->hasVerifiedEmail());
+        Notification::assertNothingSent();
         $this->assertSame(RegistrationRequestStatus::Approved, $registrationRequest->fresh()->status);
     }
 
@@ -139,8 +148,8 @@ class TenantPortalTest extends TestCase
 
         $user = User::query()->where('email', 'tenant@example.test')->firstOrFail();
         $this->assertSame(UserRole::Tenant, $user->role);
-        $this->assertFalse($user->hasVerifiedEmail());
-        Notification::assertSentTo($user, VerifyEmailNotification::class);
+        $this->assertTrue($user->hasVerifiedEmail());
+        Notification::assertNothingSent();
         $this->assertSame($user->id, $member->fresh()->user_id);
         $this->assertNull($registrationRequest->fresh()->password);
         $this->assertSame(
@@ -313,6 +322,33 @@ class TenantPortalTest extends TestCase
             'action' => 'tenant.registration.rejected',
             'subject_id' => $registrationRequest->id,
         ]);
+    }
+
+    public function test_rejecting_pending_registration_removes_unlinked_created_user(): void
+    {
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $user = User::factory()->unverified()->create([
+            'role' => UserRole::Tenant,
+            'email' => 'wartend@example.test',
+        ]);
+        $registrationRequest = RegistrationRequest::factory()->create([
+            'user_id' => $user->id,
+            'email' => $user->email,
+            'parcel_id' => null,
+            'parcel_number' => null,
+            'password' => null,
+        ]);
+
+        $this->actingAs($board)
+            ->post(route('registration-requests.reject', $registrationRequest), [
+                'review_note' => 'Nicht bekannt.',
+            ])
+            ->assertRedirect(route('registration-requests.index'));
+
+        $this->assertDatabaseMissing('users', [
+            'id' => $user->id,
+        ]);
+        $this->assertSame(RegistrationRequestStatus::Rejected, $registrationRequest->fresh()->status);
     }
 
     public function test_tenant_portal_only_shows_current_own_data_and_documents(): void

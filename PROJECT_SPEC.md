@@ -504,20 +504,23 @@ Zählerstandsmeldungen mit Foto und Freigabe.
 
 Pächter, Vorstandsmitglieder, technische Helfer oder spätere Benutzer können
 öffentlich eine Registrierungsanfrage mit Vorname, Nachname, E-Mail-Adresse,
-optional Parzellennummer und Passwort stellen. Eine Anfrage erzeugt noch kein
-aktives Benutzerkonto. Das Passwort wird ausschließlich gehasht gespeichert.
-Die öffentliche Route wird rate-limitiert und liefert keine internen
-Mitglieds- oder Pächterdaten aus.
+optional Parzellennummer und Passwort stellen. Die Anfrage erzeugt sofort ein
+Benutzerkonto mit der Rolle `tenant`, das bis zur Freigabe keine Vereinsdaten
+oder Pächterdaten erhält. Das Passwort wird ausschließlich gehasht
+gespeichert. Die öffentliche Route wird rate-limitiert und liefert keine
+internen Mitglieds- oder Pächterdaten aus. Die E-Mail-Bestätigung wird direkt
+nach der Registrierung versendet.
 
 Administrator oder Vorstand prüfen die Anfrage. Wenn eine Parzellennummer
 angegeben wurde, muss eines der aktuell eingetragenen, noch nicht mit einem
 Benutzerkonto verbundenen Mitglieder dieser Parzelle ausgewählt werden. Ohne
 Parzellennummer darf die Anfrage auch ohne Mitgliedsverknüpfung freigegeben
-werden; Mitglieds- und Parzellenzuordnung können später ergänzt werden. Erst
-die Freigabe erzeugt ein Benutzerkonto mit der Rolle `tenant`. Freigabe und
-Ablehnung werden mit Bearbeiter, Zeitpunkt und optionaler Begründung
-historisiert und auditiert. Kassierer, Wasserwart und Gartenwart dürfen
-Registrierungsanfragen nicht bearbeiten.
+werden; Mitglieds- und Parzellenzuordnung können später ergänzt werden. Die
+Freigabe aktiviert die Anfrage fachlich und markiert die E-Mail als bestätigt,
+falls die externe Zustellung der Bestätigungsmail nicht funktioniert hat.
+Freigabe und Ablehnung werden mit Bearbeiter, Zeitpunkt und optionaler
+Begründung historisiert und auditiert. Kassierer, Wasserwart und Gartenwart
+dürfen Registrierungsanfragen nicht bearbeiten.
 
 Die Prüfübersicht bewertet bei angegebener Parzelle ausschließlich die
 freigabefähigen Mitglieder dieser Parzelle anhand von E-Mail und Namen. Ohne
