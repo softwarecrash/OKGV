@@ -162,4 +162,90 @@ final class RegistrationRequestManager
             return $registrationRequest;
         });
     }
+
+    public function linkMember(
+        RegistrationRequest $registrationRequest,
+        Member $member,
+        User $actor,
+        ?string $reviewNote = null,
+        string $memberEmailAction = 'keep',
+    ): RegistrationRequest {
+        return DB::transaction(function () use (
+            $registrationRequest,
+            $member,
+            $actor,
+            $reviewNote,
+            $memberEmailAction,
+        ): RegistrationRequest {
+            $registrationRequest = RegistrationRequest::query()
+                ->lockForUpdate()
+                ->findOrFail($registrationRequest->id);
+            $member = Member::query()->lockForUpdate()->findOrFail($member->id);
+
+            if ($registrationRequest->status !== RegistrationRequestStatus::Approved) {
+                throw ValidationException::withMessages([
+                    'status' => 'Nur bereits freigegebene Registrierungsanfragen können nachträglich verknüpft werden.',
+                ]);
+            }
+
+            $user = $registrationRequest->resolvedUser();
+
+            if ($user === null) {
+                throw ValidationException::withMessages([
+                    'user_id' => 'Für diese Anfrage wurde kein Benutzerkonto gefunden.',
+                ]);
+            }
+
+            if ($user->member()->exists()) {
+                throw ValidationException::withMessages([
+                    'member_id' => 'Dieses Benutzerkonto ist bereits mit einem Mitglied verknüpft.',
+                ]);
+            }
+
+            if ($member->user_id !== null) {
+                throw ValidationException::withMessages([
+                    'member_id' => 'Dieses Mitglied besitzt bereits ein Benutzerkonto.',
+                ]);
+            }
+
+            if ($registrationRequest->parcel_id !== null) {
+                $hasActiveTenancy = $member->parcelTenancies()
+                    ->activeOn()
+                    ->where('parcel_id', $registrationRequest->parcel_id)
+                    ->exists();
+
+                if (! $hasActiveTenancy) {
+                    throw ValidationException::withMessages([
+                        'member_id' => 'Das Mitglied ist der angegebenen Parzelle aktuell nicht als Pächter zugeordnet.',
+                    ]);
+                }
+            }
+
+            $previousMemberEmail = $member->email;
+
+            $member->update([
+                'user_id' => $user->id,
+                'email' => $memberEmailAction === 'use_registration'
+                    ? $registrationRequest->email
+                    : $member->email,
+            ]);
+
+            if ($registrationRequest->user_id !== $user->id) {
+                $registrationRequest->user()->associate($user);
+            }
+
+            $registrationRequest->update([
+                'review_note' => $reviewNote ?: $registrationRequest->review_note,
+            ]);
+
+            AuditLogger::log('tenant.registration.member_linked', $actor, $registrationRequest, [
+                'member_id' => $member->id,
+                'user_id' => $user->id,
+                'member_email_action' => $memberEmailAction,
+                'member_email_changed' => $previousMemberEmail !== $member->email,
+            ]);
+
+            return $registrationRequest;
+        });
+    }
 }

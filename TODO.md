@@ -231,6 +231,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Benutzerkonto direkt bei Registrierungsanfrage anlegen und wartend verknüpfen
 - [x] Freigabe unabhängig von zugestellter E-Mail-Bestätigung ermöglichen
 - [x] Wartende Altanfragen mit vorhandenem Benutzerkonto per E-Mail verknüpfen
+- [x] Freigegebene Anfragen ohne Mitgliedsverknüpfung nachträglich zuordnen
 - [x] Pächterdashboard für eigene Daten und aktuelle Parzellen implementieren
 - [x] Eigene freigegebene Rechnungen in das Portal integrieren
 - [x] Lesenden Dokumentenzugriff mit privaten Downloads vorbereiten

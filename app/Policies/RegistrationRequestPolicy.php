@@ -23,4 +23,12 @@ class RegistrationRequestPolicy
         return $user->canReviewTenantRegistrations()
             && $registrationRequest->status === RegistrationRequestStatus::Pending;
     }
+
+    public function linkMember(User $user, RegistrationRequest $registrationRequest): bool
+    {
+        return $user->canReviewTenantRegistrations()
+            && $registrationRequest->status === RegistrationRequestStatus::Approved
+            && $registrationRequest->resolvedUser() !== null
+            && $registrationRequest->resolvedUser()?->member()->doesntExist();
+    }
 }

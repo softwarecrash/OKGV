@@ -137,6 +137,89 @@
                 </form>
             </div>
         </div>
+    @elsecan('linkMember', $registrationRequest)
+        <div class="alert alert-info">
+            Diese Anfrage wurde bereits freigegeben, aber das Benutzerkonto ist noch mit keinem Mitglied verknüpft.
+            Du kannst die Zuordnung hier nachtragen, ohne den Account zu löschen oder die Registrierung neu zu starten.
+        </div>
+        <form class="card card-body border-0 shadow-sm" method="POST" action="{{ route('registration-requests.link-member', $registrationRequest) }}">
+            @csrf
+            <x-validation-errors />
+            <h2 class="h5">Mitglied nachträglich verknüpfen</h2>
+            <label class="form-label" for="member_id">Mitglied zuordnen</label>
+            <select
+                class="form-select"
+                id="member_id"
+                name="member_id"
+                data-registration-member-select
+                data-registration-email="{{ $registrationRequest->email }}"
+                required>
+                <option value="">Bitte Mitglied auswählen</option>
+                @foreach ($candidates as $member)
+                    <option
+                        value="{{ $member->id }}"
+                        data-member-number="{{ $member->member_number }}"
+                        data-member-name="{{ $member->full_name }}"
+                        data-member-email="{{ $member->email }}"
+                        @selected((string) old('member_id', $recommendedCandidate?->id) === (string) $member->id)>
+                        {{ $member->member_number }} · {{ $member->full_name }}
+                        @if ($member->registration_recommended)
+                            · Empfohlen
+                        @endif
+                    </option>
+                @endforeach
+            </select>
+            <div class="form-text mb-3">
+                @if ($registrationRequest->parcel_id)
+                    Angezeigt werden nur aktuelle Pächter dieser Parzelle ohne vorhandenes Benutzerkonto.
+                @else
+                    Angezeigt werden Mitglieder ohne vorhandenes Benutzerkonto.
+                @endif
+            </div>
+            <div class="border rounded p-3 mb-3 d-none" data-registration-member-preview>
+                <h3 class="h6">Vergleich vor der Verknüpfung</h3>
+                <dl class="row small mb-0">
+                    <dt class="col-sm-5">Ausgewähltes Mitglied</dt>
+                    <dd class="col-sm-7" data-registration-member-name></dd>
+                    <dt class="col-sm-5">E-Mail im Mitglied</dt>
+                    <dd class="col-sm-7" data-registration-member-email></dd>
+                    <dt class="col-sm-5">Registrierungs-/Login-E-Mail</dt>
+                    <dd class="col-sm-7">{{ $registrationRequest->email }}</dd>
+                </dl>
+            </div>
+            <fieldset class="border rounded p-3 mb-3 d-none" data-registration-email-choice>
+                <legend class="h6 float-none w-auto px-2">Abweichende Kontakt-E-Mail</legend>
+                <p class="small text-secondary">Die Login-Adresse bleibt die bestätigte Registrierungsadresse. Entscheide zusätzlich, welche E-Mail im Mitgliedsstammsatz stehen soll.</p>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" id="link_member_email_keep" name="member_email_action" value="keep" @checked(old('member_email_action', 'keep') === 'keep')>
+                    <label class="form-check-label" for="link_member_email_keep">
+                        Bestehende Kontakt-E-Mail beibehalten
+                        <span class="d-block small text-secondary" data-registration-existing-email></span>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="link_member_email_registration" name="member_email_action" value="use_registration" @checked(old('member_email_action') === 'use_registration')>
+                    <label class="form-check-label" for="link_member_email_registration">
+                        Registrierungsadresse als Kontakt-E-Mail übernehmen
+                        <span class="d-block small text-secondary">{{ $registrationRequest->email }}</span>
+                    </label>
+                </div>
+            </fieldset>
+            <input type="hidden" name="member_email_action" value="keep" data-registration-email-default>
+            @if ($candidates->isEmpty())
+                <div class="alert alert-danger">Es gibt aktuell kein verknüpfbares Mitglied. Prüfe zuerst Mitgliederstammdaten, Pächterhistorie und vorhandene Kontoverknüpfungen.</div>
+            @endif
+            <label class="form-label" for="link_review_note">Interner Hinweis (optional)</label>
+            <input class="form-control" id="link_review_note" name="review_note" maxlength="255">
+            <button class="btn btn-success mt-3" @disabled($candidates->isEmpty()) onclick="return confirm('Benutzerkonto mit diesem Mitglied verknüpfen?')">Mitglied verknüpfen</button>
+        </form>
+    @else
+        <div class="alert alert-secondary">
+            Diese Anfrage ist nicht mehr offen. Eine Freigabe oder Ablehnung ist nur bei offenen Anfragen möglich.
+            @if ($registrationRequest->status === \App\Enums\RegistrationRequestStatus::Approved)
+                Wenn das Konto bereits mit einem Mitglied verbunden ist, erfolgt die weitere Bearbeitung über die Mitgliederverwaltung.
+            @endif
+        </div>
     @endcan
 </div>
 @endsection

@@ -201,6 +201,55 @@ class TenantPortalTest extends TestCase
         $this->assertSame(RegistrationRequestStatus::Approved, $registrationRequest->fresh()->status);
     }
 
+    public function test_approved_request_without_member_link_can_be_linked_later(): void
+    {
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $user = User::factory()->create([
+            'email' => 'approved-legacy@example.test',
+            'email_verified_at' => now(),
+        ]);
+        $parcel = Parcel::factory()->create(['parcel_number' => 'ALT-02']);
+        $member = Member::factory()->create([
+            'email' => 'kontakt@example.test',
+        ]);
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $member->id,
+            'starts_at' => now()->subYear(),
+        ]);
+        $registrationRequest = RegistrationRequest::factory()->create([
+            'user_id' => null,
+            'parcel_id' => $parcel->id,
+            'parcel_number' => $parcel->parcel_number,
+            'email' => 'approved-legacy@example.test',
+            'password' => null,
+            'status' => RegistrationRequestStatus::Approved,
+        ]);
+
+        $this->actingAs($board)
+            ->get(route('registration-requests.show', $registrationRequest))
+            ->assertOk()
+            ->assertSee('Mitglied nachträglich verknüpfen')
+            ->assertSee('ALT-02')
+            ->assertSee($member->member_number);
+
+        $this->actingAs($board)
+            ->post(route('registration-requests.link-member', $registrationRequest), [
+                'member_id' => $member->id,
+                'member_email_action' => 'use_registration',
+                'review_note' => 'Nachträgliche Zuordnung geprüft',
+            ])
+            ->assertRedirect(route('registration-requests.show', $registrationRequest));
+
+        $this->assertSame($user->id, $registrationRequest->fresh()->user_id);
+        $this->assertSame($user->id, $member->fresh()->user_id);
+        $this->assertSame('approved-legacy@example.test', $member->fresh()->email);
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'tenant.registration.member_linked',
+            'subject_id' => $registrationRequest->id,
+        ]);
+    }
+
     public function test_registration_review_recommends_matching_existing_member(): void
     {
         $board = User::factory()->create(['role' => UserRole::Board]);

@@ -2,6 +2,21 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.95] - 2026-06-17
+
+### Nachträgliche Zuordnung freigegebener Registrierungen
+
+- Bereits freigegebene Registrierungsanfragen mit vorhandenem Benutzerkonto,
+  aber fehlender Mitgliedsverknüpfung, können jetzt nachträglich mit einem
+  Mitglied verbunden werden.
+- Die Prüfansicht erklärt bearbeitete Anfragen sichtbarer, statt ohne
+  Handlungsmöglichkeit leer zu wirken.
+- Nachträgliche Zuordnungen werden im Auditlog dokumentiert und respektieren
+  weiterhin die aktive Pächterhistorie der angegebenen Parzelle.
+- Die betroffene Pächterportal-Testsuite besteht mit 18 Tests und 152
+  Assertions.
+- Entwicklungsstand auf `0.2.0.95` erhöht.
+
 ## [0.2.0.94] - 2026-06-17
 
 ### Bestehende Konten mit Registrierungsanfragen verknüpfen

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegistrationApprovalRequest;
+use App\Http\Requests\RegistrationMemberLinkRequest;
 use App\Http\Requests\RegistrationRejectionRequest;
 use App\Models\Member;
 use App\Models\RegistrationRequest;
@@ -89,5 +90,21 @@ class RegistrationRequestController extends Controller
 
         return redirect()->route('registration-requests.index')
             ->with('status', 'Registrierungsanfrage wurde abgelehnt.');
+    }
+
+    public function linkMember(
+        RegistrationMemberLinkRequest $request,
+        RegistrationRequest $registrationRequest,
+    ): RedirectResponse {
+        $this->manager->linkMember(
+            $registrationRequest,
+            Member::query()->findOrFail($request->integer('member_id')),
+            $request->user(),
+            $request->validated('review_note'),
+            $request->validated('member_email_action'),
+        );
+
+        return redirect()->route('registration-requests.show', $registrationRequest)
+            ->with('status', 'Benutzerkonto wurde nachträglich mit dem Mitglied verknüpft.');
     }
 }

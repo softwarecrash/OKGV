@@ -135,6 +135,9 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::post('registrierungsanfragen/{registration_request}/freigeben', [RegistrationRequestController::class, 'approve'])
         ->middleware('module:tenant_portal')
         ->name('registration-requests.approve');
+    Route::post('registrierungsanfragen/{registration_request}/mitglied-verknuepfen', [RegistrationRequestController::class, 'linkMember'])
+        ->middleware('module:tenant_portal')
+        ->name('registration-requests.link-member');
     Route::post('registrierungsanfragen/{registration_request}/ablehnen', [RegistrationRequestController::class, 'reject'])
         ->middleware('module:tenant_portal')
         ->name('registration-requests.reject');
