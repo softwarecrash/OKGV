@@ -23,7 +23,7 @@ class CommunicationSettingController extends Controller
             return redirect()
                 ->route('application-settings.edit', ['section' => 'smtp'])
                 ->withErrors([
-                    'smtp_enabled' => 'SMTP-Einstellungen sind im Demo-Modus gesperrt.',
+                    'smtp_enabled' => 'Mailversand ist im Demo-Modus gesperrt.',
                 ]);
         }
 
@@ -31,6 +31,9 @@ class CommunicationSettingController extends Controller
         $data = $request->validated();
         $clearCredentials = $data['clear_credentials'];
         unset($data['clear_credentials']);
+        $data['sendmail_path'] = blank($data['sendmail_path'] ?? null)
+            ? null
+            : $data['sendmail_path'];
 
         if ($clearCredentials) {
             $data['smtp_username'] = null;
@@ -59,7 +62,7 @@ class CommunicationSettingController extends Controller
 
         return redirect()
             ->route('application-settings.edit', ['section' => 'smtp'])
-            ->with('status', 'SMTP-Einstellungen wurden gespeichert.');
+            ->with('status', 'Mailversand wurde gespeichert.');
     }
 
     public function test(SmtpTestRequest $request): RedirectResponse
@@ -89,7 +92,7 @@ class CommunicationSettingController extends Controller
             ->route('application-settings.edit', ['section' => 'smtp'])
             ->with(
                 'status',
-                "Der SMTP-Server hat die Testmail für {$recipient} angenommen. "
+                "Der Mailtransport hat die Testmail für {$recipient} angenommen. "
                 .'Die endgültige Zustellung kann sich verzögern; prüfe auch den Spamordner.'
                 .($messageId ? " Message-ID: {$messageId}" : ''),
             );

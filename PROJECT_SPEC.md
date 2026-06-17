@@ -710,10 +710,11 @@ globalen Konfiguration und bleibt Administratoren vorbehalten.
 Zahlungserinnerungen setzen zusätzlich das Abrechnungsrecht voraus, da sie
 Rechnungs- und Zahlungsdaten enthalten.
 
-#### SMTP
+#### Mailversand
 
-SMTP-Host, Port, Schema, Benutzername, Passwort, Absenderadresse und
-Absendername werden im SMTP-Abschnitt der globalen Konfiguration verwaltet.
+SMTP-Host, Port, Schema, Benutzername, Passwort, Sendmail-Pfad,
+Absenderadresse und Absendername werden im Mailversand-Abschnitt der globalen
+Konfiguration verwaltet.
 Benutzername und Passwort werden mit Laravel verschlüsselt gespeichert und
 niemals im Auditlog ausgegeben. Nur Administratoren dürfen diese Werte ändern
 oder einen Testversand an eine frei eingegebene, serverseitig validierte
@@ -721,11 +722,13 @@ Zieladresse auslösen. Die Zieladresse wird auditiert, aber nicht als
 Systemeinstellung gespeichert. Die Konfiguration verwendet `smtp` mit
 STARTTLS-Unterstützung, `smtps` oder bewusst unverschlüsseltes SMTP für lokale
 Relays wie `localhost:25`, bei denen kein öffentliches TLS-Zertifikat
-vorhanden ist. Testversand ist pro Benutzer auf zehn Nachrichten pro Minute
+vorhanden ist. Zusätzlich kann Sendmail des Webhostings mit konfigurierbarem
+Sendmail-Pfad verwendet werden, wenn der Anbieter lokale Mailzustellung
+bereitstellt. Testversand ist pro Benutzer auf zehn Nachrichten pro Minute
 begrenzt. Bei Überschreitung bleibt die Person auf der Konfigurationsseite
 und erhält eine verständliche deutsche Meldung. Eine
 erfolgreiche Testmeldung bestätigt ausdrücklich nur die Annahme durch den
-SMTP-Server. Die vom Transport zurückgegebene Message-ID wird für die
+konfigurierten Mailtransport. Die vom Transport zurückgegebene Message-ID wird für die
 Nachverfolgung beim Mailanbieter auditiert.
 
 #### Serienmails

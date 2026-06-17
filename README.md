@@ -60,7 +60,7 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Rollenabhängige Aktionspunkte für Vorgänge mit notwendiger Bearbeitung
 - Persistenter heller und dunkler Darstellungsmodus
 - Granular berechtigte Serienmails mit Empfängergruppen und Versandhistorie
-- Verschlüsselte SMTP-Konfiguration mit Testversand
+- Verschlüsselte Mailkonfiguration mit SMTP, lokalem Relay oder Sendmail und Testversand
 - Allgemeine PDF-Briefe mit dauerhaftem Anschriften-Snapshot
 - PDF-Zahlungserinnerungen für fällige offene Rechnungen
 - Zentrale Dokumentenverwaltung für Verträge, Protokolle, Satzungen, Belege und Fotos
@@ -253,7 +253,7 @@ OKGV_PRIVACY_RETENTION_YEARS=10
 Arbeitsstunden benötigen Abrechnung, Arbeitseinsätze benötigen
 Arbeitsstunden, und SEPA sowie Mahnwesen benötigen Abrechnung. OKGV startet
 bei einer ungültigen Kombination nicht, damit keine unvollständige
-SaaS-Instanz betrieben wird. SMTP bleibt unabhängig vom Kommunikationsmodul
+SaaS-Instanz betrieben wird. Mailversand bleibt unabhängig vom Kommunikationsmodul
 verfügbar, weil E-Mail-Verifizierung und Passwort-Reset darauf angewiesen
 sind.
 
@@ -273,21 +273,22 @@ Administrator oder Vorstandsmitglied muss die Anfrage anschließend unter
 freigeben.
 
 Nach der Freigabe erhält der Pächter einen zeitlich begrenzten
-Bestätigungslink. Bis zur Einrichtung im Abschnitt `SMTP-Einstellungen` der
+Bestätigungslink. Bis zur Einrichtung im Abschnitt `Mailversand` der
 `Globalen Konfiguration`
 verwendet Laravel die Werte aus `.env`. Mit dem voreingestellten
 `MAIL_MAILER=log` wird die Nachricht nur in `storage/logs/laravel.log`
-geschrieben. Sobald die verschlüsselte SMTP-Konfiguration aktiviert ist,
+geschrieben. Sobald die verschlüsselte Mailkonfiguration aktiviert ist,
 verwenden Bestätigungsmails und Serienmails diese Einstellungen.
 
 Administratoren finden unter ihrem Benutzermenü die `Rechteverwaltung` und
 die `Globale Konfiguration`. Dort können registrierte Konten zum Vorstand
 hochgestuft, einzelne Rechte oder Vorlagen vergeben, der sichtbare
 Systemname angepasst und die verschlüsselte SMTP-Verbindung eingerichtet
-oder mit einer frei wählbaren Zieladresse getestet werden.
-Der SMTP-Test bestätigt die Annahme durch den konfigurierten Mailserver und
+oder alternativ Sendmail des Webhostings genutzt werden. Der Versand kann mit
+einer frei wählbaren Zieladresse getestet werden.
+Der Testversand bestätigt die Annahme durch den konfigurierten Mailtransport und
 zeigt die Message-ID zur Nachverfolgung. Eine endgültige Zustellgarantie beim
-Empfänger kann SMTP technisch nicht geben.
+Empfänger kann ein Mailtransport technisch nicht geben.
 
 Konten mit dem Recht `Kommunikation verwalten` finden in der Hauptnavigation
 den Bereich `Kommunikation`. Dort stehen Serienmails, PDF-Briefe und die

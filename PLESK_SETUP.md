@@ -109,6 +109,35 @@ php artisan up
 Wenn Plesk Node.js nicht passend bereitstellt, `npm ci` und `npm run build`
 lokal ausführen und anschließend `public/build` per Dateimanager hochladen.
 
+## Mailversand über Sendmail
+
+Viele Webhoster stellen zusätzlich zu SMTP eine lokale Sendmail-Funktion
+bereit. Das ist auf Plesk oft die einfachere Variante, wenn `localhost` wegen
+TLS-Zertifikaten meckert oder für jede Subdomain kein eigener SMTP-Host
+konfiguriert werden soll.
+
+In OKGV unter `Globale Konfiguration` -> `Mailversand`:
+
+```text
+Mailversand aktivieren: ja
+Versandart:             Sendmail des Webhostings
+Sendmail-Pfad:          /usr/sbin/sendmail -bs -i
+Absenderadresse:        noreply@deine-domain.example
+Absendername:           OKGV
+```
+
+Falls der Hoster einen anderen Pfad nennt, diesen Wert eintragen. Für Sendmail
+werden normalerweise kein SMTP-Benutzername, kein SMTP-Passwort, kein Host und
+kein Port benötigt.
+
+Nach einem Update mit neuer Mailkonfiguration:
+
+```bash
+php artisan migrate --force
+php artisan optimize:clear
+php artisan optimize
+```
+
 ## Frontend-Build mit Plesk Node.js
 
 Das Laravel Toolkit erzeugt `public/build` nicht automatisch. Der

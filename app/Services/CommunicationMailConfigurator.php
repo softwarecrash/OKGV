@@ -20,25 +20,32 @@ final class CommunicationMailConfigurator
 
         if (! $settings->smtp_enabled) {
             throw ValidationException::withMessages([
-                'smtp_enabled' => 'Der SMTP-Versand ist noch nicht aktiviert.',
+                'smtp_enabled' => 'Der Mailversand ist noch nicht aktiviert.',
             ]);
         }
 
-        $mailerConfig = [
-            'transport' => 'smtp',
-            'host' => $settings->smtp_host,
-            'port' => $settings->smtp_port,
-            'username' => $settings->smtp_username,
-            'password' => $settings->smtp_password,
-            'timeout' => 15,
-            'local_domain' => parse_url((string) config('app.url'), PHP_URL_HOST),
-        ];
-
-        if ($settings->smtp_scheme === 'none') {
-            $mailerConfig['scheme'] = 'smtp';
-            $mailerConfig['auto_tls'] = false;
+        if ($settings->mailer_transport === 'sendmail') {
+            $mailerConfig = [
+                'transport' => 'sendmail',
+                'path' => $settings->sendmail_path ?: config('mail.mailers.sendmail.path', '/usr/sbin/sendmail -bs -i'),
+            ];
         } else {
-            $mailerConfig['scheme'] = $settings->smtp_scheme;
+            $mailerConfig = [
+                'transport' => 'smtp',
+                'host' => $settings->smtp_host,
+                'port' => $settings->smtp_port,
+                'username' => $settings->smtp_username,
+                'password' => $settings->smtp_password,
+                'timeout' => 15,
+                'local_domain' => parse_url((string) config('app.url'), PHP_URL_HOST),
+            ];
+
+            if ($settings->smtp_scheme === 'none') {
+                $mailerConfig['scheme'] = 'smtp';
+                $mailerConfig['auto_tls'] = false;
+            } else {
+                $mailerConfig['scheme'] = $settings->smtp_scheme;
+            }
         }
 
         config([

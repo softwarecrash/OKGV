@@ -17,11 +17,13 @@ class CommunicationSettingRequest extends FormRequest
     {
         return [
             'smtp_enabled' => ['required', 'boolean'],
+            'mailer_transport' => ['required', Rule::in(['smtp', 'sendmail'])],
             'smtp_scheme' => ['required', Rule::in(['smtp', 'smtps', 'none'])],
-            'smtp_host' => ['required', 'string', 'max:255'],
-            'smtp_port' => ['required', 'integer', 'between:1,65535'],
+            'smtp_host' => ['required_if:mailer_transport,smtp', 'nullable', 'string', 'max:255'],
+            'smtp_port' => ['required_if:mailer_transport,smtp', 'nullable', 'integer', 'between:1,65535'],
             'smtp_username' => ['nullable', 'string', 'max:255'],
             'smtp_password' => ['nullable', 'string', 'max:255'],
+            'sendmail_path' => ['nullable', 'string', 'max:255'],
             'clear_credentials' => ['required', 'boolean'],
             'from_address' => ['required', 'email', 'max:255'],
             'from_name' => ['required', 'string', 'max:255'],

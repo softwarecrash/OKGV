@@ -42,6 +42,7 @@ class CommunicationWorkflowTest extends TestCase
         $this->actingAs($administrator)
             ->put(route('communication-settings.update'), [
                 'smtp_enabled' => true,
+                'mailer_transport' => 'smtp',
                 'smtp_scheme' => 'smtp',
                 'smtp_host' => 'smtp.example.test',
                 'smtp_port' => 587,
@@ -61,7 +62,7 @@ class CommunicationWorkflowTest extends TestCase
         $this->actingAs($administrator)
             ->get(route('application-settings.edit'))
             ->assertOk()
-            ->assertSee('SMTP-Einstellungen')
+            ->assertSee('Mailversand')
             ->assertSee('mailer@example.test')
             ->assertDontSee('VerySecretPassword');
     }
@@ -73,6 +74,7 @@ class CommunicationWorkflowTest extends TestCase
         $this->actingAs($administrator)
             ->put(route('communication-settings.update'), [
                 'smtp_enabled' => true,
+                'mailer_transport' => 'smtp',
                 'smtp_scheme' => 'none',
                 'smtp_host' => 'localhost',
                 'smtp_port' => 25,
@@ -103,12 +105,52 @@ class CommunicationWorkflowTest extends TestCase
             ->assertSee('localhost:25');
     }
 
+    public function test_sendmail_transport_can_be_configured_for_webhosting(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+
+        $this->actingAs($administrator)
+            ->put(route('communication-settings.update'), [
+                'smtp_enabled' => true,
+                'mailer_transport' => 'sendmail',
+                'smtp_scheme' => 'smtp',
+                'smtp_host' => null,
+                'smtp_port' => null,
+                'smtp_username' => null,
+                'smtp_password' => null,
+                'sendmail_path' => '/usr/sbin/sendmail -t -i',
+                'clear_credentials' => false,
+                'from_address' => 'noreply@okgv.de',
+                'from_name' => 'OKGV',
+            ])
+            ->assertRedirect();
+
+        $settings = CommunicationSetting::current();
+        $this->assertSame('sendmail', $settings->mailer_transport);
+        $this->assertSame('/usr/sbin/sendmail -t -i', $settings->sendmail_path);
+
+        app(CommunicationMailConfigurator::class)->apply();
+        $mailerConfig = config('mail.mailers.okgv_smtp');
+
+        $this->assertSame('sendmail', $mailerConfig['transport']);
+        $this->assertSame('/usr/sbin/sendmail -t -i', $mailerConfig['path']);
+        $this->assertArrayNotHasKey('host', $mailerConfig);
+        $this->assertArrayNotHasKey('port', $mailerConfig);
+
+        $this->actingAs($administrator)
+            ->get(route('application-settings.edit', ['section' => 'smtp']))
+            ->assertOk()
+            ->assertSee('Sendmail des Webhostings')
+            ->assertSee('/usr/sbin/sendmail -t -i');
+    }
+
     public function test_administrator_can_send_smtp_test_to_custom_validated_address(): void
     {
         Mail::fake();
         $administrator = User::factory()->administrator()->create();
         CommunicationSetting::create([
             'smtp_enabled' => true,
+            'mailer_transport' => 'smtp',
             'smtp_scheme' => 'smtp',
             'smtp_host' => 'smtp.example.test',
             'smtp_port' => 587,
@@ -125,7 +167,7 @@ class CommunicationWorkflowTest extends TestCase
                 'status',
                 fn (string $status): bool => str_contains(
                     $status,
-                    'Der SMTP-Server hat die Testmail für extern@example.test angenommen.',
+                    'Der Mailtransport hat die Testmail für extern@example.test angenommen.',
                 ),
             );
 
@@ -161,12 +203,13 @@ class CommunicationWorkflowTest extends TestCase
             ->get(route('application-settings.edit', ['section' => 'smtp']))
             ->assertOk()
             ->assertSee('Diese Installation läuft im Demo-Modus')
-            ->assertSee('SMTP-Einstellungen speichern')
+            ->assertSee('Mailversand speichern')
             ->assertSee('disabled', false);
 
         $this->actingAs($administrator)
             ->put(route('communication-settings.update'), [
                 'smtp_enabled' => true,
+                'mailer_transport' => 'smtp',
                 'smtp_scheme' => 'smtp',
                 'smtp_host' => 'smtp.example.test',
                 'smtp_port' => 587,
@@ -178,7 +221,7 @@ class CommunicationWorkflowTest extends TestCase
             ])
             ->assertRedirect(route('application-settings.edit', ['section' => 'smtp']))
             ->assertSessionHasErrors([
-                'smtp_enabled' => 'SMTP-Einstellungen sind im Demo-Modus gesperrt.',
+                'smtp_enabled' => 'Mailversand ist im Demo-Modus gesperrt.',
             ]);
 
         $this->assertFalse(CommunicationSetting::current()->smtp_enabled);
@@ -201,6 +244,7 @@ class CommunicationWorkflowTest extends TestCase
         $administrator = User::factory()->administrator()->create();
         CommunicationSetting::create([
             'smtp_enabled' => true,
+            'mailer_transport' => 'smtp',
             'smtp_scheme' => 'smtp',
             'smtp_host' => 'smtp.example.test',
             'smtp_port' => 587,
@@ -234,6 +278,7 @@ class CommunicationWorkflowTest extends TestCase
         $administrator = User::factory()->administrator()->create();
         CommunicationSetting::create([
             'smtp_enabled' => true,
+            'mailer_transport' => 'smtp',
             'smtp_scheme' => 'smtp',
             'smtp_host' => 'smtp.example.test',
             'smtp_port' => 587,
@@ -288,6 +333,7 @@ class CommunicationWorkflowTest extends TestCase
         $this->actingAs($board)
             ->put(route('communication-settings.update'), [
                 'smtp_enabled' => false,
+                'mailer_transport' => 'smtp',
                 'smtp_scheme' => 'smtp',
                 'smtp_host' => 'smtp.example.test',
                 'smtp_port' => 587,

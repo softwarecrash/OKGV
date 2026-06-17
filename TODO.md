@@ -99,6 +99,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 ## Projektweite Standards
 
+- [x] Sendmail als Mailversand für Webhosting ergänzen
+- [x] Plesk-Hinweise für Sendmail dokumentieren
+- [x] Entwicklungsstand 0.2.0.85 vorbereiten
 - [x] SMTP ohne Verschlüsselung für lokale Relays wie localhost ergänzen
 - [x] Entwicklungsstand 0.2.0.84 vorbereiten
 - [x] Eigene Parzellen bei stellvertretender Arbeitsstunden-Erfassung bevorzugt anzeigen

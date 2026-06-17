@@ -283,12 +283,12 @@
     </form>
 
     <section class="mt-5" id="smtp">
-        <h2 class="h4 mb-1">SMTP-Einstellungen</h2>
-        <p class="text-secondary mb-3">Mailserver für Kontobestätigungen und Serienmails konfigurieren.</p>
+        <h2 class="h4 mb-1">Mailversand</h2>
+        <p class="text-secondary mb-3">Mailserver oder Sendmail für Kontobestätigungen und Serienmails konfigurieren.</p>
 
         @if (config('demo.enabled'))
             <div class="alert alert-info">
-                Diese Installation läuft im Demo-Modus. SMTP-Einstellungen und Testmails sind gesperrt,
+                Diese Installation läuft im Demo-Modus. Mailversand und Testmails sind gesperrt,
                 damit öffentlich zugängliche Testkonten keinen Mailversand auslösen können.
             </div>
         @else
@@ -307,19 +307,36 @@
                     <input class="form-check-input" type="checkbox" id="smtp_enabled" name="smtp_enabled" value="1"
                            @checked(old('smtp_enabled', $communicationSettings->smtp_enabled))
                            @disabled(config('demo.enabled'))>
-                    <label class="form-check-label" for="smtp_enabled">SMTP-Versand aktivieren</label>
+                    <label class="form-check-label" for="smtp_enabled">Mailversand aktivieren</label>
                 </div>
 
                 <div class="row g-3">
                     <div class="col-lg-6">
+                        <label class="form-label" for="mailer_transport">Versandart</label>
+                        <select class="form-select" id="mailer_transport" name="mailer_transport" required
+                                @disabled(config('demo.enabled'))>
+                            <option value="smtp" @selected(old('mailer_transport', $communicationSettings->mailer_transport) === 'smtp')>SMTP-Server</option>
+                            <option value="sendmail" @selected(old('mailer_transport', $communicationSettings->mailer_transport) === 'sendmail')>Sendmail des Webhostings</option>
+                        </select>
+                        <div class="form-text">Sendmail nutzt die lokale Mailfunktion des Hosters und benötigt normalerweise keinen SMTP-Benutzernamen.</div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="form-label" for="sendmail_path">Sendmail-Pfad</label>
+                        <input class="form-control" id="sendmail_path" name="sendmail_path" maxlength="255"
+                               value="{{ old('sendmail_path', $communicationSettings->sendmail_path ?: config('mail.mailers.sendmail.path')) }}"
+                               placeholder="/usr/sbin/sendmail -bs -i"
+                               @disabled(config('demo.enabled'))>
+                        <div class="form-text">Nur bei Versandart Sendmail relevant. Der Standard passt auf vielen Linux-Hostings.</div>
+                    </div>
+                    <div class="col-lg-6">
                         <label class="form-label" for="smtp_host">SMTP-Server</label>
-                        <input class="form-control" id="smtp_host" name="smtp_host" required maxlength="255"
+                        <input class="form-control" id="smtp_host" name="smtp_host" maxlength="255"
                                value="{{ old('smtp_host', $communicationSettings->smtp_host) }}" placeholder="smtp.example.de"
                                @disabled(config('demo.enabled'))>
                     </div>
                     <div class="col-lg-3">
                         <label class="form-label" for="smtp_port">Port</label>
-                        <input class="form-control" id="smtp_port" name="smtp_port" type="number" min="1" max="65535" required
+                        <input class="form-control" id="smtp_port" name="smtp_port" type="number" min="1" max="65535"
                                value="{{ old('smtp_port', $communicationSettings->smtp_port) }}"
                                @disabled(config('demo.enabled'))>
                     </div>
@@ -370,7 +387,7 @@
                 <x-validation-errors />
             </div>
             <div class="card-footer bg-body border-0">
-                <button class="btn btn-primary" @disabled(config('demo.enabled'))>SMTP-Einstellungen speichern</button>
+                <button class="btn btn-primary" @disabled(config('demo.enabled'))>Mailversand speichern</button>
             </div>
         </form>
 
@@ -390,7 +407,7 @@
                 </div>
                 <div class="form-text">
                     Die Adresse wird nur für diesen Testversand verwendet und nicht als Systemeinstellung gespeichert.
-                    Eine erfolgreiche Rückmeldung bestätigt die Annahme durch den SMTP-Server, nicht die endgültige Zustellung beim Empfänger.
+                    Eine erfolgreiche Rückmeldung bestätigt die Annahme durch den Mailtransport, nicht die endgültige Zustellung beim Empfänger.
                 </div>
             </div>
         </form>

@@ -2,6 +2,22 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.85] - 2026-06-17
+
+### Sendmail für Webhosting
+
+- Die globale Mailkonfiguration unterstützt jetzt neben SMTP auch Sendmail
+  des Webhostings.
+- Der Sendmail-Pfad ist konfigurierbar, damit Plesk- und Shared-Hosting-
+  Vorgaben übernommen werden können.
+- Bei Sendmail sind SMTP-Host, Port, Benutzername und Passwort nicht mehr
+  erforderlich.
+- Plesk-Setup-Hinweise dokumentieren Sendmail als Alternative zu SMTP oder
+  lokalem Relay.
+- Die komplette Testsuite besteht mit 222 Tests und 1405 Assertions; der
+  Frontend-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.85` erhöht.
+
 ## [0.2.0.84] - 2026-06-17
 
 ### Lokales SMTP-Relay ohne TLS
