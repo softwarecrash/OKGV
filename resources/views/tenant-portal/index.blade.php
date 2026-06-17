@@ -45,7 +45,12 @@
                         <h2 class="h5">Meine Daten</h2>
                         <p class="mb-1"><strong>{{ $member->full_name }}</strong></p>
                         <p class="mb-1">Mitgliedsnummer {{ $member->member_number }}</p>
-                        <p class="mb-0">{{ $member->street }}<br>{{ $member->zip }} {{ $member->city }}</p>
+                        <p>{{ $member->street }}<br>{{ $member->zip }} {{ $member->city }}</p>
+                        @if (App\Enums\FeatureModule::Sepa->enabled())
+                            <a class="btn btn-sm btn-outline-primary" href="{{ route('tenant-portal.sepa-mandates.index') }}">
+                                SEPA-Mandate verwalten
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>

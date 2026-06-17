@@ -23,6 +23,7 @@ use App\Models\User;
 use App\Services\BillingCalculator;
 use App\Services\BillingPeriodManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use LogicException;
 use Tests\TestCase;
 
@@ -415,6 +416,33 @@ class BillingWorkflowTest extends TestCase
 
         $response->assertOk()->assertHeader('Content-Type', 'application/pdf');
         $this->assertStringStartsWith('%PDF-', $response->getContent());
+    }
+
+    public function test_approved_invoice_pdf_is_archived_in_private_storage(): void
+    {
+        Storage::fake('local');
+        [$administrator, $period] = $this->billingScenario();
+        BillingRate::factory()->create([
+            'billing_period_id' => $period->id,
+            'code' => 'MEMBER_FEE',
+            'name' => 'Mitgliedsbeitrag',
+            'calculation_type' => BillingRateType::Fixed,
+            'scope' => BillingRateScope::Member,
+            'amount' => '25.0000',
+        ]);
+
+        app(BillingCalculator::class)->calculate($period, $administrator);
+        app(BillingPeriodManager::class)->approve($period->fresh(), $administrator);
+
+        $invoice = Invoice::query()->firstOrFail();
+        $this->assertNotNull($invoice->pdf_path);
+        $this->assertNotNull($invoice->pdf_generated_at);
+        Storage::disk('local')->assertExists($invoice->pdf_path);
+        $this->assertStringStartsWith('%PDF-', Storage::disk('local')->get($invoice->pdf_path));
+
+        $response = $this->actingAs($administrator)->get(route('invoices.pdf', $invoice));
+        $response->assertOk()->assertHeader('Content-Type', 'application/pdf');
+        $this->assertSame(Storage::disk('local')->get($invoice->pdf_path), $response->getContent());
     }
 
     /**

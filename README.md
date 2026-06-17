@@ -35,8 +35,10 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Eigene Leistungszeiträume je Preis mit sichtbarer Herleitung auf Rechnung und PDF
 - Gemeinsame Rechnungen für Haupt- und Mitpächter mit historischen Empfängerdaten
 - Freigabeschutz für Rechnungen und serverseitige PDF-Ausgabe
+- Private PDF-Archivierung freigegebener Rechnungen
 - Konfigurierbare Preisvorlagen für wiederkehrende Kostenarten
 - Verschlüsselte SEPA-Mandate und Vereinsbankdaten
+- Self-Service-SEPA-Mandate im Pächterportal mit Widerruf
 - Sammellastschriften als pain.008.001.08-XML
 - Zahlungsstatus und historisierte Rücklastschriften
 - Pächterregistrierung mit verbindlicher Freigabe durch Vorstand oder Administrator
@@ -96,6 +98,15 @@ Rechnungslauf kann zum Beispiel Pacht und Versicherung für das Folgejahr als
 Vorauszahlung sowie Wasser und Strom für das zurückliegende Jahr als
 Nachberechnung enthalten. Für eine verbrauchsgenaue Aufteilung bei
 Pächterwechseln muss ein Übergabezählerstand vorhanden sein.
+
+Bei der Rechnungsfreigabe speichert OKGV zusätzlich ein PDF im privaten
+Storage. Dieses Archiv-PDF dient als Notfall- und Nachweisablage und wird bei
+späteren Downloads bevorzugt ausgeliefert. Alte Rechnungen ohne Archivdatei
+werden weiterhin dynamisch erzeugt.
+
+Pächter können im Pächterportal eigene SEPA-Mandate hinterlegen und für
+zukünftige Lastschriften widerrufen. Die zentrale SEPA-Übersicht zeigt diese
+Mandate mit Herkunft und Widerrufsinformationen an.
 
 Konten mit dem Recht `Abrechnungen und Rechnungen verwalten` finden unter
 `Finanzen` die Arbeitsstundenübersicht. Zusätzlich zeigt jede

@@ -809,3 +809,12 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Admin-Ernennung und letzter-Admin-Schutz ergänzen
 - [x] Vorstands-Selbstverwaltung für Pächter- und Vorstandskonten erlauben
 - [x] Tests, Dokumentation und Veröffentlichung abschließen
+
+## Nachbesserung Phase 4/5: SEPA-Self-Service und Rechnungsarchiv
+
+- [x] Eigene SEPA-Mandate im Pächterportal hinterlegen
+- [x] SEPA-Mandate im Pächterportal widerrufen
+- [x] Self-Service-Mandate in zentraler Mandatsübersicht anzeigen
+- [x] Freigegebene Rechnungen als private PDF-Datei archivieren
+- [x] Archivierte Rechnungs-PDFs bevorzugt ausliefern
+- [x] Tests, Dokumentation und Veröffentlichung abschließen

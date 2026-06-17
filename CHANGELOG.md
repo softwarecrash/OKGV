@@ -2,6 +2,24 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.80] - 2026-06-17
+
+### SEPA-Self-Service und Rechnungsarchiv
+
+- Pächter können eigene SEPA-Mandate im Pächterportal hinterlegen.
+- Eigene SEPA-Mandate können im Pächterportal für zukünftige Einzüge
+  widerrufen werden.
+- Self-Service-Mandate erscheinen in der zentralen SEPA-Mandatsübersicht mit
+  Herkunfts- und Widerrufsinformationen.
+- Freigegebene Rechnungen werden als PDF im privaten Storage archiviert und
+  bei späteren Downloads bevorzugt aus dieser Ablage ausgeliefert.
+- Demo-Löschung und DSGVO-Auskunft berücksichtigen archivierte Rechnungs-PDFs
+  und Mandats-Widerrufsdaten.
+- Die komplette Testsuite besteht mit 217 Tests und 1358 Assertions; der
+  Frontend-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand `0.2.0.80` auf GitHub veröffentlicht.
+- Entwicklungsstand auf `0.2.0.80` erhöht.
+
 ## [0.2.0.79] - 2026-06-17
 
 ### Konten und technische Administration getrennt

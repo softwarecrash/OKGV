@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
-use App\Services\InvoicePdfGenerator;
+use App\Services\InvoicePdfArchive;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class InvoiceController extends Controller
 {
-    public function __construct(private readonly InvoicePdfGenerator $pdfGenerator) {}
+    public function __construct(private readonly InvoicePdfArchive $pdfArchive) {}
 
     public function index(Request $request): View
     {
@@ -54,7 +54,7 @@ class InvoiceController extends Controller
     {
         $this->authorize('view', $invoice);
 
-        return response($this->pdfGenerator->render($invoice), 200, [
+        return response($this->pdfArchive->content($invoice), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => "attachment; filename=\"Rechnung-{$invoice->invoice_number}.pdf\"",
             'X-Content-Type-Options' => 'nosniff',

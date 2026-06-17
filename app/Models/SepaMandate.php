@@ -26,6 +26,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'mandate_type',
     'status',
     'last_used_at',
+    'created_by',
+    'revoked_at',
+    'revoked_by',
+    'revocation_note',
 ])]
 class SepaMandate extends Model
 {
@@ -44,6 +48,7 @@ class SepaMandate extends Model
             'mandate_type' => SepaMandateType::class,
             'status' => SepaMandateStatus::class,
             'last_used_at' => 'datetime',
+            'revoked_at' => 'datetime',
         ];
     }
 
@@ -55,6 +60,16 @@ class SepaMandate extends Model
     public function paymentBatchItems(): HasMany
     {
         return $this->hasMany(PaymentBatchItem::class);
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function revoker(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'revoked_by');
     }
 
     public function isUsableOn(\DateTimeInterface|string $date): bool

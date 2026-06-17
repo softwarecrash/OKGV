@@ -81,6 +81,10 @@ Pflichtbestandteile sind CSRF-Schutz, Session-Rotation, Passwort-Hashing, Form R
 
 Auditpflicht besteht insbesondere für Anmeldung, Benutzer-, Mitglieder- und Parzellenänderungen, Zählerwechsel, Abrechnungserstellung, Dokumentenfreigaben und SEPA-Änderungen.
 
+Freigegebene Rechnungen werden zusätzlich als PDF im privaten Storage
+archiviert. Spätere Downloads verwenden bevorzugt diese archivierte Datei und
+erzeugen nur für ältere Bestandsdaten ohne Archivdatei dynamisch neu.
+
 ## Rollen
 
 - Vorstand
@@ -455,6 +459,12 @@ Kontoinhaber, Unterschriftsdatum, Gültigkeitszeitraum, Mandatsart und Status.
 Mandate werden nicht gelöscht. Wiederkehrende Mandate erzeugen beim ersten
 Einzug `FRST`, danach `RCUR`; einmalige Mandate erzeugen `OOFF` und werden
 nach Einreichung als abgelaufen markiert.
+
+Pächter und andere Konten mit eigener Mitgliedszuordnung können im
+Pächterportal eigene SEPA-Mandate hinterlegen und für zukünftige Einzüge
+widerrufen. Diese Self-Service-Mandate erscheinen in der zentralen
+Mandatsübersicht, werden verschlüsselt gespeichert und auditiert. Ein
+Widerruf beendet keine bereits eingereichten Bankvorgänge rückwirkend.
 
 #### Sammellastschriften
 

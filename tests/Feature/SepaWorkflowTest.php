@@ -6,6 +6,7 @@ use App\Enums\InvoicePaymentStatus;
 use App\Enums\InvoiceStatus;
 use App\Enums\PaymentBatchItemStatus;
 use App\Enums\PaymentBatchStatus;
+use App\Enums\SepaMandateStatus;
 use App\Enums\UserRole;
 use App\Models\Invoice;
 use App\Models\Member;
@@ -100,6 +101,69 @@ class SepaWorkflowTest extends TestCase
             ->get(route('sepa-mandates.index'))
             ->assertSee('•••• 3000')
             ->assertDontSee('DE89370400440532013000');
+    }
+
+    public function test_tenant_can_create_and_revoke_own_sepa_mandate(): void
+    {
+        $tenant = User::factory()->create(['role' => UserRole::Tenant]);
+        $member = Member::factory()->create(['user_id' => $tenant->id]);
+        $treasurer = User::factory()->create(['role' => UserRole::Treasurer]);
+
+        $this->actingAs($tenant)
+            ->post(route('tenant-portal.sepa-mandates.store'), [
+                'iban' => 'DE89 3704 0044 0532 0130 00',
+                'account_holder' => 'Erika Mustermann',
+                'consent' => '1',
+            ])
+            ->assertRedirect(route('tenant-portal.sepa-mandates.index'));
+
+        $mandate = SepaMandate::query()->firstOrFail();
+        $this->assertSame($member->id, $mandate->member_id);
+        $this->assertSame($tenant->id, $mandate->created_by);
+        $this->assertSame(SepaMandateStatus::Active, $mandate->status);
+        $this->assertSame('3000', $mandate->iban_last_four);
+        $this->assertStringNotContainsString(
+            'DE89370400440532013000',
+            (string) $mandate->getRawOriginal('iban'),
+        );
+
+        $this->actingAs($treasurer)
+            ->get(route('sepa-mandates.index'))
+            ->assertOk()
+            ->assertSee($member->full_name)
+            ->assertSee('Selbst hinterlegt');
+
+        $this->actingAs($tenant)
+            ->post(route('tenant-portal.sepa-mandates.revoke', $mandate), [
+                'confirm_revoke' => '1',
+                'revocation_note' => 'Bitte nicht mehr einziehen.',
+            ])
+            ->assertRedirect(route('tenant-portal.sepa-mandates.index'));
+
+        $mandate->refresh();
+        $this->assertSame(SepaMandateStatus::Revoked, $mandate->status);
+        $this->assertNotNull($mandate->revoked_at);
+        $this->assertSame($tenant->id, $mandate->revoked_by);
+        $this->assertSame('Bitte nicht mehr einziehen.', $mandate->revocation_note);
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'sepa.mandate.self_revoked',
+            'subject_id' => $mandate->id,
+        ]);
+    }
+
+    public function test_tenant_cannot_revoke_foreign_sepa_mandate(): void
+    {
+        $tenant = User::factory()->create(['role' => UserRole::Tenant]);
+        Member::factory()->create(['user_id' => $tenant->id]);
+        $foreignMandate = SepaMandate::factory()->create();
+
+        $this->actingAs($tenant)
+            ->post(route('tenant-portal.sepa-mandates.revoke', $foreignMandate), [
+                'confirm_revoke' => '1',
+            ])
+            ->assertForbidden();
+
+        $this->assertSame(SepaMandateStatus::Active, $foreignMandate->fresh()->status);
     }
 
     public function test_batch_generates_pain_008_and_tracks_payment_lifecycle(): void

@@ -33,6 +33,7 @@ use App\Http\Controllers\PaymentReminderController;
 use App\Http\Controllers\PaymentReturnController;
 use App\Http\Controllers\PermissionProfileController;
 use App\Http\Controllers\PortalDocumentController;
+use App\Http\Controllers\PortalSepaMandateController;
 use App\Http\Controllers\PrivacyController;
 use App\Http\Controllers\PrivacyErasureRequestController;
 use App\Http\Controllers\PublicDocumentController;
@@ -113,6 +114,18 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::get('paechterportal/dokumente/{document}', [PortalDocumentController::class, 'download'])
         ->middleware(['module:tenant_portal', 'module:documents'])
         ->name('tenant-portal.documents.download');
+    Route::get('paechterportal/sepa-mandate', [PortalSepaMandateController::class, 'index'])
+        ->middleware(['module:tenant_portal', 'module:sepa'])
+        ->name('tenant-portal.sepa-mandates.index');
+    Route::get('paechterportal/sepa-mandate/neu', [PortalSepaMandateController::class, 'create'])
+        ->middleware(['module:tenant_portal', 'module:sepa'])
+        ->name('tenant-portal.sepa-mandates.create');
+    Route::post('paechterportal/sepa-mandate', [PortalSepaMandateController::class, 'store'])
+        ->middleware(['module:tenant_portal', 'module:sepa', 'throttle:5,10'])
+        ->name('tenant-portal.sepa-mandates.store');
+    Route::post('paechterportal/sepa-mandate/{sepaMandate}/widerrufen', [PortalSepaMandateController::class, 'revoke'])
+        ->middleware(['module:tenant_portal', 'module:sepa', 'throttle:5,10'])
+        ->name('tenant-portal.sepa-mandates.revoke');
     Route::get('registrierungsanfragen', [RegistrationRequestController::class, 'index'])
         ->middleware('module:tenant_portal')
         ->name('registration-requests.index');

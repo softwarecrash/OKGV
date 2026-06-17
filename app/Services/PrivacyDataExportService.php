@@ -97,6 +97,8 @@ final class PrivacyDataExportService
                     'total_amount',
                     'approved_at',
                     'paid_at',
+                    'pdf_path',
+                    'pdf_generated_at',
                 ]),
                 'recipients' => $invoice->recipients->map->only([
                     'member_number',

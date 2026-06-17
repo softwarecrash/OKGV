@@ -213,6 +213,11 @@ final class DemoDataManager
                 ->whereIn('id', $documentIds)
                 ->pluck('file_path')
                 ->merge(
+                    DB::table('invoices')
+                        ->whereIn('id', $invoiceIds)
+                        ->pluck('pdf_path'),
+                )
+                ->merge(
                     DB::table('document_versions')
                         ->whereIn('document_id', $documentIds)
                         ->pluck('file_path'),

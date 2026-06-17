@@ -12,6 +12,10 @@ use Illuminate\Validation\ValidationException;
 
 final class BillingPeriodManager
 {
+    public function __construct(
+        private readonly InvoicePdfArchive $invoicePdfArchive,
+    ) {}
+
     /**
      * @param  array<string, mixed>  $data
      */
@@ -115,6 +119,7 @@ final class BillingPeriodManager
                     'approved_at' => $approvedAt,
                     'approved_by' => $actor->id,
                 ]);
+                $this->invoicePdfArchive->store($invoice->fresh());
             }
 
             $period->update([

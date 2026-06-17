@@ -26,6 +26,8 @@ use LogicException;
     'approved_by',
     'paid_at',
     'association_snapshot',
+    'pdf_path',
+    'pdf_generated_at',
 ])]
 class Invoice extends Model
 {
@@ -35,7 +37,7 @@ class Invoice extends Model
     protected static function booted(): void
     {
         static::updating(function (Invoice $invoice): void {
-            $allowedPaymentFields = ['payment_status', 'paid_at', 'updated_at'];
+            $allowedPaymentFields = ['payment_status', 'paid_at', 'pdf_path', 'pdf_generated_at', 'updated_at'];
             $changedFields = array_keys($invoice->getDirty());
 
             if ($invoice->getRawOriginal('status') === InvoiceStatus::Approved->value
@@ -62,6 +64,7 @@ class Invoice extends Model
             'approved_at' => 'datetime',
             'paid_at' => 'datetime',
             'association_snapshot' => 'array',
+            'pdf_generated_at' => 'datetime',
         ];
     }
 
