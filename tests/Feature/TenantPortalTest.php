@@ -159,6 +159,33 @@ class TenantPortalTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
+    public function test_legacy_pending_registration_without_user_id_blocks_login_by_email(): void
+    {
+        Notification::fake();
+
+        $user = User::factory()->create([
+            'email' => 'alt-wartend@example.test',
+            'password' => 'SicheresPasswort123',
+            'email_verified_at' => now(),
+        ]);
+        RegistrationRequest::factory()->create([
+            'user_id' => null,
+            'email' => $user->email,
+            'parcel_id' => null,
+            'parcel_number' => null,
+            'password' => null,
+            'status' => RegistrationRequestStatus::Pending,
+        ]);
+
+        $this->post(route('login'), [
+            'email' => $user->email,
+            'password' => 'SicheresPasswort123',
+        ])
+            ->assertRedirect(route('login'))
+            ->assertSessionHasErrors('email');
+        $this->assertGuest();
+    }
+
     public function test_board_can_approve_only_an_active_tenant_of_requested_parcel(): void
     {
         Notification::fake();
@@ -338,6 +365,42 @@ class TenantPortalTest extends TestCase
         $this->assertSame('approved-legacy@example.test', $member->fresh()->email);
         $this->assertDatabaseHas('audit_logs', [
             'action' => 'tenant.registration.member_linked',
+            'subject_id' => $registrationRequest->id,
+        ]);
+    }
+
+    public function test_approved_request_without_parcel_can_link_existing_account_without_member(): void
+    {
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $user = User::factory()->create([
+            'email' => 'konto-only@example.test',
+            'email_verified_at' => now(),
+        ]);
+        $registrationRequest = RegistrationRequest::factory()->create([
+            'user_id' => null,
+            'parcel_id' => null,
+            'parcel_number' => null,
+            'email' => $user->email,
+            'password' => null,
+            'status' => RegistrationRequestStatus::Approved,
+        ]);
+
+        $this->actingAs($board)
+            ->get(route('registration-requests.show', $registrationRequest))
+            ->assertOk()
+            ->assertSee('Konto-Verknüpfung abschließen')
+            ->assertDontSee('Mitglied nachträglich verknüpfen');
+
+        $this->actingAs($board)
+            ->post(route('registration-requests.link-account', $registrationRequest))
+            ->assertRedirect(route('registration-requests.show', $registrationRequest));
+
+        $this->assertSame($user->id, $registrationRequest->fresh()->user_id);
+        $this->assertDatabaseMissing('members', [
+            'user_id' => $user->id,
+        ]);
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'tenant.registration.account_linked',
             'subject_id' => $registrationRequest->id,
         ]);
     }

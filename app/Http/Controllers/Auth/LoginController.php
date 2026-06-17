@@ -45,7 +45,10 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user): ?RedirectResponse
     {
         $hasPendingRegistration = RegistrationRequest::query()
-            ->where('user_id', $user->id)
+            ->where(function ($query) use ($user): void {
+                $query->where('user_id', $user->id)
+                    ->orWhere('email', $user->email);
+            })
             ->where('status', RegistrationRequestStatus::Pending)
             ->exists();
 

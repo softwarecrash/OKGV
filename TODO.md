@@ -234,6 +234,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Mitglied und Pächterhistorie bei Freigabe mit Parzellennummer automatisch anlegen
 - [x] Wartende Altanfragen mit vorhandenem Benutzerkonto per E-Mail verknüpfen
 - [x] Freigegebene Anfragen ohne Mitgliedsverknüpfung nachträglich zuordnen
+- [x] Freigegebene Altanfragen ohne Parzelle mit vorhandenem Konto abschließen
 - [x] Pächterdashboard für eigene Daten und aktuelle Parzellen implementieren
 - [x] Eigene freigegebene Rechnungen in das Portal integrieren
 - [x] Lesenden Dokumentenzugriff mit privaten Downloads vorbereiten

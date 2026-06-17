@@ -2,6 +2,21 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.97] - 2026-06-17
+
+### Altfreigaben ohne Parzelle abschließen
+
+- Bereits freigegebene Registrierungsanfragen ohne Parzelle und ohne
+  gespeicherte `user_id` können jetzt direkt mit dem gefundenen Benutzerkonto
+  verknüpft werden, ohne ein künstliches Mitglied anlegen zu müssen.
+- Die nachträgliche Mitgliedsverknüpfung erscheint nur noch, wenn zur Anfrage
+  tatsächlich eine Parzelle gehört.
+- Login-Sperren für offene Registrierungsanfragen greifen jetzt auch bei
+  Altanfragen, die nur über die E-Mail-Adresse zum Benutzerkonto passen.
+- Die betroffene Pächterportal-Testsuite besteht mit 22 Tests und 189
+  Assertions.
+- Entwicklungsstand auf `0.2.0.97` erhöht.
+
 ## [0.2.0.96] - 2026-06-17
 
 ### Registrierungsflow entkoppelt

@@ -290,4 +290,44 @@ final class RegistrationRequestManager
             return $registrationRequest;
         });
     }
+
+    public function linkAccount(
+        RegistrationRequest $registrationRequest,
+        User $actor,
+    ): RegistrationRequest {
+        return DB::transaction(function () use ($registrationRequest, $actor): RegistrationRequest {
+            $registrationRequest = RegistrationRequest::query()
+                ->lockForUpdate()
+                ->findOrFail($registrationRequest->id);
+
+            if ($registrationRequest->status !== RegistrationRequestStatus::Approved) {
+                throw ValidationException::withMessages([
+                    'status' => 'Nur bereits freigegebene Registrierungsanfragen können nachträglich mit einem Konto verknüpft werden.',
+                ]);
+            }
+
+            $user = $registrationRequest->resolvedUser();
+
+            if ($user === null) {
+                throw ValidationException::withMessages([
+                    'user_id' => 'Für diese Anfrage wurde kein Benutzerkonto gefunden.',
+                ]);
+            }
+
+            if ($registrationRequest->user_id !== null && $registrationRequest->user_id !== $user->id) {
+                throw ValidationException::withMessages([
+                    'user_id' => 'Diese Anfrage ist bereits mit einem anderen Benutzerkonto verknüpft.',
+                ]);
+            }
+
+            $registrationRequest->user()->associate($user);
+            $registrationRequest->save();
+
+            AuditLogger::log('tenant.registration.account_linked', $actor, $registrationRequest, [
+                'user_id' => $user->id,
+            ]);
+
+            return $registrationRequest;
+        });
+    }
 }

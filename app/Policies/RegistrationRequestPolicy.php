@@ -28,7 +28,17 @@ class RegistrationRequestPolicy
     {
         return $user->canReviewTenantRegistrations()
             && $registrationRequest->status === RegistrationRequestStatus::Approved
+            && $registrationRequest->parcel_id !== null
             && $registrationRequest->resolvedUser() !== null
             && $registrationRequest->resolvedUser()?->member()->doesntExist();
+    }
+
+    public function linkAccount(User $user, RegistrationRequest $registrationRequest): bool
+    {
+        return $user->canReviewTenantRegistrations()
+            && $registrationRequest->status === RegistrationRequestStatus::Approved
+            && $registrationRequest->parcel_id === null
+            && $registrationRequest->user_id === null
+            && $registrationRequest->resolvedUser() !== null;
     }
 }

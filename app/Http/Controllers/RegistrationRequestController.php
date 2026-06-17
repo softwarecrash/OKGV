@@ -107,4 +107,14 @@ class RegistrationRequestController extends Controller
         return redirect()->route('registration-requests.show', $registrationRequest)
             ->with('status', 'Benutzerkonto wurde nachträglich mit dem Mitglied verknüpft.');
     }
+
+    public function linkAccount(RegistrationRequest $registrationRequest): RedirectResponse
+    {
+        $this->authorize('linkAccount', $registrationRequest);
+
+        $this->manager->linkAccount($registrationRequest, request()->user());
+
+        return redirect()->route('registration-requests.show', $registrationRequest)
+            ->with('status', 'Registrierungsanfrage wurde mit dem vorhandenen Benutzerkonto verknüpft.');
+    }
 }

@@ -133,6 +133,20 @@
                 </form>
             </div>
         </div>
+    @elsecan('linkAccount', $registrationRequest)
+        <div class="alert alert-info">
+            Diese Anfrage wurde bereits freigegeben und das passende Benutzerkonto wurde über die E-Mail-Adresse gefunden.
+            Es fehlt nur noch die technische Verknüpfung zwischen Anfrage und Konto.
+        </div>
+        <form class="card card-body border-0 shadow-sm" method="POST" action="{{ route('registration-requests.link-account', $registrationRequest) }}">
+            @csrf
+            <h2 class="h5">Konto-Verknüpfung abschließen</h2>
+            <p class="text-secondary mb-3">
+                Es ist keine Parzelle angegeben. Daher ist keine Mitglieds- oder Pächterzuordnung nötig.
+                Das Konto kann danach normal genutzt und später bei Bedarf einem Mitglied oder einer Parzelle zugeordnet werden.
+            </p>
+            <button class="btn btn-success" onclick="return confirm('Registrierungsanfrage mit diesem Benutzerkonto verknüpfen?')">Konto verknüpfen</button>
+        </form>
     @elsecan('linkMember', $registrationRequest)
         <div class="alert alert-info">
             Diese Anfrage wurde bereits freigegeben, aber das Benutzerkonto ist noch mit keinem Mitglied verknüpft.
