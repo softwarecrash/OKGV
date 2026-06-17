@@ -74,12 +74,19 @@ class WorkHourSubmissionController extends Controller
         }
 
         $this->authorize('create', WorkHourSubmission::class);
+        $ownParcelIds = $member
+            ? $member->parcelTenancies()
+                ->activeOn()
+                ->pluck('parcel_id')
+            : collect();
 
         if ($request->user()->canManageWorkEvents()) {
             $parcels = Parcel::query()
                 ->whereHas('tenancies')
                 ->orderBy('parcel_number')
-                ->get();
+                ->get()
+                ->sortBy(fn (Parcel $parcel) => $ownParcelIds->contains($parcel->id) ? 0 : 1)
+                ->values();
             $workHourSummaries = $this->workHourSummaries($parcels->pluck('id')->all());
         } else {
             if (! $member) {
@@ -88,25 +95,26 @@ class WorkHourSubmissionController extends Controller
                 ]);
             }
 
-            $parcelIds = $member->parcelTenancies()
-                ->activeOn()
-                ->pluck('parcel_id');
             $parcels = Parcel::query()
-                ->whereIn('id', $parcelIds)
+                ->whereIn('id', $ownParcelIds)
                 ->orderBy('parcel_number')
                 ->get();
             $workHourSummaries = $this->workHourSummaries($parcels->pluck('id')->all());
         }
 
         $selectedParcelId = $request->integer('parcel_id');
+        $defaultParcelId = $ownParcelIds
+            ->first(fn (int $parcelId): bool => $parcels->contains('id', $parcelId))
+            ?? $parcels->first()?->id;
 
         return view('work-hour-submissions.create', [
             'parcels' => $parcels,
             'canManageAllParcels' => $request->user()->canManageWorkEvents(),
+            'ownParcelIds' => $ownParcelIds,
             'workHourSummaries' => $workHourSummaries,
             'selectedParcelId' => $parcels->contains('id', $selectedParcelId)
                 ? $selectedParcelId
-                : null,
+                : $defaultParcelId,
         ]);
     }
 

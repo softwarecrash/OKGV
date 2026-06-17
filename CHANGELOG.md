@@ -2,6 +2,19 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.83] - 2026-06-17
+
+### Eigene Parzellen bei Arbeitsstunden bevorzugt
+
+- Bei stellvertretender Arbeitsstunden-Erfassung werden eigene Parzellen von
+  Vorstands- oder Verwaltungskonten oben in der Auswahl angezeigt.
+- Eigene Parzellen sind in der Liste sichtbar markiert und werden bevorzugt
+  vorausgewählt, auch wenn ein Pächter mehrere Parzellen besitzt.
+- Die Auswahl kann weiterhin bewusst auf andere Parzellen geändert werden.
+- Die komplette Testsuite besteht mit 220 Tests und 1385 Assertions; der
+  Frontend-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.83` erhöht.
+
 ## [0.2.0.82] - 2026-06-17
 
 ### Stellvertretende Arbeitsstunden-Erfassung

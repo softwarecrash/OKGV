@@ -35,8 +35,12 @@
                 <select class="form-select" id="parcel_id" name="parcel_id" required>
                     @foreach ($parcels as $parcel)
                         @php($summary = $workHourSummaries[$parcel->id] ?? null)
+                        @php($isOwnParcel = $ownParcelIds->contains($parcel->id))
                         <option value="{{ $parcel->id }}" @selected((int) old('parcel_id', $selectedParcelId) === $parcel->id)>
                             Parzelle {{ $parcel->parcel_number }}
+                            @if ($isOwnParcel)
+                                · eigene Parzelle
+                            @endif
                             @if ($summary)
                                 · offen {{ number_format((float) $summary['missing'], 2, ',', '.') }} Std.
                                 · {{ $summary['period'] }}
@@ -47,7 +51,7 @@
                     @endforeach
                 </select>
                 @if ($canManageAllParcels)
-                    <div class="form-text">Für nicht registrierte Pächter können Arbeitsstunden hier stellvertretend durch den Vorstand erfasst werden.</div>
+                    <div class="form-text">Eigene Parzellen stehen oben und sind markiert. Für nicht registrierte Pächter können Arbeitsstunden hier stellvertretend durch den Vorstand erfasst werden.</div>
                 @endif
             </div>
             <div class="col-md-4">

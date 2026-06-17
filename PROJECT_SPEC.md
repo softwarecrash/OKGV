@@ -930,7 +930,10 @@ ohne eigenes Onlinekonto berücksichtigt werden können. Diese Einträge werden
 direkt als bestätigt gespeichert, auditierbar als stellvertretende Erfassung
 gekennzeichnet und im Parzellenkonto den bestätigten Pächtermeldungen
 zugerechnet. Die Erfassungsmaske zeigt vorhandene offene Stunden der
-aktuellsten bearbeitbaren Abrechnungsperiode als Orientierung an.
+aktuellsten bearbeitbaren Abrechnungsperiode als Orientierung an. Wenn das
+erfassende Konto selbst aktuelle Parzellen besitzt, stehen diese oben in der
+Auswahl, sind als eigene Parzellen markiert und werden bevorzugt
+vorausgewählt.
 
 ### Vorgezogene Phase 12: Arbeitseinsätze
 

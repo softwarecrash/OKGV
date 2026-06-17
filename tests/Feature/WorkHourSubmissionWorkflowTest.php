@@ -27,14 +27,19 @@ class WorkHourSubmissionWorkflowTest extends TestCase
     public function test_board_can_record_work_hours_for_any_leased_parcel(): void
     {
         $board = User::factory()->create(['role' => UserRole::GardenManager]);
+        $boardMember = Member::factory()->create(['user_id' => $board->id]);
+        $ownParcel = Parcel::factory()->create(['parcel_number' => 'A-01']);
+        $secondOwnParcel = Parcel::factory()->create(['parcel_number' => 'A-02']);
         $member = Member::factory()->create();
         $parcel = Parcel::factory()->create(['parcel_number' => 'B-12']);
-        ParcelTenant::factory()->create([
-            'parcel_id' => $parcel->id,
-            'member_id' => $member->id,
-            'starts_at' => '2020-01-01',
-            'is_primary' => true,
-        ]);
+        foreach ([[$ownParcel, $boardMember], [$secondOwnParcel, $boardMember], [$parcel, $member]] as [$leasedParcel, $tenantMember]) {
+            ParcelTenant::factory()->create([
+                'parcel_id' => $leasedParcel->id,
+                'member_id' => $tenantMember->id,
+                'starts_at' => '2020-01-01',
+                'is_primary' => true,
+            ]);
+        }
         $period = BillingPeriod::factory()->create([
             'name' => 'Abrechnung 2025',
             'starts_at' => '2025-01-01',
@@ -55,6 +60,14 @@ class WorkHourSubmissionWorkflowTest extends TestCase
             ->get(route('work-hour-submissions.create'))
             ->assertOk()
             ->assertSee('stellvertretend')
+            ->assertSee('value="'.$ownParcel->id.'" selected', false)
+            ->assertSeeInOrder([
+                'Parzelle A-01',
+                'eigene Parzelle',
+                'Parzelle A-02',
+                'eigene Parzelle',
+                'Parzelle B-12',
+            ])
             ->assertSee('Parzelle B-12')
             ->assertSee('offen 10,00 Std.');
 

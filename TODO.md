@@ -99,6 +99,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 ## Projektweite Standards
 
+- [x] Eigene Parzellen bei stellvertretender Arbeitsstunden-Erfassung bevorzugt anzeigen
+- [x] Eigene Parzellen in der Arbeitsstunden-Parzellenauswahl markieren
+- [x] Entwicklungsstand 0.2.0.83 vorbereiten
 - [x] Stellvertretende Arbeitsstunden-Erfassung für Vorstand und Verwaltung ergänzen
 - [x] Offene Arbeitsstunden in der Erfassungsmaske als Orientierung anzeigen
 - [x] Entwicklungsstand 0.2.0.82 vorbereiten
