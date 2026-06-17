@@ -48,6 +48,12 @@ class RegistrationRequest extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function resolvedUser(): ?User
+    {
+        return $this->user
+            ?? User::query()->where('email', $this->email)->first();
+    }
+
     public function reviewer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reviewed_by');

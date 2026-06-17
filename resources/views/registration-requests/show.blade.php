@@ -11,9 +11,13 @@
                 <dt class="col-sm-3">Parzelle</dt><dd class="col-sm-9">{{ $registrationRequest->parcel_number ?? 'Keine angegeben' }}</dd>
                 <dt class="col-sm-3">Benutzerkonto</dt>
                 <dd class="col-sm-9">
-                    @if ($registrationRequest->user)
-                        Bereits angelegt
-                        @if ($registrationRequest->user->hasVerifiedEmail())
+                    @if ($resolvedUser)
+                        @if ($registrationRequest->user_id)
+                            Bereits angelegt
+                        @else
+                            Passendes Konto über E-Mail gefunden
+                        @endif
+                        @if ($resolvedUser->hasVerifiedEmail())
                             · E-Mail bestätigt
                         @else
                             · E-Mail noch nicht bestätigt

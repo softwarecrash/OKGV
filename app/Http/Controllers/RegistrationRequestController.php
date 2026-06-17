@@ -35,6 +35,7 @@ class RegistrationRequestController extends Controller
     {
         $this->authorize('view', $registrationRequest);
         $registrationRequest->loadMissing('user');
+        $resolvedUser = $registrationRequest->resolvedUser();
 
         $memberQuery = Member::query()
             ->whereNull('user_id')
@@ -54,6 +55,7 @@ class RegistrationRequestController extends Controller
             'registrationRequest',
             'candidates',
             'recommendedCandidate',
+            'resolvedUser',
         ));
     }
 

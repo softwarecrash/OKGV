@@ -2,6 +2,18 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.94] - 2026-06-17
+
+### Bestehende Konten mit Registrierungsanfragen verknüpfen
+
+- Wartende Registrierungsanfragen ohne gespeicherte `user_id` erkennen jetzt
+  ein bereits vorhandenes Benutzerkonto mit derselben E-Mail-Adresse.
+- Die Prüfansicht zeigt solche Konten als gefunden an und erlaubt die normale
+  Freigabe samt Mitglieds- oder Parzellenzuordnung.
+- Bei der Freigabe wird die fehlende Verknüpfung dauerhaft nachgetragen.
+- Die komplette Testsuite besteht mit 232 Tests und 1488 Assertions.
+- Entwicklungsstand auf `0.2.0.94` erhöht.
+
 ## [0.2.0.93] - 2026-06-17
 
 ### Registrierungsflow vereinfacht

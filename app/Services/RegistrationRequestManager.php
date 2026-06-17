@@ -64,7 +64,7 @@ final class RegistrationRequestManager
                 }
             }
 
-            $user = $registrationRequest->user;
+            $user = $registrationRequest->resolvedUser();
 
             if (User::query()
                 ->where('email', $registrationRequest->email)
@@ -90,6 +90,10 @@ final class RegistrationRequestManager
 
             if (! $user->hasVerifiedEmail()) {
                 $user->markEmailAsVerified();
+            }
+
+            if ($registrationRequest->user_id !== $user->id) {
+                $registrationRequest->user()->associate($user);
             }
 
             $previousMemberEmail = $member?->email;
@@ -140,7 +144,7 @@ final class RegistrationRequestManager
                 ]);
             }
 
-            $user = $registrationRequest->user;
+            $user = $registrationRequest->resolvedUser();
             $registrationRequest->update([
                 'status' => RegistrationRequestStatus::Rejected,
                 'reviewed_by' => $actor->id,

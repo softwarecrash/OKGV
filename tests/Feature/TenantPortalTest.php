@@ -162,6 +162,45 @@ class TenantPortalTest extends TestCase
         ]);
     }
 
+    public function test_approval_links_legacy_pending_request_to_existing_user_by_email(): void
+    {
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $user = User::factory()->create([
+            'email' => 'legacy@example.test',
+            'email_verified_at' => now(),
+        ]);
+        $parcel = Parcel::factory()->create(['parcel_number' => 'ALT-01']);
+        $member = Member::factory()->create();
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $member->id,
+            'starts_at' => now()->subYear(),
+        ]);
+        $registrationRequest = RegistrationRequest::factory()->create([
+            'user_id' => null,
+            'parcel_id' => $parcel->id,
+            'parcel_number' => $parcel->parcel_number,
+            'email' => 'legacy@example.test',
+            'password' => null,
+        ]);
+
+        $this->actingAs($board)
+            ->get(route('registration-requests.show', $registrationRequest))
+            ->assertOk()
+            ->assertSee('Passendes Konto über E-Mail gefunden')
+            ->assertSee('E-Mail bestätigt');
+
+        $this->actingAs($board)
+            ->post(route('registration-requests.approve', $registrationRequest), [
+                'member_id' => $member->id,
+            ])
+            ->assertRedirect(route('registration-requests.index'));
+
+        $this->assertSame($user->id, $registrationRequest->fresh()->user_id);
+        $this->assertSame($user->id, $member->fresh()->user_id);
+        $this->assertSame(RegistrationRequestStatus::Approved, $registrationRequest->fresh()->status);
+    }
+
     public function test_registration_review_recommends_matching_existing_member(): void
     {
         $board = User::factory()->create(['role' => UserRole::Board]);

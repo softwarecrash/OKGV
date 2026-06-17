@@ -15,9 +15,13 @@
                             <td>{{ $entry->email }}</td>
                             <td>{{ $entry->parcel_number ?? 'Keine angegeben' }}</td>
                             <td>
-                                @if ($entry->user)
+                                @php($resolvedUser = $entry->resolvedUser())
+                                @if ($resolvedUser)
                                     <span class="badge text-bg-success">angelegt</span>
-                                    @if ($entry->user->hasVerifiedEmail())
+                                    @if (! $entry->user_id)
+                                        <span class="badge text-bg-info">per E-Mail gefunden</span>
+                                    @endif
+                                    @if ($resolvedUser->hasVerifiedEmail())
                                         <span class="badge text-bg-success">E-Mail bestätigt</span>
                                     @else
                                         <span class="badge text-bg-warning">E-Mail offen</span>
