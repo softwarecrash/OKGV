@@ -36,18 +36,6 @@ final class WorkHourSubmissionManager
             }
 
             return DB::transaction(function () use ($data, $photo, $photoPath, $actor): WorkHourSubmission {
-                $activeTenancy = ParcelTenant::query()
-                    ->where('parcel_id', $data['parcel_id'])
-                    ->whereHas('member', fn ($query) => $query->where('user_id', $actor->id))
-                    ->activeOn($data['worked_at'])
-                    ->exists();
-
-                if (! $activeTenancy) {
-                    throw ValidationException::withMessages([
-                        'parcel_id' => 'Du bist am angegebenen Datum nicht dieser Parzelle zugeordnet.',
-                    ]);
-                }
-
                 $period = BillingPeriod::query()
                     ->whereDate('starts_at', '<=', $data['worked_at'])
                     ->whereDate('ends_at', '>=', $data['worked_at'])
@@ -59,6 +47,25 @@ final class WorkHourSubmissionManager
                     ]);
                 }
 
+                $canManageWorkEvents = $actor->canManageWorkEvents();
+                $activeTenancyQuery = ParcelTenant::query()
+                    ->where('parcel_id', $data['parcel_id'])
+                    ->activeOn($data['worked_at']);
+
+                $activeTenancy = $canManageWorkEvents
+                    ? $activeTenancyQuery->exists()
+                    : $activeTenancyQuery
+                        ->whereHas('member', fn ($query) => $query->where('user_id', $actor->id))
+                        ->exists();
+
+                if (! $activeTenancy) {
+                    throw ValidationException::withMessages([
+                        'parcel_id' => $canManageWorkEvents
+                            ? 'Diese Parzelle ist am angegebenen Datum keinem Pächter zugeordnet.'
+                            : 'Du bist am angegebenen Datum nicht dieser Parzelle zugeordnet.',
+                    ]);
+                }
+
                 $submission = WorkHourSubmission::create([
                     'billing_period_id' => $period->id,
                     'parcel_id' => $data['parcel_id'],
@@ -66,18 +73,33 @@ final class WorkHourSubmissionManager
                     'worked_at' => $data['worked_at'],
                     'hours' => $data['hours'],
                     'description' => $data['description'],
-                    'status' => WorkHourSubmissionStatus::Pending,
+                    'status' => $canManageWorkEvents
+                        ? WorkHourSubmissionStatus::Approved
+                        : WorkHourSubmissionStatus::Pending,
                     'photo_path' => $photoPath,
                     'photo_original_name' => $photo?->getClientOriginalName(),
                     'photo_mime' => $photo?->getMimeType(),
                     'photo_size' => $photo?->getSize(),
+                    'reviewed_by' => $canManageWorkEvents ? $actor->id : null,
+                    'reviewed_at' => $canManageWorkEvents ? now() : null,
+                    'review_note' => $canManageWorkEvents
+                        ? 'Stellvertretend durch Vorstand/Verwaltung erfasst.'
+                        : null,
                 ]);
 
                 AuditLogger::log('work_hour_submission.created', $actor, $submission, [
                     'parcel_id' => $submission->parcel_id,
                     'hours' => $submission->hours,
                     'has_photo' => $photo !== null,
+                    'delegated_by_management' => $canManageWorkEvents,
                 ]);
+
+                if ($canManageWorkEvents) {
+                    $this->workHourManager->synchronizeParcel($period, $submission->parcel_id, $actor);
+                    AuditLogger::log('work_hour_submission.approved', $actor, $submission, [
+                        'delegated_by_management' => true,
+                    ]);
+                }
 
                 return $submission;
             });

@@ -24,14 +24,60 @@ class WorkHourSubmissionWorkflowTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_non_tenant_is_redirected_from_tenant_submission_form(): void
+    public function test_board_can_record_work_hours_for_any_leased_parcel(): void
     {
-        $administrator = User::factory()->administrator()->create();
+        $board = User::factory()->create(['role' => UserRole::GardenManager]);
+        $member = Member::factory()->create();
+        $parcel = Parcel::factory()->create(['parcel_number' => 'B-12']);
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $member->id,
+            'starts_at' => '2020-01-01',
+            'is_primary' => true,
+        ]);
+        $period = BillingPeriod::factory()->create([
+            'name' => 'Abrechnung 2025',
+            'starts_at' => '2025-01-01',
+            'ends_at' => '2025-12-31',
+        ]);
+        WorkHour::factory()->create([
+            'billing_period_id' => $period->id,
+            'parcel_id' => $parcel->id,
+            'hours_required' => '10.00',
+            'manual_hours_done' => '0.00',
+            'hours_done' => '0.00',
+            'hours_missing' => '10.00',
+            'penalty_rate' => '20.00',
+            'penalty_amount' => '200.00',
+        ]);
 
-        $this->actingAs($administrator)
+        $this->actingAs($board)
             ->get(route('work-hour-submissions.create'))
-            ->assertRedirect(route('work-hours.index'))
-            ->assertSessionHasErrors('work_hours');
+            ->assertOk()
+            ->assertSee('stellvertretend')
+            ->assertSee('Parzelle B-12')
+            ->assertSee('offen 10,00 Std.');
+
+        $this->actingAs($board)
+            ->post(route('work-hour-submissions.store'), [
+                'parcel_id' => $parcel->id,
+                'worked_at' => '2025-06-10',
+                'hours' => '2.50',
+                'description' => 'Gemeinschaftsweg gepflegt, stellvertretend gemeldet.',
+            ])
+            ->assertRedirect(route('work-hour-submissions.index'))
+            ->assertSessionHas('status');
+
+        $submission = WorkHourSubmission::query()->firstOrFail();
+        $this->assertSame(WorkHourSubmissionStatus::Approved, $submission->status);
+        $this->assertSame($board->id, $submission->submitted_by);
+        $this->assertSame($board->id, $submission->reviewed_by);
+        $this->assertSame('2.50', WorkHour::query()->firstOrFail()->submission_hours_done);
+        $this->assertSame('7.50', WorkHour::query()->firstOrFail()->hours_missing);
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'work_hour_submission.approved',
+            'subject_id' => $submission->id,
+        ]);
     }
 
     public function test_tenant_without_assigned_parcel_sees_an_explanation(): void
@@ -43,6 +89,23 @@ class WorkHourSubmissionWorkflowTest extends TestCase
             ->get(route('work-hour-submissions.create'))
             ->assertOk()
             ->assertSee('aktuell keine Parzelle zugeordnet');
+    }
+
+    public function test_tenant_cannot_report_work_hours_for_foreign_parcel(): void
+    {
+        [$tenant] = $this->tenantScenario();
+        $foreignParcel = $this->leasedParcel();
+
+        $this->actingAs($tenant)
+            ->post(route('work-hour-submissions.store'), [
+                'parcel_id' => $foreignParcel->id,
+                'worked_at' => '2025-06-10',
+                'hours' => '1.00',
+                'description' => 'Fremde Parzelle.',
+            ])
+            ->assertSessionHasErrors('parcel_id');
+
+        $this->assertDatabaseCount('work_hour_submissions', 0);
     }
 
     public function test_period_accounts_are_created_automatically_from_global_defaults(): void

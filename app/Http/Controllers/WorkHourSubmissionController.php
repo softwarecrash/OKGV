@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Enums\WorkHourSubmissionStatus;
 use App\Http\Requests\WorkHourSubmissionRequest;
 use App\Http\Requests\WorkHourSubmissionReviewRequest;
+use App\Models\BillingPeriod;
 use App\Models\Parcel;
+use App\Models\WorkHour;
 use App\Models\WorkHourSubmission;
 use App\Services\ActionIndicatorService;
 use App\Services\AuditLogger;
@@ -61,7 +63,7 @@ class WorkHourSubmissionController extends Controller
     {
         $member = $request->user()->member;
 
-        if (! $request->user()->hasTenantAccess() || ! $member) {
+        if (! $request->user()->hasTenantAccess() && ! $request->user()->canManageWorkEvents()) {
             $route = $request->user()->canManageBilling()
                 ? 'work-hours.index'
                 : 'home';
@@ -72,17 +74,36 @@ class WorkHourSubmissionController extends Controller
         }
 
         $this->authorize('create', WorkHourSubmission::class);
-        $parcelIds = $member->parcelTenancies()
-            ->activeOn()
-            ->pluck('parcel_id');
-        $parcels = Parcel::query()
-            ->whereIn('id', $parcelIds)
-            ->orderBy('parcel_number')
-            ->get();
+
+        if ($request->user()->canManageWorkEvents()) {
+            $parcels = Parcel::query()
+                ->whereHas('tenancies')
+                ->orderBy('parcel_number')
+                ->get();
+            $workHourSummaries = $this->workHourSummaries($parcels->pluck('id')->all());
+        } else {
+            if (! $member) {
+                return redirect()->route('home')->withErrors([
+                    'work_hours' => 'Arbeitsstunden melden Pächter über ihr verknüpftes Mitgliedskonto.',
+                ]);
+            }
+
+            $parcelIds = $member->parcelTenancies()
+                ->activeOn()
+                ->pluck('parcel_id');
+            $parcels = Parcel::query()
+                ->whereIn('id', $parcelIds)
+                ->orderBy('parcel_number')
+                ->get();
+            $workHourSummaries = $this->workHourSummaries($parcels->pluck('id')->all());
+        }
+
         $selectedParcelId = $request->integer('parcel_id');
 
         return view('work-hour-submissions.create', [
             'parcels' => $parcels,
+            'canManageAllParcels' => $request->user()->canManageWorkEvents(),
+            'workHourSummaries' => $workHourSummaries,
             'selectedParcelId' => $parcels->contains('id', $selectedParcelId)
                 ? $selectedParcelId
                 : null,
@@ -91,14 +112,18 @@ class WorkHourSubmissionController extends Controller
 
     public function store(WorkHourSubmissionRequest $request): RedirectResponse
     {
-        $this->manager->create(
+        $submission = $this->manager->create(
             $request->safe()->only(['parcel_id', 'worked_at', 'hours', 'description']),
             $request->file('photo'),
             $request->user(),
         );
 
+        $statusMessage = $submission->status === WorkHourSubmissionStatus::Approved
+            ? 'Arbeitsstunden wurden stellvertretend erfasst und direkt anerkannt.'
+            : 'Arbeitsstunden wurden eingereicht und warten auf Prüfung.';
+
         return redirect()->route('work-hour-submissions.index')
-            ->with('status', 'Arbeitsstunden wurden eingereicht und warten auf Prüfung.');
+            ->with('status', $statusMessage);
     }
 
     public function approve(
@@ -152,5 +177,42 @@ class WorkHourSubmissionController extends Controller
             $workHourSubmission->photo_original_name,
             ['Content-Type' => $workHourSubmission->photo_mime],
         );
+    }
+
+    /**
+     * @param  list<int>  $parcelIds
+     * @return array<int, array{period: string, missing: string, required: string, done: string}>
+     */
+    private function workHourSummaries(array $parcelIds): array
+    {
+        if ($parcelIds === []) {
+            return [];
+        }
+
+        $latestEditablePeriods = BillingPeriod::query()
+            ->whereIn('status', ['draft', 'calculated'])
+            ->orderByDesc('ends_at')
+            ->pluck('id');
+
+        if ($latestEditablePeriods->isEmpty()) {
+            return [];
+        }
+
+        return WorkHour::query()
+            ->with('billingPeriod')
+            ->whereIn('parcel_id', $parcelIds)
+            ->whereIn('billing_period_id', $latestEditablePeriods)
+            ->get()
+            ->sortByDesc(fn (WorkHour $workHour) => $workHour->billingPeriod->ends_at)
+            ->unique('parcel_id')
+            ->mapWithKeys(fn (WorkHour $workHour) => [
+                $workHour->parcel_id => [
+                    'period' => $workHour->billingPeriod->name,
+                    'missing' => (string) $workHour->hours_missing,
+                    'required' => (string) $workHour->hours_required,
+                    'done' => (string) $workHour->hours_done,
+                ],
+            ])
+            ->all();
     }
 }

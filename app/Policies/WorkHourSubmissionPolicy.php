@@ -23,7 +23,8 @@ class WorkHourSubmissionPolicy
 
     public function create(User $user): bool
     {
-        return $user->hasTenantAccess();
+        return $user->hasTenantAccess()
+            || $user->canManageWorkEvents();
     }
 
     public function review(User $user, WorkHourSubmission $submission): bool

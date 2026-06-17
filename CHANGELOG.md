@@ -2,6 +2,22 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.82] - 2026-06-17
+
+### Stellvertretende Arbeitsstunden-Erfassung
+
+- Konten mit dem Recht `Arbeitseinsätze verwalten` können Arbeitsstunden für
+  alle Parzellen mit Pächterhistorie stellvertretend erfassen.
+- Stellvertretend erfasste Arbeitsstunden werden direkt als bestätigt
+  gespeichert, auditierbar gekennzeichnet und in das Parzellenkonto übernommen.
+- Die Erfassungsmaske zeigt Vorstand und Verwaltung die offenen Stunden der
+  aktuellsten bearbeitbaren Abrechnungsperiode je Parzelle an.
+- Normale Pächter können weiterhin nur eigene Parzellen zum Tätigkeitsdatum
+  melden; Fremdparzellen werden serverseitig abgewiesen.
+- Die komplette Testsuite besteht mit 220 Tests und 1383 Assertions; der
+  Frontend-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.82` erhöht.
+
 ## [0.2.0.81] - 2026-06-17
 
 ### Portal-Hinweise und Arbeitsstundenmeldungen bereinigt

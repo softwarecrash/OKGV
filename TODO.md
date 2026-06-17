@@ -99,6 +99,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 ## Projektweite Standards
 
+- [x] Stellvertretende Arbeitsstunden-Erfassung für Vorstand und Verwaltung ergänzen
+- [x] Offene Arbeitsstunden in der Erfassungsmaske als Orientierung anzeigen
+- [x] Entwicklungsstand 0.2.0.82 vorbereiten
 - [x] Pächterportal-Indikatoren von Vorstands- und Admin-Aufgaben trennen
 - [x] Abgelehnte Arbeitsstundenmeldungen als gelesen ausblendbar machen
 - [x] Entwicklungsstand 0.2.0.81 vorbereiten

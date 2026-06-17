@@ -3,24 +3,52 @@
 @section('content')
 <div class="container">
     <h1 class="h2 mb-2">Arbeitsstunden melden</h1>
-    <p class="text-secondary mb-4">Melde eine geleistete Tätigkeit für deine Parzelle. Die Stunden zählen erst nach Prüfung.</p>
+    <p class="text-secondary mb-4">
+        @if ($canManageAllParcels)
+            Erfasse geleistete Arbeitsstunden stellvertretend für eine Parzelle. Diese Stunden werden direkt anerkannt und im Arbeitsstundenkonto berücksichtigt.
+        @else
+            Melde eine geleistete Tätigkeit für deine Parzelle. Die Stunden zählen erst nach Prüfung.
+        @endif
+    </p>
     <form class="card card-body border-0 shadow-sm" method="POST" enctype="multipart/form-data" action="{{ route('work-hour-submissions.store') }}">
         @csrf
         <x-validation-errors />
         @if ($parcels->isEmpty())
             <div class="alert alert-warning mb-0">
-                Deinem Mitgliedskonto ist aktuell keine Parzelle zugeordnet. Bitte wende dich an den Vorstand, bevor du Arbeitsstunden meldest.
+                @if ($canManageAllParcels)
+                    Es gibt aktuell keine Parzellen mit Pächterhistorie. Lege zuerst eine Pächterzuordnung an, damit Arbeitsstunden einer Parzelle zugeordnet werden können.
+                @else
+                    Deinem Mitgliedskonto ist aktuell keine Parzelle zugeordnet. Bitte wende dich an den Vorstand, bevor du Arbeitsstunden meldest.
+                @endif
             </div>
         @else
-            <div class="alert alert-info">Beschreibe die Tätigkeit nachvollziehbar. Ein Foto ist optional und bleibt ausschließlich für berechtigte Prüfer sichtbar.</div>
+            <div class="alert alert-info">
+                @if ($canManageAllParcels)
+                    Wähle die betroffene Parzelle aus und beschreibe die Tätigkeit nachvollziehbar. Die offenen Stunden der aktuellsten bearbeitbaren Abrechnungsperiode werden in der Auswahl angezeigt, sofern ein Arbeitsstundenkonto existiert.
+                @else
+                    Beschreibe die Tätigkeit nachvollziehbar. Ein Foto ist optional und bleibt ausschließlich für berechtigte Prüfer sichtbar.
+                @endif
+            </div>
             <div class="row g-3">
             <div class="col-md-4">
                 <label class="form-label" for="parcel_id">Parzelle</label>
                 <select class="form-select" id="parcel_id" name="parcel_id" required>
                     @foreach ($parcels as $parcel)
-                        <option value="{{ $parcel->id }}" @selected((int) old('parcel_id', $selectedParcelId) === $parcel->id)>Parzelle {{ $parcel->parcel_number }}</option>
+                        @php($summary = $workHourSummaries[$parcel->id] ?? null)
+                        <option value="{{ $parcel->id }}" @selected((int) old('parcel_id', $selectedParcelId) === $parcel->id)>
+                            Parzelle {{ $parcel->parcel_number }}
+                            @if ($summary)
+                                · offen {{ number_format((float) $summary['missing'], 2, ',', '.') }} Std.
+                                · {{ $summary['period'] }}
+                            @elseif ($canManageAllParcels)
+                                · noch kein Konto
+                            @endif
+                        </option>
                     @endforeach
                 </select>
+                @if ($canManageAllParcels)
+                    <div class="form-text">Für nicht registrierte Pächter können Arbeitsstunden hier stellvertretend durch den Vorstand erfasst werden.</div>
+                @endif
             </div>
             <div class="col-md-4">
                 <label class="form-label" for="worked_at">Datum</label>
@@ -56,8 +84,8 @@
             </div>
             </div>
             <div class="d-flex gap-2 mt-4">
-                <button class="btn btn-primary">Zur Prüfung einreichen</button>
-                <a class="btn btn-outline-secondary" href="{{ route('tenant-portal.index') }}">Abbrechen</a>
+                <button class="btn btn-primary">{{ $canManageAllParcels ? 'Stunden eintragen und anerkennen' : 'Zur Prüfung einreichen' }}</button>
+                <a class="btn btn-outline-secondary" href="{{ $canManageAllParcels ? route('work-hour-submissions.index') : route('tenant-portal.index') }}">Abbrechen</a>
             </div>
         @endif
     </form>

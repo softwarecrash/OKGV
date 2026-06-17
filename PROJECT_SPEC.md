@@ -924,6 +924,14 @@ Gemeinsame Pächter melden in dasselbe Parzellenkonto. Meldungen können nach
 dem Absenden nicht geändert oder gelöscht werden; Prüfung, Prüfer und
 Begründung bleiben dauerhaft erhalten und werden auditiert.
 
+Berechtigte Vorstands- und Administrationskonten können Arbeitsstunden
+stellvertretend für alle verpachteten Parzellen erfassen, damit auch Pächter
+ohne eigenes Onlinekonto berücksichtigt werden können. Diese Einträge werden
+direkt als bestätigt gespeichert, auditierbar als stellvertretende Erfassung
+gekennzeichnet und im Parzellenkonto den bestätigten Pächtermeldungen
+zugerechnet. Die Erfassungsmaske zeigt vorhandene offene Stunden der
+aktuellsten bearbeitbaren Abrechnungsperiode als Orientierung an.
+
 ### Vorgezogene Phase 12: Arbeitseinsätze
 
 Phase 12 wird auf ausdrücklichen Wunsch direkt nach Phase 9 umgesetzt, weil
