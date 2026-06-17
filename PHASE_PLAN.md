@@ -215,7 +215,145 @@ vorherigen Phase geprüft sein.
 - [ ] Automatisierte Zeitpläne, externe Backupziele und Aufbewahrungsstrategie
 - [ ] Produktionsdokumentation
 
+## Phase 21: Schwarzes Brett und Vereinsnews
+
+- [ ] Öffentliche und interne Bekanntmachungen
+- [ ] Zielgruppen: alle Pächter, Vorstand, ausgewählte Rollen
+- [ ] Veröffentlichungszeitraum und optionale Hervorhebung
+- [ ] Anhänge und Dokumentverknüpfungen
+- [ ] Aktionspunkt für neue ungelesene Bekanntmachungen
+- [ ] Lesebestätigung für wichtige Bekanntmachungen
+- [ ] Auditlog und Rechtekonzept
+
+## Phase 22: Bewerbermanagement
+
+- [ ] Warteliste fachlich zum Bewerbermanagement erweitern
+- [ ] Interessentenakte mit Kontakthistorie
+- [ ] Besichtigungstermine
+- [ ] Bewerberstatus und Priorisierung
+- [ ] Zuordnungsvorschlag für freie oder bald freie Parzellen
+- [ ] Übernahme eines Bewerbers in Mitglied und Pächterhistorie
+- [ ] Auditlog und DSGVO-Auskunft erweitern
+
+## Phase 23: Gartenbegehungen
+
+- [ ] Begehungstermine mit Prüfern und Parzellenumfang
+- [ ] Checklisten und Mängelkategorien
+- [ ] Mängel mit Fotos, Fristen und Verantwortlichkeit
+- [ ] Nachkontrolle und Erledigungsstatus
+- [ ] Pächterhinweise im Portal
+- [ ] Dokumentation als PDF-Protokoll
+- [ ] Auditlog, Rechte und Datenschutzprüfung
+
+## Phase 24: Vorstandsarbeit
+
+- [ ] Vorstandssitzungen
+- [ ] Tagesordnungen
+- [ ] Protokolle
+- [ ] Beschlussbuch
+- [ ] Aufgaben und Wiedervorlagen aus Beschlüssen
+- [ ] Dokumentverknüpfung und PDF-Export
+- [ ] Rechte für vertrauliche Vorstandsunterlagen
+
+## Phase 25: Aufgaben und Wiedervorlagen
+
+- [ ] Zentrale Aufgabenliste für Vorstand und Verwaltung
+- [ ] Fälligkeiten, Zuständigkeiten und Status
+- [ ] Verknüpfung mit Mitgliedern, Parzellen, Begehungen, Beschlüssen und Dokumenten
+- [ ] Erinnerungen und Aktionspunkte
+- [ ] Wiederkehrende Aufgaben
+- [ ] Auditlog und Rechte
+
+## Phase 26: Kassenbuch
+
+- [ ] Einnahmen und Ausgaben
+- [ ] Kategorien oder einfacher Kontenrahmen
+- [ ] Belegnummern und Beleganhänge
+- [ ] Bezug zu Rechnungen, Mitgliedern oder Parzellen
+- [ ] Kassenbericht und Export
+- [ ] Rechte für Kassierer und Administratoren
+- [ ] Auditlog und unveränderbare Abschlussstände
+
+## Phase 27: Bankimport und Bankabgleich
+
+- [ ] Import von Kontoauszügen per CSV
+- [ ] Vorbereitung für CAMT.053 und MT940
+- [ ] Automatische Zuordnung zu Rechnungen und Zahlungspflichten
+- [ ] Manuelle Klärung nicht zugeordneter Buchungen
+- [ ] Erkennung von Rücklastschriften
+- [ ] Zahlungsstatus automatisch aktualisieren
+- [ ] Auditlog und Schutz sensibler Bankdaten
+
+## Phase 28: Haushaltsplan
+
+- [ ] Haushaltsplan je Geschäftsjahr
+- [ ] Budgetpositionen und Kategorien
+- [ ] Soll-Ist-Vergleich aus Kassenbuch und Abrechnung
+- [ ] Auswertungen für Vorstand und Mitgliederversammlung
+- [ ] Export als PDF und CSV
+
+## Phase 29: Umfragen und Terminabfragen
+
+- [ ] Umfragen für Pächter und Mitglieder
+- [ ] Terminabfragen für Arbeitseinsätze und Vereinsveranstaltungen
+- [ ] Zielgruppen und Abstimmungszeitraum
+- [ ] Sichtbare oder geheime Ergebnisse
+- [ ] Export und Auditlog
+
+## Phase 30: Wertermittlung
+
+- [ ] Wertermittlungsakte je Parzelle
+- [ ] Laube, Gewächshaus, Bepflanzung und Ausstattung erfassen
+- [ ] Bewertungspositionen und Rückbaukosten
+- [ ] Fotos und Dokumente
+- [ ] Wertermittlungsprotokoll als PDF
+- [ ] Historie bei Pächterwechseln
+
+## Phase 31: Mobile Nutzung und PWA
+
+- [ ] PWA-Manifest und installierbare Oberfläche
+- [ ] Mobile Optimierung wichtiger Pächterfunktionen
+- [ ] Zählerstand melden, Arbeitsstunden melden, Dokumente und Termine mobil priorisieren
+- [ ] Offline-freundliche Formularentwürfe prüfen
+- [ ] Push-Benachrichtigungen als spätere Option bewerten
+
+## Phase 32: Erweiterte Finanzexporte
+
+- [ ] DATEV-Export prüfen und fachlich spezifizieren
+- [ ] Export aus Kassenbuch, Rechnungen und Zahlungen
+- [ ] Steuerberaterfreundliche Beleg- und Buchungslisten
+- [ ] Validierung gegen gängige DATEV-Anforderungen
+
+## Phase 33: Digitale Mitgliederversammlung
+
+- [ ] Einladungen und Tagesordnung
+- [ ] Teilnehmerliste
+- [ ] Abstimmungen und Ergebnisse
+- [ ] Beschlüsse mit Protokollverknüpfung
+- [ ] Rechtliche Anforderungen vor Umsetzung prüfen
+
+## Phase 34: SaaS- und Hosting-Betrieb
+
+- [ ] Tenant-Verwaltung außerhalb der Einzelinstanz
+- [ ] Lizenz- und Paketverwaltung
+- [ ] Abrechnung der Vereine
+- [ ] Automatische Updates
+- [ ] Monitoring und Healthchecks
+- [ ] SMTP pro Verein
+- [ ] Eigene Domain pro Verein
+- [ ] Objektstorage für Dokumente
+- [ ] Automatische Backups und Restore-Strategie
+- [ ] Klare Trennung zur selbstverwalteten Einzelinstanz dokumentieren
+
+## Spätere Forschungsphase: KI-Protokollassistent
+
+- [ ] Fachliche und datenschutzrechtliche Prüfung
+- [ ] Protokollentwurf aus Stichpunkten
+- [ ] Beschlüsse und Aufgaben extrahieren
+- [ ] Lokale oder datenschutzkonforme Modellnutzung bewerten
+
 ## Nächster Schritt
 
-Die Phasen 0 bis 19 sind abgeschlossen. Als nächste reguläre Phase folgt
-Phase 20 mit Deployment und Produktionsdokumentation.
+Die Phasen 0 bis 19 sind abgeschlossen. Phase 20 bleibt die nächste reguläre
+technische Phase. Für fachlichen Mehrwert folgen danach Schwarzes Brett,
+Bewerbermanagement, Gartenbegehungen und Vorstandsarbeit.

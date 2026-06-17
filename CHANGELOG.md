@@ -2,6 +2,18 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.89] - 2026-06-17
+
+### Anschlussphasen aus Funktionsabgleich
+
+- Der externe Funktionsabgleich wurde in konkrete Anschlussphasen übersetzt.
+- Neue Fachphasen nach Phase 20 ergänzen Schwarzes Brett, Bewerbermanagement,
+  Gartenbegehungen, Vorstandsarbeit, Aufgaben, Kassenbuch, Bankabgleich,
+  Haushaltsplan, Umfragen, Wertermittlung, PWA und spätere SaaS-Themen.
+- Die nächsten Mehrwertmodule sind bewusst vor großen Zukunftsthemen
+  eingeordnet, damit OKGV zuerst typische Vereinsabläufe weiter abdeckt.
+- Entwicklungsstand auf `0.2.0.89` erhöht.
+
 ## [0.2.0.88] - 2026-06-17
 
 ### Plesk-Deployment ohne SSH

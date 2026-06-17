@@ -1,8 +1,16 @@
 # TODO
 
-Der verbindliche Gesamtfahrplan mit den Phasen 0 bis 20 steht in
+Der verbindliche Gesamtfahrplan mit den Phasen 0 bis 34 steht in
 `PHASE_PLAN.md`. In dieser Datei werden die jeweils aktive Phase und
 projektweite Einzelaufgaben detailliert geführt.
+
+## Projektweite Planung
+
+- [x] Externen Funktionsabgleich auswerten
+- [x] Anschlussphasen für Schwarzes Brett, Bewerbermanagement,
+  Gartenbegehungen, Vorstandsarbeit und Finanzmodule ableiten
+- [x] SaaS- und Zukunftsthemen als spätere Phasen einordnen
+- [x] Entwicklungsstand 0.2.0.89 vorbereiten
 
 ## Phase 0: Projektbasis
 
