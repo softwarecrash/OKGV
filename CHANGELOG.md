@@ -2,6 +2,22 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.88] - 2026-06-17
+
+### Plesk-Deployment ohne SSH
+
+- Neuer Artisan-Befehl `php artisan okgv:deploy` führt sichere
+  Bereitstellungsschritte für Webhosting aus.
+- Neues Script `scripts/plesk-deploy.sh` kann als zusätzliche
+  Git-Bereitstellungsaktion im Plesk Laravel Toolkit hinterlegt werden.
+- Das Deployment leert Caches, führt Migrationen aus, legt bei gesetzten
+  `OKGV_ADMIN_*` Werten den technischen Admin an und baut Laravel-Caches neu.
+- Die Plesk-Dokumentation beschreibt die Nutzung ohne SSH sowie optionale
+  Demo-Datenanlage über `--demo-seed`.
+- Die komplette Testsuite besteht mit 226 Tests und 1451 Assertions; der
+  Frontend-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.88` erhöht.
+
 ## [0.2.0.87] - 2026-06-17
 
 ### Primäradmin-Rechte und Pächterportal-Link

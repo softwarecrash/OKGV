@@ -109,6 +109,47 @@ php artisan up
 Wenn Plesk Node.js nicht passend bereitstellt, `npm ci` und `npm run build`
 lokal ausführen und anschließend `public/build` per Dateimanager hochladen.
 
+## Plesk-Bereitstellungsaktion ohne SSH
+
+Wenn SSH deaktiviert ist, kann das Laravel Toolkit trotzdem nach einem Git-
+Deployment Befehle ausführen. Trage in Plesk bei den zusätzlichen
+Bereitstellungsaktionen eine Zeile ein:
+
+```bash
+sh scripts/plesk-deploy.sh
+```
+
+Das Script nutzt den passenden PHP-Binary aus dem Hosting, leert zuerst die
+Laravel-Caches und ruft anschließend den OKGV-Deploy-Befehl auf:
+
+```bash
+php artisan okgv:deploy
+```
+
+Der Deploy-Befehl führt sicher aus:
+
+- `php artisan optimize:clear`
+- `php artisan migrate --force`
+- `php artisan okgv:create-admin`, wenn `OKGV_ADMIN_EMAIL` und
+  `OKGV_ADMIN_PASSWORD` in `.env` gesetzt sind
+- `php artisan optimize`
+
+Für Demo-Installationen kann die Bereitstellungsaktion erweitert werden:
+
+```bash
+sh scripts/plesk-deploy.sh --demo-seed
+```
+
+Wenn Plesk den falschen PHP-Binary findet, kann der Pfad vorangestellt werden:
+
+```bash
+OKGV_PHP_BINARY=/opt/plesk/php/8.3/bin/php sh scripts/plesk-deploy.sh
+```
+
+Composer-Abhängigkeiten und der Frontend-Build müssen weiterhin über die
+Plesk-Funktionen `Composer installieren` und den Node.js-Build oder über
+separate Bereitstellungsaktionen erledigt werden.
+
 ## Mailversand über Sendmail
 
 Viele Webhoster stellen zusätzlich zu SMTP eine lokale Sendmail-Funktion

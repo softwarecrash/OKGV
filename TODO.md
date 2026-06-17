@@ -99,6 +99,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 ## Projektweite Standards
 
+- [x] Plesk-Bereitstellungsscript ohne SSH ergänzen
+- [x] Artisan-Befehl `okgv:deploy` für Migration und Optimierung ergänzen
+- [x] Entwicklungsstand 0.2.0.88 vorbereiten
 - [x] Primäradmin mit vollständigen Verwaltungsrechten absichern
 - [x] Pächterportal-Link nur bei echter Mitgliedsverknüpfung anzeigen
 - [x] Entwicklungsstand 0.2.0.87 vorbereiten

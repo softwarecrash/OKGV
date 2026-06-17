@@ -470,6 +470,16 @@ Die frühe Entwicklung erfolgt direkt im Linux-LXC. Docker- und Deployment-Artef
 Eine kompakte Checkliste für die manuelle Plesk-Demo-Installation steht in
 [PLESK_SETUP.md](PLESK_SETUP.md).
 
+Für Plesk-Installationen ohne SSH stellt OKGV zusätzlich bereit:
+
+```bash
+sh scripts/plesk-deploy.sh
+```
+
+Das Script kann als zusätzliche Git-Bereitstellungsaktion im Laravel Toolkit
+hinterlegt werden und führt Migrationen, Admin-Bootstrap und Laravel-Optimierung
+über `php artisan okgv:deploy` aus.
+
 Die verbindliche Reihenfolge steht in [PHASE_PLAN.md](PHASE_PLAN.md), die
 Fachspezifikation in [PROJECT_SPEC.md](PROJECT_SPEC.md), Arbeitsregeln in
 [AGENTS.md](AGENTS.md) und der aktuelle Fortschritt in [TODO.md](TODO.md).
