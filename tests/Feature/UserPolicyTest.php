@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\UserPermission;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
@@ -18,6 +19,20 @@ class UserPolicyTest extends TestCase
 
         $this->assertTrue(Gate::forUser($administrator)->allows('update', $subject));
         $this->assertTrue(Gate::forUser($administrator)->allows('delete', $subject));
+    }
+
+    public function test_system_administrator_has_all_available_permissions(): void
+    {
+        $administrator = User::factory()->administrator()->create([
+            'permissions' => [],
+        ]);
+
+        foreach (UserPermission::availableCases() as $permission) {
+            $this->assertTrue(
+                $administrator->hasPermission($permission),
+                "System administrator is missing {$permission->value}.",
+            );
+        }
     }
 
     public function test_tenant_can_only_update_own_account(): void

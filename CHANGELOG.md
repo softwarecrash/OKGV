@@ -2,6 +2,21 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.87] - 2026-06-17
+
+### Primäradmin-Rechte und Pächterportal-Link
+
+- Technische Administratoren erhalten jetzt wieder alle verfügbaren
+  Verwaltungsrechte, damit der Primäradmin Menüs und Verwaltungsbereiche
+  direkt nutzen kann.
+- Der Dashboard-Link `Mein Pächterportal öffnen` erscheint nur noch bei
+  Konten, die tatsächlich mit einem Mitglied verknüpft sind.
+- Administratoren mit eigener Mitgliedsverknüpfung können weiterhin dasselbe
+  Konto auch als Pächterkonto nutzen.
+- Die komplette Testsuite besteht mit 224 Tests und 1446 Assertions; der
+  Frontend-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.87` erhöht.
+
 ## [0.2.0.86] - 2026-06-17
 
 ### Verbindliche Mailkonfiguration aus `.env`

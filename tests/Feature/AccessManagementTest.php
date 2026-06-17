@@ -100,7 +100,7 @@ class AccessManagementTest extends TestCase
             ->assertForbidden();
     }
 
-    public function test_system_admin_can_manage_admin_flag_without_getting_board_data_access(): void
+    public function test_system_admin_can_manage_admin_flag_and_gets_full_management_access(): void
     {
         $administrator = User::factory()->administrator()->create([
             'role' => UserRole::Tenant,
@@ -111,9 +111,9 @@ class AccessManagementTest extends TestCase
 
         $this->assertTrue($administrator->isAdministrator());
         $this->assertTrue($administrator->hasTenantAccess());
-        $this->assertFalse($administrator->canManageBilling());
-        $this->assertFalse($administrator->canManageSepa());
-        $this->assertFalse($administrator->canViewAllMasterData());
+        $this->assertTrue($administrator->canManageBilling());
+        $this->assertTrue($administrator->canManageSepa());
+        $this->assertTrue($administrator->canViewAllMasterData());
 
         $this->actingAs($administrator)
             ->get(route('application-settings.edit'))
@@ -124,7 +124,7 @@ class AccessManagementTest extends TestCase
             ->assertSee($member->last_name);
         $this->actingAs($administrator)
             ->get(route('billing-periods.index'))
-            ->assertForbidden();
+            ->assertOk();
 
         $this->actingAs($administrator)
             ->put(route('user-permissions.update', $otherUser), [

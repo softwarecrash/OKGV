@@ -17,7 +17,7 @@
                     <h1 class="h4">Willkommen bei {{ config('app.name', 'OKGV') }}</h1>
                     <p class="text-secondary">Wähle den Bereich aus, in dem du arbeiten möchtest. Angezeigte Funktionen richten sich nach deinen Berechtigungen.</p>
                     <div class="row g-3">
-                        @if (App\Enums\FeatureModule::TenantPortal->enabled() && auth()->user()->role === App\Enums\UserRole::Tenant)
+                        @if (App\Enums\FeatureModule::TenantPortal->enabled() && auth()->user()->hasTenantAccess())
                             <div class="col-12"><a class="btn btn-primary w-100" href="{{ route('tenant-portal.index') }}">Mein Pächterportal öffnen</a></div>
                         @endif
                         @can('viewAny', App\Models\Member::class)

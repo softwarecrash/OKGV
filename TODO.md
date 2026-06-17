@@ -99,6 +99,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 ## Projektweite Standards
 
+- [x] Primäradmin mit vollständigen Verwaltungsrechten absichern
+- [x] Pächterportal-Link nur bei echter Mitgliedsverknüpfung anzeigen
+- [x] Entwicklungsstand 0.2.0.87 vorbereiten
 - [x] Mail-Beispieldaten in `.env.example` auskommentiert dokumentieren
 - [x] Verbindliche Mailkonfiguration aus `.env` im Webinterface sperren
 - [x] Entwicklungsstand 0.2.0.86 vorbereiten

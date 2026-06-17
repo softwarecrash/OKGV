@@ -116,6 +116,10 @@ class User extends Authenticatable implements MustVerifyEmail
             return false;
         }
 
+        if ($this->isAdministrator()) {
+            return true;
+        }
+
         $permissions = $this->permissions ?? $this->role->defaultPermissions();
 
         return in_array($permission->value, $permissions, true);

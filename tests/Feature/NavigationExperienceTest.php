@@ -94,10 +94,16 @@ class NavigationExperienceTest extends TestCase
         $this->actingAs($administrator)
             ->get(route('home'))
             ->assertOk()
+            ->assertSee('Mitglieder')
+            ->assertSee('Parzellen')
+            ->assertSee('Finanzen')
+            ->assertSee('Kommunikation')
+            ->assertSee('Dokumente')
             ->assertSee('Rechteverwaltung')
             ->assertSee('data-theme-toggle', false)
             ->assertSee('js/theme-init.js')
-            ->assertSee('Darstellungsmodus wechseln');
+            ->assertSee('Darstellungsmodus wechseln')
+            ->assertDontSee('Mein Pächterportal öffnen');
     }
 
     public function test_newer_meter_submission_resolves_tenant_action_indicator(): void
