@@ -71,8 +71,8 @@
                                     <a class="nav-link" href="{{ route('tenant-portal.index') }}">
                                         Mein Portal
                                         <x-action-indicator
-                                            :count="$actionIndicators['total']"
-                                            :label="$actionIndicators['total'] === 1 ? 'offene Aufgabe' : 'offene Aufgaben'" />
+                                            :count="$tenantPortalIndicators['total']"
+                                            :label="$tenantPortalIndicators['total'] === 1 ? 'offener Portalhinweis' : 'offene Portalhinweise'" />
                                     </a>
                                 </li>
                             @endif

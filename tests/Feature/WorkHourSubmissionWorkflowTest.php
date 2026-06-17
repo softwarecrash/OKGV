@@ -350,8 +350,26 @@ class WorkHourSubmissionWorkflowTest extends TestCase
 
         $this->assertSame(
             1,
-            app(ActionIndicatorService::class)->forUser($tenant)['work_hour_submissions'],
+            app(ActionIndicatorService::class)->forTenantPortal($tenant)['work_hour_submissions'],
         );
+
+        $this->actingAs($tenant)
+            ->post(route('work-hour-submissions.acknowledge', $submission))
+            ->assertRedirect()
+            ->assertSessionHas('status');
+
+        $this->assertNotNull($submission->fresh()->tenant_acknowledged_at);
+        $this->assertSame(
+            0,
+            app(ActionIndicatorService::class)->forTenantPortal($tenant)['work_hour_submissions'],
+        );
+        $this->actingAs($tenant)
+            ->get(route('work-hour-submissions.index'))
+            ->assertOk()
+            ->assertSee('Ablehnungsgrund:')
+            ->assertSee('Tätigkeit nicht nachvollziehbar.')
+            ->assertSee('Hinweis ausgeblendet')
+            ->assertDontSee('Erneute Meldung erforderlich');
 
         $this->actingAs($tenant)->post(route('work-hour-submissions.store'), [
             'parcel_id' => $parcel->id,
@@ -362,7 +380,7 @@ class WorkHourSubmissionWorkflowTest extends TestCase
 
         $this->assertSame(
             0,
-            app(ActionIndicatorService::class)->forUser($tenant)['work_hour_submissions'],
+            app(ActionIndicatorService::class)->forTenantPortal($tenant)['work_hour_submissions'],
         );
         $this->actingAs($tenant)
             ->get(route('work-hour-submissions.index'))
@@ -370,6 +388,54 @@ class WorkHourSubmissionWorkflowTest extends TestCase
             ->assertSee('Ablehnungsgrund:')
             ->assertSee('Tätigkeit nicht nachvollziehbar.')
             ->assertDontSee('Erneute Meldung erforderlich');
+    }
+
+    public function test_only_submitter_can_acknowledge_a_rejected_work_hour_submission(): void
+    {
+        [$tenant, $parcel, $period] = $this->tenantScenario();
+        $otherTenant = User::factory()->create();
+        Member::factory()->create(['user_id' => $otherTenant->id]);
+        $submission = WorkHourSubmission::create([
+            'billing_period_id' => $period->id,
+            'parcel_id' => $parcel->id,
+            'submitted_by' => $tenant->id,
+            'worked_at' => '2025-05-01',
+            'hours' => '2.00',
+            'description' => 'Abgelehnte Tätigkeit.',
+            'status' => WorkHourSubmissionStatus::Rejected,
+            'review_note' => 'Nicht nachvollziehbar.',
+        ]);
+
+        $this->actingAs($otherTenant)
+            ->post(route('work-hour-submissions.acknowledge', $submission))
+            ->assertForbidden();
+
+        $this->assertNull($submission->fresh()->tenant_acknowledged_at);
+    }
+
+    public function test_tenant_portal_indicators_ignore_board_review_tasks(): void
+    {
+        [$otherTenant, $parcel, $period] = $this->tenantScenario();
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        Member::factory()->create(['user_id' => $board->id]);
+        WorkHourSubmission::create([
+            'billing_period_id' => $period->id,
+            'parcel_id' => $parcel->id,
+            'submitted_by' => $otherTenant->id,
+            'worked_at' => '2025-05-01',
+            'hours' => '2.00',
+            'description' => 'Wartet auf Prüfung.',
+            'status' => WorkHourSubmissionStatus::Pending,
+        ]);
+
+        $this->assertSame(
+            1,
+            app(ActionIndicatorService::class)->forUser($board)['work_hour_submissions'],
+        );
+        $this->assertSame(
+            0,
+            app(ActionIndicatorService::class)->forTenantPortal($board)['work_hour_submissions'],
+        );
     }
 
     public function test_reviewed_submission_is_immutable_and_cannot_be_deleted(): void

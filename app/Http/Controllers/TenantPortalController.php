@@ -23,7 +23,7 @@ class TenantPortalController extends Controller
     public function index(Request $request): View
     {
         abort_unless($request->user()->hasTenantAccess(), 403);
-        $actionIndicators = $this->actionIndicatorService->forUser($request->user());
+        $actionIndicators = $this->actionIndicatorService->forTenantPortal($request->user());
 
         $member = $request->user()->member()
             ->with([

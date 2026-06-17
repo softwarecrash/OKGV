@@ -32,6 +32,13 @@ class WorkHourSubmissionPolicy
             && $submission->status === WorkHourSubmissionStatus::Pending;
     }
 
+    public function acknowledge(User $user, WorkHourSubmission $submission): bool
+    {
+        return $submission->submitted_by === $user->id
+            && $submission->status === WorkHourSubmissionStatus::Rejected
+            && $submission->tenant_acknowledged_at === null;
+    }
+
     public function downloadPhoto(User $user, WorkHourSubmission $submission): bool
     {
         return $this->view($user, $submission) && $submission->photo_path !== null;

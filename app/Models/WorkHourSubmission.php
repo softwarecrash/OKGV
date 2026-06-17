@@ -24,6 +24,7 @@ use LogicException;
     'reviewed_by',
     'reviewed_at',
     'review_note',
+    'tenant_acknowledged_at',
 ])]
 class WorkHourSubmission extends Model
 {
@@ -31,6 +32,12 @@ class WorkHourSubmission extends Model
     {
         static::updating(function (WorkHourSubmission $submission): void {
             if ($submission->getRawOriginal('status') !== WorkHourSubmissionStatus::Pending->value) {
+                $allowedDirtyFields = ['tenant_acknowledged_at', 'updated_at'];
+
+                if (array_diff(array_keys($submission->getDirty()), $allowedDirtyFields) === []) {
+                    return;
+                }
+
                 throw new LogicException('Reviewed work hour submissions cannot be changed.');
             }
         });
@@ -47,6 +54,7 @@ class WorkHourSubmission extends Model
             'hours' => 'decimal:2',
             'status' => WorkHourSubmissionStatus::class,
             'reviewed_at' => 'datetime',
+            'tenant_acknowledged_at' => 'datetime',
         ];
     }
 
@@ -75,6 +83,7 @@ class WorkHourSubmission extends Model
         return $query
             ->where('submitted_by', $userId)
             ->where('status', WorkHourSubmissionStatus::Rejected)
+            ->whereNull('tenant_acknowledged_at')
             ->whereNotExists(function ($query): void {
                 $query->selectRaw('1')
                     ->from('work_hour_submissions as later_submission')

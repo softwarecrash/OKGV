@@ -2,6 +2,24 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.81] - 2026-06-17
+
+### Portal-Hinweise und Arbeitsstundenmeldungen bereinigt
+
+- Das Pächterportal verwendet eigene Aktionsindikatoren und zeigt bei Konten
+  mit Vorstands- oder Administrationsrechten nur noch persönliche
+  Pächter-Aufgaben an.
+- Abgelehnte eigene Arbeitsstundenmeldungen können als gelesen markiert
+  werden, damit der Hinweis verschwindet, ohne die abgelehnte Meldung aus der
+  Historie zu entfernen.
+- Die Lesebestätigung wird auditierbar gespeichert und kann nur vom betroffenen
+  Pächterkonto gesetzt werden.
+- Die Projektspezifikation dokumentiert die quittierbaren
+  Arbeitsstunden-Hinweise.
+- Die komplette Testsuite besteht mit 219 Tests und 1371 Assertions; der
+  Frontend-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.81` erhöht.
+
 ## [0.2.0.80] - 2026-06-17
 
 ### SEPA-Self-Service und Rechnungsarchiv

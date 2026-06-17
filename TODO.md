@@ -99,6 +99,9 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 
 ## Projektweite Standards
 
+- [x] Pächterportal-Indikatoren von Vorstands- und Admin-Aufgaben trennen
+- [x] Abgelehnte Arbeitsstundenmeldungen als gelesen ausblendbar machen
+- [x] Entwicklungsstand 0.2.0.81 vorbereiten
 - [x] Vorherigen wirksamen Zählerstand in der Meldungsprüfung anzeigen
 - [x] Rückläufige Meldungen bereits in der Übersicht markieren
 - [x] Entwicklungsstand 0.2.0.55 veröffentlichen

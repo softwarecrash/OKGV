@@ -25,6 +25,7 @@
                 abgelehnt und muss erneut eingereicht werden.
             </strong>
             <div>Die betroffene Meldung ist unten hervorgehoben. Beachte den Ablehnungsgrund und reiche anschließend eine korrigierte Meldung ein.</div>
+            <div>Wenn keine neue Meldung nötig ist, kannst du den Hinweis unten als gelesen markieren. Die abgelehnte Meldung bleibt weiterhin in deiner Historie sichtbar.</div>
         </div>
     @endif
     <div class="card border-0 shadow-sm">
@@ -70,11 +71,22 @@
                                         <a class="btn btn-sm btn-warning mt-2" href="{{ route('work-hour-submissions.create', ['parcel_id' => $submission->parcel_id]) }}">
                                             Korrigierte Meldung einreichen
                                         </a>
+                                        <form class="d-inline" method="POST" action="{{ route('work-hour-submissions.acknowledge', $submission) }}">
+                                            @csrf
+                                            <button class="btn btn-sm btn-outline-secondary mt-2" onclick="return confirm('Hinweis ausblenden? Die Meldung bleibt als abgelehnt gespeichert.')">
+                                                Hinweis ausblenden
+                                            </button>
+                                        </form>
                                     @elseif ($submission->status === App\Enums\WorkHourSubmissionStatus::Rejected)
                                         <div class="small">
                                             <strong>Ablehnungsgrund:</strong>
                                             {{ $submission->review_note ?: 'Kein Ablehnungsgrund hinterlegt.' }}
                                         </div>
+                                        @if ($submission->tenant_acknowledged_at)
+                                            <div class="small text-secondary">
+                                                Hinweis ausgeblendet am {{ $submission->tenant_acknowledged_at->format('d.m.Y H:i') }} Uhr.
+                                            </div>
+                                        @endif
                                     @else
                                         {{ $submission->review_note ?? '–' }}
                                     @endif

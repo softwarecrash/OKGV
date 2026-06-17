@@ -82,7 +82,7 @@ class NavigationExperienceTest extends TestCase
         $this->actingAs($tenant)
             ->get(route('home'))
             ->assertOk()
-            ->assertSee('2 offene Aufgaben')
+            ->assertSee('2 offene Portalhinweise')
             ->assertSee('1 offene Rechnungen')
             ->assertDontSee('Registrierungsanfragen');
     }

@@ -137,6 +137,98 @@ final class ActionIndicatorService
         ];
     }
 
+    /**
+     * Return only tasks that belong to the user's own tenant/member context.
+     *
+     * Board and admin users can also be tenants. Their management tasks must not
+     * light up the tenant portal, because the portal should only explain personal
+     * action items.
+     *
+     * @return array{
+     *     registrations: int,
+     *     meter_readings: int,
+     *     invoices: int,
+     *     work_hours: int,
+     *     work_events: int,
+     *     work_hour_submissions: int,
+     *     waiting_list: int,
+     *     inventory: int,
+     *     members_group: int,
+     *     meters_group: int,
+     *     finance_group: int,
+     *     communication_group: int,
+     *     dunning_notices: int,
+     *     total: int
+     * }
+     */
+    public function forTenantPortal(User $user): array
+    {
+        if (! $user->hasTenantAccess()) {
+            return $this->emptyIndicators();
+        }
+
+        $meterReadings = FeatureModule::Meters->enabled()
+            ? MeterReadingSubmission::query()
+                ->unresolvedRejectedForUser($user->id)
+                ->count()
+            : 0;
+
+        $invoices = FeatureModule::Billing->enabled()
+            ? Invoice::query()
+                ->where('status', InvoiceStatus::Approved)
+                ->whereIn('payment_status', [
+                    InvoicePaymentStatus::Open,
+                    InvoicePaymentStatus::Returned,
+                ])
+                ->where(function ($query) use ($user): void {
+                    $query->whereHas('recipients.member', fn ($query) => $query
+                        ->where('user_id', $user->id))
+                        ->orWhereHas('member', fn ($query) => $query
+                            ->where('user_id', $user->id));
+                })
+                ->count()
+            : 0;
+
+        $workHourSubmissions = FeatureModule::WorkHours->enabled()
+            ? WorkHourSubmission::query()
+                ->unresolvedRejectedForUser($user->id)
+                ->count()
+            : 0;
+
+        return [
+            ...$this->emptyIndicators(),
+            'meter_readings' => $meterReadings,
+            'invoices' => $invoices,
+            'work_hour_submissions' => $workHourSubmissions,
+            'meters_group' => $meterReadings,
+            'finance_group' => $invoices + $workHourSubmissions,
+            'total' => $meterReadings + $invoices + $workHourSubmissions,
+        ];
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    public function emptyIndicators(): array
+    {
+        return [
+            'registrations' => 0,
+            'meter_readings' => 0,
+            'invoices' => 0,
+            'work_hours' => 0,
+            'work_events' => 0,
+            'work_hour_submissions' => 0,
+            'waiting_list' => 0,
+            'inventory' => 0,
+            'members_group' => 0,
+            'meters_group' => 0,
+            'finance_group' => 0,
+            'communication_group' => 0,
+            'dunning_notices' => 0,
+            'total' => 0,
+        ];
+    }
+
     private function dunnableInvoiceCount(): int
     {
         return Invoice::query()

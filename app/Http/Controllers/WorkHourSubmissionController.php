@@ -8,6 +8,7 @@ use App\Http\Requests\WorkHourSubmissionReviewRequest;
 use App\Models\Parcel;
 use App\Models\WorkHourSubmission;
 use App\Services\ActionIndicatorService;
+use App\Services\AuditLogger;
 use App\Services\WorkHourSubmissionManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,7 +36,7 @@ class WorkHourSubmissionController extends Controller
             ->orderByRaw("status = 'pending' desc")
             ->latest()
             ->paginate(20);
-        $unresolvedRejectedIds = $request->user()->hasTenantAccess() && ! $request->user()->canManageWorkEvents()
+        $unresolvedRejectedIds = $request->user()->hasTenantAccess()
             ? WorkHourSubmission::query()
                 ->unresolvedRejectedForUser($request->user()->id)
                 ->pluck('id')
@@ -50,7 +51,9 @@ class WorkHourSubmissionController extends Controller
 
         return view('work-hour-submissions.index', [
             'submissions' => $submissions,
-            'actionIndicators' => $this->actionIndicatorService->forUser($request->user()),
+            'actionIndicators' => $request->user()->hasTenantAccess()
+                ? $this->actionIndicatorService->forTenantPortal($request->user())
+                : $this->actionIndicatorService->forUser($request->user()),
         ]);
     }
 
@@ -124,6 +127,19 @@ class WorkHourSubmissionController extends Controller
         );
 
         return back()->with('status', 'Arbeitsstundenmeldung wurde abgelehnt.');
+    }
+
+    public function acknowledge(Request $request, WorkHourSubmission $workHourSubmission): RedirectResponse
+    {
+        $this->authorize('acknowledge', $workHourSubmission);
+
+        $workHourSubmission->update([
+            'tenant_acknowledged_at' => now(),
+        ]);
+
+        AuditLogger::log('work_hour_submission.acknowledged', $request->user(), $workHourSubmission);
+
+        return back()->with('status', 'Der Hinweis wurde ausgeblendet. Die abgelehnte Meldung bleibt in deiner Historie sichtbar.');
     }
 
     public function photo(WorkHourSubmission $workHourSubmission): StreamedResponse

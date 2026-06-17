@@ -618,8 +618,9 @@ desselben Pächters für denselben Zähler als offen. Sobald ein korrigierter
 Stand erneut eingereicht wurde, verschwindet der Aktionshinweis unabhängig
 davon, ob die neue Meldung noch geprüft wird oder bereits bestätigt ist.
 Dasselbe gilt für abgelehnte Arbeitsstundenmeldungen je Pächter und Parzelle.
-Der Ablehnungsgrund bleibt in beiden Fällen dauerhaft in der Historie
-sichtbar.
+Bei Arbeitsstundenmeldungen kann der betroffene Pächter den Hinweis zusätzlich
+als gelesen markieren, wenn keine neue Meldung nötig ist. Der Ablehnungsgrund
+bleibt in beiden Fällen dauerhaft in der Historie sichtbar.
 Jeder Aktionspunkt muss auf seiner Zielseite durch eine verständliche
 Aufgabenbox, einen weiteren Punkt oder eine hervorgehobene Zeile eindeutig
 erklärbar sein.

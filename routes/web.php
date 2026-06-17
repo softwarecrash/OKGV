@@ -292,6 +292,9 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::post('arbeitsstundenmeldungen/{work_hour_submission}/ablehnen', [WorkHourSubmissionController::class, 'reject'])
         ->middleware('module:work_hours')
         ->name('work-hour-submissions.reject');
+    Route::post('arbeitsstundenmeldungen/{work_hour_submission}/gelesen', [WorkHourSubmissionController::class, 'acknowledge'])
+        ->middleware('module:work_hours')
+        ->name('work-hour-submissions.acknowledge');
     Route::resource('billing-periods.billing-rates', BillingRateController::class)
         ->only(['create', 'store', 'edit', 'update', 'destroy'])
         ->parameters(['billing-rates' => 'billing_rate'])

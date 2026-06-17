@@ -130,26 +130,18 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('layouts.app', function ($view): void {
             $user = auth()->user();
+            $indicatorService = app(ActionIndicatorService::class);
             $view->with(
                 'actionIndicators',
                 $user
-                    ? app(ActionIndicatorService::class)->forUser($user)
-                    : [
-                        'registrations' => 0,
-                        'meter_readings' => 0,
-                        'invoices' => 0,
-                        'work_hours' => 0,
-                        'work_events' => 0,
-                        'work_hour_submissions' => 0,
-                        'waiting_list' => 0,
-                        'inventory' => 0,
-                        'members_group' => 0,
-                        'meters_group' => 0,
-                        'finance_group' => 0,
-                        'communication_group' => 0,
-                        'dunning_notices' => 0,
-                        'total' => 0,
-                    ],
+                    ? $indicatorService->forUser($user)
+                    : $indicatorService->emptyIndicators(),
+            );
+            $view->with(
+                'tenantPortalIndicators',
+                $user
+                    ? $indicatorService->forTenantPortal($user)
+                    : $indicatorService->emptyIndicators(),
             );
         });
 
