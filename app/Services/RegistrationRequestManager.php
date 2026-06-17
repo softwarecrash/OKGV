@@ -14,7 +14,7 @@ final class RegistrationRequestManager
 {
     public function approve(
         RegistrationRequest $registrationRequest,
-        Member $member,
+        ?Member $member,
         User $actor,
         ?string $reviewNote = null,
         string $memberEmailAction = 'keep',
@@ -29,7 +29,9 @@ final class RegistrationRequestManager
             $registrationRequest = RegistrationRequest::query()
                 ->lockForUpdate()
                 ->findOrFail($registrationRequest->id);
-            $member = Member::query()->lockForUpdate()->findOrFail($member->id);
+            $member = $member === null
+                ? null
+                : Member::query()->lockForUpdate()->findOrFail($member->id);
 
             if ($registrationRequest->status !== RegistrationRequestStatus::Pending) {
                 throw ValidationException::withMessages([
@@ -37,21 +39,29 @@ final class RegistrationRequestManager
                 ]);
             }
 
-            if ($member->user_id !== null) {
+            if ($member !== null && $member->user_id !== null) {
                 throw ValidationException::withMessages([
                     'member_id' => 'Dieses Mitglied besitzt bereits ein Benutzerkonto.',
                 ]);
             }
 
-            $hasActiveTenancy = $member->parcelTenancies()
-                ->activeOn()
-                ->where('parcel_id', $registrationRequest->parcel_id)
-                ->exists();
+            if ($registrationRequest->parcel_id !== null) {
+                if ($member === null) {
+                    throw ValidationException::withMessages([
+                        'member_id' => 'Für eine Pächterregistrierung muss ein Mitglied der angegebenen Parzelle ausgewählt werden.',
+                    ]);
+                }
 
-            if (! $hasActiveTenancy) {
-                throw ValidationException::withMessages([
-                    'member_id' => 'Das Mitglied ist der angegebenen Parzelle aktuell nicht als Pächter zugeordnet.',
-                ]);
+                $hasActiveTenancy = $member->parcelTenancies()
+                    ->activeOn()
+                    ->where('parcel_id', $registrationRequest->parcel_id)
+                    ->exists();
+
+                if (! $hasActiveTenancy) {
+                    throw ValidationException::withMessages([
+                        'member_id' => 'Das Mitglied ist der angegebenen Parzelle aktuell nicht als Pächter zugeordnet.',
+                    ]);
+                }
             }
 
             if (User::query()->where('email', $registrationRequest->email)->exists()) {
@@ -61,19 +71,23 @@ final class RegistrationRequestManager
             }
 
             $user = User::create([
-                'name' => $member->full_name,
+                'name' => $member?->full_name ?? $registrationRequest->full_name,
                 'email' => $registrationRequest->email,
                 'password' => $registrationRequest->password,
                 'role' => UserRole::Tenant,
             ]);
 
-            $previousMemberEmail = $member->email;
-            $member->update([
-                'user_id' => $user->id,
-                'email' => $memberEmailAction === 'use_registration'
-                    ? $registrationRequest->email
-                    : $member->email,
-            ]);
+            $previousMemberEmail = $member?->email;
+
+            if ($member !== null) {
+                $member->update([
+                    'user_id' => $user->id,
+                    'email' => $memberEmailAction === 'use_registration'
+                        ? $registrationRequest->email
+                        : $member->email,
+                ]);
+            }
+
             $registrationRequest->update([
                 'status' => RegistrationRequestStatus::Approved,
                 'reviewed_by' => $actor->id,
@@ -83,10 +97,10 @@ final class RegistrationRequestManager
             ]);
 
             AuditLogger::log('tenant.registration.approved', $actor, $registrationRequest, [
-                'member_id' => $member->id,
+                'member_id' => $member?->id,
                 'user_id' => $user->id,
                 'member_email_action' => $memberEmailAction,
-                'member_email_changed' => $previousMemberEmail !== $member->email,
+                'member_email_changed' => $member !== null && $previousMemberEmail !== $member->email,
             ]);
 
             return $user;

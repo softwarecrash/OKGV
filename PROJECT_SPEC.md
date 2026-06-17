@@ -502,24 +502,29 @@ Zählerstandsmeldungen mit Foto und Freigabe.
 
 #### Registrierung und Freigabe
 
-Pächter können öffentlich eine Registrierungsanfrage mit Vorname, Nachname,
-E-Mail-Adresse, Parzellennummer und Passwort stellen. Eine Anfrage erzeugt
-noch kein aktives Benutzerkonto. Das Passwort wird ausschließlich gehasht
-gespeichert. Die öffentliche Route wird rate-limitiert und liefert keine
-internen Mitglieds- oder Pächterdaten aus.
+Pächter, Vorstandsmitglieder, technische Helfer oder spätere Benutzer können
+öffentlich eine Registrierungsanfrage mit Vorname, Nachname, E-Mail-Adresse,
+optional Parzellennummer und Passwort stellen. Eine Anfrage erzeugt noch kein
+aktives Benutzerkonto. Das Passwort wird ausschließlich gehasht gespeichert.
+Die öffentliche Route wird rate-limitiert und liefert keine internen
+Mitglieds- oder Pächterdaten aus.
 
-Administrator oder Vorstand prüfen die Anfrage und wählen eines der aktuell
-eingetragenen, noch nicht mit einem Benutzerkonto verbundenen Mitglieder der
-angegebenen Parzelle aus. Erst die Freigabe erzeugt ein Benutzerkonto mit der
-Rolle `tenant` und verknüpft es mit diesem Mitglied. Freigabe und Ablehnung
-werden mit Bearbeiter, Zeitpunkt und optionaler Begründung historisiert und
-auditiert. Kassierer, Wasserwart und Gartenwart dürfen Registrierungsanfragen
-nicht bearbeiten.
+Administrator oder Vorstand prüfen die Anfrage. Wenn eine Parzellennummer
+angegeben wurde, muss eines der aktuell eingetragenen, noch nicht mit einem
+Benutzerkonto verbundenen Mitglieder dieser Parzelle ausgewählt werden. Ohne
+Parzellennummer darf die Anfrage auch ohne Mitgliedsverknüpfung freigegeben
+werden; Mitglieds- und Parzellenzuordnung können später ergänzt werden. Erst
+die Freigabe erzeugt ein Benutzerkonto mit der Rolle `tenant`. Freigabe und
+Ablehnung werden mit Bearbeiter, Zeitpunkt und optionaler Begründung
+historisiert und auditiert. Kassierer, Wasserwart und Gartenwart dürfen
+Registrierungsanfragen nicht bearbeiten.
 
-Die Prüfübersicht bewertet ausschließlich die freigabefähigen Mitglieder der
-angegebenen Parzelle anhand von E-Mail und Namen. Der beste plausible Treffer
-wird als unverbindliche Empfehlung markiert; eine automatische Freigabe oder
-globale Zuordnung allein anhand der E-Mail findet nicht statt. Vor der
+Die Prüfübersicht bewertet bei angegebener Parzelle ausschließlich die
+freigabefähigen Mitglieder dieser Parzelle anhand von E-Mail und Namen. Ohne
+Parzellennummer werden noch nicht verknüpfte Mitglieder allgemein als
+optionale Zuordnung angeboten. Der beste plausible Treffer wird als
+unverbindliche Empfehlung markiert; eine automatische Freigabe oder globale
+Zuordnung allein anhand der E-Mail findet nicht statt. Vor der
 Freigabe zeigt die Oberfläche Mitglieds- und Registrierungsadresse gemeinsam.
 Bei abweichenden E-Mail-Adressen entscheidet der Prüfer ausdrücklich, ob die
 bisherige Kontaktadresse im Mitgliedsstammsatz erhalten bleibt oder durch die

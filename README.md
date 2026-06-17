@@ -41,7 +41,8 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Self-Service-SEPA-Mandate im Pächterportal mit Widerruf
 - Sammellastschriften als pain.008.001.08-XML
 - Zahlungsstatus und historisierte Rücklastschriften
-- Pächterregistrierung mit verbindlicher Freigabe durch Vorstand oder Administrator
+- Zugangsanfragen mit optionaler Parzellennummer und verbindlicher Freigabe
+  durch Vorstand oder Administrator
 - E-Mail-Verifizierung nach Freigabe eines neuen Kontos
 - Aufstufung freigegebener Pächterkonten zu Vorstandsmitgliedern
 - Ein Konto kann gleichzeitig technischer Administrator und Pächter sein

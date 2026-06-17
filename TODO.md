@@ -227,6 +227,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Öffentliche, rate-limitierte Registrierungsanfragen implementieren
 - [x] Freigabe und Ablehnung durch Administrator oder Vorstand implementieren
 - [x] Sichere Benutzer- und Mitgliedszuordnung gegen aktive Pachtverträge prüfen
+- [x] Registrierungsanfragen ohne Parzellennummer für spätere Zuordnung erlauben
 - [x] Pächterdashboard für eigene Daten und aktuelle Parzellen implementieren
 - [x] Eigene freigegebene Rechnungen in das Portal integrieren
 - [x] Lesenden Dokumentenzugriff mit privaten Downloads vorbereiten

@@ -35,14 +35,18 @@ class RegistrationRequestController extends Controller
     {
         $this->authorize('view', $registrationRequest);
 
-        $candidates = $this->candidateMatcher->rank(Member::query()
+        $memberQuery = Member::query()
             ->whereNull('user_id')
-            ->whereHas('parcelTenancies', fn ($query) => $query
-                ->activeOn()
-                ->where('parcel_id', $registrationRequest->parcel_id))
+            ->when(
+                $registrationRequest->parcel_id !== null,
+                fn ($query) => $query->whereHas('parcelTenancies', fn ($query) => $query
+                    ->activeOn()
+                    ->where('parcel_id', $registrationRequest->parcel_id)),
+            )
             ->orderBy('last_name')
-            ->orderBy('first_name')
-            ->get(), $registrationRequest);
+            ->orderBy('first_name');
+
+        $candidates = $this->candidateMatcher->rank($memberQuery->get(), $registrationRequest);
         $recommendedCandidate = $candidates->firstWhere('registration_recommended', true);
 
         return view('registration-requests.show', compact(
@@ -58,7 +62,9 @@ class RegistrationRequestController extends Controller
     ): RedirectResponse {
         $this->manager->approve(
             $registrationRequest,
-            Member::query()->findOrFail($request->integer('member_id')),
+            $request->filled('member_id')
+                ? Member::query()->findOrFail($request->integer('member_id'))
+                : null,
             $request->user(),
             $request->validated('review_note'),
             $request->validated('member_email_action'),

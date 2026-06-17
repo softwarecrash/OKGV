@@ -8,7 +8,7 @@
             <dl class="row mb-0">
                 <dt class="col-sm-3">Angegebener Name</dt><dd class="col-sm-9">{{ $registrationRequest->full_name }}</dd>
                 <dt class="col-sm-3">E-Mail</dt><dd class="col-sm-9">{{ $registrationRequest->email }}</dd>
-                <dt class="col-sm-3">Parzelle</dt><dd class="col-sm-9">{{ $registrationRequest->parcel_number }}</dd>
+                <dt class="col-sm-3">Parzelle</dt><dd class="col-sm-9">{{ $registrationRequest->parcel_number ?? 'Keine angegeben' }}</dd>
                 <dt class="col-sm-3">Status</dt><dd class="col-sm-9">{{ $registrationRequest->status->label() }}</dd>
                 @if ($registrationRequest->reviewed_at)
                     <dt class="col-sm-3">Bearbeitet</dt><dd class="col-sm-9">{{ $registrationRequest->reviewed_at->format('d.m.Y H:i') }}{{ $registrationRequest->review_note ? ' · '.$registrationRequest->review_note : '' }}</dd>
@@ -18,7 +18,10 @@
     </div>
 
     @can('review', $registrationRequest)
-        <div class="alert alert-warning">Vergleiche die Angaben mit dem Pachtvertrag oder einem anderen verlässlichen Vereinsnachweis. Wähle nur die tatsächlich anfragende Person aus.</div>
+        <div class="alert alert-warning">
+            Vergleiche die Angaben mit dem Pachtvertrag oder einem anderen verlässlichen Vereinsnachweis.
+            Wenn keine Parzellennummer angegeben wurde, kann das Konto ohne Mitgliedsverknüpfung freigegeben und später zugeordnet oder hochgestuft werden.
+        </div>
         @if ($recommendedCandidate)
             <div class="alert alert-success">
                 <strong>Empfohlene Zuordnung:</strong>
@@ -38,15 +41,14 @@
                     @csrf
                     <x-validation-errors />
                     <h2 class="h5">Konto freigeben</h2>
-                    <label class="form-label" for="member_id">Mitglied der Parzelle zuordnen</label>
+                    <label class="form-label" for="member_id">Mitglied zuordnen</label>
                     <select
                         class="form-select"
                         id="member_id"
                         name="member_id"
                         data-registration-member-select
-                        data-registration-email="{{ $registrationRequest->email }}"
-                        required>
-                        <option value="">Bitte auswählen</option>
+                        data-registration-email="{{ $registrationRequest->email }}">
+                        <option value="">Kein Mitglied zuordnen</option>
                         @foreach ($candidates as $member)
                             <option
                                 value="{{ $member->id }}"
@@ -61,7 +63,13 @@
                             </option>
                         @endforeach
                     </select>
-                    <div class="form-text mb-3">Angezeigt werden nur aktuelle Pächter dieser Parzelle ohne vorhandenes Benutzerkonto.</div>
+                    <div class="form-text mb-3">
+                        @if ($registrationRequest->parcel_id)
+                            Angezeigt werden nur aktuelle Pächter dieser Parzelle ohne vorhandenes Benutzerkonto. Für Pächterregistrierungen ist eine Zuordnung erforderlich.
+                        @else
+                            Ohne Parzellennummer ist die Zuordnung optional. Das Konto kann später mit einem Mitglied oder einer Parzelle verbunden werden.
+                        @endif
+                    </div>
                     <div class="border rounded p-3 mb-3 d-none" data-registration-member-preview>
                         <h3 class="h6">Vergleich vor der Freigabe</h3>
                         <dl class="row small mb-0">
@@ -92,12 +100,12 @@
                         </div>
                     </fieldset>
                     <input type="hidden" name="member_email_action" value="keep" data-registration-email-default>
-                    @if ($candidates->isEmpty())
+                    @if ($registrationRequest->parcel_id && $candidates->isEmpty())
                         <div class="alert alert-danger">Es gibt kein freigabefähiges Mitglied. Prüfe zuerst Pächterhistorie und bestehende Kontoverknüpfungen.</div>
                     @endif
                     <label class="form-label" for="approval_review_note">Interner Prüfhinweis (optional)</label>
                     <input class="form-control" id="approval_review_note" name="review_note" maxlength="255">
-                    <button class="btn btn-success mt-3" @disabled($candidates->isEmpty()) onclick="return confirm('Pächterkonto verbindlich freigeben?')">Konto freigeben</button>
+                    <button class="btn btn-success mt-3" @disabled($registrationRequest->parcel_id && $candidates->isEmpty()) onclick="return confirm('Benutzerkonto verbindlich freigeben?')">Konto freigeben</button>
                 </form>
             </div>
             <div class="col-lg-5">

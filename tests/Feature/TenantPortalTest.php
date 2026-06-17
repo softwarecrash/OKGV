@@ -61,6 +61,51 @@ class TenantPortalTest extends TestCase
         ])->assertSessionHasErrors('email');
     }
 
+    public function test_public_registration_can_be_submitted_without_parcel_number(): void
+    {
+        $this->post(route('tenant-registration.store'), [
+            'first_name' => 'Technik',
+            'last_name' => 'Helfer',
+            'email' => 'technik@example.test',
+            'parcel_number' => '',
+            'password' => 'SicheresPasswort123',
+            'password_confirmation' => 'SicheresPasswort123',
+        ])->assertRedirect(route('login'));
+
+        $registrationRequest = RegistrationRequest::query()->firstOrFail();
+        $this->assertNull($registrationRequest->parcel_id);
+        $this->assertNull($registrationRequest->parcel_number);
+        $this->assertSame(RegistrationRequestStatus::Pending, $registrationRequest->status);
+        $this->assertDatabaseCount('users', 0);
+    }
+
+    public function test_board_can_approve_registration_without_member_or_parcel(): void
+    {
+        Notification::fake();
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $registrationRequest = RegistrationRequest::factory()->create([
+            'first_name' => 'Technik',
+            'last_name' => 'Helfer',
+            'email' => 'technik@example.test',
+            'parcel_id' => null,
+            'parcel_number' => null,
+            'password' => 'SicheresPasswort123',
+        ]);
+
+        $this->actingAs($board)
+            ->post(route('registration-requests.approve', $registrationRequest), [
+                'review_note' => 'Technisches Konto ohne Parzelle geprüft',
+            ])
+            ->assertRedirect(route('registration-requests.index'));
+
+        $user = User::query()->where('email', 'technik@example.test')->firstOrFail();
+        $this->assertSame('Technik Helfer', $user->name);
+        $this->assertSame(UserRole::Tenant, $user->role);
+        $this->assertFalse($user->hasVerifiedEmail());
+        Notification::assertSentTo($user, VerifyEmailNotification::class);
+        $this->assertSame(RegistrationRequestStatus::Approved, $registrationRequest->fresh()->status);
+    }
+
     public function test_board_can_approve_only_an_active_tenant_of_requested_parcel(): void
     {
         Notification::fake();

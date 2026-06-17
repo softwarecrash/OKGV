@@ -2,6 +2,23 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.92] - 2026-06-17
+
+### Registrierung ohne Parzellennummer
+
+- Öffentliche Zugangsanfragen können jetzt ohne Parzellennummer gestellt
+  werden, damit auch Vorstände, technische Helfer oder spätere Benutzer ohne
+  vorhandene Parzellenzuordnung ein Konto beantragen können.
+- Wenn eine Parzellennummer angegeben wird, bleibt die bisherige Prüfung gegen
+  aktuelle Pächter dieser Parzelle verpflichtend.
+- Freigaben ohne Parzelle erzeugen ein Benutzerkonto ohne Mitgliedsverknüpfung;
+  Zuordnung und Hochstufung können später in der Verwaltung erfolgen.
+- Die Registrierungs- und Prüfansichten erklären die optionale
+  Parzellennummer verständlicher.
+- Die komplette Testsuite besteht mit 230 Tests und 1473 Assertions; der
+  Frontend-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.92` erhöht.
+
 ## [0.2.0.91] - 2026-06-17
 
 ### APP_KEY-Sicherung für Backups

@@ -19,24 +19,25 @@ class TenantRegistrationController extends Controller
 
     public function store(TenantRegistrationRequest $request): RedirectResponse
     {
-        $parcel = Parcel::query()
-            ->where('parcel_number', $request->validated('parcel_number'))
-            ->firstOrFail();
+        $parcelNumber = $request->validated('parcel_number');
+        $parcel = $parcelNumber === null
+            ? null
+            : Parcel::query()->where('parcel_number', $parcelNumber)->firstOrFail();
 
         $registrationRequest = RegistrationRequest::create([
             ...$request->safe()->only(['first_name', 'last_name', 'email', 'password']),
-            'parcel_id' => $parcel->id,
-            'parcel_number' => $parcel->parcel_number,
+            'parcel_id' => $parcel?->id,
+            'parcel_number' => $parcel?->parcel_number,
             'status' => RegistrationRequestStatus::Pending,
         ]);
 
         AuditLogger::log('tenant.registration.requested', subject: $registrationRequest, metadata: [
-            'parcel_id' => $parcel->id,
+            'parcel_id' => $parcel?->id,
         ]);
 
         return redirect()->route('login')->with(
             'status',
-            'Deine Registrierung wurde eingereicht. Du kannst dich anmelden, sobald der Vorstand die Zuordnung bestätigt hat.',
+            'Deine Registrierung wurde eingereicht. Du kannst dich anmelden, sobald der Vorstand oder ein Administrator die Anfrage bestätigt hat.',
         );
     }
 }

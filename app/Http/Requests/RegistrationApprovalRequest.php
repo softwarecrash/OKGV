@@ -15,7 +15,7 @@ class RegistrationApprovalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'member_id' => ['required', 'integer', 'exists:members,id'],
+            'member_id' => ['nullable', 'integer', 'exists:members,id'],
             'member_email_action' => [
                 'required',
                 Rule::in(['keep', 'use_registration']),

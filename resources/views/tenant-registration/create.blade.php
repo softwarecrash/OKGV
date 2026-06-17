@@ -5,10 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-primary text-white">Zugang zum Pächterportal beantragen</div>
+                <div class="card-header bg-primary text-white">Zugang beantragen</div>
                 <div class="card-body">
                     <p class="text-secondary">
-                        Gib deine Daten so ein, wie sie dem Verein bekannt sind. Der Vorstand prüft anschließend die Zuordnung zur Parzelle. Erst danach kannst du dich anmelden.
+                        Gib deine Daten so ein, wie sie dem Verein bekannt sind. Der Vorstand oder ein Administrator prüft anschließend die Anfrage. Erst danach kannst du dich anmelden.
                     </p>
                     <form method="POST" action="{{ route('tenant-registration.store') }}">
                         @csrf
@@ -28,9 +28,9 @@
                                 <div class="form-text">Mit dieser Adresse meldest du dich nach der Freigabe an.</div>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label" for="parcel_number">Parzellennummer</label>
-                                <input class="form-control" id="parcel_number" name="parcel_number" maxlength="255" value="{{ old('parcel_number') }}" required>
-                                <div class="form-text">Genau wie auf deinem Pachtvertrag angegeben.</div>
+                                <label class="form-label" for="parcel_number">Parzellennummer <span class="text-secondary">(optional)</span></label>
+                                <input class="form-control" id="parcel_number" name="parcel_number" maxlength="255" value="{{ old('parcel_number') }}">
+                                <div class="form-text">Wenn du Pächter bist, genau wie auf deinem Pachtvertrag angegeben. Für Vorstand, Helfer oder technische Konten leer lassen.</div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" for="password">Passwort</label>
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="alert alert-info mt-4 mb-3">
-                            Die Anfrage erzeugt noch kein Benutzerkonto. Bei Unstimmigkeiten meldet sich der Verein über die angegebene E-Mail-Adresse.
+                            Die Anfrage erzeugt noch kein Benutzerkonto. Bei Unstimmigkeiten meldet sich der Verein über die angegebene E-Mail-Adresse. Eine Parzellenzuordnung kann später ergänzt werden.
                         </div>
                         <div class="d-flex gap-2">
                             <button class="btn btn-primary">Anfrage absenden</button>

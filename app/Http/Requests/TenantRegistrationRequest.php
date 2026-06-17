@@ -35,7 +35,7 @@ class TenantRegistrationRequest extends FormRequest
                     }
                 },
             ],
-            'parcel_number' => ['required', 'string', 'max:255', 'exists:parcels,parcel_number'],
+            'parcel_number' => ['nullable', 'string', 'max:255', 'exists:parcels,parcel_number'],
             'password' => ['required', 'confirmed', Password::min(12)->letters()->numbers()],
         ];
     }
@@ -46,7 +46,7 @@ class TenantRegistrationRequest extends FormRequest
             'first_name' => trim((string) $this->input('first_name')),
             'last_name' => trim((string) $this->input('last_name')),
             'email' => mb_strtolower(trim((string) $this->input('email'))),
-            'parcel_number' => trim((string) $this->input('parcel_number')),
+            'parcel_number' => trim((string) $this->input('parcel_number')) ?: null,
         ]);
     }
 }
