@@ -37,7 +37,7 @@
     @can('review', $registrationRequest)
         <div class="alert alert-warning">
             Vergleiche die Angaben mit dem Pachtvertrag oder einem anderen verlässlichen Vereinsnachweis.
-            Wenn keine Parzellennummer angegeben wurde, kann das Konto ohne Mitgliedsverknüpfung freigegeben und später zugeordnet oder hochgestuft werden.
+            Das Konto kann ohne vorher manuell angelegtes Mitglied freigegeben werden. Wenn eine Parzelle angegeben wurde und kein Mitglied ausgewählt ist, legt OKGV automatisch einen Mitgliedsstammsatz und eine Pächterhistorie an.
             Bei der Freigabe wird eine noch offene E-Mail-Bestätigung übernommen, wenn die Identität anderweitig geprüft wurde.
         </div>
         @if ($recommendedCandidate)
@@ -82,11 +82,7 @@
                         @endforeach
                     </select>
                     <div class="form-text mb-3">
-                        @if ($registrationRequest->parcel_id)
-                            Angezeigt werden nur aktuelle Pächter dieser Parzelle ohne vorhandenes Benutzerkonto. Für Pächterregistrierungen ist eine Zuordnung erforderlich.
-                        @else
-                            Ohne Parzellennummer ist die Zuordnung optional. Das Konto kann später mit einem Mitglied oder einer Parzelle verbunden werden.
-                        @endif
+                        Vorhandenes Mitglied auswählen, wenn der Stammdatensatz schon existiert. Leer lassen, damit OKGV nur das Konto freigibt oder bei angegebener Parzelle automatisch Mitglied und Pächterhistorie anlegt.
                     </div>
                     <div class="border rounded p-3 mb-3 d-none" data-registration-member-preview>
                         <h3 class="h6">Vergleich vor der Freigabe</h3>
@@ -119,11 +115,11 @@
                     </fieldset>
                     <input type="hidden" name="member_email_action" value="keep" data-registration-email-default>
                     @if ($registrationRequest->parcel_id && $candidates->isEmpty())
-                        <div class="alert alert-danger">Es gibt kein freigabefähiges Mitglied. Prüfe zuerst Pächterhistorie und bestehende Kontoverknüpfungen.</div>
+                        <div class="alert alert-info">Es gibt noch kein verknüpfbares Mitglied auf dieser Parzelle. Bei der Freigabe legt OKGV automatisch einen Mitgliedsstammsatz und eine Pächterhistorie an.</div>
                     @endif
                     <label class="form-label" for="approval_review_note">Interner Prüfhinweis (optional)</label>
                     <input class="form-control" id="approval_review_note" name="review_note" maxlength="255">
-                    <button class="btn btn-success mt-3" @disabled($registrationRequest->parcel_id && $candidates->isEmpty()) onclick="return confirm('Benutzerkonto verbindlich freigeben?')">Konto freigeben</button>
+                    <button class="btn btn-success mt-3" onclick="return confirm('Benutzerkonto verbindlich freigeben?')">Konto freigeben</button>
                 </form>
             </div>
             <div class="col-lg-5">

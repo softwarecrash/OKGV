@@ -115,6 +115,50 @@ class TenantPortalTest extends TestCase
         $this->assertSame(RegistrationRequestStatus::Approved, $registrationRequest->fresh()->status);
     }
 
+    public function test_pending_registration_cannot_login_until_approved(): void
+    {
+        Notification::fake();
+
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $user = User::factory()->create([
+            'email' => 'wartend@example.test',
+            'password' => 'SicheresPasswort123',
+            'email_verified_at' => now(),
+        ]);
+        $registrationRequest = RegistrationRequest::factory()->create([
+            'user_id' => $user->id,
+            'first_name' => 'Wartende',
+            'last_name' => 'Person',
+            'email' => $user->email,
+            'parcel_id' => null,
+            'parcel_number' => null,
+            'password' => null,
+            'status' => RegistrationRequestStatus::Pending,
+        ]);
+
+        $this->post(route('login'), [
+            'email' => $user->email,
+            'password' => 'SicheresPasswort123',
+        ])
+            ->assertRedirect(route('login'))
+            ->assertSessionHasErrors('email');
+        $this->assertGuest();
+
+        $this->actingAs($board)
+            ->post(route('registration-requests.approve', $registrationRequest), [
+                'review_note' => 'Konto freigegeben',
+            ])
+            ->assertRedirect(route('registration-requests.index'));
+
+        $this->post(route('logout'));
+
+        $this->post(route('login'), [
+            'email' => $user->email,
+            'password' => 'SicheresPasswort123',
+        ])->assertRedirect('/dashboard');
+        $this->assertAuthenticatedAs($user);
+    }
+
     public function test_board_can_approve_only_an_active_tenant_of_requested_parcel(): void
     {
         Notification::fake();
@@ -156,6 +200,54 @@ class TenantPortalTest extends TestCase
             RegistrationRequestStatus::Approved,
             $registrationRequest->fresh()->status,
         );
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'tenant.registration.approved',
+            'subject_id' => $registrationRequest->id,
+        ]);
+    }
+
+    public function test_approval_can_create_member_and_tenancy_from_registration(): void
+    {
+        Notification::fake();
+
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $parcel = Parcel::factory()->create(['parcel_number' => 'NEU-01']);
+        $user = User::factory()->unverified()->create([
+            'email' => 'neu@example.test',
+        ]);
+        $registrationRequest = RegistrationRequest::factory()->create([
+            'user_id' => $user->id,
+            'first_name' => 'Neue',
+            'last_name' => 'Pächterin',
+            'email' => $user->email,
+            'parcel_id' => $parcel->id,
+            'parcel_number' => $parcel->parcel_number,
+            'password' => null,
+        ]);
+
+        $this->actingAs($board)
+            ->get(route('registration-requests.show', $registrationRequest))
+            ->assertOk()
+            ->assertSee('automatisch einen Mitgliedsstammsatz')
+            ->assertSee('Konto freigeben');
+
+        $this->actingAs($board)
+            ->post(route('registration-requests.approve', $registrationRequest), [
+                'review_note' => 'Identität und Parzelle geprüft',
+            ])
+            ->assertRedirect(route('registration-requests.index'));
+
+        $member = Member::query()->where('email', $user->email)->firstOrFail();
+        $this->assertSame($user->id, $member->user_id);
+        $this->assertSame('Neue', $member->first_name);
+        $this->assertSame('Pächterin', $member->last_name);
+        $this->assertSame(RegistrationRequestStatus::Approved, $registrationRequest->fresh()->status);
+        $this->assertTrue($user->fresh()->hasVerifiedEmail());
+        $this->assertDatabaseHas('parcel_tenants', [
+            'parcel_id' => $parcel->id,
+            'member_id' => $member->id,
+            'is_primary' => true,
+        ]);
         $this->assertDatabaseHas('audit_logs', [
             'action' => 'tenant.registration.approved',
             'subject_id' => $registrationRequest->id,

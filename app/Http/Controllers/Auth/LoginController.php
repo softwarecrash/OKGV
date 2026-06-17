@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\RegistrationRequestStatus;
 use App\Http\Controllers\Controller;
+use App\Models\RegistrationRequest;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -36,5 +40,25 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
+    }
+
+    protected function authenticated(Request $request, $user): ?RedirectResponse
+    {
+        $hasPendingRegistration = RegistrationRequest::query()
+            ->where('user_id', $user->id)
+            ->where('status', RegistrationRequestStatus::Pending)
+            ->exists();
+
+        if (! $hasPendingRegistration) {
+            return null;
+        }
+
+        $this->guard()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->withErrors([
+            'email' => 'Dein Konto ist angelegt, wartet aber noch auf Freigabe durch den Verein.',
+        ]);
     }
 }

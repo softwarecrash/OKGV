@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1 class="h2 mb-2">Registrierungsanfragen</h1>
-    <p class="text-secondary mb-4">Prüfe Identität und Pachtzuordnung sorgfältig. Erst die Freigabe erzeugt ein aktives Benutzerkonto.</p>
+    <p class="text-secondary mb-4">Prüfe Identität und Pachtzuordnung sorgfältig. Das Benutzerkonto existiert bereits, wird aber erst nach Freigabe nutzbar.</p>
     <div class="card border-0 shadow-sm">
         <div class="table-responsive">
             <table class="table align-middle mb-0">

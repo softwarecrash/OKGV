@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\MemberStatus;
+use App\Enums\NumberSequenceType;
 use App\Enums\RegistrationRequestStatus;
 use App\Enums\UserRole;
 use App\Models\Member;
@@ -12,6 +14,11 @@ use Illuminate\Validation\ValidationException;
 
 final class RegistrationRequestManager
 {
+    public function __construct(
+        private readonly NumberSequenceManager $numberSequenceManager,
+        private readonly ParcelTenancyManager $parcelTenancyManager,
+    ) {}
+
     public function approve(
         RegistrationRequest $registrationRequest,
         ?Member $member,
@@ -45,13 +52,7 @@ final class RegistrationRequestManager
                 ]);
             }
 
-            if ($registrationRequest->parcel_id !== null) {
-                if ($member === null) {
-                    throw ValidationException::withMessages([
-                        'member_id' => 'Für eine Pächterregistrierung muss ein Mitglied der angegebenen Parzelle ausgewählt werden.',
-                    ]);
-                }
-
+            if ($registrationRequest->parcel_id !== null && $member !== null) {
                 $hasActiveTenancy = $member->parcelTenancies()
                     ->activeOn()
                     ->where('parcel_id', $registrationRequest->parcel_id)
@@ -96,7 +97,14 @@ final class RegistrationRequestManager
                 $registrationRequest->user()->associate($user);
             }
 
+            $createdMember = false;
             $previousMemberEmail = $member?->email;
+
+            if ($member === null && $registrationRequest->parcel_id !== null) {
+                $member = $this->createMemberFromRegistration($registrationRequest, $user);
+                $createdMember = true;
+                $previousMemberEmail = null;
+            }
 
             if ($member !== null) {
                 $member->update([
@@ -118,6 +126,7 @@ final class RegistrationRequestManager
             AuditLogger::log('tenant.registration.approved', $actor, $registrationRequest, [
                 'member_id' => $member?->id,
                 'user_id' => $user->id,
+                'member_created' => $createdMember,
                 'member_email_action' => $memberEmailAction,
                 'member_email_changed' => $member !== null && $previousMemberEmail !== $member->email,
             ]);
@@ -126,6 +135,39 @@ final class RegistrationRequestManager
         });
 
         return $user;
+    }
+
+    private function createMemberFromRegistration(RegistrationRequest $registrationRequest, User $user): Member
+    {
+        $member = Member::create([
+            'user_id' => $user->id,
+            'member_number' => $this->numberSequenceManager->next(NumberSequenceType::Member),
+            'first_name' => $registrationRequest->first_name,
+            'last_name' => $registrationRequest->last_name,
+            'street' => 'Noch nicht erfasst',
+            'zip' => '00000',
+            'city' => 'Noch nicht erfasst',
+            'email' => $registrationRequest->email,
+            'joined_at' => now()->toDateString(),
+            'status' => MemberStatus::Active,
+            'notes' => 'Automatisch aus einer freigegebenen Registrierungsanfrage angelegt. Adresse bitte in den Stammdaten ergänzen.',
+        ]);
+
+        $primaryExists = $registrationRequest->parcel
+            ?->tenancies()
+            ->activeOn()
+            ->where('is_primary', true)
+            ->exists() ?? false;
+
+        $this->parcelTenancyManager->save([
+            'parcel_id' => $registrationRequest->parcel_id,
+            'member_id' => $member->id,
+            'starts_at' => now()->toDateString(),
+            'is_primary' => ! $primaryExists,
+            'notes' => 'Automatisch bei Freigabe der Registrierungsanfrage eingetragen.',
+        ]);
+
+        return $member;
     }
 
     public function reject(

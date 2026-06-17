@@ -2,6 +2,25 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.96] - 2026-06-17
+
+### Registrierungsflow entkoppelt
+
+- Registrierungsfreigaben aktivieren jetzt zuerst das Benutzerkonto; eine
+  vorhandene Mitgliedszuordnung ist dafür nicht mehr zwingend erforderlich.
+- Wenn bei der Registrierung eine Parzelle angegeben wurde und noch kein
+  Mitgliedsstammsatz existiert, legt OKGV bei Freigabe automatisch ein
+  Mitglied und einen Eintrag in der Pächterhistorie an.
+- Vorhandene Mitglieder können weiterhin bewusst ausgewählt werden, wenn der
+  Verein Stammdaten schon vor der Registrierung angelegt hat.
+- Konten mit noch offener Registrierungsfreigabe werden trotz korrekter
+  Zugangsdaten beim Login blockiert.
+- Registrierungs- und Prüfansichten erklären den neuen Ablauf verständlicher
+  und entfernen Hinweise auf vorherige Pflicht-Doppelanlage.
+- Die betroffene Pächterportal-Testsuite besteht mit 20 Tests und 176
+  Assertions.
+- Entwicklungsstand auf `0.2.0.96` erhöht.
+
 ## [0.2.0.95] - 2026-06-17
 
 ### Nachträgliche Zuordnung freigegebener Registrierungen
