@@ -100,7 +100,7 @@ final class RegistrationRequestManager
             $createdMember = false;
             $previousMemberEmail = $member?->email;
 
-            if ($member === null && $registrationRequest->parcel_id !== null) {
+            if ($member === null) {
                 $member = $this->createMemberFromRegistration($registrationRequest, $user);
                 $createdMember = true;
                 $previousMemberEmail = null;
@@ -153,19 +153,21 @@ final class RegistrationRequestManager
             'notes' => 'Automatisch aus einer freigegebenen Registrierungsanfrage angelegt. Adresse bitte in den Stammdaten ergänzen.',
         ]);
 
-        $primaryExists = $registrationRequest->parcel
-            ?->tenancies()
-            ->activeOn()
-            ->where('is_primary', true)
-            ->exists() ?? false;
+        if ($registrationRequest->parcel_id !== null) {
+            $primaryExists = $registrationRequest->parcel
+                ?->tenancies()
+                ->activeOn()
+                ->where('is_primary', true)
+                ->exists() ?? false;
 
-        $this->parcelTenancyManager->save([
-            'parcel_id' => $registrationRequest->parcel_id,
-            'member_id' => $member->id,
-            'starts_at' => now()->toDateString(),
-            'is_primary' => ! $primaryExists,
-            'notes' => 'Automatisch bei Freigabe der Registrierungsanfrage eingetragen.',
-        ]);
+            $this->parcelTenancyManager->save([
+                'parcel_id' => $registrationRequest->parcel_id,
+                'member_id' => $member->id,
+                'starts_at' => now()->toDateString(),
+                'is_primary' => ! $primaryExists,
+                'notes' => 'Automatisch bei Freigabe der Registrierungsanfrage eingetragen.',
+            ]);
+        }
 
         return $member;
     }
@@ -325,6 +327,52 @@ final class RegistrationRequestManager
 
             AuditLogger::log('tenant.registration.account_linked', $actor, $registrationRequest, [
                 'user_id' => $user->id,
+            ]);
+
+            return $registrationRequest;
+        });
+    }
+
+    public function createMemberForApprovedRequest(
+        RegistrationRequest $registrationRequest,
+        User $actor,
+    ): RegistrationRequest {
+        return DB::transaction(function () use ($registrationRequest, $actor): RegistrationRequest {
+            $registrationRequest = RegistrationRequest::query()
+                ->lockForUpdate()
+                ->findOrFail($registrationRequest->id);
+
+            if ($registrationRequest->status !== RegistrationRequestStatus::Approved) {
+                throw ValidationException::withMessages([
+                    'status' => 'Nur bereits freigegebene Registrierungsanfragen können nachträglich in ein Mitglied übernommen werden.',
+                ]);
+            }
+
+            $user = $registrationRequest->resolvedUser();
+
+            if ($user === null) {
+                throw ValidationException::withMessages([
+                    'user_id' => 'Für diese Anfrage wurde kein Benutzerkonto gefunden.',
+                ]);
+            }
+
+            if ($user->member()->exists()) {
+                throw ValidationException::withMessages([
+                    'member_id' => 'Dieses Benutzerkonto ist bereits mit einem Mitglied verknüpft.',
+                ]);
+            }
+
+            if ($registrationRequest->user_id !== $user->id) {
+                $registrationRequest->user()->associate($user);
+                $registrationRequest->save();
+            }
+
+            $member = $this->createMemberFromRegistration($registrationRequest, $user);
+
+            AuditLogger::log('tenant.registration.member_created', $actor, $registrationRequest, [
+                'member_id' => $member->id,
+                'user_id' => $user->id,
+                'parcel_id' => $registrationRequest->parcel_id,
             ]);
 
             return $registrationRequest;

@@ -233,6 +233,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Warteseite nach erfolgreichem Login für noch nicht freigegebene Konten anzeigen
 - [x] Registrierungsfreigabe von vorher manuell angelegten Mitgliedern entkoppeln
 - [x] Mitglied und Pächterhistorie bei Freigabe mit Parzellennummer automatisch anlegen
+- [x] Mitgliedsstammsatz bei Freigabe auch ohne Parzellennummer automatisch anlegen
 - [x] Wartende Altanfragen mit vorhandenem Benutzerkonto per E-Mail verknüpfen
 - [x] Freigegebene Anfragen ohne Mitgliedsverknüpfung nachträglich zuordnen
 - [x] Freigegebene Altanfragen ohne Parzelle mit vorhandenem Konto abschließen

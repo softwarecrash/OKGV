@@ -117,4 +117,14 @@ class RegistrationRequestController extends Controller
         return redirect()->route('registration-requests.show', $registrationRequest)
             ->with('status', 'Registrierungsanfrage wurde mit dem vorhandenen Benutzerkonto verknüpft.');
     }
+
+    public function createMember(RegistrationRequest $registrationRequest): RedirectResponse
+    {
+        $this->authorize('createMember', $registrationRequest);
+
+        $this->manager->createMemberForApprovedRequest($registrationRequest, request()->user());
+
+        return redirect()->route('registration-requests.show', $registrationRequest)
+            ->with('status', 'Mitglied wurde aus der Registrierungsanfrage angelegt.');
+    }
 }

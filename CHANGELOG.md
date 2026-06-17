@@ -2,6 +2,25 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.99] - 2026-06-17
+
+### Freigabe erzeugt immer ein Mitglied
+
+- Registrierungsfreigaben legen jetzt immer einen Mitgliedsstammsatz an, wenn
+  noch kein vorhandenes Mitglied ausgewählt wurde.
+- Ohne Parzellennummer entsteht ein Mitglied ohne Parzellenzuordnung, das
+  später zugeordnet werden kann.
+- Mit Parzellennummer entsteht zusätzlich automatisch ein Eintrag in der
+  Pächterhistorie.
+- Bereits freigegebene Altanfragen ohne Mitglied können nachträglich direkt
+  in einen Mitgliedsstammsatz übernommen werden.
+- Wenn für eine alte Anfrage bereits ein verknüpfbares Mitglied auf der
+  Parzelle existiert, bleibt die bewusste Verknüpfung erhalten, um Dubletten
+  zu vermeiden.
+- Die betroffene Pächterportal-Testsuite besteht mit 22 Tests und 201
+  Assertions.
+- Entwicklungsstand auf `0.2.0.99` erhöht.
+
 ## [0.2.0.98] - 2026-06-17
 
 ### Warteseite nach erfolgreichem Login

@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Enums\RegistrationRequestStatus;
+use App\Models\Member;
 use App\Models\RegistrationRequest;
 use App\Models\User;
 
@@ -40,5 +41,22 @@ class RegistrationRequestPolicy
             && $registrationRequest->parcel_id === null
             && $registrationRequest->user_id === null
             && $registrationRequest->resolvedUser() !== null;
+    }
+
+    public function createMember(User $user, RegistrationRequest $registrationRequest): bool
+    {
+        $hasLinkableMemberForParcel = $registrationRequest->parcel_id !== null
+            && Member::query()
+                ->whereNull('user_id')
+                ->whereHas('parcelTenancies', fn ($query) => $query
+                    ->activeOn()
+                    ->where('parcel_id', $registrationRequest->parcel_id))
+                ->exists();
+
+        return $user->canReviewTenantRegistrations()
+            && $registrationRequest->status === RegistrationRequestStatus::Approved
+            && $registrationRequest->resolvedUser() !== null
+            && $registrationRequest->resolvedUser()?->member()->doesntExist()
+            && ! $hasLinkableMemberForParcel;
     }
 }

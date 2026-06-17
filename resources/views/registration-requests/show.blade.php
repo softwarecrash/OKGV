@@ -37,7 +37,7 @@
     @can('review', $registrationRequest)
         <div class="alert alert-warning">
             Vergleiche die Angaben mit dem Pachtvertrag oder einem anderen verlässlichen Vereinsnachweis.
-            Das Konto kann ohne vorher manuell angelegtes Mitglied freigegeben werden. Wenn eine Parzelle angegeben wurde und kein Mitglied ausgewählt ist, legt OKGV automatisch einen Mitgliedsstammsatz und eine Pächterhistorie an.
+            Das Konto kann ohne vorher manuell angelegtes Mitglied freigegeben werden. Wenn kein Mitglied ausgewählt ist, legt OKGV automatisch einen Mitgliedsstammsatz an. Mit angegebener Parzelle wird zusätzlich die Pächterhistorie eingetragen.
             Bei der Freigabe wird eine noch offene E-Mail-Bestätigung übernommen, wenn die Identität anderweitig geprüft wurde.
         </div>
         @if ($recommendedCandidate)
@@ -82,7 +82,7 @@
                         @endforeach
                     </select>
                     <div class="form-text mb-3">
-                        Vorhandenes Mitglied auswählen, wenn der Stammdatensatz schon existiert. Leer lassen, damit OKGV nur das Konto freigibt oder bei angegebener Parzelle automatisch Mitglied und Pächterhistorie anlegt.
+                        Vorhandenes Mitglied auswählen, wenn der Stammdatensatz schon existiert. Leer lassen, damit OKGV automatisch ein Mitglied anlegt. Mit angegebener Parzelle wird dieses Mitglied direkt als Pächter eingetragen.
                     </div>
                     <div class="border rounded p-3 mb-3 d-none" data-registration-member-preview>
                         <h3 class="h6">Vergleich vor der Freigabe</h3>
@@ -133,19 +133,24 @@
                 </form>
             </div>
         </div>
-    @elsecan('linkAccount', $registrationRequest)
+    @elsecan('createMember', $registrationRequest)
         <div class="alert alert-info">
-            Diese Anfrage wurde bereits freigegeben und das passende Benutzerkonto wurde über die E-Mail-Adresse gefunden.
-            Es fehlt nur noch die technische Verknüpfung zwischen Anfrage und Konto.
+            Diese Anfrage wurde bereits freigegeben, aber es fehlt noch der Mitgliedsstammsatz.
+            Du kannst das Mitglied jetzt direkt aus der Anfrage anlegen.
         </div>
-        <form class="card card-body border-0 shadow-sm" method="POST" action="{{ route('registration-requests.link-account', $registrationRequest) }}">
+        <form class="card card-body border-0 shadow-sm" method="POST" action="{{ route('registration-requests.create-member', $registrationRequest) }}">
             @csrf
-            <h2 class="h5">Konto-Verknüpfung abschließen</h2>
+            <h2 class="h5">Mitglied aus Anfrage anlegen</h2>
             <p class="text-secondary mb-3">
-                Es ist keine Parzelle angegeben. Daher ist keine Mitglieds- oder Pächterzuordnung nötig.
-                Das Konto kann danach normal genutzt und später bei Bedarf einem Mitglied oder einer Parzelle zugeordnet werden.
+                OKGV übernimmt Name und E-Mail-Adresse aus der Registrierung, vergibt automatisch eine Mitgliedsnummer
+                und markiert fehlende Adressdaten zur späteren Ergänzung.
+                @if ($registrationRequest->parcel_id)
+                    Die angegebene Parzelle wird direkt in die Pächterhistorie übernommen.
+                @else
+                    Eine Parzelle kann später in der Mitglieder- oder Parzellenverwaltung zugeordnet werden.
+                @endif
             </p>
-            <button class="btn btn-success" onclick="return confirm('Registrierungsanfrage mit diesem Benutzerkonto verknüpfen?')">Konto verknüpfen</button>
+            <button class="btn btn-success" onclick="return confirm('Mitglied aus dieser Registrierungsanfrage anlegen?')">Mitglied anlegen</button>
         </form>
     @elsecan('linkMember', $registrationRequest)
         <div class="alert alert-info">

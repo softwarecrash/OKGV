@@ -142,6 +142,9 @@ Route::middleware(['auth', 'verified', 'registration.approved'])->group(function
     Route::post('registrierungsanfragen/{registration_request}/konto-verknuepfen', [RegistrationRequestController::class, 'linkAccount'])
         ->middleware('module:tenant_portal')
         ->name('registration-requests.link-account');
+    Route::post('registrierungsanfragen/{registration_request}/mitglied-anlegen', [RegistrationRequestController::class, 'createMember'])
+        ->middleware('module:tenant_portal')
+        ->name('registration-requests.create-member');
     Route::post('registrierungsanfragen/{registration_request}/mitglied-verknuepfen', [RegistrationRequestController::class, 'linkMember'])
         ->middleware('module:tenant_portal')
         ->name('registration-requests.link-member');

@@ -88,7 +88,7 @@ class TenantPortalTest extends TestCase
         ]);
     }
 
-    public function test_board_can_approve_registration_without_member_or_parcel(): void
+    public function test_board_can_approve_registration_without_parcel_and_create_member(): void
     {
         Notification::fake();
         $board = User::factory()->create(['role' => UserRole::Board]);
@@ -111,6 +111,13 @@ class TenantPortalTest extends TestCase
         $this->assertSame('Technik Helfer', $user->name);
         $this->assertSame(UserRole::Tenant, $user->role);
         $this->assertTrue($user->hasVerifiedEmail());
+        $member = Member::query()->where('email', 'technik@example.test')->firstOrFail();
+        $this->assertSame($user->id, $member->user_id);
+        $this->assertSame('Technik', $member->first_name);
+        $this->assertSame('Helfer', $member->last_name);
+        $this->assertDatabaseMissing('parcel_tenants', [
+            'member_id' => $member->id,
+        ]);
         Notification::assertNothingSent();
         $this->assertSame(RegistrationRequestStatus::Approved, $registrationRequest->fresh()->status);
     }
@@ -376,7 +383,7 @@ class TenantPortalTest extends TestCase
         ]);
     }
 
-    public function test_approved_request_without_parcel_can_link_existing_account_without_member(): void
+    public function test_approved_request_without_parcel_can_create_member_from_existing_account(): void
     {
         $board = User::factory()->create(['role' => UserRole::Board]);
         $user = User::factory()->create([
@@ -395,19 +402,19 @@ class TenantPortalTest extends TestCase
         $this->actingAs($board)
             ->get(route('registration-requests.show', $registrationRequest))
             ->assertOk()
-            ->assertSee('Konto-Verknüpfung abschließen')
+            ->assertSee('Mitglied aus Anfrage anlegen')
             ->assertDontSee('Mitglied nachträglich verknüpfen');
 
         $this->actingAs($board)
-            ->post(route('registration-requests.link-account', $registrationRequest))
+            ->post(route('registration-requests.create-member', $registrationRequest))
             ->assertRedirect(route('registration-requests.show', $registrationRequest));
 
         $this->assertSame($user->id, $registrationRequest->fresh()->user_id);
-        $this->assertDatabaseMissing('members', [
-            'user_id' => $user->id,
-        ]);
+        $member = Member::query()->where('user_id', $user->id)->firstOrFail();
+        $this->assertSame($registrationRequest->first_name, $member->first_name);
+        $this->assertSame($registrationRequest->last_name, $member->last_name);
         $this->assertDatabaseHas('audit_logs', [
-            'action' => 'tenant.registration.account_linked',
+            'action' => 'tenant.registration.member_created',
             'subject_id' => $registrationRequest->id,
         ]);
     }
