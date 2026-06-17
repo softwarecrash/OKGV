@@ -2,6 +2,18 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.90] - 2026-06-17
+
+### Deployment ans Ende verschoben
+
+- Die große Deployment-Phase wurde von Phase 20 auf Phase 34 verschoben.
+- Die fachlichen Anschlussmodule rücken vor, damit als nächstes Schwarzes
+  Brett, Bewerbermanagement, Gartenbegehungen und Vorstandsarbeit gebaut
+  werden können.
+- Der Phasenplan hält fest, dass Webhosting und Plesk für den aktuellen
+  Testbetrieb vorerst ausreichen.
+- Entwicklungsstand auf `0.2.0.90` erhöht.
+
 ## [0.2.0.89] - 2026-06-17
 
 ### Anschlussphasen aus Funktionsabgleich

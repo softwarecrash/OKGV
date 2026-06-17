@@ -207,15 +207,7 @@ vorherigen Phase geprüft sein.
 - [x] Polygonpunkte in Parzellen-CSV-Import und -Export
 - [x] Hintergrundbild in Backup und Restore
 
-## Phase 20: Deployment
-
-- [ ] Deployment
-- [ ] Docker
-- [ ] Docker Compose
-- [ ] Automatisierte Zeitpläne, externe Backupziele und Aufbewahrungsstrategie
-- [ ] Produktionsdokumentation
-
-## Phase 21: Schwarzes Brett und Vereinsnews
+## Phase 20: Schwarzes Brett und Vereinsnews
 
 - [ ] Öffentliche und interne Bekanntmachungen
 - [ ] Zielgruppen: alle Pächter, Vorstand, ausgewählte Rollen
@@ -225,7 +217,7 @@ vorherigen Phase geprüft sein.
 - [ ] Lesebestätigung für wichtige Bekanntmachungen
 - [ ] Auditlog und Rechtekonzept
 
-## Phase 22: Bewerbermanagement
+## Phase 21: Bewerbermanagement
 
 - [ ] Warteliste fachlich zum Bewerbermanagement erweitern
 - [ ] Interessentenakte mit Kontakthistorie
@@ -235,7 +227,7 @@ vorherigen Phase geprüft sein.
 - [ ] Übernahme eines Bewerbers in Mitglied und Pächterhistorie
 - [ ] Auditlog und DSGVO-Auskunft erweitern
 
-## Phase 23: Gartenbegehungen
+## Phase 22: Gartenbegehungen
 
 - [ ] Begehungstermine mit Prüfern und Parzellenumfang
 - [ ] Checklisten und Mängelkategorien
@@ -245,7 +237,7 @@ vorherigen Phase geprüft sein.
 - [ ] Dokumentation als PDF-Protokoll
 - [ ] Auditlog, Rechte und Datenschutzprüfung
 
-## Phase 24: Vorstandsarbeit
+## Phase 23: Vorstandsarbeit
 
 - [ ] Vorstandssitzungen
 - [ ] Tagesordnungen
@@ -255,7 +247,7 @@ vorherigen Phase geprüft sein.
 - [ ] Dokumentverknüpfung und PDF-Export
 - [ ] Rechte für vertrauliche Vorstandsunterlagen
 
-## Phase 25: Aufgaben und Wiedervorlagen
+## Phase 24: Aufgaben und Wiedervorlagen
 
 - [ ] Zentrale Aufgabenliste für Vorstand und Verwaltung
 - [ ] Fälligkeiten, Zuständigkeiten und Status
@@ -264,7 +256,7 @@ vorherigen Phase geprüft sein.
 - [ ] Wiederkehrende Aufgaben
 - [ ] Auditlog und Rechte
 
-## Phase 26: Kassenbuch
+## Phase 25: Kassenbuch
 
 - [ ] Einnahmen und Ausgaben
 - [ ] Kategorien oder einfacher Kontenrahmen
@@ -274,7 +266,7 @@ vorherigen Phase geprüft sein.
 - [ ] Rechte für Kassierer und Administratoren
 - [ ] Auditlog und unveränderbare Abschlussstände
 
-## Phase 27: Bankimport und Bankabgleich
+## Phase 26: Bankimport und Bankabgleich
 
 - [ ] Import von Kontoauszügen per CSV
 - [ ] Vorbereitung für CAMT.053 und MT940
@@ -284,7 +276,7 @@ vorherigen Phase geprüft sein.
 - [ ] Zahlungsstatus automatisch aktualisieren
 - [ ] Auditlog und Schutz sensibler Bankdaten
 
-## Phase 28: Haushaltsplan
+## Phase 27: Haushaltsplan
 
 - [ ] Haushaltsplan je Geschäftsjahr
 - [ ] Budgetpositionen und Kategorien
@@ -292,7 +284,7 @@ vorherigen Phase geprüft sein.
 - [ ] Auswertungen für Vorstand und Mitgliederversammlung
 - [ ] Export als PDF und CSV
 
-## Phase 29: Umfragen und Terminabfragen
+## Phase 28: Umfragen und Terminabfragen
 
 - [ ] Umfragen für Pächter und Mitglieder
 - [ ] Terminabfragen für Arbeitseinsätze und Vereinsveranstaltungen
@@ -300,7 +292,7 @@ vorherigen Phase geprüft sein.
 - [ ] Sichtbare oder geheime Ergebnisse
 - [ ] Export und Auditlog
 
-## Phase 30: Wertermittlung
+## Phase 29: Wertermittlung
 
 - [ ] Wertermittlungsakte je Parzelle
 - [ ] Laube, Gewächshaus, Bepflanzung und Ausstattung erfassen
@@ -309,7 +301,7 @@ vorherigen Phase geprüft sein.
 - [ ] Wertermittlungsprotokoll als PDF
 - [ ] Historie bei Pächterwechseln
 
-## Phase 31: Mobile Nutzung und PWA
+## Phase 30: Mobile Nutzung und PWA
 
 - [ ] PWA-Manifest und installierbare Oberfläche
 - [ ] Mobile Optimierung wichtiger Pächterfunktionen
@@ -317,14 +309,14 @@ vorherigen Phase geprüft sein.
 - [ ] Offline-freundliche Formularentwürfe prüfen
 - [ ] Push-Benachrichtigungen als spätere Option bewerten
 
-## Phase 32: Erweiterte Finanzexporte
+## Phase 31: Erweiterte Finanzexporte
 
 - [ ] DATEV-Export prüfen und fachlich spezifizieren
 - [ ] Export aus Kassenbuch, Rechnungen und Zahlungen
 - [ ] Steuerberaterfreundliche Beleg- und Buchungslisten
 - [ ] Validierung gegen gängige DATEV-Anforderungen
 
-## Phase 33: Digitale Mitgliederversammlung
+## Phase 32: Digitale Mitgliederversammlung
 
 - [ ] Einladungen und Tagesordnung
 - [ ] Teilnehmerliste
@@ -332,7 +324,7 @@ vorherigen Phase geprüft sein.
 - [ ] Beschlüsse mit Protokollverknüpfung
 - [ ] Rechtliche Anforderungen vor Umsetzung prüfen
 
-## Phase 34: SaaS- und Hosting-Betrieb
+## Phase 33: SaaS- und Hosting-Betrieb
 
 - [ ] Tenant-Verwaltung außerhalb der Einzelinstanz
 - [ ] Lizenz- und Paketverwaltung
@@ -345,6 +337,14 @@ vorherigen Phase geprüft sein.
 - [ ] Automatische Backups und Restore-Strategie
 - [ ] Klare Trennung zur selbstverwalteten Einzelinstanz dokumentieren
 
+## Phase 34: Deployment
+
+- [ ] Deployment
+- [ ] Docker
+- [ ] Docker Compose
+- [ ] Automatisierte Zeitpläne, externe Backupziele und Aufbewahrungsstrategie
+- [ ] Produktionsdokumentation
+
 ## Spätere Forschungsphase: KI-Protokollassistent
 
 - [ ] Fachliche und datenschutzrechtliche Prüfung
@@ -354,6 +354,6 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
-Die Phasen 0 bis 19 sind abgeschlossen. Phase 20 bleibt die nächste reguläre
-technische Phase. Für fachlichen Mehrwert folgen danach Schwarzes Brett,
-Bewerbermanagement, Gartenbegehungen und Vorstandsarbeit.
+Die Phasen 0 bis 19 sind abgeschlossen. Als nächste reguläre Fachphase folgt
+Phase 20 mit Schwarzem Brett und Vereinsnews. Die große Deployment-Phase ist
+bewusst ans Ende verschoben, weil Webhosting und Plesk vorerst ausreichen.

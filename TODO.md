@@ -10,7 +10,9 @@ projektweite Einzelaufgaben detailliert geführt.
 - [x] Anschlussphasen für Schwarzes Brett, Bewerbermanagement,
   Gartenbegehungen, Vorstandsarbeit und Finanzmodule ableiten
 - [x] SaaS- und Zukunftsthemen als spätere Phasen einordnen
+- [x] Große Deployment-Phase ans Ende verschieben
 - [x] Entwicklungsstand 0.2.0.89 vorbereiten
+- [x] Entwicklungsstand 0.2.0.90 vorbereiten
 
 ## Phase 0: Projektbasis
 
