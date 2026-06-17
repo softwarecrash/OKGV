@@ -64,6 +64,27 @@ class MasterDataCrudTest extends TestCase
         $this->assertNotNull($member->archived_at);
     }
 
+    public function test_administrator_can_edit_member_with_existing_tenant_account_link(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $tenant = User::factory()->create([
+            'name' => 'Tobias Rocktäschel',
+            'email' => 'tobias@example.test',
+        ]);
+        $member = Member::factory()->create([
+            'user_id' => $tenant->id,
+            'first_name' => 'Tobias',
+            'last_name' => 'Rocktäschel',
+        ]);
+
+        $this->actingAs($administrator)
+            ->get(route('members.edit', $member))
+            ->assertOk()
+            ->assertSee('Mitglied bearbeiten')
+            ->assertSee('Tobias Rocktäschel')
+            ->assertSee('tobias@example.test');
+    }
+
     public function test_administrator_can_create_and_update_parcel(): void
     {
         $administrator = User::factory()->administrator()->create();

@@ -234,6 +234,7 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Registrierungsfreigabe von vorher manuell angelegten Mitgliedern entkoppeln
 - [x] Mitglied und Pächterhistorie bei Freigabe mit Parzellennummer automatisch anlegen
 - [x] Mitgliedsstammsatz bei Freigabe auch ohne Parzellennummer automatisch anlegen
+- [x] Mitglieder-Bearbeiten-Maske für verknüpfte Pächterkonten reparieren
 - [x] Wartende Altanfragen mit vorhandenem Benutzerkonto per E-Mail verknüpfen
 - [x] Freigegebene Anfragen ohne Mitgliedsverknüpfung nachträglich zuordnen
 - [x] Freigegebene Altanfragen ohne Parzelle mit vorhandenem Konto abschließen

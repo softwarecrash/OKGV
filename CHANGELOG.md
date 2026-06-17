@@ -2,6 +2,18 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.100] - 2026-06-17
+
+### Mitgliedsbearbeitung nach Registrierung
+
+- Die Mitglieder-Bearbeiten-Maske funktioniert wieder für Mitglieder, die
+  bereits mit einem Pächterkonto verknüpft sind.
+- Die Auswahl für Pächterkonten nutzt eine Laravel-kompatible Abfrage und hält
+  das aktuell verknüpfte Konto weiterhin sichtbar.
+- Ein Regressionstest deckt die Bearbeitung eines automatisch verknüpften
+  Mitglieds ab.
+- Entwicklungsstand auf `0.2.0.100` erhöht.
+
 ## [0.2.0.99] - 2026-06-17
 
 ### Freigabe erzeugt immer ein Mitglied

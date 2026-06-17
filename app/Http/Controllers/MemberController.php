@@ -142,7 +142,7 @@ class MemberController extends Controller
                 $query->whereDoesntHave('member');
 
                 if ($member?->user_id) {
-                    $query->orWhereKey($member->user_id);
+                    $query->orWhere('id', $member->user_id);
                 }
             })
             ->orderBy('name')
