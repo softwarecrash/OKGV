@@ -24,6 +24,7 @@ use App\Models\MeterReading;
 use App\Models\Parcel;
 use App\Models\ParcelTenant;
 use App\Models\User;
+use App\Services\CommunicationMailConfigurator;
 use App\Services\MailRecipientResolver;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -63,6 +64,43 @@ class CommunicationWorkflowTest extends TestCase
             ->assertSee('SMTP-Einstellungen')
             ->assertSee('mailer@example.test')
             ->assertDontSee('VerySecretPassword');
+    }
+
+    public function test_local_smtp_relay_can_be_configured_without_encryption(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+
+        $this->actingAs($administrator)
+            ->put(route('communication-settings.update'), [
+                'smtp_enabled' => true,
+                'smtp_scheme' => 'none',
+                'smtp_host' => 'localhost',
+                'smtp_port' => 25,
+                'smtp_username' => null,
+                'smtp_password' => null,
+                'clear_credentials' => false,
+                'from_address' => 'noreply@okgv.de',
+                'from_name' => 'OKGV',
+            ])
+            ->assertRedirect();
+
+        $settings = CommunicationSetting::current();
+        $this->assertSame('none', $settings->smtp_scheme);
+
+        app(CommunicationMailConfigurator::class)->apply();
+        $mailerConfig = config('mail.mailers.okgv_smtp');
+
+        $this->assertSame('smtp', $mailerConfig['transport']);
+        $this->assertSame('smtp', $mailerConfig['scheme']);
+        $this->assertSame('localhost', $mailerConfig['host']);
+        $this->assertSame(25, $mailerConfig['port']);
+        $this->assertFalse($mailerConfig['auto_tls']);
+
+        $this->actingAs($administrator)
+            ->get(route('application-settings.edit', ['section' => 'smtp']))
+            ->assertOk()
+            ->assertSee('SMTP ohne Verschlüsselung')
+            ->assertSee('localhost:25');
     }
 
     public function test_administrator_can_send_smtp_test_to_custom_validated_address(): void

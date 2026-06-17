@@ -17,7 +17,7 @@ class CommunicationSettingRequest extends FormRequest
     {
         return [
             'smtp_enabled' => ['required', 'boolean'],
-            'smtp_scheme' => ['required', Rule::in(['smtp', 'smtps'])],
+            'smtp_scheme' => ['required', Rule::in(['smtp', 'smtps', 'none'])],
             'smtp_host' => ['required', 'string', 'max:255'],
             'smtp_port' => ['required', 'integer', 'between:1,65535'],
             'smtp_username' => ['nullable', 'string', 'max:255'],

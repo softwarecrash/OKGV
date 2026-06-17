@@ -2,6 +2,20 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.84] - 2026-06-17
+
+### Lokales SMTP-Relay ohne TLS
+
+- SMTP-Einstellungen unterstützen jetzt zusätzlich `SMTP ohne Verschlüsselung`
+  für lokale Relays wie `localhost:25`.
+- Bei dieser Option wird automatisches STARTTLS deaktiviert, damit lokale
+  Mailserver ohne passendes TLS-Zertifikat genutzt werden können.
+- Die Konfigurationsoberfläche erklärt den lokalen Relay-Fall direkt an der
+  Verbindungsauswahl.
+- Die komplette Testsuite besteht mit 221 Tests und 1395 Assertions; der
+  Frontend-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.84` erhöht.
+
 ## [0.2.0.83] - 2026-06-17
 
 ### Eigene Parzellen bei Arbeitsstunden bevorzugt

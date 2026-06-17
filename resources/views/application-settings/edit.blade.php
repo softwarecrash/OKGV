@@ -329,7 +329,9 @@
                                 @disabled(config('demo.enabled'))>
                             <option value="smtp" @selected(old('smtp_scheme', $communicationSettings->smtp_scheme) === 'smtp')>SMTP / STARTTLS</option>
                             <option value="smtps" @selected(old('smtp_scheme', $communicationSettings->smtp_scheme) === 'smtps')>SMTPS</option>
+                            <option value="none" @selected(old('smtp_scheme', $communicationSettings->smtp_scheme) === 'none')>SMTP ohne Verschlüsselung</option>
                         </select>
+                        <div class="form-text">Für lokale Relays wie <code>localhost:25</code> ohne TLS-Zertifikat.</div>
                     </div>
                     <div class="col-lg-6">
                         <label class="form-label" for="smtp_username">Benutzername</label>

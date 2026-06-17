@@ -719,9 +719,11 @@ niemals im Auditlog ausgegeben. Nur Administratoren dürfen diese Werte ändern
 oder einen Testversand an eine frei eingegebene, serverseitig validierte
 Zieladresse auslösen. Die Zieladresse wird auditiert, aber nicht als
 Systemeinstellung gespeichert. Die Konfiguration verwendet `smtp` mit
-STARTTLS-Unterstützung oder `smtps`. Testversand ist pro Benutzer auf zehn
-Nachrichten pro Minute begrenzt. Bei Überschreitung bleibt die Person auf der
-Konfigurationsseite und erhält eine verständliche deutsche Meldung. Eine
+STARTTLS-Unterstützung, `smtps` oder bewusst unverschlüsseltes SMTP für lokale
+Relays wie `localhost:25`, bei denen kein öffentliches TLS-Zertifikat
+vorhanden ist. Testversand ist pro Benutzer auf zehn Nachrichten pro Minute
+begrenzt. Bei Überschreitung bleibt die Person auf der Konfigurationsseite
+und erhält eine verständliche deutsche Meldung. Eine
 erfolgreiche Testmeldung bestätigt ausdrücklich nur die Annahme durch den
 SMTP-Server. Die vom Transport zurückgegebene Message-ID wird für die
 Nachverfolgung beim Mailanbieter auditiert.
