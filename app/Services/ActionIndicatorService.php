@@ -8,7 +8,6 @@ use App\Enums\InvoiceStatus;
 use App\Enums\MailCampaignStatus;
 use App\Enums\MeterReadingSubmissionStatus;
 use App\Enums\RegistrationRequestStatus;
-use App\Enums\UserRole;
 use App\Enums\WaitingListStatus;
 use App\Enums\WorkEventStatus;
 use App\Enums\WorkHourSubmissionStatus;
@@ -56,7 +55,7 @@ final class ActionIndicatorService
             $user->canReviewMeterReadingSubmissions() => MeterReadingSubmission::query()
                 ->where('status', MeterReadingSubmissionStatus::Pending)
                 ->count(),
-            $user->role === UserRole::Tenant => MeterReadingSubmission::query()
+            $user->hasTenantAccess() => MeterReadingSubmission::query()
                 ->unresolvedRejectedForUser($user->id)
                 ->count(),
             default => 0,
@@ -65,7 +64,7 @@ final class ActionIndicatorService
         $invoices = match (true) {
             ! FeatureModule::Billing->enabled() => 0,
             $user->canManageBilling() => $this->dunnableInvoiceCount(),
-            $user->role === UserRole::Tenant => Invoice::query()
+            $user->hasTenantAccess() => Invoice::query()
                 ->where('status', InvoiceStatus::Approved)
                 ->whereIn('payment_status', [
                     InvoicePaymentStatus::Open,
@@ -95,7 +94,7 @@ final class ActionIndicatorService
             $user->canManageWorkEvents() => WorkHourSubmission::query()
                 ->where('status', WorkHourSubmissionStatus::Pending)
                 ->count(),
-            $user->role === UserRole::Tenant => WorkHourSubmission::query()
+            $user->hasTenantAccess() => WorkHourSubmission::query()
                 ->unresolvedRejectedForUser($user->id)
                 ->count(),
             default => 0,

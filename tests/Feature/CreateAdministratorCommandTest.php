@@ -24,7 +24,8 @@ class CreateAdministratorCommandTest extends TestCase
 
         $user = User::query()->where('email', 'admin@example.test')->firstOrFail();
         $this->assertSame('OKGV Administrator', $user->name);
-        $this->assertSame(UserRole::Administrator, $user->role);
+        $this->assertSame(UserRole::Tenant, $user->role);
+        $this->assertTrue($user->is_system_admin);
         $this->assertTrue(Hash::check('SicheresPasswort123', $user->password));
         $this->assertNotNull($user->email_verified_at);
     }
@@ -47,7 +48,8 @@ class CreateAdministratorCommandTest extends TestCase
 
         $user->refresh();
         $this->assertSame('Neuer Admin', $user->name);
-        $this->assertSame(UserRole::Administrator, $user->role);
+        $this->assertSame(UserRole::Tenant, $user->role);
+        $this->assertTrue($user->is_system_admin);
         $this->assertTrue(Hash::check('NeuesPasswort123', $user->password));
         $this->assertDatabaseCount('users', 1);
     }

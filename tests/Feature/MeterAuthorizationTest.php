@@ -17,7 +17,7 @@ class MeterAuthorizationTest extends TestCase
 
     public function test_authorized_roles_have_expected_meter_access(): void
     {
-        foreach ([UserRole::Administrator, UserRole::Board, UserRole::WaterManager] as $role) {
+        foreach ([UserRole::Board, UserRole::WaterManager] as $role) {
             $user = User::factory()->create(['role' => $role]);
             $this->actingAs($user)->get(route('meters.create'))->assertOk();
         }

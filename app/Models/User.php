@@ -21,6 +21,7 @@ use Illuminate\Notifications\Notifiable;
     'email',
     'password',
     'role',
+    'is_system_admin',
     'can_correct_meter_readings',
     'permissions',
     'permission_profile_id',
@@ -43,6 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'role' => UserRole::class,
+            'is_system_admin' => 'boolean',
             'can_correct_meter_readings' => 'boolean',
             'permissions' => 'array',
         ];
@@ -50,7 +52,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isAdministrator(): bool
     {
-        return $this->role === UserRole::Administrator;
+        return $this->is_system_admin || $this->role === UserRole::Administrator;
+    }
+
+    public function hasTenantAccess(): bool
+    {
+        return $this->member()->exists();
     }
 
     public function member(): HasOne
@@ -99,7 +106,7 @@ class User extends Authenticatable implements MustVerifyEmail
             return $this->hasPermission(UserPermission::CorrectMeterReadings);
         }
 
-        return in_array($this->role, [UserRole::Administrator, UserRole::Board], true)
+        return $this->role === UserRole::Board
             && $this->can_correct_meter_readings;
     }
 

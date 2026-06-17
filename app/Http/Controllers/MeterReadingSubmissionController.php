@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\UserRole;
 use App\Http\Requests\MeterReadingSubmissionRequest;
 use App\Http\Requests\MeterReadingSubmissionReviewRequest;
 use App\Models\Meter;
@@ -36,13 +35,13 @@ class MeterReadingSubmissionController extends Controller
                 'reviewer',
             ])
             ->when(
-                $request->user()->role === UserRole::Tenant,
+                $request->user()->hasTenantAccess() && ! $request->user()->canReviewMeterReadingSubmissions(),
                 fn ($query) => $query->where('submitted_by', $request->user()->id),
             )
             ->orderByRaw("status = 'pending' desc")
             ->latest()
             ->paginate(20);
-        $unresolvedRejectedIds = $request->user()->role === UserRole::Tenant
+        $unresolvedRejectedIds = $request->user()->hasTenantAccess() && ! $request->user()->canReviewMeterReadingSubmissions()
             ? MeterReadingSubmission::query()
                 ->unresolvedRejectedForUser($request->user()->id)
                 ->pluck('id')

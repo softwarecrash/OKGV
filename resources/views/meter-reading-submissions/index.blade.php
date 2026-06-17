@@ -4,14 +4,14 @@
 <div class="container">
     <h1 class="h2 mb-2">Zählerstandsmeldungen</h1>
     <p class="text-secondary mb-4">
-        @if (auth()->user()->role === App\Enums\UserRole::Tenant)
+        @if (auth()->user()->hasTenantAccess())
             Hier siehst du den Prüfstatus deiner Meldungen. Abgesendete Werte können nicht nachträglich verändert werden.
         @else
             Prüfe Foto, Datum und Plausibilität. Erst eine Bestätigung übernimmt den Wert in die Zählerhistorie. Bearbeitete Meldungen bleiben als nachvollziehbare Historie sichtbar.
         @endif
     </p>
     <x-validation-errors />
-    @if (auth()->user()->role === App\Enums\UserRole::Tenant && $actionIndicators['meter_readings'] > 0)
+    @if (auth()->user()->hasTenantAccess() && $actionIndicators['meter_readings'] > 0)
         <div class="alert alert-warning" role="status">
             <strong>
                 {{ $actionIndicators['meter_readings'] }}

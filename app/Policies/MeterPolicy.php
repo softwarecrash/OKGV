@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Enums\MeterStatus;
-use App\Enums\UserRole;
 use App\Models\Meter;
 use App\Models\User;
 
@@ -43,7 +42,7 @@ class MeterPolicy
 
     public function submitReading(User $user, Meter $meter): bool
     {
-        if ($user->role !== UserRole::Tenant || $meter->status !== MeterStatus::Active) {
+        if (! $user->hasTenantAccess() || $meter->status !== MeterStatus::Active) {
             return false;
         }
 

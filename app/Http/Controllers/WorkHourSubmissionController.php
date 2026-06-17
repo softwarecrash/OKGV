@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\UserRole;
 use App\Enums\WorkHourSubmissionStatus;
 use App\Http\Requests\WorkHourSubmissionRequest;
 use App\Http\Requests\WorkHourSubmissionReviewRequest;
@@ -30,13 +29,13 @@ class WorkHourSubmissionController extends Controller
         $submissions = WorkHourSubmission::query()
             ->with(['parcel', 'submitter.member', 'reviewer'])
             ->when(
-                $request->user()->role === UserRole::Tenant,
+                $request->user()->hasTenantAccess() && ! $request->user()->canManageWorkEvents(),
                 fn ($query) => $query->where('submitted_by', $request->user()->id),
             )
             ->orderByRaw("status = 'pending' desc")
             ->latest()
             ->paginate(20);
-        $unresolvedRejectedIds = $request->user()->role === UserRole::Tenant
+        $unresolvedRejectedIds = $request->user()->hasTenantAccess() && ! $request->user()->canManageWorkEvents()
             ? WorkHourSubmission::query()
                 ->unresolvedRejectedForUser($request->user()->id)
                 ->pluck('id')
@@ -59,7 +58,7 @@ class WorkHourSubmissionController extends Controller
     {
         $member = $request->user()->member;
 
-        if ($request->user()->role !== UserRole::Tenant || ! $member) {
+        if (! $request->user()->hasTenantAccess() || ! $member) {
             $route = $request->user()->canManageBilling()
                 ? 'work-hours.index'
                 : 'home';

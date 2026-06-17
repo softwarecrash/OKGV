@@ -186,8 +186,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(WorkEventParticipant::class, WorkEventParticipantPolicy::class);
         Gate::policy(WorkHourSubmission::class, WorkHourSubmissionPolicy::class);
         Gate::policy(WaitingListEntry::class, WaitingListEntryPolicy::class);
-        Gate::before(fn (User $user) => $user->isAdministrator() ? true : null);
-
         Event::listen(Login::class, fn (Login $event) => AuditLogger::log(
             action: 'auth.login',
             actor: $event->user,

@@ -45,7 +45,7 @@ class NavigationExperienceTest extends TestCase
             ->assertSee('Finanzen')
             ->assertSee('2 wartende Registrierungen')
             ->assertSee('1 offene Zählerstandsmeldung')
-            ->assertDontSee('Rechteverwaltung');
+            ->assertSee('Rechteverwaltung');
     }
 
     public function test_tenant_only_receives_indicators_for_own_required_actions(): void
@@ -103,6 +103,7 @@ class NavigationExperienceTest extends TestCase
     public function test_newer_meter_submission_resolves_tenant_action_indicator(): void
     {
         $tenant = User::factory()->create(['role' => UserRole::Tenant]);
+        Member::factory()->create(['user_id' => $tenant->id]);
         $meter = Meter::factory()->create();
         MeterReadingSubmission::factory()->create([
             'meter_id' => $meter->id,

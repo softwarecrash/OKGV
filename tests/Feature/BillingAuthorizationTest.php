@@ -19,7 +19,7 @@ class BillingAuthorizationTest extends TestCase
 
     public function test_financial_roles_can_manage_billing(): void
     {
-        foreach ([UserRole::Administrator, UserRole::Board, UserRole::Treasurer] as $role) {
+        foreach ([UserRole::Board, UserRole::Treasurer] as $role) {
             $user = User::factory()->create(['role' => $role]);
 
             $this->actingAs($user)->get(route('billing-periods.index'))->assertOk();

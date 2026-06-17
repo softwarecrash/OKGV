@@ -31,6 +31,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'role' => UserRole::Tenant,
+            'is_system_admin' => false,
             'can_correct_meter_readings' => false,
             'remember_token' => Str::random(10),
         ];
@@ -49,7 +50,8 @@ class UserFactory extends Factory
     public function administrator(): static
     {
         return $this->state(fn (array $attributes) => [
-            'role' => UserRole::Administrator,
+            'role' => UserRole::Board,
+            'is_system_admin' => true,
         ]);
     }
 }

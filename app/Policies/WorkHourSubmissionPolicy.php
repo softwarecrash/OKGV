@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Enums\UserRole;
 use App\Enums\WorkHourSubmissionStatus;
 use App\Models\User;
 use App\Models\WorkHourSubmission;
@@ -11,7 +10,7 @@ class WorkHourSubmissionPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->role === UserRole::Tenant
+        return $user->hasTenantAccess()
             ? $user->member()->exists()
             : $user->canManageWorkEvents();
     }
@@ -24,7 +23,7 @@ class WorkHourSubmissionPolicy
 
     public function create(User $user): bool
     {
-        return $user->role === UserRole::Tenant && $user->member()->exists();
+        return $user->hasTenantAccess();
     }
 
     public function review(User $user, WorkHourSubmission $submission): bool

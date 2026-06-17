@@ -800,3 +800,12 @@ Weitere Phasen werden vor Beginn aus `PROJECT_SPEC.md` detailliert.
 - [x] Demo-Seed nutzt konfigurierte Vorstand- und Pächter-Mailadressen
 - [x] Demo-Purge entfernt konfigurierte Demo-Benutzer zuverlässig
 - [x] Änderung prüfen und veröffentlichen
+
+## Nachbesserung Phase 0: Konten, Passwörter und technische Administration
+
+- [x] Passwortänderung im eingeloggten Konto ergänzen
+- [x] Technische Administration von Vereinsrollen trennen
+- [x] Ein Konto gleichzeitig als technischer Admin und Pächter ermöglichen
+- [x] Admin-Ernennung und letzter-Admin-Schutz ergänzen
+- [x] Vorstands-Selbstverwaltung für Pächter- und Vorstandskonten erlauben
+- [x] Tests, Dokumentation und Veröffentlichung abschließen

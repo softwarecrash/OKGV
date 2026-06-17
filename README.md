@@ -13,7 +13,9 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Laravel 13 und PHP 8.3+
 - Bootstrap 5 und Alpine.js
 - Login, Logout und Passwort-Reset
+- Passwortänderung im eingeloggten Benutzerkonto
 - Rollen- und Policy-Grundlage
+- Technisches Administrator-Kennzeichen getrennt von Vereinsrollen
 - Auditlog-Basis
 - Security-Header
 - MariaDB-Unterstützung
@@ -40,6 +42,7 @@ Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vier
 - Pächterregistrierung mit verbindlicher Freigabe durch Vorstand oder Administrator
 - E-Mail-Verifizierung nach Freigabe eines neuen Kontos
 - Aufstufung freigegebener Pächterkonten zu Vorstandsmitgliedern
+- Ein Konto kann gleichzeitig technischer Administrator und Pächter sein
 - Granulare Vorstandsrechte mit konfigurierbaren Rechtevorlagen
 - Globale Konfiguration des sichtbaren Systemnamens
 - Konfigurierbare Nummernkreise für Mitglieder, Rechnungen, Mandate und Dokumente
@@ -161,8 +164,13 @@ OKGV_ADMIN_NAME="OKGV Administrator"
 OKGV_ADMIN_PASSWORD="EinSicheresPasswort123!"
 ```
 
-`php artisan okgv:create-admin` legt dann den Administrator an oder
-aktualisiert das bestehende Konto mit dieser E-Mail-Adresse.
+`php artisan okgv:create-admin` legt dann den technischen Administrator an
+oder aktualisiert das bestehende Konto mit dieser E-Mail-Adresse. Das Konto
+erhält dadurch Zugriff auf Systempflege, globale Konfiguration,
+Rechteverwaltung und Backups. Es erhält nicht automatisch Einsicht in
+Vereinsfachdaten wie Mitglieder, Abrechnung oder SEPA. Wird dasselbe Konto
+später einem Mitglied zugeordnet, kann es zugleich als Pächter sein eigenes
+Portal nutzen.
 
 Die Anwendung ist danach standardmäßig unter `http://127.0.0.1:8000` erreichbar.
 Für die Frontend-Entwicklung kann parallel `npm run dev` gestartet werden.

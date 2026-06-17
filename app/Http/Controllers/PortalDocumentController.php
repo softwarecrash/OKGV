@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\DocumentVisibility;
-use App\Enums\UserRole;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +13,7 @@ class PortalDocumentController extends Controller
 {
     public function index(Request $request): View
     {
-        abort_unless($request->user()->role === UserRole::Tenant, 403);
+        abort_unless($request->user()->hasTenantAccess(), 403);
         $member = $request->user()->member;
         abort_unless($member, 403);
 

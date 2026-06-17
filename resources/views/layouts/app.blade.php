@@ -66,7 +66,7 @@
                                 $canViewDocuments = $documentsEnabled && auth()->user()->can('viewAny', App\Models\Document::class);
                                 $canViewInventory = $inventoryEnabled && auth()->user()->can('viewAny', App\Models\InventoryItem::class);
                             @endphp
-                            @if ($tenantPortalEnabled && auth()->user()->role === App\Enums\UserRole::Tenant)
+                            @if ($tenantPortalEnabled && auth()->user()->hasTenantAccess())
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('tenant-portal.index') }}">
                                         Mein Portal
@@ -268,12 +268,14 @@
                                         <a class="dropdown-item" href="{{ route('user-permissions.index') }}">
                                             Rechteverwaltung
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('application-settings.edit') }}">
-                                            Globale Konfiguration
-                                        </a>
-                                        <a class="dropdown-item" href="{{ route('number-sequences.edit') }}">
-                                            Nummernkreise
-                                        </a>
+                                        @if (auth()->user()->isAdministrator())
+                                            <a class="dropdown-item" href="{{ route('application-settings.edit') }}">
+                                                Globale Konfiguration
+                                            </a>
+                                            <a class="dropdown-item" href="{{ route('number-sequences.edit') }}">
+                                                Nummernkreise
+                                            </a>
+                                        @endif
                                         <div class="dropdown-divider"></div>
                                     @endcan
                                     @if (App\Enums\FeatureModule::DataTransfer->enabled() && auth()->user()->canManageDataTransfer())
@@ -284,6 +286,9 @@
                                     @endif
                                     <a class="dropdown-item" href="{{ route('privacy.index') }}">
                                         Datenschutz
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('account.password.edit') }}">
+                                        Passwort ändern
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <form action="{{ route('logout') }}" method="POST" data-logout-form>

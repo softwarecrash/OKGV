@@ -30,7 +30,6 @@ class InvoicePolicy
 
     public function reminder(User $user, Invoice $invoice): bool
     {
-        return $user->canManageBilling()
-            && $invoice->canReceivePaymentReminder();
+        return $user->canManageBilling();
     }
 }

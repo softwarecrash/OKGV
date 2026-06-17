@@ -19,12 +19,24 @@ class UserPermissionController extends Controller
 
     public function index(Request $request): View
     {
-        abort_unless($request->user()->isAdministrator(), 403);
+        $actor = $request->user();
+
+        abort_unless($actor->can('viewAny', User::class), 403);
+
+        $users = User::query()
+            ->orderBy('name');
+
+        if (! $actor->isAdministrator()) {
+            $users
+                ->whereIn('role', [
+                    UserRole::Board->value,
+                    UserRole::Tenant->value,
+                ])
+                ->whereKeyNot($actor->id);
+        }
 
         return view('user-permissions.index', [
-            'users' => User::query()
-                ->orderBy('name')
-                ->get(),
+            'users' => $users->get(),
             'profiles' => PermissionProfile::query()
                 ->where('is_active', true)
                 ->orderBy('name')
@@ -32,13 +44,22 @@ class UserPermissionController extends Controller
             'permissions' => UserPermission::availableCases(),
             'defaultProfileId' => ApplicationSetting::current()
                 ->default_board_permission_profile_id,
-            'assignableRoles' => [
-                UserRole::Board,
-                UserRole::Treasurer,
-                UserRole::WaterManager,
-                UserRole::GardenManager,
-                UserRole::Tenant,
-            ],
+            'assignableRoles' => $actor->isAdministrator()
+                ? [
+                    UserRole::Board,
+                    UserRole::Treasurer,
+                    UserRole::WaterManager,
+                    UserRole::GardenManager,
+                    UserRole::Tenant,
+                ]
+                : [
+                    UserRole::Board,
+                    UserRole::Tenant,
+                ],
+            'canManagePermissionDetails' => $actor->isAdministrator(),
+            'administratorCount' => User::query()
+                ->where('is_system_admin', true)
+                ->count(),
         ]);
     }
 
@@ -47,16 +68,29 @@ class UserPermissionController extends Controller
         User $user,
     ): RedirectResponse {
         $validated = $request->validated();
+        $actor = $request->user();
+        $targetRole = UserRole::from($validated['role']);
         $profile = isset($validated['permission_profile_id'])
             ? PermissionProfile::query()->findOrFail($validated['permission_profile_id'])
             : null;
+        $permissions = $validated['permissions'] ?? [];
+
+        if (! $actor->isAdministrator()) {
+            $profile = $targetRole === UserRole::Board
+                ? PermissionProfile::query()->find(ApplicationSetting::current()->default_board_permission_profile_id)
+                : null;
+            $permissions = $targetRole === UserRole::Board && $profile === null
+                ? UserRole::Board->defaultPermissions()
+                : [];
+        }
 
         $this->manager->update(
             subject: $user,
-            role: UserRole::from($validated['role']),
-            permissions: $validated['permissions'] ?? [],
+            role: $targetRole,
+            isSystemAdmin: (bool) ($validated['is_system_admin'] ?? false),
+            permissions: $permissions,
             profile: $profile,
-            actor: $request->user(),
+            actor: $actor,
         );
 
         return back()->with('status', 'Rolle und Zugriffsrechte wurden aktualisiert.');

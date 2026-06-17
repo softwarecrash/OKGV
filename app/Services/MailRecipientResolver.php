@@ -64,7 +64,7 @@ final class MailRecipientResolver
     private function board(): Collection
     {
         return User::query()
-            ->whereIn('role', [UserRole::Administrator, UserRole::Board])
+            ->where('role', UserRole::Board)
             ->whereNotNull('email_verified_at')
             ->get()
             ->map(fn (User $user): array => [

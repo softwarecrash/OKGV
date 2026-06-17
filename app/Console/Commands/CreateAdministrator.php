@@ -50,7 +50,8 @@ class CreateAdministrator extends Command
         $user->forceFill([
             'name' => $name,
             'password' => Hash::make($password),
-            'role' => UserRole::Administrator,
+            'role' => $user->role ?? UserRole::Tenant,
+            'is_system_admin' => true,
             'email_verified_at' => $user->email_verified_at ?? now(),
         ])->save();
 

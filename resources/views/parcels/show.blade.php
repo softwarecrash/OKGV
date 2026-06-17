@@ -117,7 +117,7 @@
     <div class="card border-0 shadow-sm mt-4">
         <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
             <span>Arbeitsstunden</span>
-            @if (auth()->user()->role === App\Enums\UserRole::Tenant)
+            @if (auth()->user()->hasTenantAccess())
                 <a class="btn btn-sm btn-outline-success" href="{{ route('work-hour-submissions.create', ['parcel_id' => $parcel->id]) }}">
                     Arbeitsstunden melden
                 </a>

@@ -6,18 +6,18 @@
         <div>
             <h1 class="h2 mb-1">Arbeitsstundenmeldungen</h1>
             <p class="text-secondary mb-0">
-                @if (auth()->user()->role === App\Enums\UserRole::Tenant)
+                @if (auth()->user()->hasTenantAccess())
                     Deine Meldungen können nach dem Absenden nicht verändert werden.
                 @else
                     Prüfe Tätigkeit, Parzellenzuordnung und Nachweis. Erst die Bestätigung übernimmt die Stunden.
                 @endif
             </p>
         </div>
-        @if (auth()->user()->role === App\Enums\UserRole::Tenant && auth()->user()->member)
+        @if (auth()->user()->hasTenantAccess() && auth()->user()->member)
             <a class="btn btn-primary" href="{{ route('work-hour-submissions.create') }}">Arbeitsstunden melden</a>
         @endif
     </div>
-    @if (auth()->user()->role === App\Enums\UserRole::Tenant && $actionIndicators['work_hour_submissions'] > 0)
+    @if (auth()->user()->hasTenantAccess() && $actionIndicators['work_hour_submissions'] > 0)
         <div class="alert alert-warning" role="status">
             <strong>
                 {{ $actionIndicators['work_hour_submissions'] }}

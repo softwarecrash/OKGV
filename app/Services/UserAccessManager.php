@@ -16,13 +16,15 @@ final class UserAccessManager
     public function update(
         User $subject,
         UserRole $role,
+        bool $isSystemAdmin,
         array $permissions,
         ?PermissionProfile $profile,
         User $actor,
     ): User {
-        return DB::transaction(function () use ($subject, $role, $permissions, $profile, $actor): User {
+        return DB::transaction(function () use ($subject, $role, $isSystemAdmin, $permissions, $profile, $actor): User {
             $subject = User::query()->lockForUpdate()->findOrFail($subject->id);
             $oldRole = $subject->role;
+            $oldIsSystemAdmin = $subject->is_system_admin;
             $oldPermissions = $subject->permissions;
 
             $explicitPermissions = null;
@@ -39,6 +41,7 @@ final class UserAccessManager
 
             $subject->update([
                 'role' => $role,
+                'is_system_admin' => $isSystemAdmin,
                 'permissions' => $explicitPermissions,
                 'permission_profile_id' => $role === UserRole::Board ? $profile?->id : null,
                 'can_correct_meter_readings' => in_array(
@@ -51,6 +54,8 @@ final class UserAccessManager
             AuditLogger::log('user.access.updated', $actor, $subject, [
                 'old_role' => $oldRole->value,
                 'new_role' => $role->value,
+                'old_is_system_admin' => $oldIsSystemAdmin,
+                'new_is_system_admin' => $isSystemAdmin,
                 'old_permissions' => $oldPermissions,
                 'new_permissions' => $explicitPermissions,
                 'permission_profile_id' => $profile?->id,

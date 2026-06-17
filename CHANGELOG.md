@@ -2,6 +2,25 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.79] - 2026-06-17
+
+### Konten und technische Administration getrennt
+
+- Eingeloggte Benutzer können ihr eigenes Passwort ändern.
+- Technische Administration ist jetzt ein separates Konto-Kennzeichen und
+  keine automatische Vereinsrolle mit Datenvollzugriff.
+- Ein Konto kann gleichzeitig technischer Administrator und Pächter sein; das
+  Pächterportal bleibt dabei auf die eigene Mitgliedszuordnung begrenzt.
+- Technische Administratoren können weitere technische Administratoren
+  ernennen, solange mindestens ein technischer Administrator erhalten bleibt.
+- Vorstände können Pächter zu Vorständen hochstufen und Vorstände wieder zu
+  Pächtern zurückstufen, ohne technische Adminrechte oder Sonderrechte
+  vergeben zu können.
+- Die komplette Testsuite besteht mit 214 Tests und 1331 Assertions; der
+  Frontend-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand `0.2.0.79` auf GitHub veröffentlicht.
+- Entwicklungsstand auf `0.2.0.79` erhöht.
+
 ## [0.2.0.78] - 2026-06-16
 
 ### Demo-Mailadressen synchronisiert

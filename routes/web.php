@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountPasswordController;
 use App\Http\Controllers\ApplicationSettingController;
 use App\Http\Controllers\AssociationLogoController;
 use App\Http\Controllers\BackupController;
@@ -84,6 +85,10 @@ Route::get('/dashboard', [HomeController::class, 'index'])
     ->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function (): void {
+    Route::get('konto/passwort', [AccountPasswordController::class, 'edit'])
+        ->name('account.password.edit');
+    Route::put('konto/passwort', [AccountPasswordController::class, 'update'])
+        ->name('account.password.update');
     Route::get('datenschutz', [PrivacyController::class, 'index'])
         ->name('privacy.index');
     Route::put('datenschutz/freigaben', [PrivacyController::class, 'update'])

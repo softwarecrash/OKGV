@@ -127,7 +127,9 @@ class MeterReadingCorrectionTest extends TestCase
                 'role' => UserRole::Board->value,
                 'permissions' => [UserPermission::CorrectMeterReadings->value],
             ])
-            ->assertForbidden();
+            ->assertRedirect();
+
+        $this->assertFalse($otherBoard->fresh()->canCorrectMeterReadings());
 
         $this->actingAs($administrator)
             ->put(route('user-permissions.update', $waterManager), [

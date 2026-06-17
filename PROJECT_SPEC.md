@@ -83,7 +83,6 @@ Auditpflicht besteht insbesondere für Anmeldung, Benutzer-, Mitglieder- und Par
 
 ## Rollen
 
-- Administrator
 - Vorstand
 - Kassierer
 - Wasserwart
@@ -91,27 +90,40 @@ Auditpflicht besteht insbesondere für Anmeldung, Benutzer-, Mitglieder- und Par
 - Pächter
 
 Pächter dürfen ausschließlich eigene Daten sehen. Berechtigungen werden
-serverseitig geprüft. Administratorkonten besitzen vollständigen Zugriff.
+serverseitig geprüft. Der technische Administrator ist kein Vereinsamt,
+sondern ein separates Konto-Kennzeichen für Systempflege, globale
+Konfiguration, Rechteverwaltung, Backups und Nummernkreise. Dieses Kennzeichen
+vergibt keine automatische Einsicht in Mitglieder-, Parzellen-, Abrechnungs-,
+SEPA- oder Dokumentdaten.
+
+Ein Konto kann gleichzeitig technischer Administrator und Pächter sein. In
+diesem Fall sieht es im Pächterportal ausschließlich die über `members.user_id`
+verknüpften eigenen Daten. Vereinsfachrechte entstehen nur über die
+Vereinsrolle und ausdrücklich zugewiesene Berechtigungen.
+
 Vorstandsmitglieder erhalten keine pauschalen Vollrechte, sondern
-ausdrücklich zugewiesene Berechtigungen. Bankdaten sind nur für
-Administratoren sowie Konten mit dem gesonderten SEPA-Recht zugänglich.
+ausdrücklich zugewiesene Berechtigungen. Bankdaten sind nur für Konten mit
+dem gesonderten SEPA-Recht zugänglich.
 
 ### Globale Konfiguration und Rechtevorlagen
 
-Administratoren können den sichtbaren Systemnamen ändern. Der Name ersetzt
+Technische Administratoren können den sichtbaren Systemnamen ändern. Der Name ersetzt
 `OKGV` in Navigation, Seitentitel, Rechnungs-PDFs und Transaktionsmails.
 
-Administratoren verwalten wiederverwendbare Rechtevorlagen für
+Technische Administratoren verwalten wiederverwendbare Rechtevorlagen für
 Vorstandsmitglieder. Eine Vorlage enthält eine fachlich verständliche Auswahl
 einzelner Rechte, insbesondere Stammdaten, Zähler, Abrechnung, Preisvorlagen,
 SEPA, Registrierungsprüfung und Zählerstandprüfung. Bei Zuweisung wird ein
 Snapshot der Vorlage am Benutzerkonto gespeichert. Spätere Änderungen einer
 Vorlage verändern bestehende Konten nicht automatisch.
 
-Ein freigegebenes Pächterkonto kann durch einen Administrator zum
-Vorstandsmitglied hochgestuft werden. Administratorkonten dürfen in der
-Oberfläche nicht herabgestuft werden. Rollen- und Rechteänderungen werden
-auditiert.
+Ein freigegebenes Pächterkonto kann durch technische Administratoren oder
+Vorstandsmitglieder zum Vorstandsmitglied hochgestuft und wieder zum Pächter
+zurückgestuft werden. Vorstandsmitglieder dürfen dabei keine technischen
+Administratorrechte und keine individuellen Sonderrechte vergeben. Technische
+Administratoren können weitere technische Administratoren ernennen oder dieses
+Kennzeichen entfernen, solange mindestens ein technischer Administrator
+bestehen bleibt. Rollen- und Rechteänderungen werden auditiert.
 
 ## Phasen
 
@@ -121,7 +133,7 @@ Anforderungen; bei abweichender Nummerierung gilt `PHASE_PLAN.md`.
 
 ### Phase 0: Projektbasis
 
-Laravel, Git, Bootstrap, Alpine.js, Login, Logout, Passwort-Reset, Dashboard, Rollenmodell, Policies, Security-Header und Auditlog-Basis. Die Abmeldung erfolgt ausschließlich über ein natives, CSRF-geschütztes POST-Formular und funktioniert unabhängig von JavaScript.
+Laravel, Git, Bootstrap, Alpine.js, Login, Logout, Passwort-Reset, Passwortänderung im eingeloggten Konto, Dashboard, Rollenmodell, Policies, Security-Header und Auditlog-Basis. Die Abmeldung erfolgt ausschließlich über ein natives, CSRF-geschütztes POST-Formular und funktioniert unabhängig von JavaScript.
 
 ### Phase 1: Stammdaten
 

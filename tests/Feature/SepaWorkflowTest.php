@@ -25,7 +25,7 @@ class SepaWorkflowTest extends TestCase
 
     public function test_only_financial_roles_can_access_sepa_data(): void
     {
-        foreach ([UserRole::Administrator, UserRole::Board, UserRole::Treasurer] as $role) {
+        foreach ([UserRole::Board, UserRole::Treasurer] as $role) {
             $user = User::factory()->create(['role' => $role]);
             $this->actingAs($user)->get(route('sepa-mandates.index'))->assertOk();
         }

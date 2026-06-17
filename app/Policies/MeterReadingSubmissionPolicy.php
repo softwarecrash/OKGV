@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Enums\MeterReadingSubmissionStatus;
-use App\Enums\UserRole;
 use App\Models\MeterReadingSubmission;
 use App\Models\User;
 
@@ -11,7 +10,7 @@ class MeterReadingSubmissionPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->role === UserRole::Tenant
+        return $user->hasTenantAccess()
             ? $user->member()->exists()
             : $user->canReviewMeterReadingSubmissions();
     }

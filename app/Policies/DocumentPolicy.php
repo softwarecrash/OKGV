@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Enums\DocumentVisibility;
-use App\Enums\UserRole;
 use App\Models\Document;
 use App\Models\User;
 
@@ -20,7 +19,7 @@ class DocumentPolicy
             return true;
         }
 
-        if ($user->role !== UserRole::Tenant
+        if (! $user->hasTenantAccess()
             || $document->visibility !== DocumentVisibility::Tenant
             || ! $document->isPublished()) {
             return false;

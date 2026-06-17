@@ -29,7 +29,7 @@ enum UserRole: string
     public function defaultPermissions(): array
     {
         return match ($this) {
-            self::Administrator => UserPermission::values(),
+            self::Administrator => [],
             self::Board => [
                 UserPermission::ViewAllMasterData->value,
                 UserPermission::ManageMasterData->value,
