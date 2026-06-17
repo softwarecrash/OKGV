@@ -13,6 +13,9 @@ projektweite Einzelaufgaben detailliert geführt.
 - [x] Große Deployment-Phase ans Ende verschieben
 - [x] Entwicklungsstand 0.2.0.89 vorbereiten
 - [x] Entwicklungsstand 0.2.0.90 vorbereiten
+- [x] APP_KEY-Sicherung im Backup-Bereich ergänzen
+- [x] Restore gegen abweichenden APP_KEY absichern
+- [x] Entwicklungsstand 0.2.0.91 vorbereiten
 
 ## Phase 0: Projektbasis
 

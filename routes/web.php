@@ -178,6 +178,9 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::get('datenuebertragung', [DataTransferController::class, 'index'])
         ->middleware('module:data_transfer')
         ->name('data-transfer.index');
+    Route::post('datenuebertragung/app-key', [DataTransferController::class, 'revealAppKey'])
+        ->middleware(['module:data_transfer', 'throttle:3,10'])
+        ->name('data-transfer.app-key');
     Route::post('datenuebertragung/import', [DataTransferController::class, 'import'])
         ->middleware(['module:data_transfer', 'throttle:10,1'])
         ->name('data-transfer.import');

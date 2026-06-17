@@ -9,6 +9,7 @@ use App\Services\BackupManager;
 use App\Services\CsvDataTransferService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -23,6 +24,23 @@ class DataTransferController extends Controller
     {
         abort_unless($request->user()->canManageDataTransfer(), 403);
 
+        return $this->view($request);
+    }
+
+    public function revealAppKey(Request $request): View
+    {
+        abort_unless($request->user()->isAdministrator(), 403);
+
+        $request->validate([
+            'app_key_password' => ['required', 'current_password'],
+            'app_key_confirmation' => ['required', Rule::in(['APP_KEY ANZEIGEN'])],
+        ]);
+
+        return $this->view($request, (string) config('app.key'));
+    }
+
+    private function view(Request $request, ?string $revealedAppKey = null): View
+    {
         return view('data-transfer.index', [
             'types' => array_values(array_filter(
                 DataTransferType::cases(),
@@ -32,6 +50,7 @@ class DataTransferController extends Controller
             'backups' => $request->user()->isAdministrator()
                 ? $this->backups->all()
                 : [],
+            'revealedAppKey' => $revealedAppKey,
         ]);
     }
 

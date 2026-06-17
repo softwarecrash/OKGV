@@ -13,6 +13,7 @@ use App\Services\DatabaseDumpService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Mockery;
 use Tests\TestCase;
 use ZipArchive;
@@ -180,6 +181,8 @@ class DataTransferWorkflowTest extends TestCase
 
         $this->assertSame('okgv-backup-v1', $manifest['format']);
         $this->assertSame(trim(file_get_contents(base_path('VERSION'))), $manifest['version']);
+        $this->assertSame(hash('sha256', (string) config('app.key')), $manifest['app_key_fingerprint']);
+        $this->assertStringNotContainsString((string) config('app.key'), $archive->getFromName('manifest.json'));
         $this->assertSame('database dump', $archive->getFromName('database.sql'));
         $this->assertSame('private document', $archive->getFromName('files/documents/vertrag.pdf'));
         $this->assertSame('private map', $archive->getFromName('files/association/parcel-map/plan.jpg'));
@@ -204,6 +207,28 @@ class DataTransferWorkflowTest extends TestCase
                 'confirmation' => 'JA',
             ])
             ->assertSessionHasErrors(['password', 'confirmation']);
+    }
+
+    public function test_administrator_can_reveal_app_key_after_password_confirmation(): void
+    {
+        $administrator = User::factory()->administrator()->create([
+            'password' => 'secret-password',
+        ]);
+
+        $this->actingAs($administrator)
+            ->post(route('data-transfer.app-key'), [
+                'app_key_password' => 'wrong-password',
+                'app_key_confirmation' => 'APP_KEY ANZEIGEN',
+            ])
+            ->assertSessionHasErrors(['app_key_password']);
+
+        $this->actingAs($administrator)
+            ->post(route('data-transfer.app-key'), [
+                'app_key_password' => 'secret-password',
+                'app_key_confirmation' => 'APP_KEY ANZEIGEN',
+            ])
+            ->assertOk()
+            ->assertSee((string) config('app.key'));
     }
 
     public function test_valid_backup_restores_database_and_private_files_through_the_manager(): void
@@ -234,6 +259,34 @@ class DataTransferWorkflowTest extends TestCase
             Storage::disk('local')->get('documents/vertrag.pdf'),
         );
         $this->assertCount(2, $manager->all());
+    }
+
+    public function test_restore_rejects_backup_when_app_key_fingerprint_differs(): void
+    {
+        Storage::fake('local');
+        $originalKey = (string) config('app.key');
+        $administrator = User::factory()->administrator()->create();
+        $database = Mockery::mock(DatabaseDumpService::class);
+        $database->shouldReceive('dump')
+            ->once()
+            ->andReturnUsing(fn (string $path) => file_put_contents($path, 'database dump'));
+        $database->shouldReceive('restore')->never();
+        $manager = new BackupManager($database);
+        $backup = $manager->create($administrator);
+        $archive = file_get_contents(Storage::disk('local')->path("backups/{$backup['name']}"));
+
+        try {
+            config(['app.key' => 'base64:'.base64_encode(random_bytes(32))]);
+
+            $this->expectException(ValidationException::class);
+
+            $manager->restore(
+                UploadedFile::fake()->createWithContent('restore.zip', $archive),
+                $administrator,
+            );
+        } finally {
+            config(['app.key' => $originalKey]);
+        }
     }
 
     public function test_csv_templates_use_the_documented_header(): void

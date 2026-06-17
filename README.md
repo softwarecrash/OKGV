@@ -365,9 +365,13 @@ ein Sicherheitsbackup.
 Die `.env` ist bewusst nicht Bestandteil des Archivs. Sie muss separat
 geschützt gesichert werden. Für eine erfolgreiche Wiederherstellung ist
 insbesondere derselbe `APP_KEY` erforderlich, da andernfalls verschlüsselte
-SMTP- und Bankdaten nicht mehr lesbar sind. Produktive Betreiber benötigen
-zusätzlich einen externen, automatisierten Backupplan; die manuelle
-Serverablage allein schützt nicht gegen einen vollständigen Serverausfall.
+SMTP- und Bankdaten nicht mehr lesbar sind. Administratoren können den
+aktuellen `APP_KEY` nach Passwortbestätigung im Backup-Bereich anzeigen und
+separat sichern. Neue Backups enthalten nur eine Prüfsumme des `APP_KEY`; ein
+Restore mit falschem Schlüssel wird vor dem Überschreiben abgelehnt.
+Produktive Betreiber benötigen zusätzlich einen externen, automatisierten
+Backupplan; die manuelle Serverablage allein schützt nicht gegen einen
+vollständigen Serverausfall.
 
 ## Datenschutz und Löschprüfung
 

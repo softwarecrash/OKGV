@@ -105,6 +105,64 @@
                 <strong>Vertrauliche Datei:</strong>
                 Ein Backup enthält personenbezogene Daten, Passwort-Hashes, verschlüsselte Bankdaten und private Dateien.
                 Bewahre Downloads geschützt auf. Die `.env` und ihre Schlüssel sind aus Sicherheitsgründen nicht enthalten und müssen separat gesichert werden.
+                Besonders wichtig ist der APP_KEY. Ohne denselben APP_KEY bleiben verschlüsselte SMTP-, SEPA- und Bankdaten nach einem Umzug unlesbar.
+            </div>
+
+            <div class="card border-warning mb-4">
+                <div class="card-body">
+                    <h3 class="h4">APP_KEY separat sichern</h3>
+                    <p class="text-secondary">
+                        Der APP_KEY wird nicht in das Backup geschrieben. Sichere ihn getrennt vom ZIP-Archiv, zum Beispiel im Passwortmanager.
+                        Neue Backups speichern nur eine Prüfsumme und verhindern damit einen Restore mit falschem APP_KEY.
+                    </p>
+
+                    @isset($revealedAppKey)
+                        <div class="alert alert-danger">
+                            <strong>Nur jetzt sichtbar:</strong>
+                            Lege diesen Wert geschützt ab. Teile ihn nicht öffentlich und speichere ihn nicht zusammen mit frei zugänglichen Backups.
+                        </div>
+                        <div class="input-group mb-3">
+                            <input class="form-control font-monospace" id="revealed-app-key" type="text" value="{{ $revealedAppKey }}" readonly>
+                            <button class="btn btn-outline-secondary" type="button"
+                                    onclick="navigator.clipboard?.writeText(document.getElementById('revealed-app-key').value); this.textContent = 'Kopiert';">
+                                Kopieren
+                            </button>
+                        </div>
+                    @endisset
+
+                    <form method="POST" action="{{ route('data-transfer.app-key') }}">
+                        @csrf
+                        <div class="row g-3 align-items-end">
+                            <div class="col-lg-4">
+                                <label class="form-label" for="app-key-password">Eigenes Passwort</label>
+                                <input class="form-control @error('app_key_password') is-invalid @enderror"
+                                       id="app-key-password"
+                                       name="app_key_password"
+                                       type="password"
+                                       autocomplete="current-password"
+                                       required>
+                                @error('app_key_password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label" for="app-key-confirmation">Bestätigung</label>
+                                <input class="form-control @error('app_key_confirmation') is-invalid @enderror"
+                                       id="app-key-confirmation"
+                                       name="app_key_confirmation"
+                                       type="text"
+                                       placeholder="APP_KEY ANZEIGEN"
+                                       required>
+                                @error('app_key_confirmation')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-lg-4">
+                                <button class="btn btn-warning w-100">APP_KEY anzeigen</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <div class="card mb-4">
@@ -160,7 +218,13 @@
                         Die aktuelle Datenbank und die gesicherten privaten Dateien werden ersetzt.
                         Vorher legt OKGV automatisch ein Sicherheitsbackup des jetzigen Zustands an.
                         Zulässig sind ausschließlich unveränderte OKGV-Backups der aktuell laufenden Version.
+                        Neue Backups werden zusätzlich gegen den APP_KEY dieser Installation geprüft.
                     </p>
+                    <div class="alert alert-danger">
+                        <strong>Vor einem Umzug prüfen:</strong>
+                        Setze in der neuen Installation zuerst den APP_KEY der alten Installation in der `.env`.
+                        Danach erst das Backup wiederherstellen.
+                    </div>
                     <form method="POST" action="{{ route('backups.restore') }}" enctype="multipart/form-data"
                           onsubmit="return confirm('Wiederherstellung wirklich starten? Währenddessen darf niemand in OKGV arbeiten.')">
                         @csrf

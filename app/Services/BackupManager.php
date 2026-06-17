@@ -67,6 +67,7 @@ final class BackupManager
             $manifest = [
                 'format' => self::FORMAT,
                 'version' => trim((string) file_get_contents(base_path('VERSION'))),
+                'app_key_fingerprint' => hash('sha256', (string) config('app.key')),
                 'created_at' => now()->toIso8601String(),
                 'reason' => $reason,
                 'private_directories' => self::PRIVATE_DIRECTORIES,
@@ -205,6 +206,13 @@ final class BackupManager
         if ($manifest['version'] !== $currentVersion) {
             throw ValidationException::withMessages([
                 'backup' => "Das Backup gehört zu Version {$manifest['version']}. Für diesen sicheren Restore ist Version {$currentVersion} erforderlich.",
+            ]);
+        }
+
+        if (isset($manifest['app_key_fingerprint'])
+            && ! hash_equals($manifest['app_key_fingerprint'], hash('sha256', (string) config('app.key')))) {
+            throw ValidationException::withMessages([
+                'backup' => 'Der APP_KEY dieser Installation passt nicht zum Backup. Setze vor dem Restore den APP_KEY aus der ursprünglichen Installation in der .env.',
             ]);
         }
 

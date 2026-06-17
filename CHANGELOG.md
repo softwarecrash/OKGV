@@ -2,6 +2,21 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.91] - 2026-06-17
+
+### APP_KEY-Sicherung für Backups
+
+- Administratoren können den aktuellen `APP_KEY` im Backup-Bereich nach
+  Passwortbestätigung bewusst anzeigen und separat sichern.
+- Neue Backups enthalten eine Prüfsumme des `APP_KEY`, ohne den Schlüssel
+  selbst in das ZIP-Archiv zu schreiben.
+- Restore lehnt neue Backups vor dem Überschreiben ab, wenn der aktuelle
+  `APP_KEY` nicht zur Sicherung passt.
+- Die Dokumentation erklärt den Umzug mit separater `APP_KEY`-Sicherung.
+- Die komplette Testsuite besteht mit 228 Tests und 1460 Assertions; der
+  Frontend-Build wurde erfolgreich ausgeführt.
+- Entwicklungsstand auf `0.2.0.91` erhöht.
+
 ## [0.2.0.90] - 2026-06-17
 
 ### Deployment ans Ende verschoben

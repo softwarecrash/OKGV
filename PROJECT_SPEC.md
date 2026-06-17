@@ -1115,7 +1115,10 @@ Manifest speichert Format, Anwendungsversion und SHA-256-Prüfsummen. Die
 `.env` wird niemals in das Archiv aufgenommen. Insbesondere `APP_KEY`,
 Datenbankzugang und SMTP-Geheimnisse müssen deshalb separat und geschützt
 gesichert werden; ohne denselben `APP_KEY` bleiben verschlüsselte Werte nach
-einem Restore unlesbar.
+einem Restore unlesbar. Administratoren können den aktuellen `APP_KEY` im
+Backup-Bereich nach Passwortbestätigung anzeigen und separat sichern. Neue
+Backups speichern ausschließlich eine Prüfsumme des `APP_KEY`, damit ein
+Restore mit falschem Schlüssel vor dem Überschreiben abgelehnt werden kann.
 
 Restore akzeptiert ausschließlich unveränderte OKGV-Archive derselben
 Anwendungsversion, prüft Pfade und sämtliche Prüfsummen und verlangt
