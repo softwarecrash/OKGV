@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureModuleEnabled;
+use App\Http\Middleware\EnsureRegistrationApproved;
 use App\Http\Middleware\LoadApplicationSettings;
 use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'module' => EnsureModuleEnabled::class,
+            'registration.approved' => EnsureRegistrationApproved::class,
         ]);
 
         $middleware->web(append: [

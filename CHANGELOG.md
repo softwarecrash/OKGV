@@ -2,6 +2,20 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.98] - 2026-06-17
+
+### Warteseite nach erfolgreichem Login
+
+- Konten mit bestätigter E-Mail, aber noch offener Vereinsfreigabe, können
+  sich jetzt anmelden und sehen danach eine klare Warteseite.
+- Geschützte interne Bereiche werden bis zur Freigabe auf die Warteseite
+  umgeleitet, statt den Login als fehlgeschlagen erscheinen zu lassen.
+- Die Warteseite erklärt den Status und bietet eine Abmeldung an.
+- Altanfragen ohne gespeicherte `user_id` werden weiterhin über die
+  E-Mail-Adresse erkannt.
+- Die betroffenen Tests bestehen mit 31 Tests und 240 Assertions.
+- Entwicklungsstand auf `0.2.0.98` erhöht.
+
 ## [0.2.0.97] - 2026-06-17
 
 ### Altfreigaben ohne Parzelle abschließen

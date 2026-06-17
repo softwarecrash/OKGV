@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\RegistrationRequestStatus;
 use App\Enums\UserPermission;
 use App\Enums\UserRole;
 use App\Notifications\VerifyEmailNotification;
@@ -93,6 +94,17 @@ class User extends Authenticatable implements MustVerifyEmail
     public function reviewedRegistrationRequests(): HasMany
     {
         return $this->hasMany(RegistrationRequest::class, 'reviewed_by');
+    }
+
+    public function hasPendingRegistrationApproval(): bool
+    {
+        return RegistrationRequest::query()
+            ->where(function ($query): void {
+                $query->where('user_id', $this->id)
+                    ->orWhere('email', $this->email);
+            })
+            ->where('status', RegistrationRequestStatus::Pending)
+            ->exists();
     }
 
     public function uploadedDocuments(): HasMany

@@ -82,10 +82,14 @@ Route::get('vereinslogo', [AssociationLogoController::class, 'show'])
     ->name('association-logo.show');
 
 Route::get('/dashboard', [HomeController::class, 'index'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'registration.approved'])
     ->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function (): void {
+Route::view('konto-wartet-auf-freigabe', 'auth.pending-approval')
+    ->middleware(['auth', 'verified'])
+    ->name('registration.pending');
+
+Route::middleware(['auth', 'verified', 'registration.approved'])->group(function (): void {
     Route::get('konto/passwort', [AccountPasswordController::class, 'edit'])
         ->name('account.password.edit');
     Route::put('konto/passwort', [AccountPasswordController::class, 'update'])

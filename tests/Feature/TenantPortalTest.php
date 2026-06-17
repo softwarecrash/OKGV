@@ -115,7 +115,7 @@ class TenantPortalTest extends TestCase
         $this->assertSame(RegistrationRequestStatus::Approved, $registrationRequest->fresh()->status);
     }
 
-    public function test_pending_registration_cannot_login_until_approved(): void
+    public function test_pending_registration_can_login_and_sees_waiting_notice_until_approved(): void
     {
         Notification::fake();
 
@@ -139,10 +139,16 @@ class TenantPortalTest extends TestCase
         $this->post(route('login'), [
             'email' => $user->email,
             'password' => 'SicheresPasswort123',
-        ])
-            ->assertRedirect(route('login'))
-            ->assertSessionHasErrors('email');
-        $this->assertGuest();
+        ])->assertRedirect('/dashboard');
+        $this->assertAuthenticatedAs($user);
+
+        $this->get(route('home'))
+            ->assertRedirect(route('registration.pending'));
+
+        $this->get(route('registration.pending'))
+            ->assertOk()
+            ->assertSee('Deine Anmeldung hat funktioniert.')
+            ->assertSee('wartet auf Freigabe');
 
         $this->actingAs($board)
             ->post(route('registration-requests.approve', $registrationRequest), [
@@ -159,7 +165,7 @@ class TenantPortalTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
-    public function test_legacy_pending_registration_without_user_id_blocks_login_by_email(): void
+    public function test_legacy_pending_registration_without_user_id_shows_waiting_notice_by_email(): void
     {
         Notification::fake();
 
@@ -180,10 +186,11 @@ class TenantPortalTest extends TestCase
         $this->post(route('login'), [
             'email' => $user->email,
             'password' => 'SicheresPasswort123',
-        ])
-            ->assertRedirect(route('login'))
-            ->assertSessionHasErrors('email');
-        $this->assertGuest();
+        ])->assertRedirect('/dashboard');
+        $this->assertAuthenticatedAs($user);
+
+        $this->get(route('home'))
+            ->assertRedirect(route('registration.pending'));
     }
 
     public function test_board_can_approve_only_an_active_tenant_of_requested_parcel(): void
