@@ -2,6 +2,17 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## Unveröffentlicht
+
+### Planung
+
+- Vorstandsarbeit, Aufgaben/Wiedervorlagen, Umfragen und digitale
+  Mitgliederversammlung als Phasen 21 bis 24 vorgezogen. Übrige offene Phasen
+  entsprechend neu nummeriert; abgeschlossene Phasen bleiben unverändert.
+- Aufgabenverknüpfung für Gartenbegehungen in deren Phase 26 verschoben.
+  Finanzabhängigkeiten und Deployment am Ende bleiben erhalten.
+- Ausschließlich Planungsänderung, daher bleibt die Anwendungsversion 0.2.0.102.
+
 ## [0.2.0.102] - 2026-09-09
 
 ### Phase 20: Schwarzes Brett und Vereinsnews

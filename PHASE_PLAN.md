@@ -217,7 +217,50 @@ vorherigen Phase geprüft sein.
 - [x] Lesebestätigung für wichtige Bekanntmachungen
 - [x] Auditlog und Rechtekonzept
 
-## Phase 21: Bewerbermanagement
+## Priorität der nächsten Phasen
+
+Die direkte Vorstandsarbeit hat Vorrang: Sitzungen und Beschlüsse, zentrale
+Aufgaben, Umfragen und Mitgliederversammlung werden als Phasen 21 bis 24
+umgesetzt. Die abgeschlossenen Phasen 0 bis 20 bleiben unverändert.
+Verknüpfungen mit späteren Modulen werden erst in deren jeweiliger Phase ergänzt.
+Kassenbuch, Bankabgleich und Haushaltsplan bleiben in dieser fachlichen Reihenfolge.
+
+## Phase 21: Vorstandsarbeit
+
+- [ ] Vorstandssitzungen
+- [ ] Tagesordnungen
+- [ ] Protokolle
+- [ ] Beschlussbuch
+- [ ] Aufgaben und Wiedervorlagen aus Beschlüssen erfassen; zentrale Verwaltung folgt in Phase 22
+- [ ] Dokumentverknüpfung und PDF-Export
+- [ ] Rechte für vertrauliche Vorstandsunterlagen
+
+## Phase 22: Aufgaben und Wiedervorlagen
+
+- [ ] Zentrale Aufgabenliste für Vorstand und Verwaltung
+- [ ] Fälligkeiten, Zuständigkeiten und Status
+- [ ] Verknüpfung mit Mitgliedern, Parzellen, Beschlüssen und Dokumenten
+- [ ] Erinnerungen und Aktionspunkte
+- [ ] Wiederkehrende Aufgaben
+- [ ] Auditlog und Rechte
+
+## Phase 23: Umfragen und Terminabfragen
+
+- [ ] Umfragen für Pächter und Mitglieder
+- [ ] Terminabfragen für Arbeitseinsätze und Vereinsveranstaltungen
+- [ ] Zielgruppen und Abstimmungszeitraum
+- [ ] Sichtbare oder geheime Ergebnisse
+- [ ] Export und Auditlog
+
+## Phase 24: Digitale Mitgliederversammlung
+
+- [ ] Einladungen und Tagesordnung
+- [ ] Teilnehmerliste
+- [ ] Abstimmungen und Ergebnisse
+- [ ] Beschlüsse mit Protokollverknüpfung
+- [ ] Rechtliche Anforderungen vor Umsetzung prüfen
+
+## Phase 25: Bewerbermanagement
 
 - [ ] Warteliste fachlich zum Bewerbermanagement erweitern
 - [ ] Interessentenakte mit Kontakthistorie
@@ -227,36 +270,18 @@ vorherigen Phase geprüft sein.
 - [ ] Übernahme eines Bewerbers in Mitglied und Pächterhistorie
 - [ ] Auditlog und DSGVO-Auskunft erweitern
 
-## Phase 22: Gartenbegehungen
+## Phase 26: Gartenbegehungen
 
 - [ ] Begehungstermine mit Prüfern und Parzellenumfang
 - [ ] Checklisten und Mängelkategorien
 - [ ] Mängel mit Fotos, Fristen und Verantwortlichkeit
 - [ ] Nachkontrolle und Erledigungsstatus
+- [ ] Begehungen und Mängel mit der Aufgabenverwaltung aus Phase 22 verknüpfen
 - [ ] Pächterhinweise im Portal
 - [ ] Dokumentation als PDF-Protokoll
 - [ ] Auditlog, Rechte und Datenschutzprüfung
 
-## Phase 23: Vorstandsarbeit
-
-- [ ] Vorstandssitzungen
-- [ ] Tagesordnungen
-- [ ] Protokolle
-- [ ] Beschlussbuch
-- [ ] Aufgaben und Wiedervorlagen aus Beschlüssen
-- [ ] Dokumentverknüpfung und PDF-Export
-- [ ] Rechte für vertrauliche Vorstandsunterlagen
-
-## Phase 24: Aufgaben und Wiedervorlagen
-
-- [ ] Zentrale Aufgabenliste für Vorstand und Verwaltung
-- [ ] Fälligkeiten, Zuständigkeiten und Status
-- [ ] Verknüpfung mit Mitgliedern, Parzellen, Begehungen, Beschlüssen und Dokumenten
-- [ ] Erinnerungen und Aktionspunkte
-- [ ] Wiederkehrende Aufgaben
-- [ ] Auditlog und Rechte
-
-## Phase 25: Kassenbuch
+## Phase 27: Kassenbuch
 
 - [ ] Einnahmen und Ausgaben
 - [ ] Kategorien oder einfacher Kontenrahmen
@@ -266,7 +291,7 @@ vorherigen Phase geprüft sein.
 - [ ] Rechte für Kassierer und Administratoren
 - [ ] Auditlog und unveränderbare Abschlussstände
 
-## Phase 26: Bankimport und Bankabgleich
+## Phase 28: Bankimport und Bankabgleich
 
 - [ ] Import von Kontoauszügen per CSV
 - [ ] Vorbereitung für CAMT.053 und MT940
@@ -276,7 +301,7 @@ vorherigen Phase geprüft sein.
 - [ ] Zahlungsstatus automatisch aktualisieren
 - [ ] Auditlog und Schutz sensibler Bankdaten
 
-## Phase 27: Haushaltsplan
+## Phase 29: Haushaltsplan
 
 - [ ] Haushaltsplan je Geschäftsjahr
 - [ ] Budgetpositionen und Kategorien
@@ -284,15 +309,7 @@ vorherigen Phase geprüft sein.
 - [ ] Auswertungen für Vorstand und Mitgliederversammlung
 - [ ] Export als PDF und CSV
 
-## Phase 28: Umfragen und Terminabfragen
-
-- [ ] Umfragen für Pächter und Mitglieder
-- [ ] Terminabfragen für Arbeitseinsätze und Vereinsveranstaltungen
-- [ ] Zielgruppen und Abstimmungszeitraum
-- [ ] Sichtbare oder geheime Ergebnisse
-- [ ] Export und Auditlog
-
-## Phase 29: Wertermittlung
+## Phase 30: Wertermittlung
 
 - [ ] Wertermittlungsakte je Parzelle
 - [ ] Laube, Gewächshaus, Bepflanzung und Ausstattung erfassen
@@ -301,7 +318,7 @@ vorherigen Phase geprüft sein.
 - [ ] Wertermittlungsprotokoll als PDF
 - [ ] Historie bei Pächterwechseln
 
-## Phase 30: Mobile Nutzung und PWA
+## Phase 31: Mobile Nutzung und PWA
 
 - [ ] PWA-Manifest und installierbare Oberfläche
 - [ ] Mobile Optimierung wichtiger Pächterfunktionen
@@ -309,20 +326,12 @@ vorherigen Phase geprüft sein.
 - [ ] Offline-freundliche Formularentwürfe prüfen
 - [ ] Push-Benachrichtigungen als spätere Option bewerten
 
-## Phase 31: Erweiterte Finanzexporte
+## Phase 32: Erweiterte Finanzexporte
 
 - [ ] DATEV-Export prüfen und fachlich spezifizieren
 - [ ] Export aus Kassenbuch, Rechnungen und Zahlungen
 - [ ] Steuerberaterfreundliche Beleg- und Buchungslisten
 - [ ] Validierung gegen gängige DATEV-Anforderungen
-
-## Phase 32: Digitale Mitgliederversammlung
-
-- [ ] Einladungen und Tagesordnung
-- [ ] Teilnehmerliste
-- [ ] Abstimmungen und Ergebnisse
-- [ ] Beschlüsse mit Protokollverknüpfung
-- [ ] Rechtliche Anforderungen vor Umsetzung prüfen
 
 ## Phase 33: SaaS- und Hosting-Betrieb
 
@@ -358,5 +367,7 @@ Die Stabilisierung von Registrierung, Rechtewechseln, Demo-Schutz und
 persönlichen Portalansichten ist im Entwicklungsstand 0.2.0.101 umgesetzt.
 
 Die Phasen 0 bis 20 sind abgeschlossen. Als nächste reguläre Fachphase folgt
-Phase 21 mit Bewerbermanagement. Die große Deployment-Phase ist
+Phase 21 mit Vorstandsarbeit (Sitzungen, Tagesordnungen, Protokolle und Beschlüsse).
+Danach folgen Aufgaben und Wiedervorlagen, Umfragen und die digitale
+Mitgliederversammlung. Die große Deployment-Phase ist
 bewusst ans Ende verschoben, weil Webhosting und Plesk vorerst ausreichen.

@@ -1,5 +1,12 @@
 # TODO
 
+## Priorisierung der nächsten Phasen
+
+- [x] Vorstandsarbeit, Aufgaben, Umfragen und Mitgliederversammlung als Phasen 21 bis 24 vorziehen
+- [x] Offene Folgephasen neu nummerieren und Abhängigkeiten erhalten
+
+Als Nächstes: Phase 21 (Vorstandsarbeit), gemäß `PHASE_PLAN.md`.
+
 ## Phase 20: Schwarzes Brett
 
 - [x] Datenmodell, Zielgruppen und Rechtekonzept spezifizieren
