@@ -2,7 +2,27 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
-## Unveröffentlicht
+## [0.2.0.103] - 2026-09-09
+
+### Phase 21: Vorstandsarbeit
+
+- Abschaltbares Modul mit vertraulichen Lese- und Verwaltungsrechten, ohne
+  bestehende individuelle Berechtigungssnapshots zu erweitern.
+- Sitzungen, sortierte Tagesordnung, Protokolltexte und Beschlüsse mit optionalen
+  Abstimmungszahlen. Abschluss sperrt historische Inhalte; Beschlussbuch mit Suche.
+- Private Protokoll-PDFs mit Vereinskopfsnapshot werden beim Abschluss gesichert;
+  Speicherfehler verhindern den Abschluss. Dokumentlinks behalten eigene Policies.
+- Beschlussaufgaben mit Zuständigkeit, Fälligkeit und auditierter Erledigung;
+  rollenabhängige Aktionshinweise führen zur passenden Aufgabenliste.
+- Fünf additive Migrationen, neue Tabellen im Datenbankbackup, PDF-Verzeichnis
+  in Datei-Backups sowie Aufgabenbezüge im Datenschutzexport und Pseudonymisierung.
+- Rücknehmbare Archivierung; ausgeblendete Dokumentverknüpfungen bleiben bei
+  Bearbeitung ohne Dokumentrechte erhalten. Sitzungsumfang für PDF-Erzeugung begrenzt.
+- 273 Tests mit 1888 Assertions erfolgreich, einschließlich 15 neuer Fachtests,
+  isoliertem Migrations-Rollback, PDF-Fehlerfall, Datei-Backup/Restore und
+  Pseudonymisierung. Lokale MariaDB ausschließlich vorwärts migriert, keine
+  bestehenden Daten gelöscht. Pint, Build, Composer-Validierung und beide
+  Paketaudits erfolgreich; bekannte Bootstrap/Sass-Abkündigungshinweise bleiben.
 
 ### Planung
 
@@ -11,7 +31,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
   entsprechend neu nummeriert; abgeschlossene Phasen bleiben unverändert.
 - Aufgabenverknüpfung für Gartenbegehungen in deren Phase 26 verschoben.
   Finanzabhängigkeiten und Deployment am Ende bleiben erhalten.
-- Ausschließlich Planungsänderung, daher bleibt die Anwendungsversion 0.2.0.102.
+- Die vorbereitende Umpriorisierung änderte allein noch keine Anwendungsversion.
 
 ## [0.2.0.102] - 2026-09-09
 

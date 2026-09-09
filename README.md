@@ -8,6 +8,25 @@ OKGV ist eine moderne, sichere und selbsthostbare Laravel-Anwendung. Eine Instal
 
 ## Aktueller Stand
 
+**Vorstandsarbeit:** Unter **Kommunikation → Vorstandssitzungen / Beschlussbuch**
+stehen Sitzungsplanung, Tagesordnung, Protokolle und Beschlüsse zur Verfügung.
+Die Rechte „Vertrauliche Vorstandsunterlagen lesen“ und „Sitzungen und Beschlüsse
+verwalten“ sind separat zuweisbar. Individuelle Vorstandsrechte müssen bei Bedarf
+ergänzt werden; Pächter erhalten keine automatische Einsicht.
+
+Protokolle werden nach ausdrücklicher Bestätigung unveränderbar abgeschlossen
+und als private PDF gesichert. Korrekturen erfolgen durch neue dokumentierte
+Beschlüsse. Aus angenommenen Beschlüssen lassen sich Aufgaben mit Zuständigkeit
+und Fälligkeit erfassen. Der Aktionspunkt zeigt bearbeitbare fällige Aufgaben;
+„Als erledigt markieren“ entfernt ihn. Archivierung ist rücknehmbar und löscht
+weder Beschlüsse noch offene Aufgaben. Die zentrale Aufgabenverwaltung folgt
+in Phase 22. Dokumentlinks behalten ihre eigenen Zugriffsrechte.
+
+`OKGV_MODULE_BOARD_WORK=false` deaktiviert die Vorstandsarbeit ohne Datenverlust.
+Die neuen Tabellen und privaten Protokoll-PDFs sind im Vollbackup enthalten.
+Nach dem Update `php artisan migrate --force` ausführen und Anwendungscaches
+wie gewohnt erneuern. Bestehende Daten werden nicht zurückgesetzt.
+
 Das Schwarze Brett findest du unter **Kommunikation → Schwarzes Brett**.
 Mit dem Recht „Bekanntmachungen verwalten“ können Beiträge als Entwurf angelegt,
 geprüft und veröffentlicht werden. Bereits individuell konfigurierte

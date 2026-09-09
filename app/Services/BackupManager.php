@@ -17,6 +17,7 @@ final class BackupManager
 
     private const PRIVATE_DIRECTORIES = [
         'association',
+        'board-meetings',
         'documents',
         'meter-reading-submissions',
         'tenant-transitions',

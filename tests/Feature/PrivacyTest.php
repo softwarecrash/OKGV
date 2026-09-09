@@ -7,6 +7,7 @@ use App\Enums\MemberStatus;
 use App\Enums\PrivacyErasureStatus;
 use App\Enums\UserPermission;
 use App\Enums\UserRole;
+use App\Models\BoardMeeting;
 use App\Models\Invoice;
 use App\Models\Member;
 use App\Models\MemberPrivacySetting;
@@ -187,6 +188,12 @@ class PrivacyTest extends TestCase
             'reviewed_at' => now(),
         ]);
 
+        $meeting = BoardMeeting::factory()->create(['created_by' => $tenant->id]);
+        $resolution = $meeting->resolutions()->create(['title' => 'Historischer Beschluss', 'body' => 'Historie bewahren.', 'result' => 'adopted']);
+        $task = $resolution->followUps()->make(['title' => 'Historischer Auftrag', 'due_at' => today()]);
+        $task->forceFill(['assigned_to' => $tenant->id, 'created_by' => $tenant->id, 'completed_by' => $tenant->id, 'completed_at' => now()])->save();
+        $meeting->forceFill(['finalized_by' => $tenant->id, 'finalized_at' => now()])->save();
+
         $this->actingAs($administrator)
             ->post(route('privacy-erasure-requests.anonymize', $erasureRequest), [
                 'current_password' => 'Admin-Test-123!',
@@ -205,6 +212,12 @@ class PrivacyTest extends TestCase
         $this->assertFalse(Hash::check('password', $tenant->password));
         $this->assertSame(PrivacyErasureStatus::Completed, $erasureRequest->status);
         $this->assertNull($tenancy->fresh()->notes);
+        $this->assertNull($meeting->fresh()->created_by);
+        $this->assertNull($meeting->fresh()->finalized_by);
+        $this->assertNull($task->fresh()->assigned_to);
+        $this->assertNull($task->fresh()->created_by);
+        $this->assertNull($task->fresh()->completed_by);
+        $this->assertNotNull($task->fresh()->completed_at);
         $this->assertDatabaseHas('registration_requests', [
             'parcel_id' => $parcel->id,
             'first_name' => 'Anonymisiert',

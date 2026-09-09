@@ -16,6 +16,8 @@ enum UserPermission: string
     case ReviewMeterReadingSubmissions = 'review_meter_reading_submissions';
     case ManageCommunication = 'manage_communication';
     case ManageAnnouncements = 'manage_announcements';
+    case ViewBoardWork = 'view_board_work';
+    case ManageBoardWork = 'manage_board_work';
     case ManageDocuments = 'manage_documents';
     case ManageWorkEvents = 'manage_work_events';
     case ManageWaitingList = 'manage_waiting_list';
@@ -38,6 +40,8 @@ enum UserPermission: string
             self::ReviewMeterReadingSubmissions => 'Zählerstandsmeldungen prüfen',
             self::ManageCommunication => 'Kommunikation verwalten',
             self::ManageAnnouncements => 'Bekanntmachungen verwalten',
+            self::ViewBoardWork => 'Vertrauliche Vorstandsunterlagen lesen',
+            self::ManageBoardWork => 'Sitzungen und Beschlüsse verwalten',
             self::ManageDocuments => 'Dokumente verwalten',
             self::ManageWorkEvents => 'Arbeitseinsätze verwalten',
             self::ManageWaitingList => 'Warteliste verwalten',
@@ -62,6 +66,8 @@ enum UserPermission: string
             self::ReviewMeterReadingSubmissions => 'Erlaubt die Prüfung gemeldeter Zählerstände und Fotos.',
             self::ManageCommunication => 'Erlaubt Serienmails, Versandhistorie und allgemeine PDF-Briefe.',
             self::ManageAnnouncements => 'Erlaubt Beiträge am Schwarzen Brett zu veröffentlichen, zurückzuziehen und Lesebestätigungen einzusehen.',
+            self::ViewBoardWork => 'Erlaubt Einsicht in interne Sitzungen, Protokolle und Beschlüsse sowie Erledigung eigener Beschlussaufgaben.',
+            self::ManageBoardWork => 'Erlaubt Sitzungen, Protokollabschluss, Beschlüsse und deren Aufgaben zu verwalten. Umfasst vertrauliche Vorstandsunterlagen.',
             self::ManageDocuments => 'Erlaubt private Uploads, Dateiversionen, Freigaben und die zentrale Dokumentenverwaltung.',
             self::ManageWorkEvents => 'Erlaubt Termine, Teilnehmer und bestätigte Arbeitsstunden zu verwalten.',
             self::ManageWaitingList => 'Erlaubt den Zugriff auf Interessenten, Kontaktdaten, Prioritäten und Bearbeitungsstatus.',
@@ -84,6 +90,7 @@ enum UserPermission: string
             self::ReviewTenantRegistrations => FeatureModule::TenantPortal,
             self::ManageCommunication => FeatureModule::Communication,
             self::ManageAnnouncements => FeatureModule::Announcements,
+            self::ViewBoardWork, self::ManageBoardWork => FeatureModule::BoardWork,
             self::ManageDocuments => FeatureModule::Documents,
             self::ManageWorkEvents => FeatureModule::WorkEvents,
             self::ManageWaitingList => FeatureModule::WaitingList,
@@ -126,6 +133,7 @@ enum UserPermission: string
     public static function expandDependencies(array $permissions): array
     {
         $dependencies = [
+            self::ManageBoardWork->value => self::ViewBoardWork->value,
             self::ManageMasterData->value => self::ViewAllMasterData->value,
             self::ManageMeters->value => self::ViewAllMeters->value,
             self::CorrectMeterReadings->value => self::ViewAllMeters->value,

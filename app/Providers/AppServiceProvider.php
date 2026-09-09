@@ -8,6 +8,8 @@ use App\Models\BillingPeriod;
 use App\Models\BillingRate;
 use App\Models\BillingRateAssignment;
 use App\Models\BillingRateTemplate;
+use App\Models\BoardFollowUp;
+use App\Models\BoardMeeting;
 use App\Models\CommunicationSetting;
 use App\Models\Document;
 use App\Models\DunningNotice;
@@ -42,6 +44,8 @@ use App\Policies\BillingPeriodPolicy;
 use App\Policies\BillingRateAssignmentPolicy;
 use App\Policies\BillingRatePolicy;
 use App\Policies\BillingRateTemplatePolicy;
+use App\Policies\BoardFollowUpPolicy;
+use App\Policies\BoardMeetingPolicy;
 use App\Policies\CommunicationSettingPolicy;
 use App\Policies\DocumentPolicy;
 use App\Policies\DunningNoticePolicy;
@@ -154,6 +158,8 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Announcement::class, AnnouncementPolicy::class);
+        Gate::policy(BoardMeeting::class, BoardMeetingPolicy::class);
+        Gate::policy(BoardFollowUp::class, BoardFollowUpPolicy::class);
         Gate::policy(ApplicationSetting::class, ApplicationSettingPolicy::class);
         Gate::policy(BillingPeriod::class, BillingPeriodPolicy::class);
         Gate::policy(BillingRate::class, BillingRatePolicy::class);

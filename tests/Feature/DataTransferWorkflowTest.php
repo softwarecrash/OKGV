@@ -167,6 +167,7 @@ class DataTransferWorkflowTest extends TestCase
         Storage::disk('local')->put('documents/vertrag.pdf', 'private document');
         Storage::disk('local')->put('association/parcel-map/plan.jpg', 'private map');
         Storage::disk('local')->put('tenant-transitions/uebergabe.pdf', 'private handover');
+        Storage::disk('local')->put('board-meetings/protokoll.pdf', 'private minutes');
         $administrator = User::factory()->administrator()->create();
         $database = Mockery::mock(DatabaseDumpService::class);
         $database->shouldReceive('dump')
@@ -187,6 +188,7 @@ class DataTransferWorkflowTest extends TestCase
         $this->assertSame('private document', $archive->getFromName('files/documents/vertrag.pdf'));
         $this->assertSame('private map', $archive->getFromName('files/association/parcel-map/plan.jpg'));
         $this->assertSame('private handover', $archive->getFromName('files/tenant-transitions/uebergabe.pdf'));
+        $this->assertSame('private minutes', $archive->getFromName('files/board-meetings/protokoll.pdf'));
         $this->assertSame(
             hash('sha256', 'private document'),
             $manifest['checksums']['files/documents/vertrag.pdf'],
@@ -235,6 +237,7 @@ class DataTransferWorkflowTest extends TestCase
     {
         Storage::fake('local');
         Storage::disk('local')->put('documents/vertrag.pdf', 'old document');
+        Storage::disk('local')->put('board-meetings/protokoll.pdf', 'old minutes');
         $administrator = User::factory()->administrator()->create();
         $database = Mockery::mock(DatabaseDumpService::class);
         $database->shouldReceive('dump')
@@ -247,6 +250,7 @@ class DataTransferWorkflowTest extends TestCase
         $backup = $manager->create($administrator);
         $archive = file_get_contents(Storage::disk('local')->path("backups/{$backup['name']}"));
         Storage::disk('local')->put('documents/vertrag.pdf', 'new document');
+        Storage::disk('local')->delete('board-meetings/protokoll.pdf');
 
         $createdAt = $manager->restore(
             UploadedFile::fake()->createWithContent('restore.zip', $archive),
@@ -259,6 +263,7 @@ class DataTransferWorkflowTest extends TestCase
             Storage::disk('local')->get('documents/vertrag.pdf'),
         );
         $this->assertCount(2, $manager->all());
+        $this->assertSame('old minutes', Storage::disk('local')->get('board-meetings/protokoll.pdf'));
     }
 
     public function test_restore_rejects_backup_when_app_key_fingerprint_differs(): void

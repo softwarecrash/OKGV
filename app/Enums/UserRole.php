@@ -42,6 +42,8 @@ enum UserRole: string
                 UserPermission::ReviewMeterReadingSubmissions->value,
                 UserPermission::ManageCommunication->value,
                 UserPermission::ManageAnnouncements->value,
+                UserPermission::ViewBoardWork->value,
+                UserPermission::ManageBoardWork->value,
                 UserPermission::ManageDocuments->value,
                 UserPermission::ManageWorkEvents->value,
                 UserPermission::ManageWaitingList->value,

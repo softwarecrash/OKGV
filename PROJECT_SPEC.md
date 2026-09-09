@@ -1,5 +1,53 @@
 # OKGV Projektspezifikation
 
+## Phase 21: Vorstandsarbeit
+
+- Eigenständiges Modul `board_work`. Separate Rechte `view_board_work` und
+  `manage_board_work` für vertrauliche Vorstandsunterlagen; Bearbeitung umfasst
+  Lesen. Standardvorstand und Administratoren gemäß bestehendem Rechtekonzept;
+  individuelle Rechte-Snapshots werden nicht nachträglich erweitert. Keine
+  automatische Einsicht für Pächter, Kassierer oder andere Fachrollen.
+- `board_meetings`: Titel, Termin, Ort, Teilnehmer als Protokolltext,
+  allgemeines Protokoll, Ersteller, Abschlusszeitpunkt, Archivzeitpunkt,
+  Vereinskopfsnapshot und privater PDF-Pfad. Entwürfe sind bearbeitbar;
+  abgeschlossene Sitzungen einschließlich Tagesordnung und Beschlüssen nicht.
+  Archivierung ist rücknehmbar und bewahrt Historie; Korrekturen erfolgen in einer neuen Sitzung
+  mit Bezug auf den ursprünglichen Beschluss. Keine Löschfunktion.
+- `board_agenda_items`: Sitzung, eindeutige Position, Titel, Beschreibung,
+  Protokolltext. Positionen können im Entwurf geändert werden; doppelte
+  Positionen werden verständlich abgewiesen. Höchstens 50 Themen und 100 Beschlüsse
+  je Sitzung begrenzen den PDF-Umfang. Keine automatische E-Mail-Einladung.
+- `board_resolutions`: Sitzung, optional zugehöriger Tagesordnungspunkt, Titel,
+  Beschlusstext, Ergebnis (angenommen/abgelehnt/vertagt) und optionale Stimmen
+  dafür/dagegen/Enthaltungen (nur gemeinsam). Die stabile Datensatz-ID dient
+  als Beschlussreferenz, nicht als lückenloser eigener Nummernkreis.
+  Das Beschlussbuch enthält ausschließlich abgeschlossene Sitzungen, auch
+  archivierte. Bei Abschluss sind Teilnehmer, Protokoll und mindestens ein
+  Tagesordnungspunkt erforderlich; der Sitzungstermin darf nicht zukünftig sein.
+- `board_follow_ups`: angenommener Beschluss, Aufgabe/Wiedervorlage, optionaler
+  zuständiger Benutzer mit Vorstandsleserecht, Fälligkeit, Ersteller,
+  Erledigungszeitpunkt und Erledigender. Anlage erst nach Protokollabschluss,
+  damit Aufträge auf verbindlichen Beschlüssen beruhen. Erledigung durch
+  Zuständige oder Vorstandsverwaltung, nur einmal und auditiert. Aufgaben
+  bleiben auch nach Sitzungsarchivierung offen und sichtbar. Die zentrale,
+  modulübergreifende Aufgabenverwaltung folgt erst in Phase 22.
+- Dokumentverknüpfungen über `board_meeting_document`, nur eigene zugreifbare
+  Dokumente. Die Dokument-Policy gilt bei jedem Abruf weiter; keine zusätzliche
+  Freigabe durch die Verknüpfung. Bei deaktiviertem Dokumentmodul bleiben
+  Verknüpfungen erhalten, sind aber nicht nutzbar. Verlinkt wird die aktuelle
+  Dokumentversion, kein historischer Anhang-Snapshot.
+- Abschluss erzeugt atomar ein privates, anschließend unverändertes Protokoll-
+  PDF unter `board-meetings`; bei Speicherfehler bleibt die Sitzung Entwurf.
+  PDF enthält Tagesordnung, Protokoll und Beschlüsse, keine späteren Aufgaben
+  oder vertraulichen Bankdaten aus Vereinseinstellungen. Keine öffentliche URL.
+- Navigation unter Kommunikation: Sitzungen mit fälligen Beschlussaufgaben
+  und Beschlussbuch. Der Aktionspunkt führt zur gefilterten Aufgabenansicht;
+  zuständige Leser sehen eigene, Verwalter alle fälligen offenen Aufgaben.
+- Fachänderungen werden ohne Freitexte im Audit erfasst. Datenbank und PDFs
+  sind Bestandteil der bestehenden Backups. Datenschutzexport umfasst eigene
+  Aufgabenbezüge; Pseudonymisierung entfernt Benutzerverweise. Freitext in
+  aufzubewahrenden Protokollen verlangt weiterhin individuelle Prüfung.
+
 ## Phase 20: Schwarzes Brett und Vereinsnews
 
 - Eigenes Modul `announcements`, ohne Pflichtabhängigkeit zum Pächterportal oder

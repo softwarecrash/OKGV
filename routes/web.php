@@ -9,6 +9,7 @@ use App\Http\Controllers\BillingPeriodController;
 use App\Http\Controllers\BillingRateAssignmentController;
 use App\Http\Controllers\BillingRateController;
 use App\Http\Controllers\BillingRateTemplateController;
+use App\Http\Controllers\BoardMeetingController;
 use App\Http\Controllers\CommunicationSettingController;
 use App\Http\Controllers\DataTransferController;
 use App\Http\Controllers\DocumentController;
@@ -98,6 +99,27 @@ Route::view('konto-wartet-auf-freigabe', 'auth.pending-approval')
     ->name('registration.pending');
 
 Route::middleware(['auth', 'verified', 'registration.approved'])->group(function (): void {
+    Route::middleware('module:board_work')->group(function (): void {
+        Route::get('beschlussbuch', [BoardMeetingController::class, 'book'])->name('board-meetings.book');
+        Route::resource('vorstandssitzungen', BoardMeetingController::class)->except('destroy')
+            ->parameters(['vorstandssitzungen' => 'meeting'])->names('board-meetings');
+        Route::post('vorstandssitzungen/{meeting}/abschliessen', [BoardMeetingController::class, 'finalize'])->name('board-meetings.finalize');
+        Route::post('vorstandssitzungen/{meeting}/archivieren', [BoardMeetingController::class, 'archive'])->name('board-meetings.archive');
+        Route::post('vorstandssitzungen/{meeting}/zurueckholen', [BoardMeetingController::class, 'unarchive'])->name('board-meetings.unarchive');
+        Route::get('vorstandssitzungen/{meeting}/pdf', [BoardMeetingController::class, 'pdf'])->name('board-meetings.pdf');
+        Route::get('vorstandssitzungen/{meeting}/dokumente/{document}', [BoardMeetingController::class, 'document'])->middleware('module:documents')->name('board-meetings.document');
+        Route::get('vorstandssitzungen/{meeting}/tagesordnung/neu', [BoardMeetingController::class, 'agendaForm'])->name('board-agenda.create');
+        Route::get('vorstandssitzungen/{meeting}/tagesordnung/{item}/bearbeiten', [BoardMeetingController::class, 'agendaForm'])->name('board-agenda.edit');
+        Route::post('vorstandssitzungen/{meeting}/tagesordnung', [BoardMeetingController::class, 'saveAgenda'])->name('board-agenda.store');
+        Route::put('vorstandssitzungen/{meeting}/tagesordnung/{item}', [BoardMeetingController::class, 'saveAgenda'])->name('board-agenda.update');
+        Route::get('vorstandssitzungen/{meeting}/beschluesse/neu', [BoardMeetingController::class, 'resolutionForm'])->name('board-resolutions.create');
+        Route::get('vorstandssitzungen/{meeting}/beschluesse/{resolution}/bearbeiten', [BoardMeetingController::class, 'resolutionForm'])->name('board-resolutions.edit');
+        Route::post('vorstandssitzungen/{meeting}/beschluesse', [BoardMeetingController::class, 'saveResolution'])->name('board-resolutions.store');
+        Route::put('vorstandssitzungen/{meeting}/beschluesse/{resolution}', [BoardMeetingController::class, 'saveResolution'])->name('board-resolutions.update');
+        Route::get('beschluesse/{resolution}/aufgabe', [BoardMeetingController::class, 'followUpForm'])->name('board-follow-ups.create');
+        Route::post('beschluesse/{resolution}/aufgabe', [BoardMeetingController::class, 'addFollowUp'])->name('board-follow-ups.store');
+        Route::post('beschlussaufgaben/{task}/erledigen', [BoardMeetingController::class, 'complete'])->name('board-follow-ups.complete');
+    });
     Route::middleware('module:announcements')->group(function (): void {
         Route::resource('schwarzes-brett', AnnouncementController::class)->except('destroy')
             ->parameters(['schwarzes-brett' => 'announcement'])->names('announcements');

@@ -12,6 +12,8 @@ use App\Enums\WaitingListStatus;
 use App\Enums\WorkEventStatus;
 use App\Enums\WorkHourSubmissionStatus;
 use App\Models\Announcement;
+use App\Models\BoardFollowUp;
+use App\Models\BoardMeeting;
 use App\Models\InventoryLoan;
 use App\Models\Invoice;
 use App\Models\MailCampaign;
@@ -27,6 +29,7 @@ final class ActionIndicatorService
     /**
      * @return array{
      *     announcements: int,
+     *     board_work: int,
      *     registrations: int,
      *     meter_readings: int,
      *     invoices: int,
@@ -45,6 +48,7 @@ final class ActionIndicatorService
      */
     public function forUser(User $user): array
     {
+        $boardWork = $user->can('viewAny', BoardMeeting::class) ? BoardFollowUp::query()->actionableFor($user)->count() : 0;
         $announcements = $this->announcementCount($user);
         $registrations = FeatureModule::TenantPortal->enabled()
             && $user->canReviewTenantRegistrations()
@@ -124,6 +128,7 @@ final class ActionIndicatorService
 
         return [
             'announcements' => $announcements,
+            'board_work' => $boardWork,
             'registrations' => $registrations,
             'meter_readings' => $meterReadings,
             'invoices' => $invoices,
@@ -135,9 +140,9 @@ final class ActionIndicatorService
             'members_group' => $registrations + $waitingList,
             'meters_group' => $meterReadings,
             'finance_group' => $invoices + $workHours + $workEvents + $workHourSubmissions,
-            'communication_group' => $failedCampaigns + $announcements,
+            'communication_group' => $failedCampaigns + $announcements + $boardWork,
             'dunning_notices' => $dunningNotices,
-            'total' => $registrations + $waitingList + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns + $inventory + $announcements,
+            'total' => $registrations + $waitingList + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns + $inventory + $announcements + $boardWork,
         ];
     }
 
@@ -219,6 +224,7 @@ final class ActionIndicatorService
     {
         return [
             'announcements' => 0,
+            'board_work' => 0,
             'registrations' => 0,
             'meter_readings' => 0,
             'invoices' => 0,

@@ -227,13 +227,16 @@ Kassenbuch, Bankabgleich und Haushaltsplan bleiben in dieser fachlichen Reihenfo
 
 ## Phase 21: Vorstandsarbeit
 
-- [ ] Vorstandssitzungen
-- [ ] Tagesordnungen
-- [ ] Protokolle
-- [ ] Beschlussbuch
-- [ ] Aufgaben und Wiedervorlagen aus Beschlüssen erfassen; zentrale Verwaltung folgt in Phase 22
-- [ ] Dokumentverknüpfung und PDF-Export
-- [ ] Rechte für vertrauliche Vorstandsunterlagen
+- [x] Vorstandssitzungen
+- [x] Tagesordnungen
+- [x] Protokolle
+- [x] Beschlussbuch
+- [x] Aufgaben und Wiedervorlagen aus Beschlüssen erfassen; zentrale Verwaltung folgt in Phase 22
+- [x] Dokumentverknüpfung und PDF-Export
+- [x] Rechte für vertrauliche Vorstandsunterlagen
+
+Abgeschlossen in 0.2.0.103. Private PDF-Sicherung, rücknehmbare Archivierung,
+granulare Rechte und fällige Beschlussaufgaben sind integriert und getestet.
 
 ## Phase 22: Aufgaben und Wiedervorlagen
 
@@ -366,8 +369,8 @@ Kassenbuch, Bankabgleich und Haushaltsplan bleiben in dieser fachlichen Reihenfo
 Die Stabilisierung von Registrierung, Rechtewechseln, Demo-Schutz und
 persönlichen Portalansichten ist im Entwicklungsstand 0.2.0.101 umgesetzt.
 
-Die Phasen 0 bis 20 sind abgeschlossen. Als nächste reguläre Fachphase folgt
-Phase 21 mit Vorstandsarbeit (Sitzungen, Tagesordnungen, Protokolle und Beschlüsse).
-Danach folgen Aufgaben und Wiedervorlagen, Umfragen und die digitale
+Die Phasen 0 bis 21 sind abgeschlossen. Als nächste reguläre Fachphase folgt
+Phase 22 mit der zentralen Verwaltung von Aufgaben und Wiedervorlagen.
+Danach folgen Umfragen und die digitale
 Mitgliederversammlung. Die große Deployment-Phase ist
 bewusst ans Ende verschoben, weil Webhosting und Plesk vorerst ausreichen.

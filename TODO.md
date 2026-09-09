@@ -5,7 +5,19 @@
 - [x] Vorstandsarbeit, Aufgaben, Umfragen und Mitgliederversammlung als Phasen 21 bis 24 vorziehen
 - [x] Offene Folgephasen neu nummerieren und Abhängigkeiten erhalten
 
-Als Nächstes: Phase 21 (Vorstandsarbeit), gemäß `PHASE_PLAN.md`.
+Als Nächstes: Phase 22 (Aufgaben und Wiedervorlagen), gemäß `PHASE_PLAN.md`.
+
+## Phase 21: Vorstandsarbeit
+
+- [x] Datenmodell, Abschlussregeln und vertrauliche Zugriffsrechte spezifizieren
+- [x] Tabellen, Beziehungen und Policies erstellen
+- [x] Sitzungen, Tagesordnung, Protokoll und Beschlussbuch umsetzen
+- [x] Beschlussaufgaben mit Zuständigkeit, Fälligkeit und Erledigung umsetzen
+- [x] Dokumentverknüpfung und unveränderbares privates Protokoll-PDF integrieren
+- [x] Navigation, Aktionshinweise, Backup und Datenschutz integrieren
+- [x] Fachtests, Migrationsprüfung, Gesamttests, Build und Audits abschließen (273 Tests erfolgreich)
+- [x] Entwicklungsstand 0.2.0.103 dokumentieren
+- [ ] Entwicklungsstand veröffentlichen
 
 ## Phase 20: Schwarzes Brett
 
