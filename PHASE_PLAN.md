@@ -209,13 +209,13 @@ vorherigen Phase geprüft sein.
 
 ## Phase 20: Schwarzes Brett und Vereinsnews
 
-- [ ] Öffentliche und interne Bekanntmachungen
-- [ ] Zielgruppen: alle Pächter, Vorstand, ausgewählte Rollen
-- [ ] Veröffentlichungszeitraum und optionale Hervorhebung
-- [ ] Anhänge und Dokumentverknüpfungen
-- [ ] Aktionspunkt für neue ungelesene Bekanntmachungen
-- [ ] Lesebestätigung für wichtige Bekanntmachungen
-- [ ] Auditlog und Rechtekonzept
+- [x] Öffentliche und interne Bekanntmachungen
+- [x] Zielgruppen: alle Pächter, Vorstand, ausgewählte Rollen
+- [x] Veröffentlichungszeitraum und optionale Hervorhebung
+- [x] Anhänge und Dokumentverknüpfungen
+- [x] Aktionspunkt für neue ungelesene Bekanntmachungen
+- [x] Lesebestätigung für wichtige Bekanntmachungen
+- [x] Auditlog und Rechtekonzept
 
 ## Phase 21: Bewerbermanagement
 
@@ -357,6 +357,6 @@ vorherigen Phase geprüft sein.
 Die Stabilisierung von Registrierung, Rechtewechseln, Demo-Schutz und
 persönlichen Portalansichten ist im Entwicklungsstand 0.2.0.101 umgesetzt.
 
-Die Phasen 0 bis 19 sind abgeschlossen. Als nächste reguläre Fachphase folgt
-Phase 20 mit Schwarzem Brett und Vereinsnews. Die große Deployment-Phase ist
+Die Phasen 0 bis 20 sind abgeschlossen. Als nächste reguläre Fachphase folgt
+Phase 21 mit Bewerbermanagement. Die große Deployment-Phase ist
 bewusst ans Ende verschoben, weil Webhosting und Plesk vorerst ausreichen.

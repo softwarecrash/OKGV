@@ -183,6 +183,8 @@ class WorkHourWorkflowTest extends TestCase
         $workHour = WorkHour::factory()->create([
             'billing_period_id' => $period->id,
             'parcel_id' => $parcel->id,
+            'hours_done' => '0.00',
+            'manual_hours_done' => '0.00',
         ]);
         app(BillingCalculator::class)->calculate($period, $administrator);
         app(BillingPeriodManager::class)->approve($period->fresh(), $administrator);
@@ -197,6 +199,7 @@ class WorkHourWorkflowTest extends TestCase
         $coTenant = Member::factory()->create([
             'first_name' => 'Erika',
             'last_name' => 'Mitpächterin',
+            'joined_at' => '2020-01-01',
         ]);
         ParcelTenant::factory()->create([
             'parcel_id' => $parcel->id,
@@ -335,7 +338,7 @@ class WorkHourWorkflowTest extends TestCase
             'ends_at' => '2025-12-31',
             'due_at' => '2026-02-01',
         ]);
-        $member = Member::factory()->create();
+        $member = Member::factory()->create(['joined_at' => '2020-01-01']);
         $parcel = Parcel::factory()->create();
         ParcelTenant::factory()->create([
             'parcel_id' => $parcel->id,

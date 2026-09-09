@@ -8,6 +8,17 @@ OKGV ist eine moderne, sichere und selbsthostbare Laravel-Anwendung. Eine Instal
 
 ## Aktueller Stand
 
+Das Schwarze Brett findest du unter **Kommunikation → Schwarzes Brett**.
+Mit dem Recht „Bekanntmachungen verwalten“ können Beiträge als Entwurf angelegt,
+geprüft und veröffentlicht werden. Bereits individuell konfigurierte
+Vorstandsrechte lassen sich in der Rechteverwaltung um dieses Recht ergänzen.
+Öffentliche Beiträge sind unter `/bekanntmachungen` ohne Anmeldung erreichbar.
+Zeitfenster, Zielgruppen, Dokumentlinks und persönliche Lesebestätigungen werden
+serverseitig geprüft. Veröffentlichte Texte werden bei Korrekturen zurückgezogen
+und neu angelegt. `OKGV_MODULE_ANNOUNCEMENTS=false` deaktiviert das Modul ohne
+Datenverlust. Beim Update die neuen Migrationen mit `php artisan migrate --force`
+ausführen, anschließend wie gewohnt die Anwendungscaches erneuern.
+
 Registrierungen erzeugen bei der Freigabe automatisch ein Mitglied, sofern kein
 vorhandenes ausgewählt wird. Die E-Mail-Bestätigung bleibt zusätzlich notwendig.
 Erledigte Anfragen sind über den Statusfilter erreichbar. Persönliche Links im

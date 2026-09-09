@@ -41,6 +41,7 @@ enum UserRole: string
                 UserPermission::ReviewTenantRegistrations->value,
                 UserPermission::ReviewMeterReadingSubmissions->value,
                 UserPermission::ManageCommunication->value,
+                UserPermission::ManageAnnouncements->value,
                 UserPermission::ManageDocuments->value,
                 UserPermission::ManageWorkEvents->value,
                 UserPermission::ManageWaitingList->value,

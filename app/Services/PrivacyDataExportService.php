@@ -31,6 +31,8 @@ final class PrivacyDataExportService
 
         return [
             'exported_at' => now()->toIso8601String(),
+            'announcement_reads' => $member->user_id === null ? [] : DB::table('announcement_reads')
+                ->where('user_id', $member->user_id)->orderBy('read_at')->get(['announcement_id', 'read_at'])->all(),
             'application' => config('app.name'),
             'member' => $member->only([
                 'id',

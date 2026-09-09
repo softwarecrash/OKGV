@@ -13,6 +13,9 @@
                 deine Aufmerksamkeit.
             </strong>
             <div class="d-flex flex-wrap gap-2 mt-2">
+                @if ($actionIndicators['announcements'] > 0)
+                    <a class="alert-link" href="{{ route('announcements.index', ['unread' => 1]) }}">{{ $actionIndicators['announcements'] }} ungelesene Bekanntmachungen</a>
+                @endif
                 @if ($actionIndicators['meter_readings'] > 0)
                     <a class="alert-link" href="{{ route('meter-reading-submissions.index', ['own' => 1]) }}">
                         {{ $actionIndicators['meter_readings'] }}
@@ -32,6 +35,14 @@
                     </a>
                 @endif
             </div>
+        </div>
+    @endif
+
+    @if (App\Enums\FeatureModule::Announcements->enabled())
+        <div class="card card-body border-0 shadow-sm mb-4">
+            <h2 class="h5">Schwarzes Brett <x-action-indicator :count="$actionIndicators['announcements']" label="ungelesene Bekanntmachungen" /></h2>
+            <p>Neuigkeiten und wichtige Mitteilungen deines Vereins.</p>
+            <div><a class="btn btn-outline-primary" href="{{ route('announcements.index') }}">Beiträge ansehen</a></div>
         </div>
     @endif
 

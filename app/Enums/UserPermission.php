@@ -15,6 +15,7 @@ enum UserPermission: string
     case ReviewTenantRegistrations = 'review_tenant_registrations';
     case ReviewMeterReadingSubmissions = 'review_meter_reading_submissions';
     case ManageCommunication = 'manage_communication';
+    case ManageAnnouncements = 'manage_announcements';
     case ManageDocuments = 'manage_documents';
     case ManageWorkEvents = 'manage_work_events';
     case ManageWaitingList = 'manage_waiting_list';
@@ -36,6 +37,7 @@ enum UserPermission: string
             self::ReviewTenantRegistrations => 'Registrierungsanfragen bearbeiten',
             self::ReviewMeterReadingSubmissions => 'Zählerstandsmeldungen prüfen',
             self::ManageCommunication => 'Kommunikation verwalten',
+            self::ManageAnnouncements => 'Bekanntmachungen verwalten',
             self::ManageDocuments => 'Dokumente verwalten',
             self::ManageWorkEvents => 'Arbeitseinsätze verwalten',
             self::ManageWaitingList => 'Warteliste verwalten',
@@ -59,6 +61,7 @@ enum UserPermission: string
             self::ReviewTenantRegistrations => 'Erlaubt die Freigabe oder Ablehnung neuer Pächterkonten.',
             self::ReviewMeterReadingSubmissions => 'Erlaubt die Prüfung gemeldeter Zählerstände und Fotos.',
             self::ManageCommunication => 'Erlaubt Serienmails, Versandhistorie und allgemeine PDF-Briefe.',
+            self::ManageAnnouncements => 'Erlaubt Beiträge am Schwarzen Brett zu veröffentlichen, zurückzuziehen und Lesebestätigungen einzusehen.',
             self::ManageDocuments => 'Erlaubt private Uploads, Dateiversionen, Freigaben und die zentrale Dokumentenverwaltung.',
             self::ManageWorkEvents => 'Erlaubt Termine, Teilnehmer und bestätigte Arbeitsstunden zu verwalten.',
             self::ManageWaitingList => 'Erlaubt den Zugriff auf Interessenten, Kontaktdaten, Prioritäten und Bearbeitungsstatus.',
@@ -80,6 +83,7 @@ enum UserPermission: string
             self::ManageSepa => FeatureModule::Sepa,
             self::ReviewTenantRegistrations => FeatureModule::TenantPortal,
             self::ManageCommunication => FeatureModule::Communication,
+            self::ManageAnnouncements => FeatureModule::Announcements,
             self::ManageDocuments => FeatureModule::Documents,
             self::ManageWorkEvents => FeatureModule::WorkEvents,
             self::ManageWaitingList => FeatureModule::WaitingList,

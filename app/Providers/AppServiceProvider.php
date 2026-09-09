@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Announcement;
 use App\Models\ApplicationSetting;
 use App\Models\BillingPeriod;
 use App\Models\BillingRate;
@@ -35,6 +36,7 @@ use App\Models\WorkEvent;
 use App\Models\WorkEventParticipant;
 use App\Models\WorkHour;
 use App\Models\WorkHourSubmission;
+use App\Policies\AnnouncementPolicy;
 use App\Policies\ApplicationSettingPolicy;
 use App\Policies\BillingPeriodPolicy;
 use App\Policies\BillingRateAssignmentPolicy;
@@ -151,6 +153,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(Announcement::class, AnnouncementPolicy::class);
         Gate::policy(ApplicationSetting::class, ApplicationSettingPolicy::class);
         Gate::policy(BillingPeriod::class, BillingPeriodPolicy::class);
         Gate::policy(BillingRate::class, BillingRatePolicy::class);

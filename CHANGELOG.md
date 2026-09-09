@@ -2,6 +2,32 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.102] - 2026-09-09
+
+### Phase 20: Schwarzes Brett und Vereinsnews
+
+- Eigenes abschaltbares Modul mit granularen Verwaltungsrechten und sicheren
+  Zielgruppen: öffentlich, alle Konten, aktuelle Pächter oder ausgewählte Rollen.
+- Entwürfe, Vorschau, ausdrückliche Veröffentlichung, Zeitfenster, Hervorhebung
+  und Zurückziehen mit Auditlog. Veröffentlichte Inhalte bleiben unverändert.
+- Öffentliche Bekanntmachungsseite sowie interne Listen, Verwaltung und Detailansicht.
+- Dokumentverknüpfungen mit bestehenden Freigaben, Modul- und Zugriffskontrollen.
+- Ausdrückliche, einmalige Kenntnisnahmen und Lesebestätigungen; Zugriff auf
+  Bestätigungslisten ausschließlich für Verwalter. Keine Gastverfolgung.
+- Persönliche Ungelesen-Hinweise in Kommunikation und Pächterportal, Filter für
+  ungelesene Beiträge; Hinweise verschwinden bei Bestätigung oder Sichtbarkeitsende.
+- Drei vorwärts/rückwärts ausführbare Migrationen; bestehendes Vollbackup umfasst
+  die neuen Tabellen. Auskunftsexport und Pseudonymisierung berücksichtigen Lesedaten.
+- Tests für Rollen, Zielgruppen, Zeitgrenzen, Dokumentrechte, Kenntnisnahme,
+  Modulsperren und isolierten Migrations-Rollback ergänzt.
+- Zufälliges Eintrittsdatum im bestehenden Arbeitsstunden-Abrechnungsszenario
+  und potenziell wirkungslosen Änderungswert im Unveränderlichkeitstest durch
+  feste Testdaten ersetzt; Abrechnungslogik unverändert.
+- 258 Tests erfolgreich; isolierter SQLite-Migrations-Rollback und erneutes
+  Anlegen erfolgreich. Vorwärtsmigration auf dem LXC angewendet. Build, Pint,
+  Composer-Validierung und beide Paketaudits erfolgreich. Bestehende
+  Sass-Abkündigungshinweise bleiben unverändert.
+
 ## [0.2.0.101] - 2026-09-09
 
 ### Stabilisierung bestehender Abläufe

@@ -10,6 +10,7 @@ return [
     'dunning' => env('OKGV_MODULE_DUNNING', true),
     'documents' => env('OKGV_MODULE_DOCUMENTS', true),
     'communication' => env('OKGV_MODULE_COMMUNICATION', true),
+    'announcements' => env('OKGV_MODULE_ANNOUNCEMENTS', true),
     'waiting_list' => env('OKGV_MODULE_WAITING_LIST', true),
     'inventory' => env('OKGV_MODULE_INVENTORY', true),
     'data_transfer' => env('OKGV_MODULE_DATA_TRANSFER', true),

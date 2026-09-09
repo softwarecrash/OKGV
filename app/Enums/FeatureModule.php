@@ -13,6 +13,7 @@ enum FeatureModule: string
     case Dunning = 'dunning';
     case Documents = 'documents';
     case Communication = 'communication';
+    case Announcements = 'announcements';
     case WaitingList = 'waiting_list';
     case Inventory = 'inventory';
     case DataTransfer = 'data_transfer';
@@ -29,6 +30,7 @@ enum FeatureModule: string
             self::Dunning => 'Mahnwesen',
             self::Documents => 'Dokumentenverwaltung',
             self::Communication => 'Kommunikation',
+            self::Announcements => 'Schwarzes Brett',
             self::WaitingList => 'Warteliste',
             self::Inventory => 'Inventarverwaltung',
             self::DataTransfer => 'Datenübertragung',

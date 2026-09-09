@@ -1,5 +1,36 @@
 # OKGV Projektspezifikation
 
+## Phase 20: Schwarzes Brett und Vereinsnews
+
+- Eigenes Modul `announcements`, ohne Pflichtabhängigkeit zum Pächterportal oder
+  Mailversand. `manage_announcements` erlaubt Entwurf, Veröffentlichung,
+  Archivierung und Einsicht in Lesebestätigungen; Administratoren und der
+  Standardvorstand besitzen es. Bestehende individuelle Rechte bleiben unverändert.
+- Zielgruppen: öffentlich (ohne Anmeldung), alle freigegebenen Konten,
+  aktuelle Pächter unabhängig von ihrer Vereinsrolle, oder ausgewählte Rollen.
+  Ein technisches Administratorkennzeichen ersetzt dabei keine Vereinsrolle.
+- `announcements`: Titel, Klartext, Zielgruppe, Rollenliste, Beginn, optionales
+  Ende, Hervorhebung, Bestätigungspflicht, Veröffentlichungs-/Archivzeit,
+  Ersteller und Zeitstempel. Zeitgrenzen gelten inklusive Beginn, exklusive Ende.
+- Entwürfe bleiben bearbeitbar; veröffentlichte Beiträge werden archiviert und
+  bei Korrekturen neu angelegt. Inhalte werden nicht rückwirkend verändert.
+- Anhänge werden aus der vorhandenen Dokumentenverwaltung verknüpft.
+  Dokumentrechte werden beim Verknüpfen und beim Abrufen geprüft. Öffentliche
+  Beiträge dürfen ausschließlich öffentliche, freigegebene Dokumente verknüpfen.
+  Interne Dokumentlinks geben keine zusätzlichen Rechte; nicht zugängliche
+  Dokumente werden dem Leser nicht angezeigt. Dokumentlinks beziehen sich auf
+  die jeweils aktuelle Dokumentversion, die Lesebestätigung auf den Beitragstext.
+- `announcement_document` speichert Verknüpfungen. `announcement_reads` speichert
+  je Beitrag und Konto genau einen Zeitpunkt der ausdrücklichen Kenntnisnahme.
+  Ein GET schreibt keine Lesebestätigung. Für wichtige Beiträge heißt die Aktion
+  „Lesen bestätigen“, sonst „Als gelesen markieren“. Gäste werden nicht verfolgt.
+- Ungelesene, aktuell sichtbare Beiträge erzeugen denselben Aktionshinweis in
+  Navigation und Portal. Lesen, Ablauf, Archivierung oder Zielgruppenwechsel
+  entfernen den Hinweis. Bestätigungen sehen nur berechtigte Verwalter.
+- Schreibaktionen werden auditiert. Tabellen und verknüpfte private Dokumente
+  sind im bestehenden Vollbackup enthalten. Eigene Kenntnisnahmen gehören in
+  den Auskunftsexport und werden bei Pseudonymisierung vom Konto getrennt.
+
 ## Produkt
 
 OKGV (Open Kleingarten Verwaltung) ist eine moderne, sichere und selbsthostbare Verwaltungssoftware für Kleingartenvereine mit 20 bis 500 oder mehr Parzellen.

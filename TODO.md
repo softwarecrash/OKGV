@@ -1,5 +1,15 @@
 # TODO
 
+## Phase 20: Schwarzes Brett
+
+- [x] Datenmodell, Zielgruppen und Rechtekonzept spezifizieren
+- [x] Tabellen, Beziehungen und Policies erstellen
+- [x] Entwürfe, Veröffentlichung, Archivierung und Dokumentlinks umsetzen
+- [x] Öffentliche Ansicht und persönliche Kenntnisnahme umsetzen
+- [x] Navigation, Portalhinweise und Datenschutz integrieren
+- [x] Tests, Migrationsprüfung und Build abschließen (258 Tests erfolgreich)
+- [x] Entwicklungsstand 0.2.0.102 dokumentieren
+
 ## Stabilisierung bestehender Abläufe
 
 - [x] Registrierungsfreigabe von E-Mail-Bestätigung trennen und Mitgliedsabschluss sichtbar machen

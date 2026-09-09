@@ -11,6 +11,7 @@ use App\Enums\RegistrationRequestStatus;
 use App\Enums\WaitingListStatus;
 use App\Enums\WorkEventStatus;
 use App\Enums\WorkHourSubmissionStatus;
+use App\Models\Announcement;
 use App\Models\InventoryLoan;
 use App\Models\Invoice;
 use App\Models\MailCampaign;
@@ -25,6 +26,7 @@ final class ActionIndicatorService
 {
     /**
      * @return array{
+     *     announcements: int,
      *     registrations: int,
      *     meter_readings: int,
      *     invoices: int,
@@ -43,6 +45,7 @@ final class ActionIndicatorService
      */
     public function forUser(User $user): array
     {
+        $announcements = $this->announcementCount($user);
         $registrations = FeatureModule::TenantPortal->enabled()
             && $user->canReviewTenantRegistrations()
             ? RegistrationRequest::query()
@@ -120,6 +123,7 @@ final class ActionIndicatorService
             : 0;
 
         return [
+            'announcements' => $announcements,
             'registrations' => $registrations,
             'meter_readings' => $meterReadings,
             'invoices' => $invoices,
@@ -131,9 +135,9 @@ final class ActionIndicatorService
             'members_group' => $registrations + $waitingList,
             'meters_group' => $meterReadings,
             'finance_group' => $invoices + $workHours + $workEvents + $workHourSubmissions,
-            'communication_group' => $failedCampaigns,
+            'communication_group' => $failedCampaigns + $announcements,
             'dunning_notices' => $dunningNotices,
-            'total' => $registrations + $waitingList + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns + $inventory,
+            'total' => $registrations + $waitingList + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns + $inventory + $announcements,
         ];
     }
 
@@ -167,6 +171,7 @@ final class ActionIndicatorService
             return $this->emptyIndicators();
         }
 
+        $announcements = $this->announcementCount($user);
         $meterReadings = FeatureModule::Meters->enabled()
             ? MeterReadingSubmission::query()
                 ->unresolvedRejectedForUser($user->id)
@@ -197,12 +202,13 @@ final class ActionIndicatorService
 
         return [
             ...$this->emptyIndicators(),
+            'announcements' => $announcements,
             'meter_readings' => $meterReadings,
             'invoices' => $invoices,
             'work_hour_submissions' => $workHourSubmissions,
             'meters_group' => $meterReadings,
             'finance_group' => $invoices + $workHourSubmissions,
-            'total' => $meterReadings + $invoices + $workHourSubmissions,
+            'total' => $meterReadings + $invoices + $workHourSubmissions + $announcements,
         ];
     }
 
@@ -212,6 +218,7 @@ final class ActionIndicatorService
     public function emptyIndicators(): array
     {
         return [
+            'announcements' => 0,
             'registrations' => 0,
             'meter_readings' => 0,
             'invoices' => 0,
@@ -247,5 +254,12 @@ final class ActionIndicatorService
                     || ($latest->level < 3 && $latest->due_at->isPast());
             })
             ->count();
+    }
+
+    private function announcementCount(User $user): int
+    {
+        return FeatureModule::Announcements->enabled() && $user->hasVerifiedEmail() && ! $user->hasPendingRegistrationApproval()
+            ? Announcement::query()->unreadFor($user)->count()
+            : 0;
     }
 }

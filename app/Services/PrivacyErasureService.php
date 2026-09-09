@@ -236,6 +236,9 @@ final class PrivacyErasureService
                         'updated_at' => now(),
                     ]);
 
+                DB::table('announcement_reads')->where('user_id', $oldUserId)->update(['user_id' => null]);
+                DB::table('announcements')->where('created_by', $oldUserId)->update(['created_by' => null]);
+
                 DB::table('work_hour_submissions')
                     ->where('submitted_by', $oldUserId)
                     ->update([

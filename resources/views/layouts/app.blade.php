@@ -204,20 +204,25 @@
                                     </ul>
                                 </li>
                             @endif
-                            @if ($canViewCommunication)
+                            @if ($canViewCommunication || auth()->user()->can('viewAny', App\Models\Announcement::class))
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                         Kommunikation
-                                        <x-action-indicator :count="$actionIndicators['communication_group']" label="fehlgeschlagene Serienmails" />
+                                        <x-action-indicator :count="$actionIndicators['communication_group']" label="offene Kommunikationshinweise" />
                                     </a>
                                     <ul class="dropdown-menu">
+                                        @can('viewAny', App\Models\Announcement::class)
+                                            <li><a class="dropdown-item d-flex justify-content-between gap-3" href="{{ route('announcements.index') }}">Schwarzes Brett <x-action-indicator :count="$actionIndicators['announcements']" label="ungelesene Bekanntmachungen" /></a></li>
+                                        @endcan
+                                        @if ($canViewCommunication)
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('mail-campaigns.index') }}">
                                                 Serienmails
-                                                <x-action-indicator :count="$actionIndicators['communication_group']" label="fehlgeschlagene Serienmails" />
+                                                <x-action-indicator :count="$actionIndicators['communication_group'] - $actionIndicators['announcements']" label="fehlgeschlagene Serienmails" />
                                             </a>
                                         </li>
                                         <li><a class="dropdown-item" href="{{ route('letters.index') }}">PDF-Briefe</a></li>
+                                        @endif
                                     </ul>
                                 </li>
                             @endif
@@ -251,6 +256,9 @@
                         </li>
                         <!-- Authentication Links -->
                         @guest
+                            @if (App\Enums\FeatureModule::Announcements->enabled())
+                                <li class="nav-item"><a class="nav-link" href="{{ route('announcements.public.index') }}">Bekanntmachungen</a></li>
+                            @endif
                             @if (Route::has('login'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">Anmelden</a>

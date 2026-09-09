@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountPasswordController;
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\ApplicationSettingController;
 use App\Http\Controllers\AssociationLogoController;
 use App\Http\Controllers\BackupController;
@@ -78,6 +79,13 @@ Route::get('freigabe/dokument/{token}', [PublicDocumentController::class, 'downl
 
 Route::view('datenschutzinformationen', 'privacy.information')
     ->name('privacy.information');
+
+Route::middleware('module:announcements')->group(function (): void {
+    Route::get('bekanntmachungen', [AnnouncementController::class, 'index'])->name('announcements.public.index');
+    Route::get('bekanntmachungen/{announcement}', [AnnouncementController::class, 'show'])->name('announcements.public.show');
+    Route::get('bekanntmachungen/{announcement}/dokumente/{document}', [AnnouncementController::class, 'document'])
+        ->middleware(['module:documents', 'throttle:30,1'])->name('announcements.public.document');
+});
 Route::get('vereinslogo', [AssociationLogoController::class, 'show'])
     ->name('association-logo.show');
 
@@ -90,6 +98,16 @@ Route::view('konto-wartet-auf-freigabe', 'auth.pending-approval')
     ->name('registration.pending');
 
 Route::middleware(['auth', 'verified', 'registration.approved'])->group(function (): void {
+    Route::middleware('module:announcements')->group(function (): void {
+        Route::resource('schwarzes-brett', AnnouncementController::class)->except('destroy')
+            ->parameters(['schwarzes-brett' => 'announcement'])->names('announcements');
+        Route::post('schwarzes-brett/{announcement}/veroeffentlichen', [AnnouncementController::class, 'publish'])->name('announcements.publish');
+        Route::post('schwarzes-brett/{announcement}/zurueckziehen', [AnnouncementController::class, 'archive'])->name('announcements.archive');
+        Route::post('schwarzes-brett/{announcement}/gelesen', [AnnouncementController::class, 'acknowledge'])
+            ->middleware('throttle:60,1')->name('announcements.acknowledge');
+        Route::get('schwarzes-brett/{announcement}/dokumente/{document}', [AnnouncementController::class, 'document'])
+            ->middleware(['module:documents', 'throttle:30,1'])->name('announcements.document');
+    });
     Route::get('konto/passwort', [AccountPasswordController::class, 'edit'])
         ->name('account.password.edit');
     Route::put('konto/passwort', [AccountPasswordController::class, 'update'])
