@@ -502,6 +502,10 @@ Zählerstandsmeldungen mit Foto und Freigabe.
 
 #### Registrierung und Freigabe
 
+Rechtewechsel prüfen den aktuellen Akteur und das Zielkonto erneut innerhalb
+der Transaktion. Administratorwechsel werden über gesperrte Administratorkonten
+serialisiert, damit parallele Änderungen nicht alle Administratoren entfernen.
+
 Pächter, Vorstandsmitglieder, technische Helfer oder spätere Benutzer können
 öffentlich eine Registrierungsanfrage mit Vorname, Nachname, E-Mail-Adresse,
 optional Parzellennummer und Passwort stellen. Die Anfrage erzeugt sofort ein
@@ -511,13 +515,14 @@ gespeichert. Die öffentliche Route wird rate-limitiert und liefert keine
 internen Mitglieds- oder Pächterdaten aus. Die E-Mail-Bestätigung wird direkt
 nach der Registrierung versendet.
 
-Administrator oder Vorstand prüfen die Anfrage. Wenn eine Parzellennummer
-angegeben wurde, muss eines der aktuell eingetragenen, noch nicht mit einem
-Benutzerkonto verbundenen Mitglieder dieser Parzelle ausgewählt werden. Ohne
-Parzellennummer darf die Anfrage auch ohne Mitgliedsverknüpfung freigegeben
-werden; Mitglieds- und Parzellenzuordnung können später ergänzt werden. Die
-Freigabe aktiviert die Anfrage fachlich und markiert die E-Mail als bestätigt,
-falls die externe Zustellung der Bestätigungsmail nicht funktioniert hat.
+Administrator oder berechtigter Vorstand prüfen die Anfrage. Ein vorhandenes
+Mitglied kann zugeordnet werden; ohne Auswahl entsteht automatisch ein neues
+Mitglied. Eine angegebene Parzelle wird beim neuen Mitglied als Pachtzuordnung
+übernommen. Ohne Parzelle bleibt das Mitglied für eine spätere Zuordnung verfügbar.
+Freigabe und E-Mail-Bestätigung sind unabhängige Voraussetzungen: Eine Freigabe
+darf die E-Mail-Adresse niemals automatisch bestätigen. Die Übersicht zeigt
+standardmäßig offene Anfragen; bearbeitete bleiben über Statusfilter erreichbar.
+Abgeschlossene Anfragen verlinken das zugehörige Mitglied entsprechend den Rechten.
 Freigabe und Ablehnung werden mit Bearbeiter, Zeitpunkt und optionaler
 Begründung historisiert und auditiert. Kassierer, Wasserwart und Gartenwart
 dürfen Registrierungsanfragen nicht bearbeiten.
@@ -534,8 +539,8 @@ bisherige Kontaktadresse im Mitgliedsstammsatz erhalten bleibt oder durch die
 Registrierungsadresse ersetzt wird. Die Login-Adresse des neuen Kontos ist
 immer die anschließend zu bestätigende Registrierungsadresse.
 
-Nach der Freigabe wird über den in `.env` konfigurierten Laravel-Mailer eine
-deutsche Bestätigungsnachricht versendet. Das neue Konto bleibt bis zur
+Die Bestätigungsnachricht wird bei der Registrierung versendet. Bei alten
+Anfragen ohne Benutzerkonto wird sie nach dessen Anlage versendet. Das Konto bleibt bis zur
 Bestätigung der signierten, zeitlich begrenzten E-Mail-Adresse für alle
 geschützten Anwendungsbereiche gesperrt. Ein neuer Bestätigungslink kann
 rate-limitiert angefordert werden. Bereits vor Einführung dieser Pflicht
@@ -543,6 +548,17 @@ bestehende Konten gelten bei der Migration als bestätigt, damit kein
 Administrator ausgesperrt wird.
 
 #### Portalzugriff
+
+Links aus dem persönlichen Portal zu Rechnungen, Arbeitsstunden- und
+Zählerstandsmeldungen öffnen ausdrücklich die eigenen Datensätze, auch bei
+Vorständen und Administratoren. Berechtigte Prüfer können zur Vereinsübersicht
+wechseln. Persönliche Ablehnungszähler dürfen keine fremden offenen Prüfungen
+als eigene Ablehnungen darstellen. Archivierte Dokumente fehlen auch in der Vorschau.
+
+Im Demo-Modus bleiben Registrierung, Passwort- und Rechtewechsel, vollständige
+Backups, Wiederherstellung, Pseudonymisierung und die Anzeige des Anwendungsschlüssels gesperrt.
+Diese Sperren gelten auch bei direktem Aufruf der Endpunkte. Ein zentraler
+Mail-Event-Filter verhindert Versand auch über ausdrücklich gewählte Mailer.
 
 Das Pächterportal zeigt ausschließlich:
 

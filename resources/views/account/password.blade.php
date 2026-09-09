@@ -16,6 +16,10 @@
                     @include('components.validation-errors')
 
                     <form method="POST" action="{{ route('account.password.update') }}">
+                        @if (config('demo.enabled'))
+                            <div class="alert alert-info">Die Passwörter der öffentlichen Demo können nicht geändert werden.</div>
+                        @endif
+                        <fieldset @disabled(config('demo.enabled'))>
                         @csrf
                         @method('PUT')
 
@@ -57,6 +61,7 @@
                         </div>
 
                         <button class="btn btn-primary" type="submit">Passwort speichern</button>
+                        </fieldset>
                     </form>
                 </div>
             </div>

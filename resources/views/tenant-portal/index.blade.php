@@ -14,19 +14,19 @@
             </strong>
             <div class="d-flex flex-wrap gap-2 mt-2">
                 @if ($actionIndicators['meter_readings'] > 0)
-                    <a class="alert-link" href="{{ route('meter-reading-submissions.index') }}">
+                    <a class="alert-link" href="{{ route('meter-reading-submissions.index', ['own' => 1]) }}">
                         {{ $actionIndicators['meter_readings'] }}
                         {{ $actionIndicators['meter_readings'] === 1 ? 'abgelehnte Zählerstandsmeldung' : 'abgelehnte Zählerstandsmeldungen' }}
                     </a>
                 @endif
                 @if ($actionIndicators['work_hour_submissions'] > 0)
-                    <a class="alert-link" href="{{ route('work-hour-submissions.index') }}">
+                    <a class="alert-link" href="{{ route('work-hour-submissions.index', ['own' => 1]) }}">
                         {{ $actionIndicators['work_hour_submissions'] }}
                         {{ $actionIndicators['work_hour_submissions'] === 1 ? 'abgelehnte Arbeitsstundenmeldung' : 'abgelehnte Arbeitsstundenmeldungen' }}
                     </a>
                 @endif
                 @if ($actionIndicators['invoices'] > 0)
-                    <a class="alert-link" href="{{ route('invoices.index') }}">
+                    <a class="alert-link" href="{{ route('invoices.index', ['own' => 1]) }}">
                         {{ $actionIndicators['invoices'] }}
                         {{ $actionIndicators['invoices'] === 1 ? 'offene Rechnung' : 'offene Rechnungen' }}
                     </a>
@@ -94,7 +94,7 @@
                                 Letzte Rechnungen
                                 <x-action-indicator :count="$actionIndicators['invoices']" label="offene Rechnungen" />
                             </h2>
-                            <a href="{{ route('invoices.index') }}">Alle</a>
+                            <a href="{{ route('invoices.index', ['own' => 1]) }}">Alle eigenen</a>
                         </div>
                         @forelse ($invoices as $invoice)
                             <div class="d-flex justify-content-between border-top py-2">
@@ -131,10 +131,15 @@
                                 Letzte Zählerstandsmeldungen
                                 <x-action-indicator :count="$actionIndicators['meter_readings']" label="abgelehnte Zählerstandsmeldungen" />
                             </h2>
-                            <a href="{{ route('meter-reading-submissions.index') }}">Alle</a>
+                            <a href="{{ route('meter-reading-submissions.index', ['own' => 1]) }}">Alle eigenen</a>
                         </div>
                         @forelse ($submissions as $submission)
-                            <div class="border-top py-2">{{ $submission->meter->type->label() }} · {{ $submission->reading_date->format('d.m.Y') }} · {{ $submission->reading_value }} · <strong>{{ $submission->status->label() }}</strong></div>
+                            <div class="border-top py-2">
+                                {{ $submission->meter->type->label() }} · {{ $submission->reading_date->format('d.m.Y') }} · {{ $submission->reading_value }} · <strong>{{ $submission->status->label() }}</strong>
+                                @if ($submission->status === App\Enums\MeterReadingSubmissionStatus::Rejected)
+                                    <div class="small text-danger mt-1"><strong>Ablehnungsgrund:</strong> {{ $submission->review_note }}</div>
+                                @endif
+                            </div>
                         @empty
                             <p class="text-secondary mb-0">Du hast noch keinen Zählerstand gemeldet.</p>
                         @endforelse
@@ -151,7 +156,7 @@
                                 Letzte Arbeitsstundenmeldungen
                                 <x-action-indicator :count="$actionIndicators['work_hour_submissions']" label="abgelehnte Arbeitsstundenmeldungen" />
                             </h2>
-                            <a href="{{ route('work-hour-submissions.index') }}">Alle</a>
+                            <a href="{{ route('work-hour-submissions.index', ['own' => 1]) }}">Alle eigenen</a>
                         </div>
                         @forelse ($workHourSubmissions as $submission)
                             <div class="border-top py-2">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RegistrationRequestStatus;
 use App\Http\Requests\RegistrationApprovalRequest;
 use App\Http\Requests\RegistrationMemberLinkRequest;
 use App\Http\Requests\RegistrationRejectionRequest;
@@ -10,6 +11,8 @@ use App\Models\RegistrationRequest;
 use App\Services\RegistrationCandidateMatcher;
 use App\Services\RegistrationRequestManager;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class RegistrationRequestController extends Controller
@@ -19,16 +22,23 @@ class RegistrationRequestController extends Controller
         private readonly RegistrationCandidateMatcher $candidateMatcher,
     ) {}
 
-    public function index(): View
+    public function index(Request $request): View
     {
         $this->authorize('viewAny', RegistrationRequest::class);
 
+        $validated = $request->validate([
+            'status' => ['nullable', Rule::in(['all', ...array_column(RegistrationRequestStatus::cases(), 'value')])],
+        ]);
+        $status = $validated['status'] ?? RegistrationRequestStatus::Pending->value;
+
         return view('registration-requests.index', [
+            'selectedStatus' => $status,
             'registrationRequests' => RegistrationRequest::query()
                 ->with(['parcel', 'reviewer', 'user'])
+                ->when($status !== 'all', fn ($query) => $query->where('status', $status))
                 ->orderByRaw("status = 'pending' desc")
                 ->latest()
-                ->paginate(20),
+                ->paginate(20)->withQueryString(),
         ]);
     }
 
@@ -75,7 +85,7 @@ class RegistrationRequestController extends Controller
         );
 
         return redirect()->route('registration-requests.index')
-            ->with('status', 'Pächterkonto wurde freigegeben und mit dem Mitglied verknüpft.');
+            ->with('status', 'Konto wurde freigegeben und mit dem Mitglied verknüpft. Die weitere Bearbeitung erfolgt in der Mitgliederverwaltung. Eine noch offene E-Mail-Bestätigung bleibt erforderlich.');
     }
 
     public function reject(

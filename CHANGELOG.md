@@ -2,6 +2,32 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.101] - 2026-09-09
+
+### Stabilisierung bestehender Abläufe
+
+- Registrierungsfreigabe bestätigt E-Mail-Adressen nicht mehr automatisch;
+  alte Anfragen erhalten bei Kontoanlage einen Bestätigungslink.
+- Offene Anfragen sind vorgefiltert, abgeschlossene bleiben über Statusfilter
+  erreichbar und verlinken das zugehörige Mitglied abhängig von dessen Policy.
+- Auswahltext erklärt automatische Mitgliedsanlage; Spezifikation berichtigt.
+- Rechtewechsel prüfen Akteur und Ziel erneut innerhalb der Transaktion,
+  sperren Administratorkonten und behandeln ungültige Rechtefelder als Formularfehler.
+- Demo-Modus sperrt direkte Aufrufe für Registrierung, Passwort-/Rechtewechsel,
+  vollständige Backups, Restore, Pseudonymisierung und Schlüsselanzeige. Betroffene Oberflächen
+  zeigen Einschränkungen; Mail-Events verhindern auch expliziten Mailerversand.
+- Persönliche Portalverweise filtern eigene Meldungen und Rechnungen auch für
+  Vorstand/Administrator. Vereinsweite Prüfungen erscheinen nicht als persönliche
+  Ablehnungen. Zähler-Ablehnungsgründe sind im Portal sichtbar.
+- Archivierte Dokumente werden aus der Portalvorschau entfernt.
+- Sicherheitsupdates für Dompdf, Guzzle einschließlich PSR-7/Promises, CommonMark,
+  Axios, Immutable, Nanoid und PostCSS innerhalb bestehender Versionsvorgaben.
+- Regressionstests für Registrierung bis Portalzugriff, Rechtewechsel, Demo-Sperren,
+  Versandblockade und persönliche Ansichten ergänzt. Keine Datenbankmigration nötig.
+- Gesamtsuite mit 246 erfolgreichen Tests; Demo-/Datenschutztests nach letzter
+  Ergänzung erneut erfolgreich. Pint, Composer-Validierung, beide Paketaudits
+  und Frontend-Build erfolgreich; bestehende Sass-Abkündigungshinweise bleiben.
+
 ## [0.2.0.100] - 2026-06-17
 
 ### Mitgliedsbearbeitung nach Registrierung

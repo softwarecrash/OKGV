@@ -75,6 +75,7 @@ use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
@@ -103,6 +104,10 @@ class AppServiceProvider extends ServiceProvider
         if (config('demo.enabled')) {
             config(['mail.default' => 'log']);
         }
+
+        Event::listen(MessageSending::class, function (): ?bool {
+            return config('demo.enabled') ? false : null;
+        });
 
         Paginator::useBootstrapFive();
 

@@ -26,6 +26,7 @@ class MeterReadingSubmissionController extends Controller
     public function index(Request $request): View
     {
         $this->authorize('viewAny', MeterReadingSubmission::class);
+        $ownOnly = $request->boolean('own') || ! $request->user()->canReviewMeterReadingSubmissions();
 
         $submissions = MeterReadingSubmission::query()
             ->with([
@@ -35,18 +36,20 @@ class MeterReadingSubmissionController extends Controller
                 'reviewer',
             ])
             ->when(
-                $request->user()->hasTenantAccess() && ! $request->user()->canReviewMeterReadingSubmissions(),
+                $ownOnly,
                 fn ($query) => $query->where('submitted_by', $request->user()->id),
             )
             ->orderByRaw("status = 'pending' desc")
             ->latest()
-            ->paginate(20);
-        $unresolvedRejectedIds = $request->user()->hasTenantAccess() && ! $request->user()->canReviewMeterReadingSubmissions()
+            ->paginate(20)->withQueryString();
+        $unresolvedRejectedIds = $request->user()->hasTenantAccess()
             ? MeterReadingSubmission::query()
                 ->unresolvedRejectedForUser($request->user()->id)
                 ->pluck('id')
             : collect();
-        $actionIndicators = $this->actionIndicatorService->forUser($request->user());
+        $actionIndicators = $ownOnly
+            ? $this->actionIndicatorService->forTenantPortal($request->user())
+            : $this->actionIndicatorService->forUser($request->user());
 
         $submissions->getCollection()->each(function (
             MeterReadingSubmission $submission,
@@ -80,6 +83,7 @@ class MeterReadingSubmissionController extends Controller
         return view('meter-reading-submissions.index', compact(
             'submissions',
             'actionIndicators',
+            'ownOnly',
         ));
     }
 

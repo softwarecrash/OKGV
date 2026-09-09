@@ -89,10 +89,6 @@ final class RegistrationRequestManager
                 ]);
             }
 
-            if (! $user->hasVerifiedEmail()) {
-                $user->markEmailAsVerified();
-            }
-
             if ($registrationRequest->user_id !== $user->id) {
                 $registrationRequest->user()->associate($user);
             }
@@ -133,6 +129,10 @@ final class RegistrationRequestManager
 
             return $user;
         });
+
+        if ($user->wasRecentlyCreated && ! $user->hasVerifiedEmail()) {
+            $user->sendEmailVerificationNotification();
+        }
 
         return $user;
     }

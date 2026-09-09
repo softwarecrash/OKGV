@@ -3,7 +3,19 @@
 @section('content')
 <div class="container">
     <h1 class="h2 mb-2">Registrierungsanfragen</h1>
-    <p class="text-secondary mb-4">Prüfe Identität und Pachtzuordnung sorgfältig. Das Benutzerkonto existiert bereits, wird aber erst nach Freigabe nutzbar.</p>
+    <p class="text-secondary mb-4">Prüfe Identität und gegebenenfalls die Pachtzuordnung. Nach der Freigabe findest du das Mitglied in der Mitgliederverwaltung.</p>
+    <form method="GET" class="d-flex flex-wrap align-items-end gap-2 mb-3">
+        <div>
+            <label class="form-label" for="status">Anfragen anzeigen</label>
+            <select class="form-select" name="status" id="status">
+                @foreach (\App\Enums\RegistrationRequestStatus::cases() as $status)
+                    <option value="{{ $status->value }}" @selected($selectedStatus === $status->value)>{{ $status->label() }}</option>
+                @endforeach
+                <option value="all" @selected($selectedStatus === 'all')>Alle Anfragen</option>
+            </select>
+        </div>
+        <button class="btn btn-outline-primary">Anzeigen</button>
+    </form>
     <div class="card border-0 shadow-sm">
         <div class="table-responsive">
             <table class="table align-middle mb-0">

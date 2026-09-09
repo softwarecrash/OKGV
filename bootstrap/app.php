@@ -3,6 +3,7 @@
 use App\Http\Middleware\EnsureModuleEnabled;
 use App\Http\Middleware\EnsureRegistrationApproved;
 use App\Http\Middleware\LoadApplicationSettings;
+use App\Http\Middleware\ProtectDemoInstallation;
 use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -22,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web(append: [
+            ProtectDemoInstallation::class,
             LoadApplicationSettings::class,
             SecurityHeaders::class,
         ]);

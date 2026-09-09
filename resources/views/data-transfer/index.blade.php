@@ -86,7 +86,9 @@
         </div>
     </div>
 
-    @if (auth()->user()->isAdministrator())
+    @if (auth()->user()->isAdministrator() && config('demo.enabled'))
+        <div class="alert alert-info mt-4">Vollständige Backups, Wiederherstellung und die Anzeige des Anwendungsschlüssels sind in der öffentlichen Demo gesperrt.</div>
+    @elseif (auth()->user()->isAdministrator())
         <section class="mt-5">
             <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
                 <div>

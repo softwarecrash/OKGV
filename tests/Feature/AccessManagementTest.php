@@ -8,6 +8,8 @@ use App\Models\ApplicationSetting;
 use App\Models\Member;
 use App\Models\PermissionProfile;
 use App\Models\User;
+use App\Services\UserAccessManager;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
@@ -15,6 +17,31 @@ use Tests\TestCase;
 class AccessManagementTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_invalid_permission_payload_is_a_form_error(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $tenant = User::factory()->create();
+
+        $this->actingAs($administrator)->put(route('user-permissions.update', $tenant), [
+            'role' => UserRole::Board->value,
+            'permissions' => 'invalid',
+        ])->assertSessionHasErrors('permissions');
+
+        $this->assertSame(UserRole::Tenant, $tenant->fresh()->role);
+    }
+
+    public function test_access_service_rechecks_a_subject_promoted_since_form_was_loaded(): void
+    {
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $tenant = User::factory()->create();
+        User::query()->whereKey($tenant->id)->update(['is_system_admin' => true]);
+
+        $this->expectException(AuthorizationException::class);
+        app(UserAccessManager::class)->update(
+            $tenant, UserRole::Tenant, false, [], null, $board,
+        );
+    }
 
     public function test_administrator_can_promote_tenant_to_board_with_permission_profile(): void
     {

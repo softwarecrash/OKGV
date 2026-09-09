@@ -1,5 +1,14 @@
 # TODO
 
+## Stabilisierung bestehender Abläufe
+
+- [x] Registrierungsfreigabe von E-Mail-Bestätigung trennen und Mitgliedsabschluss sichtbar machen
+- [x] Rechtewechsel serverseitig gegen veraltete Zustände und ungültige Eingaben absichern
+- [x] Demo-Zugänge, Schlüssel, Backups und externen Mailversand schützen
+- [x] Persönliche Portalhinweise zu den eigenen Meldungen führen
+- [x] Bekannte Paket-Sicherheitsmeldungen durch gezielte kompatible Updates beheben
+- [x] Gesamttests, Formatierung, Build und Paketprüfungen durchführen (246 Tests; zusätzliche Demo-/Datenschutzprüfung nach letzter Sperre erfolgreich)
+
 Der verbindliche Gesamtfahrplan mit den Phasen 0 bis 34 steht in
 `PHASE_PLAN.md`. In dieser Datei werden die jeweils aktive Phase und
 projektweite Einzelaufgaben detailliert geführt.

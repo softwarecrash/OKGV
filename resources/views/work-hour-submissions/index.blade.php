@@ -6,7 +6,7 @@
         <div>
             <h1 class="h2 mb-1">Arbeitsstundenmeldungen</h1>
             <p class="text-secondary mb-0">
-                @if (auth()->user()->hasTenantAccess())
+                @if ($ownOnly)
                     Deine Meldungen können nach dem Absenden nicht verändert werden.
                 @else
                     Prüfe Tätigkeit, Parzellenzuordnung und Nachweis. Erst die Bestätigung übernimmt die Stunden.
@@ -17,7 +17,13 @@
             <a class="btn btn-primary" href="{{ route('work-hour-submissions.create') }}">Arbeitsstunden melden</a>
         @endif
     </div>
-    @if (auth()->user()->hasTenantAccess() && $actionIndicators['work_hour_submissions'] > 0)
+    @if (auth()->user()->canManageWorkEvents() && auth()->user()->hasTenantAccess())
+        <div class="d-flex gap-2 mb-3">
+            <a class="btn btn-outline-primary" href="{{ route('work-hour-submissions.index', ['own' => 1]) }}">Meine Meldungen</a>
+            <a class="btn btn-outline-primary" href="{{ route('work-hour-submissions.index') }}">Alle Meldungen prüfen</a>
+        </div>
+    @endif
+    @if ($ownOnly && $actionIndicators['work_hour_submissions'] > 0)
         <div class="alert alert-warning" role="status">
             <strong>
                 {{ $actionIndicators['work_hour_submissions'] }}

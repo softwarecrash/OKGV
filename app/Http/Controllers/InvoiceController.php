@@ -19,7 +19,7 @@ class InvoiceController extends Controller
         $invoices = Invoice::query()
             ->with(['member', 'billingPeriod'])
             ->when(
-                ! $request->user()->canManageBilling(),
+                $request->boolean('own') || ! $request->user()->canManageBilling(),
                 fn ($query) => $query
                     ->where(function ($query) use ($request): void {
                         $query->whereHas('recipients.member', fn ($query) => $query
@@ -30,7 +30,7 @@ class InvoiceController extends Controller
                     ->where('status', 'approved'),
             )
             ->latest('issued_at')
-            ->paginate(20);
+            ->paginate(20)->withQueryString();
 
         return view('invoices.index', compact('invoices'));
     }

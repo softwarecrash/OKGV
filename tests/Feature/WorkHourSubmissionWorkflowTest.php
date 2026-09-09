@@ -24,6 +24,30 @@ class WorkHourSubmissionWorkflowTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_board_tenant_personal_view_only_contains_own_submissions(): void
+    {
+        $user = User::factory()->create(['role' => UserRole::Board]);
+        Member::factory()->create(['user_id' => $user->id]);
+        $period = BillingPeriod::factory()->create();
+        $parcel = Parcel::factory()->create();
+        foreach ([$user, User::factory()->create()] as $submitter) {
+            WorkHourSubmission::create([
+                'billing_period_id' => $period->id,
+                'parcel_id' => $parcel->id,
+                'submitted_by' => $submitter->id,
+                'worked_at' => today(),
+                'hours' => '1.00',
+                'description' => 'Wege gereinigt',
+                'status' => WorkHourSubmissionStatus::Pending,
+            ]);
+        }
+
+        $this->actingAs($user)->get(route('work-hour-submissions.index', ['own' => 1]))
+            ->assertOk()->assertViewHas('submissions', fn ($rows) => $rows->count() === 1 && $rows->first()->submitted_by === $user->id);
+        $this->get(route('work-hour-submissions.index'))->assertOk()
+            ->assertViewHas('submissions', fn ($rows) => $rows->count() === 2);
+    }
+
     public function test_board_can_record_work_hours_for_any_leased_parcel(): void
     {
         $board = User::factory()->create(['role' => UserRole::GardenManager]);

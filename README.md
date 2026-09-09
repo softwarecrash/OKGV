@@ -8,6 +8,15 @@ OKGV ist eine moderne, sichere und selbsthostbare Laravel-Anwendung. Eine Instal
 
 ## Aktueller Stand
 
+Registrierungen erzeugen bei der Freigabe automatisch ein Mitglied, sofern kein
+vorhandenes ausgewählt wird. Die E-Mail-Bestätigung bleibt zusätzlich notwendig.
+Erledigte Anfragen sind über den Statusfilter erreichbar. Persönliche Links im
+Portal zeigen auch bei Vorständen nur die eigenen Meldungen und Rechnungen.
+
+In der öffentlichen Demo sind Passwort- und Rechteänderungen, Registrierung,
+vollständige Backups, Restore, Pseudonymisierung und die Anzeige des Anwendungsschlüssels gesperrt.
+Externen Mailversand verhindert zusätzlich eine zentrale Versandsperre.
+
 Die Basisversion `0.2.0` wird während der Bauphase mit einer fortlaufenden vierten Stelle ergänzt. Der aktuelle Entwicklungsstand wird in `VERSION` geführt.
 
 - Laravel 13 und PHP 8.3+

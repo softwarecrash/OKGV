@@ -122,6 +122,10 @@
                         @can('anonymize', $erasureRequest)
                             @if ($erasureRequest->status === App\Enums\PrivacyErasureStatus::Ready)
                                 <form class="mt-3 border border-danger rounded p-3" method="POST" action="{{ route('privacy-erasure-requests.anonymize', $erasureRequest) }}">
+                                    @if (config('demo.enabled'))
+                                        <p>Die Pseudonymisierung ist in der Demo gesperrt, damit die Testzugänge erhalten bleiben.</p>
+                                    @endif
+                                    <fieldset @disabled(config('demo.enabled'))>
                                     @csrf
                                     <h3 class="h6 text-danger">Endgültige Pseudonymisierung</h3>
                                     <p class="small">Diese Aktion entfernt Kontaktdaten und sperrt das verknüpfte Pächterkonto. Historische Fachdatensätze bleiben unter einer anonymen Referenz erhalten.</p>
@@ -130,6 +134,7 @@
                                     <label class="form-label" for="confirmation_{{ $erasureRequest->id }}">Zur Bestätigung PSEUDONYMISIEREN eingeben</label>
                                     <input class="form-control" id="confirmation_{{ $erasureRequest->id }}" name="confirmation" required autocomplete="off">
                                     <button class="btn btn-danger mt-2" type="submit">Personendaten pseudonymisieren</button>
+                                    </fieldset>
                                 </form>
                             @endif
                         @endcan

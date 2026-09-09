@@ -27,11 +27,46 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
 
 class TenantPortalTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_registration_verification_approval_and_portal_work_without_manual_member_creation(): void
+    {
+        Notification::fake();
+        $this->post(route('tenant-registration.store'), [
+            'first_name' => 'Erika',
+            'last_name' => 'Mustermann',
+            'email' => 'full-flow@example.test',
+            'password' => 'SicheresPasswort123',
+            'password_confirmation' => 'SicheresPasswort123',
+        ])->assertRedirect(route('login'));
+        $user = User::query()->where('email', 'full-flow@example.test')->firstOrFail();
+        $request = RegistrationRequest::query()->where('user_id', $user->id)->firstOrFail();
+        $this->post(route('login'), [
+            'email' => $user->email,
+            'password' => 'SicheresPasswort123',
+        ])->assertRedirect('/dashboard');
+        $this->get(URL::temporarySignedRoute('verification.verify', now()->addMinutes(60), [
+            'id' => $user->id,
+            'hash' => sha1($user->email),
+        ]))->assertRedirect();
+        $this->assertTrue($user->fresh()->hasVerifiedEmail());
+        $this->get(route('home'))->assertRedirect(route('registration.pending'));
+
+        $admin = User::factory()->administrator()->create();
+        $this->actingAs($admin)->post(route('registration-requests.approve', $request))
+            ->assertRedirect(route('registration-requests.index'));
+        $member = $user->fresh()->member;
+        $this->assertNotNull($member);
+        $this->get(route('members.edit', $member))->assertOk();
+        $this->actingAs($user->fresh())->get(route('tenant-portal.index'))
+            ->assertOk()->assertSee($member->member_number)->assertSee('Keine aktuelle Parzelle zugeordnet.');
+        $this->assertDatabaseCount('members', 1);
+    }
 
     public function test_public_registration_waits_for_board_approval(): void
     {
@@ -110,7 +145,7 @@ class TenantPortalTest extends TestCase
         $user = User::query()->where('email', 'technik@example.test')->firstOrFail();
         $this->assertSame('Technik Helfer', $user->name);
         $this->assertSame(UserRole::Tenant, $user->role);
-        $this->assertTrue($user->hasVerifiedEmail());
+        $this->assertFalse($user->hasVerifiedEmail());
         $member = Member::query()->where('email', 'technik@example.test')->firstOrFail();
         $this->assertSame($user->id, $member->user_id);
         $this->assertSame('Technik', $member->first_name);
@@ -118,7 +153,7 @@ class TenantPortalTest extends TestCase
         $this->assertDatabaseMissing('parcel_tenants', [
             'member_id' => $member->id,
         ]);
-        Notification::assertNothingSent();
+        Notification::assertSentTo($user, VerifyEmailNotification::class);
         $this->assertSame(RegistrationRequestStatus::Approved, $registrationRequest->fresh()->status);
     }
 
@@ -233,8 +268,8 @@ class TenantPortalTest extends TestCase
 
         $user = User::query()->where('email', 'tenant@example.test')->firstOrFail();
         $this->assertSame(UserRole::Tenant, $user->role);
-        $this->assertTrue($user->hasVerifiedEmail());
-        Notification::assertNothingSent();
+        $this->assertFalse($user->hasVerifiedEmail());
+        Notification::assertSentTo($user, VerifyEmailNotification::class);
         $this->assertSame($user->id, $member->fresh()->user_id);
         $this->assertNull($registrationRequest->fresh()->password);
         $this->assertSame(
@@ -283,7 +318,9 @@ class TenantPortalTest extends TestCase
         $this->assertSame('Neue', $member->first_name);
         $this->assertSame('Pächterin', $member->last_name);
         $this->assertSame(RegistrationRequestStatus::Approved, $registrationRequest->fresh()->status);
-        $this->assertTrue($user->fresh()->hasVerifiedEmail());
+        $this->assertFalse($user->fresh()->hasVerifiedEmail());
+        $this->actingAs($user)->get(route('home'))
+            ->assertRedirect(route('verification.notice'));
         $this->assertDatabaseHas('parcel_tenants', [
             'parcel_id' => $parcel->id,
             'member_id' => $member->id,
@@ -630,6 +667,8 @@ class TenantPortalTest extends TestCase
         Storage::disk('local')->put('documents/parcel.pdf', 'parcel');
         Storage::disk('local')->put('documents/foreign.pdf', 'foreign');
         $ownDocument = $this->document($administrator, 'Eigenes Dokument', 'documents/own.pdf', member: $member);
+        $this->document($administrator, 'Archiviertes Dokument', 'documents/archive.pdf', member: $member)
+            ->update(['archived_at' => now()]);
         $this->document($administrator, 'Parzellendokument', 'documents/parcel.pdf', parcel: $parcel);
         $foreignDocument = $this->document($administrator, 'Fremdes Dokument', 'documents/foreign.pdf', member: $foreignMember);
         $this->document(
@@ -648,6 +687,7 @@ class TenantPortalTest extends TestCase
             ->assertSee('R-OWN')
             ->assertDontSee('R-FOREIGN')
             ->assertSee('Eigenes Dokument')
+            ->assertDontSee('Archiviertes Dokument')
             ->assertDontSee('Fremdes Dokument')
             ->assertDontSee('Interne Notiz');
 
@@ -896,6 +936,54 @@ class TenantPortalTest extends TestCase
     /**
      * @return array{User, Member, Parcel}
      */
+    public function test_completed_requests_are_filtered_and_link_to_the_member(): void
+    {
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $user = User::factory()->create();
+        $member = Member::factory()->create(['user_id' => $user->id]);
+        $completed = RegistrationRequest::factory()->create([
+            'user_id' => $user->id,
+            'email' => $user->email,
+            'status' => RegistrationRequestStatus::Approved,
+        ]);
+        $pending = RegistrationRequest::factory()->create();
+
+        $this->actingAs($board)->get(route('registration-requests.index'))
+            ->assertOk()->assertSee($pending->email)->assertDontSee($completed->email);
+        $this->get(route('registration-requests.index', ['status' => 'approved']))
+            ->assertOk()->assertSee($completed->email)->assertDontSee($pending->email);
+        $this->get(route('registration-requests.show', $completed))
+            ->assertOk()->assertSee(route('members.show', $member));
+    }
+
+    public function test_board_tenant_can_switch_between_own_and_all_meter_submissions(): void
+    {
+        [$user] = $this->tenantScenario();
+        $user->update(['role' => UserRole::Board]);
+        $own = MeterReadingSubmission::factory()->create([
+            'submitted_by' => $user->id,
+            'status' => MeterReadingSubmissionStatus::Rejected,
+            'review_note' => 'Bitte den richtigen Zähler ablesen.',
+        ]);
+        $foreign = MeterReadingSubmission::factory()->create();
+
+        $this->actingAs($user)->get(route('meter-reading-submissions.index', ['own' => 1]))
+            ->assertOk()
+            ->assertViewHas('submissions', fn ($rows) => $rows->modelKeys() === [$own->id])
+            ->assertSee($own->review_note);
+        $this->get(route('meter-reading-submissions.index'))
+            ->assertOk()
+            ->assertViewHas('submissions', fn ($rows) => $rows->count() === 2)
+            ->assertDontSee('abgelehnt und muss erneut eingereicht werden.');
+        $this->get(route('tenant-portal.index'))->assertOk()
+            ->assertSee(route('meter-reading-submissions.index', ['own' => 1]));
+
+        $user->update(['role' => UserRole::Tenant]);
+        $this->get(route('meter-reading-submissions.index', ['own' => 0]))
+            ->assertOk()
+            ->assertViewHas('submissions', fn ($rows) => ! $rows->contains('id', $foreign->id));
+    }
+
     private function tenantScenario(): array
     {
         $tenant = User::factory()->create(['role' => UserRole::Tenant]);

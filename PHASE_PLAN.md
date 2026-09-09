@@ -354,6 +354,9 @@ vorherigen Phase geprüft sein.
 
 ## Nächster Schritt
 
+Die Stabilisierung von Registrierung, Rechtewechseln, Demo-Schutz und
+persönlichen Portalansichten ist im Entwicklungsstand 0.2.0.101 umgesetzt.
+
 Die Phasen 0 bis 19 sind abgeschlossen. Als nächste reguläre Fachphase folgt
 Phase 20 mit Schwarzem Brett und Vereinsnews. Die große Deployment-Phase ist
 bewusst ans Ende verschoben, weil Webhosting und Plesk vorerst ausreichen.

@@ -59,6 +59,7 @@
                         @else
                             <form method="POST" action="{{ route('user-permissions.update', $user) }}"
                                   onsubmit="return confirm('Rolle und Rechte für {{ addslashes($user->name) }} wirklich speichern? Der Zugriff ändert sich sofort.')">
+                                <fieldset @disabled(config('demo.enabled'))>
                                 @csrf
                                 @method('PUT')
 
@@ -152,6 +153,10 @@
                                 @endif
 
                                 <button class="btn btn-primary mt-4">Rolle und Rechte speichern</button>
+                                @if (config('demo.enabled'))
+                                    <p class="form-text">Rollen und Rechte der öffentlichen Demo können nicht geändert werden.</p>
+                                @endif
+                                </fieldset>
                             </form>
                         @endif
                     </div>

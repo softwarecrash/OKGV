@@ -28,16 +28,17 @@ class WorkHourSubmissionController extends Controller
     public function index(Request $request): View
     {
         $this->authorize('viewAny', WorkHourSubmission::class);
+        $ownOnly = $request->boolean('own') || ! $request->user()->canManageWorkEvents();
 
         $submissions = WorkHourSubmission::query()
             ->with(['parcel', 'submitter.member', 'reviewer'])
             ->when(
-                $request->user()->hasTenantAccess() && ! $request->user()->canManageWorkEvents(),
+                $ownOnly,
                 fn ($query) => $query->where('submitted_by', $request->user()->id),
             )
             ->orderByRaw("status = 'pending' desc")
             ->latest()
-            ->paginate(20);
+            ->paginate(20)->withQueryString();
         $unresolvedRejectedIds = $request->user()->hasTenantAccess()
             ? WorkHourSubmission::query()
                 ->unresolvedRejectedForUser($request->user()->id)
@@ -53,7 +54,8 @@ class WorkHourSubmissionController extends Controller
 
         return view('work-hour-submissions.index', [
             'submissions' => $submissions,
-            'actionIndicators' => $request->user()->hasTenantAccess()
+            'ownOnly' => $ownOnly,
+            'actionIndicators' => $ownOnly
                 ? $this->actionIndicatorService->forTenantPortal($request->user())
                 : $this->actionIndicatorService->forUser($request->user()),
         ]);

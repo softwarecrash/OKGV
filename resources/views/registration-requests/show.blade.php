@@ -38,7 +38,7 @@
         <div class="alert alert-warning">
             Vergleiche die Angaben mit dem Pachtvertrag oder einem anderen verlässlichen Vereinsnachweis.
             Das Konto kann ohne vorher manuell angelegtes Mitglied freigegeben werden. Wenn kein Mitglied ausgewählt ist, legt OKGV automatisch einen Mitgliedsstammsatz an. Mit angegebener Parzelle wird zusätzlich die Pächterhistorie eingetragen.
-            Bei der Freigabe wird eine noch offene E-Mail-Bestätigung übernommen, wenn die Identität anderweitig geprüft wurde.
+            Eine noch offene E-Mail-Bestätigung muss der Benutzer selbst über den Bestätigungslink abschließen.
         </div>
         @if ($recommendedCandidate)
             <div class="alert alert-success">
@@ -66,7 +66,7 @@
                         name="member_id"
                         data-registration-member-select
                         data-registration-email="{{ $registrationRequest->email }}">
-                        <option value="">Kein Mitglied zuordnen</option>
+                        <option value="">Neues Mitglied aus dieser Anfrage anlegen</option>
                         @foreach ($candidates as $member)
                             <option
                                 value="{{ $member->id }}"
@@ -232,7 +232,12 @@
         <div class="alert alert-secondary">
             Diese Anfrage ist nicht mehr offen. Eine Freigabe oder Ablehnung ist nur bei offenen Anfragen möglich.
             @if ($registrationRequest->status === \App\Enums\RegistrationRequestStatus::Approved)
-                Wenn das Konto bereits mit einem Mitglied verbunden ist, erfolgt die weitere Bearbeitung über die Mitgliederverwaltung.
+                @if ($resolvedUser?->member)
+                    Das Mitglied wurde erfolgreich zugeordnet. Weitere Stammdaten und Parzellen kannst du in der Mitgliederverwaltung bearbeiten.
+                    @can('view', $resolvedUser->member)
+                        <div class="mt-3"><a class="btn btn-primary" href="{{ route('members.show', $resolvedUser->member) }}">Mitglied öffnen</a></div>
+                    @endcan
+                @endif
             @endif
         </div>
     @endcan

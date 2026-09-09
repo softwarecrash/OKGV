@@ -71,6 +71,7 @@ class TenantPortalController extends Controller
             ? Document::query()
                 ->where('visibility', DocumentVisibility::Tenant)
                 ->whereNotNull('published_at')
+                ->whereNull('archived_at')
                 ->where(function ($query) use ($member, $parcelIds): void {
                     $query->where('member_id', $member->id)
                         ->orWhereIn('parcel_id', $parcelIds);

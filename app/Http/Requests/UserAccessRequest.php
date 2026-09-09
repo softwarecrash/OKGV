@@ -13,20 +13,7 @@ class UserAccessRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $actor = $this->user();
-        $subject = $this->route('user');
-
-        if (! $actor instanceof User || ! $subject instanceof User || $actor->is($subject)) {
-            return false;
-        }
-
-        if ($actor->isAdministrator()) {
-            return true;
-        }
-
-        return $actor->role === UserRole::Board
-            && ! $subject->isAdministrator()
-            && in_array($subject->role, [UserRole::Board, UserRole::Tenant], true);
+        return $this->user()->can('updateAccess', $this->route('user'));
     }
 
     public function rules(): array
@@ -127,9 +114,9 @@ class UserAccessRequest extends FormRequest
             'is_system_admin' => $this->user()?->isAdministrator()
                 ? $this->boolean('is_system_admin')
                 : false,
-            'permissions' => UserPermission::expandDependencies(
-                $permissions,
-            ),
+            'permissions' => is_array($permissions) && count(array_filter($permissions, 'is_string')) === count($permissions)
+                ? UserPermission::expandDependencies($permissions)
+                : $permissions,
         ]);
     }
 }
