@@ -23,6 +23,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
   Pseudonymisierung. Lokale MariaDB ausschließlich vorwärts migriert, keine
   bestehenden Daten gelöscht. Pint, Build, Composer-Validierung und beide
   Paketaudits erfolgreich; bekannte Bootstrap/Sass-Abkündigungshinweise bleiben.
+- Implementierung auf GitHub veröffentlicht; Abschluss in TODO und Phasenplan dokumentiert.
 
 ### Planung
 

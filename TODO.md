@@ -17,7 +17,7 @@ Als Nächstes: Phase 22 (Aufgaben und Wiedervorlagen), gemäß `PHASE_PLAN.md`.
 - [x] Navigation, Aktionshinweise, Backup und Datenschutz integrieren
 - [x] Fachtests, Migrationsprüfung, Gesamttests, Build und Audits abschließen (273 Tests erfolgreich)
 - [x] Entwicklungsstand 0.2.0.103 dokumentieren
-- [ ] Entwicklungsstand veröffentlichen
+- [x] Entwicklungsstand 0.2.0.103 auf GitHub veröffentlichen
 
 ## Phase 20: Schwarzes Brett
 
