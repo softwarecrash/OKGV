@@ -30,6 +30,7 @@ Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
   Erhaltung alter Aufgaben bei Migration, Wiederholungen, Rechteentzug und
   Datenschutz-Pseudonymisierung. Pint, Build, Composer-Validierung und beide
   Paketaudits erfolgreich. Bekannte Bootstrap/Sass-Abkündigungshinweise bleiben.
+- Auf GitHub veröffentlicht und Abschluss in TODO sowie Phasenplan dokumentiert.
 
 ## [0.2.0.103] - 2026-09-09
 

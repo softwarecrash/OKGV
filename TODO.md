@@ -16,7 +16,7 @@ Als Nächstes: Phase 23 (Umfragen und Terminabfragen), gemäß `PHASE_PLAN.md`.
 - [x] Beschlussansichten, Navigation, Module und Datenschutz integrieren
 - [x] Fachtests, Migrationen, Gesamttests, Build und Audits abschließen (288 Tests erfolgreich)
 - [x] Entwicklungsstand 0.2.0.104 dokumentieren
-- [ ] Entwicklungsstand 0.2.0.104 veröffentlichen
+- [x] Entwicklungsstand 0.2.0.104 auf GitHub veröffentlichen
 
 ## Phase 21: Vorstandsarbeit
 
