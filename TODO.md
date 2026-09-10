@@ -5,7 +5,18 @@
 - [x] Vorstandsarbeit, Aufgaben, Umfragen und Mitgliederversammlung als Phasen 21 bis 24 vorziehen
 - [x] Offene Folgephasen neu nummerieren und Abhängigkeiten erhalten
 
-Als Nächstes: Phase 22 (Aufgaben und Wiedervorlagen), gemäß `PHASE_PLAN.md`.
+Als Nächstes: Phase 23 (Umfragen und Terminabfragen), gemäß `PHASE_PLAN.md`.
+
+## Phase 22: Aufgaben und Wiedervorlagen
+
+- [x] Bestehende Beschlussaufgaben prüfen und Erweiterungs-/Rechtekonzept spezifizieren
+- [x] Additive Migrationen, zentrale Models und Policies umsetzen
+- [x] Zentrale Liste, Zuordnung, Statuswechsel und Verknüpfungen umsetzen
+- [x] Wiedervorlagen, eindeutige Wiederholungen und Aufgabenhistorie umsetzen
+- [x] Beschlussansichten, Navigation, Module und Datenschutz integrieren
+- [x] Fachtests, Migrationen, Gesamttests, Build und Audits abschließen (288 Tests erfolgreich)
+- [x] Entwicklungsstand 0.2.0.104 dokumentieren
+- [ ] Entwicklungsstand 0.2.0.104 veröffentlichen
 
 ## Phase 21: Vorstandsarbeit
 

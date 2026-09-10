@@ -8,6 +8,28 @@ OKGV ist eine moderne, sichere und selbsthostbare Laravel-Anwendung. Eine Instal
 
 ## Aktueller Stand
 
+**Aufgaben und Wiedervorlagen:** Unter **Kommunikation → Aufgaben / Wiedervorlagen**
+werden allgemeine Aufgaben und die bestehenden Beschlussaufgaben gemeinsam
+verwaltet. Zuweisung, Fälligkeit, Wiedervorlage, Status, Verknüpfungen und Verlauf
+sind direkt am Auftrag sichtbar. Zuständige dürfen beginnen und erledigen;
+Verwalter können auch umverteilen, begründet abbrechen und abgeschlossene Aufgaben
+reversibel archivieren. Die bisherigen Beschlussaufgaben werden nicht kopiert.
+
+Wiederholungen (wöchentlich, monatlich, jährlich) erzeugen beim Erledigen genau
+einen Folgetermin. Monatsenden und Schaltjahre werden berücksichtigt; verspätete
+Erledigung überspringt keine Termine. „Keine“ beendet die Wiederholung vor dem
+Abschluss. Hinweise erscheinen ab Wiedervorlage, sonst ab Fälligkeit. Dafür ist
+kein Mailversand oder zusätzlicher Cronjob erforderlich.
+
+Die Rechte „Eigene Verwaltungsaufgaben bearbeiten“ und „Aufgaben und Wiedervorlagen
+verwalten“ können in der Rechteverwaltung vergeben werden. Bestehende individuelle
+Rechte werden nicht automatisch erweitert. Beschlussaufgaben verlangen weiterhin
+Vorstandsleserecht; verknüpfte Dokumente und Stammdaten behalten eigene Policies.
+`OKGV_MODULE_TASKS=false` deaktiviert die zentrale Verwaltung ohne Datenverlust.
+Einfache Beschlussaufgaben bleiben dann nutzbar; wiederkehrende Aufgaben müssen
+bei aktiviertem Aufgabenmodul abgeschlossen werden. Nach dem Update sind die
+neuen Migrationen mit `php artisan migrate --force` anzuwenden.
+
 **Vorstandsarbeit:** Unter **Kommunikation → Vorstandssitzungen / Beschlussbuch**
 stehen Sitzungsplanung, Tagesordnung, Protokolle und Beschlüsse zur Verfügung.
 Die Rechte „Vertrauliche Vorstandsunterlagen lesen“ und „Sitzungen und Beschlüsse
@@ -19,8 +41,8 @@ und als private PDF gesichert. Korrekturen erfolgen durch neue dokumentierte
 Beschlüsse. Aus angenommenen Beschlüssen lassen sich Aufgaben mit Zuständigkeit
 und Fälligkeit erfassen. Der Aktionspunkt zeigt bearbeitbare fällige Aufgaben;
 „Als erledigt markieren“ entfernt ihn. Archivierung ist rücknehmbar und löscht
-weder Beschlüsse noch offene Aufgaben. Die zentrale Aufgabenverwaltung folgt
-in Phase 22. Dokumentlinks behalten ihre eigenen Zugriffsrechte.
+weder Beschlüsse noch offene Aufgaben. Die zentrale Aufgabenverwaltung ist
+in Phase 22 integriert. Dokumentlinks behalten ihre eigenen Zugriffsrechte.
 
 `OKGV_MODULE_BOARD_WORK=false` deaktiviert die Vorstandsarbeit ohne Datenverlust.
 Die neuen Tabellen und privaten Protokoll-PDFs sind im Vollbackup enthalten.

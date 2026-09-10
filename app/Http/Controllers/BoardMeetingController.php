@@ -35,7 +35,8 @@ class BoardMeetingController extends Controller
         $meetings = BoardMeeting::query()->when(! $archived, fn ($query) => $query->whereNull('archived_at'))
             ->orderByDesc('scheduled_at')->paginate(15, ['*'], 'meetings_page')->withQueryString();
         $tasks = BoardFollowUp::query()->with(['resolution.meeting', 'assignee'])
-            ->when($due, fn ($query) => $query->actionableFor($request->user()), fn ($query) => $query->whereNull('completed_at'))
+            ->whereNotNull('board_resolution_id')
+            ->when($due, fn ($query) => $query->actionableFor($request->user()), fn ($query) => $query->open())
             ->orderBy('due_at')->orderBy('id')->paginate(15, ['*'], 'tasks_page')->withQueryString();
 
         return view('board-meetings.index', compact('meetings', 'tasks', 'archived', 'due'));

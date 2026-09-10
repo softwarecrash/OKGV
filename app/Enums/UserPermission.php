@@ -18,6 +18,8 @@ enum UserPermission: string
     case ManageAnnouncements = 'manage_announcements';
     case ViewBoardWork = 'view_board_work';
     case ManageBoardWork = 'manage_board_work';
+    case ViewTasks = 'view_tasks';
+    case ManageTasks = 'manage_tasks';
     case ManageDocuments = 'manage_documents';
     case ManageWorkEvents = 'manage_work_events';
     case ManageWaitingList = 'manage_waiting_list';
@@ -42,6 +44,8 @@ enum UserPermission: string
             self::ManageAnnouncements => 'Bekanntmachungen verwalten',
             self::ViewBoardWork => 'Vertrauliche Vorstandsunterlagen lesen',
             self::ManageBoardWork => 'Sitzungen und Beschlüsse verwalten',
+            self::ViewTasks => 'Eigene Verwaltungsaufgaben bearbeiten',
+            self::ManageTasks => 'Aufgaben und Wiedervorlagen verwalten',
             self::ManageDocuments => 'Dokumente verwalten',
             self::ManageWorkEvents => 'Arbeitseinsätze verwalten',
             self::ManageWaitingList => 'Warteliste verwalten',
@@ -68,6 +72,8 @@ enum UserPermission: string
             self::ManageAnnouncements => 'Erlaubt Beiträge am Schwarzen Brett zu veröffentlichen, zurückzuziehen und Lesebestätigungen einzusehen.',
             self::ViewBoardWork => 'Erlaubt Einsicht in interne Sitzungen, Protokolle und Beschlüsse sowie Erledigung eigener Beschlussaufgaben.',
             self::ManageBoardWork => 'Erlaubt Sitzungen, Protokollabschluss, Beschlüsse und deren Aufgaben zu verwalten. Umfasst vertrauliche Vorstandsunterlagen.',
+            self::ViewTasks => 'Erlaubt zugewiesene Aufgaben zu lesen, zu beginnen und zu erledigen. Beschlussaufgaben benötigen zusätzlich Vorstandsleserecht.',
+            self::ManageTasks => 'Erlaubt Aufgaben anzulegen, zuzuweisen, zu bearbeiten und abzubrechen. Vertrauliche Beschlüsse behalten ihre eigenen Rechte.',
             self::ManageDocuments => 'Erlaubt private Uploads, Dateiversionen, Freigaben und die zentrale Dokumentenverwaltung.',
             self::ManageWorkEvents => 'Erlaubt Termine, Teilnehmer und bestätigte Arbeitsstunden zu verwalten.',
             self::ManageWaitingList => 'Erlaubt den Zugriff auf Interessenten, Kontaktdaten, Prioritäten und Bearbeitungsstatus.',
@@ -91,6 +97,7 @@ enum UserPermission: string
             self::ManageCommunication => FeatureModule::Communication,
             self::ManageAnnouncements => FeatureModule::Announcements,
             self::ViewBoardWork, self::ManageBoardWork => FeatureModule::BoardWork,
+            self::ViewTasks, self::ManageTasks => FeatureModule::Tasks,
             self::ManageDocuments => FeatureModule::Documents,
             self::ManageWorkEvents => FeatureModule::WorkEvents,
             self::ManageWaitingList => FeatureModule::WaitingList,
@@ -133,6 +140,7 @@ enum UserPermission: string
     public static function expandDependencies(array $permissions): array
     {
         $dependencies = [
+            self::ManageTasks->value => self::ViewTasks->value,
             self::ManageBoardWork->value => self::ViewBoardWork->value,
             self::ManageMasterData->value => self::ViewAllMasterData->value,
             self::ManageMeters->value => self::ViewAllMeters->value,

@@ -2,6 +2,35 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.104] - 2026-09-10
+
+### Phase 22: Aufgaben und Wiedervorlagen
+
+- Bestehende Beschlussaufgabentabelle ohne Kopie zur zentralen Aufgabenbasis
+  erweitert. Alte URLs und Referenzen bleiben nutzbar; Statuswechsel verwenden
+  denselben transaktionalen Service. Keine vorhandenen Daten zurückgesetzt.
+- Eigenes Modul und granulare Aufgabenrechte. Beschlussaufgaben verlangen weiter
+  Vorstandsleserecht; individuelle Berechtigungssnapshots bleiben unverändert.
+- Zentrale Liste mit Suche, Status-, Archiv-, Zuständigkeits- und Hinweisfiltern;
+  Anlage, Bearbeitung, Zuweisung, Arbeitsbeginn, Erledigung, begründeter Abbruch
+  sowie rücknehmbare Archivierung. Endzustände bleiben unverändert.
+- Optionale Mitglieder-, Parzellen-, Dokument- und Beschlussbezüge mit eigenen
+  Zugriffsprüfungen; nicht zugreifbare Verknüpfungen werden nicht offengelegt.
+- Wiedervorlagen und rollenabhängige Hinweise ohne doppelte Beschlusszählung.
+  Wiederholungen erzeugen bei Erledigung genau einen Nachfolger, mit festem
+  Terminanker und kalendergerechten Monats-/Jahreswechseln; keine externen Mails.
+- Separate Aufgabenereignisse und Auditlog ohne Freitextkopien. Datenschutzexport
+  und Pseudonymisierung erweitert; Datenbankbackup umfasst die neuen Daten.
+- Die bisher nur unveränderbar erfassten Beschlussaufträge können jetzt vor
+  Erledigung zentral bearbeitet und umverteilt werden; Änderungen werden protokolliert.
+- Rückwärtsmigrationen verweigern Datenverlust bei bereits verwendeten neuen
+  Aufgabenfeldern oder Verlaufsereignissen. Vorwärtsmigration auf MariaDB im LXC
+  erfolgreich; vorhandene Aufgaben und sonstige Daten wurden nicht gelöscht.
+- 288 Tests mit 2039 Assertions erfolgreich, einschließlich 15 neuer Fachtests,
+  Erhaltung alter Aufgaben bei Migration, Wiederholungen, Rechteentzug und
+  Datenschutz-Pseudonymisierung. Pint, Build, Composer-Validierung und beide
+  Paketaudits erfolgreich. Bekannte Bootstrap/Sass-Abkündigungshinweise bleiben.
+
 ## [0.2.0.103] - 2026-09-09
 
 ### Phase 21: Vorstandsarbeit

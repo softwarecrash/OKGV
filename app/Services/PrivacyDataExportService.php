@@ -30,7 +30,15 @@ final class PrivacyDataExportService
         ]);
 
         return [
+            'tasks' => DB::table('board_follow_ups')->where(function ($query) use ($member): void {
+                $query->where('member_id', $member->id);
+                if ($member->user_id !== null) {
+                    $query->orWhere('assigned_to', $member->user_id)->orWhere('created_by', $member->user_id)->orWhere('completed_by', $member->user_id)->orWhere('cancelled_by', $member->user_id);
+                }
+            })->orderBy('id')->get(['id', 'title', 'description', 'due_at', 'remind_at', 'started_at', 'completed_at', 'cancelled_at', 'cancel_reason', 'recurrence', 'previous_task_id'])->all(),
+            'task_events' => $member->user_id === null ? [] : DB::table('task_events')->where('user_id', $member->user_id)->orderBy('id')->get(['task_id', 'action', 'changed_fields', 'created_at'])->all(),
             'board_follow_ups' => $member->user_id === null ? [] : DB::table('board_follow_ups')
+                ->whereNotNull('board_resolution_id')
                 ->where(fn ($query) => $query->where('assigned_to', $member->user_id)->orWhere('created_by', $member->user_id)->orWhere('completed_by', $member->user_id))
                 ->orderBy('id')->get(['id', 'board_resolution_id', 'title', 'description', 'due_at', 'completed_at'])->all(),
             'exported_at' => now()->toIso8601String(),

@@ -42,6 +42,7 @@ use App\Http\Controllers\PublicDocumentController;
 use App\Http\Controllers\RegistrationRequestController;
 use App\Http\Controllers\SepaMandateController;
 use App\Http\Controllers\SepaSettingController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TenantPortalController;
 use App\Http\Controllers\TenantRegistrationController;
 use App\Http\Controllers\TenantTransitionController;
@@ -99,6 +100,13 @@ Route::view('konto-wartet-auf-freigabe', 'auth.pending-approval')
     ->name('registration.pending');
 
 Route::middleware(['auth', 'verified', 'registration.approved'])->group(function (): void {
+    Route::middleware('module:tasks')->group(function (): void {
+        Route::resource('aufgaben', TaskController::class)->except('destroy')->parameters(['aufgaben' => 'task'])->names('tasks');
+        foreach (['start', 'complete', 'cancel', 'archive', 'restore'] as $action) {
+            Route::post('aufgaben/{task}/'.$action, [TaskController::class, 'action'])->name('tasks.'.$action);
+        }
+        Route::get('aufgaben/{task}/dokument', [TaskController::class, 'document'])->middleware('module:documents')->name('tasks.document');
+    });
     Route::middleware('module:board_work')->group(function (): void {
         Route::get('beschlussbuch', [BoardMeetingController::class, 'book'])->name('board-meetings.book');
         Route::resource('vorstandssitzungen', BoardMeetingController::class)->except('destroy')

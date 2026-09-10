@@ -204,7 +204,7 @@
                                     </ul>
                                 </li>
                             @endif
-                            @if ($canViewCommunication || auth()->user()->can('viewAny', App\Models\Announcement::class) || auth()->user()->can('viewAny', App\Models\BoardMeeting::class))
+                            @if ($canViewCommunication || auth()->user()->can('viewAny', App\Models\Announcement::class) || auth()->user()->can('viewAny', App\Models\BoardMeeting::class) || auth()->user()->can('viewAny', App\Models\Task::class))
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                         Kommunikation
@@ -215,14 +215,17 @@
                                             <li><a class="dropdown-item d-flex justify-content-between gap-3" href="{{ route('announcements.index') }}">Schwarzes Brett <x-action-indicator :count="$actionIndicators['announcements']" label="ungelesene Bekanntmachungen" /></a></li>
                                         @endcan
                                         @can('viewAny', App\Models\BoardMeeting::class)
-                                            <li><a class="dropdown-item d-flex justify-content-between gap-3" href="{{ route('board-meetings.index', $actionIndicators['board_work'] > 0 ? ['due' => 1] : []) }}">Vorstandssitzungen <x-action-indicator :count="$actionIndicators['board_work']" label="fällige Beschlussaufgaben" /></a></li>
+                                            <li><a class="dropdown-item d-flex justify-content-between gap-3" href="{{ route('board-meetings.index', ! App\Enums\FeatureModule::Tasks->enabled() && $actionIndicators['board_work'] > 0 ? ['due' => 1] : []) }}">Vorstandssitzungen <x-action-indicator :count="App\Enums\FeatureModule::Tasks->enabled() ? 0 : $actionIndicators['board_work']" label="fällige Beschlussaufgaben" /></a></li>
                                             <li><a class="dropdown-item" href="{{ route('board-meetings.book') }}">Beschlussbuch</a></li>
+                                        @endcan
+                                        @can('viewAny', App\Models\Task::class)
+                                            <li><a class="dropdown-item d-flex justify-content-between gap-3" href="{{ route('tasks.index', $actionIndicators['tasks'] > 0 ? ['due' => 1] : []) }}">Aufgaben / Wiedervorlagen <x-action-indicator :count="$actionIndicators['tasks']" label="Aufgaben mit Handlungsbedarf" /></a></li>
                                         @endcan
                                         @if ($canViewCommunication)
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center justify-content-between gap-3" href="{{ route('mail-campaigns.index') }}">
                                                 Serienmails
-                                                <x-action-indicator :count="$actionIndicators['communication_group'] - $actionIndicators['announcements'] - $actionIndicators['board_work']" label="fehlgeschlagene Serienmails" />
+                                                <x-action-indicator :count="$actionIndicators['communication_group'] - $actionIndicators['announcements'] - $actionIndicators['tasks'] - (App\Enums\FeatureModule::Tasks->enabled() ? 0 : $actionIndicators['board_work'])" label="fehlgeschlagene Serienmails" />
                                             </a>
                                         </li>
                                         <li><a class="dropdown-item" href="{{ route('letters.index') }}">PDF-Briefe</a></li>

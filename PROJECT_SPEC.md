@@ -1,5 +1,51 @@
 # OKGV Projektspezifikation
 
+## Phase 22: Aufgaben und Wiedervorlagen
+
+- Die vorhandene Tabelle `board_follow_ups` wird ohne Datenkopie zur zentralen
+  Aufgabenbasis erweitert. `Task` ist das zentrale Model, `BoardFollowUp` bleibt
+  als kompatibles Model für Sitzungsansichten erhalten. Bestehende Referenzen,
+  Erledigungen und Auditdaten bleiben unverändert.
+- Eigenes Modul `tasks`, Rechte `view_tasks` (eigene zugewiesene Aufgaben) und
+  `manage_tasks` (zentrale Verwaltung). Standardvorstand erhält beide, individuelle
+  Rechte-Snapshots bleiben erhalten. Personen mit Vorstandsleserecht können auch
+  ihre bisher zugreifbaren Beschlussaufgaben zentral lesen. Beschlussaufgaben
+  verlangen zusätzlich immer Vorstandsleserecht, auch für Aufgabenverwalter.
+- Optional je ein Mitglied, eine Parzelle, ein Dokument und ein angenommener
+  Beschluss einer abgeschlossenen Sitzung als Bezug. Bei Anlage/Bearbeitung
+  werden die bestehenden Policies geprüft; Links erweitern keine Zugriffsrechte.
+  Aufgabeninhalt wird bewusst an Zuständige freigegeben. Nicht mehr zugreifbare
+  Links bleiben erhalten und werden ohne Titel als eingeschränkt angezeigt.
+  Beschlusszuordnung ist nach Anlage unveränderbar. Keine öffentlichen Aufgaben.
+- Status: offen, in Bearbeitung, erledigt, abgebrochen. Zuständige dürfen starten
+  und erledigen; Verwalter dürfen bearbeiten, umverteilen und begründet abbrechen.
+  Endzustände bleiben unverändert, können aber reversibel archiviert werden.
+  Ein neues Aufgabenereignis protokolliert Akteur, Zeitpunkt, Aktion und geänderte
+  Feldnamen, ohne Kopien personenbezogener Freitexte. Keine physische Löschung.
+- Fälligkeit und optionale Wiedervorlage (spätestens am Fälligkeitstag). Hinweise
+  beginnen an der Wiedervorlage, sonst am Fälligkeitstag. Die gefilterte Liste
+  zeigt dieselben bearbeitbaren Aufgaben wie der Navigationshinweis. Keine
+  zusätzlichen Mails oder Cronjobs nötig. Allgemeine Verwaltungsaufgaben gehören
+  nicht ins persönliche Pächterportal. Beschlusshinweise werden bei aktivem
+  Aufgabenmodul zentral gezählt, nicht doppelt unter Sitzungen.
+- Wiederholung: keine, wöchentlich, monatlich, jährlich. Bei Abschluss wird
+  transaktional genau ein Nachfolger erzeugt (eindeutiger Vorgängerbezug).
+  Der ursprüngliche Termin ist Anker: 31. Januar -> Monatsletzter im Februar
+  -> 31. März; Schaltjahre werden ohne Datumsüberlauf behandelt. Verspätete
+  Erledigung überspringt keine Termine: auch ein überfälliger Nachfolger erscheint.
+  Änderungen an Rhythmus oder Fälligkeit starten einen neuen Anker; Abbruch erzeugt
+  keinen Nachfolger. Wiederholung vor Abschluss auf „Keine“ setzen beendet eine Serie.
+- Wenn `tasks` deaktiviert ist, bleiben Daten erhalten. Die bisherigen einfachen
+  Beschlussaufgaben funktionieren weiter; der Abschluss einer wiederkehrenden
+  Aufgabe ist dann gesperrt, damit keine Wiederholungen verloren gehen.
+  Verknüpfungen zu deaktivierten Modulen werden nicht offengelegt oder geändert.
+- Neue Referenzen und Aufgabenereignisse werden im Datenschutzexport bzw. bei
+  Pseudonymisierung berücksichtigt. Das bestehende Datenbankbackup umfasst die
+  erweiterten Tabellen. Keine neuen Dateiablagen oder Deployment-Artefakte.
+- Rückwärtsmigration ist nur ohne neue Aufgabeninhalte/-historie zulässig;
+  andernfalls wird sie zum Schutz der Daten abgewiesen. Vorwärtsmigration
+  erhält alle bisherigen Beschlussaufgaben und Erledigungsdaten.
+
 ## Phase 21: Vorstandsarbeit
 
 - Eigenständiges Modul `board_work`. Separate Rechte `view_board_work` und

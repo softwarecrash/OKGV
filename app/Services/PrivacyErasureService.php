@@ -241,9 +241,10 @@ final class PrivacyErasureService
                 foreach (['created_by', 'finalized_by'] as $field) {
                     DB::table('board_meetings')->where($field, $oldUserId)->update([$field => null]);
                 }
-                foreach (['assigned_to', 'created_by', 'completed_by'] as $field) {
+                foreach (['assigned_to', 'created_by', 'completed_by', 'cancelled_by'] as $field) {
                     DB::table('board_follow_ups')->where($field, $oldUserId)->update([$field => null]);
                 }
+                DB::table('task_events')->where('user_id', $oldUserId)->update(['user_id' => null]);
 
                 DB::table('work_hour_submissions')
                     ->where('submitted_by', $oldUserId)

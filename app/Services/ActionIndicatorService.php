@@ -19,6 +19,7 @@ use App\Models\Invoice;
 use App\Models\MailCampaign;
 use App\Models\MeterReadingSubmission;
 use App\Models\RegistrationRequest;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\WaitingListEntry;
 use App\Models\WorkEvent;
@@ -30,6 +31,7 @@ final class ActionIndicatorService
      * @return array{
      *     announcements: int,
      *     board_work: int,
+     *     tasks: int,
      *     registrations: int,
      *     meter_readings: int,
      *     invoices: int,
@@ -49,6 +51,8 @@ final class ActionIndicatorService
     public function forUser(User $user): array
     {
         $boardWork = $user->can('viewAny', BoardMeeting::class) ? BoardFollowUp::query()->actionableFor($user)->count() : 0;
+        $tasks = $user->can('viewAny', Task::class) ? Task::query()->actionableFor($user)->count() : 0;
+        $boardNavigation = FeatureModule::Tasks->enabled() ? 0 : $boardWork;
         $announcements = $this->announcementCount($user);
         $registrations = FeatureModule::TenantPortal->enabled()
             && $user->canReviewTenantRegistrations()
@@ -129,6 +133,7 @@ final class ActionIndicatorService
         return [
             'announcements' => $announcements,
             'board_work' => $boardWork,
+            'tasks' => $tasks,
             'registrations' => $registrations,
             'meter_readings' => $meterReadings,
             'invoices' => $invoices,
@@ -140,9 +145,9 @@ final class ActionIndicatorService
             'members_group' => $registrations + $waitingList,
             'meters_group' => $meterReadings,
             'finance_group' => $invoices + $workHours + $workEvents + $workHourSubmissions,
-            'communication_group' => $failedCampaigns + $announcements + $boardWork,
+            'communication_group' => $failedCampaigns + $announcements + $boardNavigation + $tasks,
             'dunning_notices' => $dunningNotices,
-            'total' => $registrations + $waitingList + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns + $inventory + $announcements + $boardWork,
+            'total' => $registrations + $waitingList + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns + $inventory + $announcements + $boardNavigation + $tasks,
         ];
     }
 
@@ -225,6 +230,7 @@ final class ActionIndicatorService
         return [
             'announcements' => 0,
             'board_work' => 0,
+            'tasks' => 0,
             'registrations' => 0,
             'meter_readings' => 0,
             'invoices' => 0,

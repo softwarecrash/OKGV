@@ -15,6 +15,7 @@ enum FeatureModule: string
     case Communication = 'communication';
     case Announcements = 'announcements';
     case BoardWork = 'board_work';
+    case Tasks = 'tasks';
     case WaitingList = 'waiting_list';
     case Inventory = 'inventory';
     case DataTransfer = 'data_transfer';
@@ -33,6 +34,7 @@ enum FeatureModule: string
             self::Communication => 'Kommunikation',
             self::Announcements => 'Schwarzes Brett',
             self::BoardWork => 'Vorstandsarbeit',
+            self::Tasks => 'Aufgaben und Wiedervorlagen',
             self::WaitingList => 'Warteliste',
             self::Inventory => 'Inventarverwaltung',
             self::DataTransfer => 'Datenübertragung',

@@ -192,6 +192,7 @@ class PrivacyTest extends TestCase
         $resolution = $meeting->resolutions()->create(['title' => 'Historischer Beschluss', 'body' => 'Historie bewahren.', 'result' => 'adopted']);
         $task = $resolution->followUps()->make(['title' => 'Historischer Auftrag', 'due_at' => today()]);
         $task->forceFill(['assigned_to' => $tenant->id, 'created_by' => $tenant->id, 'completed_by' => $tenant->id, 'completed_at' => now()])->save();
+        $event = $task->events()->create(['user_id' => $tenant->id, 'action' => 'completed', 'created_at' => now()]);
         $meeting->forceFill(['finalized_by' => $tenant->id, 'finalized_at' => now()])->save();
 
         $this->actingAs($administrator)
@@ -217,6 +218,7 @@ class PrivacyTest extends TestCase
         $this->assertNull($task->fresh()->assigned_to);
         $this->assertNull($task->fresh()->created_by);
         $this->assertNull($task->fresh()->completed_by);
+        $this->assertNull($event->fresh()->user_id);
         $this->assertNotNull($task->fresh()->completed_at);
         $this->assertDatabaseHas('registration_requests', [
             'parcel_id' => $parcel->id,

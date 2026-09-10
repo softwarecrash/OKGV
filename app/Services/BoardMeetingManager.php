@@ -146,6 +146,7 @@ final class BoardMeetingManager
             $task->created_by = $actor->id;
             $task->save();
             AuditLogger::log('board_follow_up.created', $actor, $task);
+            app(TaskManager::class)->record($task, $actor, 'created');
 
             return $task;
         });
@@ -164,14 +165,7 @@ final class BoardMeetingManager
 
     public function complete(BoardFollowUp $task, User $actor): void
     {
-        DB::transaction(function () use ($task, $actor): void {
-            $task = BoardFollowUp::query()->lockForUpdate()->findOrFail($task->id);
-            Gate::forUser($actor)->authorize('complete', $task);
-            $task->completed_at = now();
-            $task->completed_by = $actor->id;
-            $task->save();
-            AuditLogger::log('board_follow_up.completed', $actor, $task);
-        });
+        app(TaskManager::class)->complete($task, $actor);
     }
 
     private function editable(BoardMeeting $meeting, User $actor): BoardMeeting

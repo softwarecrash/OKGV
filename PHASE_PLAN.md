@@ -240,12 +240,15 @@ granulare Rechte und fällige Beschlussaufgaben sind integriert und getestet.
 
 ## Phase 22: Aufgaben und Wiedervorlagen
 
-- [ ] Zentrale Aufgabenliste für Vorstand und Verwaltung
-- [ ] Fälligkeiten, Zuständigkeiten und Status
-- [ ] Verknüpfung mit Mitgliedern, Parzellen, Beschlüssen und Dokumenten
-- [ ] Erinnerungen und Aktionspunkte
-- [ ] Wiederkehrende Aufgaben
-- [ ] Auditlog und Rechte
+- [x] Zentrale Aufgabenliste für Vorstand und Verwaltung
+- [x] Fälligkeiten, Zuständigkeiten und Status
+- [x] Verknüpfung mit Mitgliedern, Parzellen, Beschlüssen und Dokumenten
+- [x] Erinnerungen und Aktionspunkte
+- [x] Wiederkehrende Aufgaben
+- [x] Auditlog und Rechte
+
+Abgeschlossen in 0.2.0.104. Beschlussaufgaben sind ohne Datenkopie integriert;
+Wiedervorlagen, kalendergerechte Folgetermine und granulare Rechte sind geprüft.
 
 ## Phase 23: Umfragen und Terminabfragen
 
@@ -369,8 +372,8 @@ granulare Rechte und fällige Beschlussaufgaben sind integriert und getestet.
 Die Stabilisierung von Registrierung, Rechtewechseln, Demo-Schutz und
 persönlichen Portalansichten ist im Entwicklungsstand 0.2.0.101 umgesetzt.
 
-Die Phasen 0 bis 21 sind abgeschlossen. Als nächste reguläre Fachphase folgt
-Phase 22 mit der zentralen Verwaltung von Aufgaben und Wiedervorlagen.
-Danach folgen Umfragen und die digitale
+Die Phasen 0 bis 22 sind abgeschlossen. Als nächste reguläre Fachphase folgt
+Phase 23 mit Umfragen und Terminabfragen.
+Danach folgt die digitale
 Mitgliederversammlung. Die große Deployment-Phase ist
 bewusst ans Ende verschoben, weil Webhosting und Plesk vorerst ausreichen.
