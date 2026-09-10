@@ -338,11 +338,16 @@ sehen ausschließlich Feststellungen ihrer aktuellen Parzellen.
 
 ## Phase 31: Mobile Nutzung und PWA
 
-- [ ] PWA-Manifest und installierbare Oberfläche
-- [ ] Mobile Optimierung wichtiger Pächterfunktionen
-- [ ] Zählerstand melden, Arbeitsstunden melden, Dokumente und Termine mobil priorisieren
-- [ ] Offline-freundliche Formularentwürfe prüfen
-- [ ] Push-Benachrichtigungen als spätere Option bewerten
+- [x] PWA-Manifest und installierbare Oberfläche
+- [x] Mobile Optimierung wichtiger Pächterfunktionen
+- [x] Zählerstand melden, Arbeitsstunden melden, Dokumente und Termine mobil priorisieren
+- [x] Offline-freundliche Formularentwürfe prüfen
+- [x] Push-Benachrichtigungen als spätere Option bewerten
+
+Vorgezogen abgeschlossen in 0.2.0.110. Die PWA speichert ausschließlich
+statische Build-Dateien; sensible Vereinsdaten und Seiten werden nicht offline
+gecached. Entwürfe für Zähler- und Arbeitsstundenmeldungen bleiben lokal im
+Browser und enthalten keine Fotos.
 
 ## Phase 32: Erweiterte Finanzexporte
 

@@ -10,6 +10,8 @@
     <title>{{ config('app.name', 'OKGV') }}</title>
 
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+    <meta name="theme-color" content="#2e7d32">
 
     <script src="{{ asset('js/theme-init.js') }}"></script>
 

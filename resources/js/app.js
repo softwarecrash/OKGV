@@ -19,6 +19,48 @@ const updateThemeToggle = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    if ('serviceWorker' in navigator && window.isSecureContext) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {
+            // Offline enhancement must never block the web application.
+        });
+    }
+
+    document.querySelectorAll('table.table').forEach((table) => {
+        if (table.parentElement?.classList.contains('table-responsive')) {
+            return;
+        }
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-responsive';
+        table.parentNode?.insertBefore(wrapper, table);
+        wrapper.append(table);
+    });
+
+    document.querySelectorAll('form[data-offline-draft]').forEach((form) => {
+        const key = `okgv-draft-${form.dataset.offlineDraft}`;
+        const fields = [...form.elements].filter((field) => field instanceof HTMLInputElement
+            || field instanceof HTMLSelectElement || field instanceof HTMLTextAreaElement);
+
+        try {
+            const draft = JSON.parse(localStorage.getItem(key) ?? '{}');
+            fields.forEach((field) => {
+                if (field.name && field.type !== 'file' && draft[field.name] !== undefined) {
+                    field.value = draft[field.name];
+                }
+            });
+        } catch {
+            // A damaged local draft is ignored.
+        }
+
+        form.addEventListener('input', () => {
+            const draft = Object.fromEntries(fields
+                .filter((field) => field.name && field.type !== 'file' && field.type !== 'password')
+                .map((field) => [field.name, field.value]));
+            localStorage.setItem(key, JSON.stringify(draft));
+        });
+        form.addEventListener('submit', () => localStorage.removeItem(key));
+    });
+
     updateThemeToggle();
 
     document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {

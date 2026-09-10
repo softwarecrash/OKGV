@@ -8,6 +8,13 @@
 
 Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 
+## Vorgezogene Phase 31: Mobile Nutzung und PWA
+
+- [x] Installierbares Manifest und Service Worker für statische Dateien
+- [x] Touch-Ziele, Tabellen und Formulare für kleine Displays optimieren
+- [x] Lokale Offline-Entwürfe für Zähler- und Arbeitsstundenmeldungen ergänzen
+- [x] Sensible Inhalte ausdrücklich vom Offline-Cache ausschließen
+
 ## Phase 26: Gartenbegehungen
 
 - [x] Ablauf, Rechte, Historie und Pächterisolation spezifizieren

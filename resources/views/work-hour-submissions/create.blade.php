@@ -10,7 +10,7 @@
             Melde eine geleistete Tätigkeit für deine Parzelle. Die Stunden zählen erst nach Prüfung.
         @endif
     </p>
-    <form class="card card-body border-0 shadow-sm" method="POST" enctype="multipart/form-data" action="{{ route('work-hour-submissions.store') }}">
+    <form class="card card-body border-0 shadow-sm" method="POST" enctype="multipart/form-data" action="{{ route('work-hour-submissions.store') }}" data-offline-draft="work-hours">
         @csrf
         <x-validation-errors />
         @if ($parcels->isEmpty())

@@ -8,6 +8,13 @@ OKGV ist eine moderne, sichere und selbsthostbare Laravel-Anwendung. Eine Instal
 
 ## Aktueller Stand
 
+**Mobile Nutzung:** OKGV kann über den Browser als App installiert werden.
+Die Oberfläche priorisiert Touch-Bedienung, lesbare Formulare und horizontal
+scrollbare Tabellen auf kleinen Displays. Bei Zählerstand- und
+Arbeitsstundenmeldungen bleiben Texteingaben als lokaler Entwurf erhalten.
+Private Daten, Fotos, Sitzungen und Seiten werden bewusst nicht offline
+gespeichert oder gecacht.
+
 **Gartenbegehungen:** Das neue Modul unter **Parzellen → Gartenbegehungen**
 ermöglicht Prüfungen mit Prüfern, internen Checklisten und nachvollziehbaren
 Feststellungen je Parzelle. Gartenwarte und entsprechend berechtigte

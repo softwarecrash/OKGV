@@ -4,7 +4,7 @@
 <div class="container">
     <h1 class="h2 mb-2">Zählerstand melden</h1>
     <p class="text-secondary">Parzelle {{ $meter->parcel->parcel_number }} · {{ $meter->type->label() }} · Zähler {{ $meter->meter_number }}</p>
-    <form class="card card-body border-0 shadow-sm" method="POST" enctype="multipart/form-data" action="{{ route('meter-reading-submissions.store', $meter) }}">
+    <form class="card card-body border-0 shadow-sm" method="POST" enctype="multipart/form-data" action="{{ route('meter-reading-submissions.store', $meter) }}" data-offline-draft="meter-reading-{{ $meter->id }}">
         @csrf
         <x-validation-errors />
         <div class="alert alert-info">Deine Meldung wird zuerst geprüft. Sie zählt erst nach Bestätigung durch Vorstand oder Wasserwart als offizieller Zählerstand.</div>

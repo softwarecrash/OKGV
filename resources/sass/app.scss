@@ -162,3 +162,38 @@
         animation: none;
     }
 }
+
+@media (max-width: 767.98px) {
+    .navbar .nav-link,
+    .navbar .dropdown-item {
+        min-height: 2.75rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .container {
+        padding-right: 1rem;
+        padding-left: 1rem;
+    }
+
+    input:not([type='checkbox']):not([type='radio']),
+    select,
+    textarea {
+        font-size: 1rem;
+    }
+
+    .btn {
+        min-height: 2.75rem;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .table-responsive {
+        margin-right: -1rem;
+        margin-left: -1rem;
+        padding-right: 1rem;
+        padding-left: 1rem;
+    }
+}

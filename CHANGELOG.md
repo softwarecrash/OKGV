@@ -2,6 +2,19 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.110] - 2026-09-10
+
+### Vorgezogene Phase 31: Mobile Nutzung und PWA
+
+- Installierbare PWA mit Manifest, Theme-Farbe und Service Worker ergänzt.
+  Der Offline-Cache umfasst ausschließlich versionierte Build-Dateien, nie
+  Seiten, Sitzungen oder private Vereinsdaten.
+- Mobile Touch-Ziele, Formularschriftgrößen, Kartenabstände und Tabellen auf
+  kleinen Displays optimiert.
+- Zählerstand- und Arbeitsstundenmeldungen sichern Texteingaben als lokalen
+  Browserentwurf. Fotos und Passwörter werden nicht gespeichert; nach dem
+  Absenden wird der Entwurf entfernt.
+
 ## [0.2.0.109] - 2026-09-10
 
 ### Einheitliche URLs
