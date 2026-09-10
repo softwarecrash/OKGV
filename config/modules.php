@@ -15,6 +15,7 @@ return [
     'tasks' => env('OKGV_MODULE_TASKS', true),
     'polls' => env('OKGV_MODULE_POLLS', true),
     'member_assemblies' => env('OKGV_MODULE_MEMBER_ASSEMBLIES', true),
+    'garden_inspections' => env('OKGV_MODULE_GARDEN_INSPECTIONS', true),
     'waiting_list' => env('OKGV_MODULE_WAITING_LIST', true),
     'inventory' => env('OKGV_MODULE_INVENTORY', true),
     'data_transfer' => env('OKGV_MODULE_DATA_TRANSFER', true),

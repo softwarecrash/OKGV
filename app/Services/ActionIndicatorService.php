@@ -14,6 +14,7 @@ use App\Enums\WorkHourSubmissionStatus;
 use App\Models\Announcement;
 use App\Models\BoardFollowUp;
 use App\Models\BoardMeeting;
+use App\Models\GardenInspectionFinding;
 use App\Models\InventoryLoan;
 use App\Models\Invoice;
 use App\Models\MailCampaign;
@@ -47,6 +48,7 @@ final class ActionIndicatorService
      *     finance_group: int,
      *     communication_group: int,
      *     dunning_notices: int,
+     *     garden_inspections: int,
      *     total: int
      * }
      */
@@ -132,6 +134,7 @@ final class ActionIndicatorService
                 ->whereDate('due_at', '<', today())
                 ->count()
             : 0;
+        $gardenInspections = $this->gardenInspectionCount($user);
 
         return [
             'announcements' => $announcements,
@@ -146,12 +149,13 @@ final class ActionIndicatorService
             'work_hour_submissions' => $workHourSubmissions,
             'waiting_list' => $waitingList,
             'inventory' => $inventory,
+            'garden_inspections' => $gardenInspections,
             'members_group' => $registrations + $waitingList,
             'meters_group' => $meterReadings,
             'finance_group' => $invoices + $workHours + $workEvents + $workHourSubmissions,
             'communication_group' => $failedCampaigns + $announcements + $polls + $boardNavigation + $tasks,
             'dunning_notices' => $dunningNotices,
-            'total' => $registrations + $waitingList + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns + $inventory + $announcements + $polls + $boardNavigation + $tasks,
+            'total' => $registrations + $waitingList + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns + $inventory + $gardenInspections + $announcements + $polls + $boardNavigation + $tasks,
         ];
     }
 
@@ -214,6 +218,7 @@ final class ActionIndicatorService
                 ->unresolvedRejectedForUser($user->id)
                 ->count()
             : 0;
+        $gardenInspections = $this->gardenInspectionCount($user);
 
         return [
             ...$this->emptyIndicators(),
@@ -222,9 +227,10 @@ final class ActionIndicatorService
             'meter_readings' => $meterReadings,
             'invoices' => $invoices,
             'work_hour_submissions' => $workHourSubmissions,
+            'garden_inspections' => $gardenInspections,
             'meters_group' => $meterReadings,
             'finance_group' => $invoices + $workHourSubmissions,
-            'total' => $meterReadings + $invoices + $workHourSubmissions + $announcements + $polls,
+            'total' => $meterReadings + $invoices + $workHourSubmissions + $gardenInspections + $announcements + $polls,
         ];
     }
 
@@ -246,6 +252,7 @@ final class ActionIndicatorService
             'work_hour_submissions' => 0,
             'waiting_list' => 0,
             'inventory' => 0,
+            'garden_inspections' => 0,
             'members_group' => 0,
             'meters_group' => 0,
             'finance_group' => 0,
@@ -280,5 +287,18 @@ final class ActionIndicatorService
         return FeatureModule::Announcements->enabled() && $user->hasVerifiedEmail() && ! $user->hasPendingRegistrationApproval()
             ? Announcement::query()->unreadFor($user)->count()
             : 0;
+    }
+
+    private function gardenInspectionCount(User $user): int
+    {
+        if (! FeatureModule::GardenInspections->enabled() || ! $user->hasTenantAccess()) {
+            return 0;
+        }
+
+        return GardenInspectionFinding::query()
+            ->where('status', 'open')
+            ->whereHas('parcel.tenancies', fn ($query) => $query->activeOn()
+                ->whereHas('member', fn ($query) => $query->where('user_id', $user->id)))
+            ->count();
     }
 }

@@ -93,6 +93,11 @@ class Parcel extends Model
         return $this->hasMany(TenantTransition::class);
     }
 
+    public function gardenInspectionFindings(): HasMany
+    {
+        return $this->hasMany(GardenInspectionFinding::class);
+    }
+
     public function scopeSearch(Builder $query, ?string $search): Builder
     {
         return $query->when($search, function (Builder $query, string $search): void {

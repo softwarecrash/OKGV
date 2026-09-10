@@ -282,16 +282,22 @@ ersetzt weder Satzungsprüfung noch eine rechtliche Prüfung der Einberufung.
 - [ ] Übernahme eines Bewerbers in Mitglied und Pächterhistorie
 - [ ] Auditlog und DSGVO-Auskunft erweitern
 
+Phase 26 wurde wegen der direkten fachlichen Nähe zur Parzellenverwaltung
+vorgezogen und vor Phase 25 abgeschlossen.
+
 ## Phase 26: Gartenbegehungen
 
-- [ ] Begehungstermine mit Prüfern und Parzellenumfang
-- [ ] Checklisten und Mängelkategorien
-- [ ] Mängel mit Fotos, Fristen und Verantwortlichkeit
-- [ ] Nachkontrolle und Erledigungsstatus
-- [ ] Begehungen und Mängel mit der Aufgabenverwaltung aus Phase 22 verknüpfen
-- [ ] Pächterhinweise im Portal
-- [ ] Dokumentation als PDF-Protokoll
-- [ ] Auditlog, Rechte und Datenschutzprüfung
+- [x] Begehungstermine mit Prüfern und Parzellenumfang
+- [x] Checklisten und Mängelkategorien
+- [x] Mängel mit Fotos, Fristen und Verantwortlichkeit
+- [x] Nachkontrolle und Erledigungsstatus
+- [x] Begehungen und Mängel mit der Aufgabenverwaltung aus Phase 22 verknüpfen
+- [x] Pächterhinweise im Portal
+- [x] Dokumentation als PDF-Protokoll
+- [x] Auditlog, Rechte und Datenschutzprüfung
+
+Abgeschlossen in 0.2.0.107. Fotos und PDF-Protokolle bleiben privat; Pächter
+sehen ausschließlich Feststellungen ihrer aktuellen Parzellen.
 
 ## Phase 27: Kassenbuch
 

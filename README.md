@@ -8,6 +8,17 @@ OKGV ist eine moderne, sichere und selbsthostbare Laravel-Anwendung. Eine Instal
 
 ## Aktueller Stand
 
+**Gartenbegehungen:** Das neue Modul unter **Parzellen → Gartenbegehungen**
+ermöglicht Prüfungen mit Prüfern, internen Checklisten und nachvollziehbaren
+Feststellungen je Parzelle. Gartenwarte und entsprechend berechtigte
+Vorstandsmitglieder können Fristen, verantwortliche Mitglieder, private Fotos
+und vorhandene Aufgaben verknüpfen. Nachkontrollen werden mit prüfendem Konto
+und Zeitpunkt festgehalten. Der Abschluss erzeugt ein unveränderbares, privat
+gespeichertes PDF-Protokoll. Pächter sehen ausschließlich Hinweise ihrer
+aktuellen Parzellen samt Frist und erhalten dafür einen persönlichen Hinweis im
+Portal. `OKGV_MODULE_GARDEN_INSPECTIONS=false` deaktiviert das Modul ohne
+Datenverlust. Nach dem Update `php artisan migrate --force` ausführen.
+
 **Umfragen und Terminabfragen:** Unter **Kommunikation → Umfragen & Termine**
 können Berechtigte Entwürfe für Mitglieder, aktuelle Pächter oder ausgewählte
 Rollen anlegen. Die bei der Veröffentlichung berechtigten, bestätigten Konten

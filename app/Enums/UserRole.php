@@ -48,6 +48,7 @@ enum UserRole: string
                 UserPermission::ManageTasks->value,
                 UserPermission::ManagePolls->value,
                 UserPermission::ManageMemberAssemblies->value,
+                UserPermission::ManageGardenInspections->value,
                 UserPermission::ManageDocuments->value,
                 UserPermission::ManageWorkEvents->value,
                 UserPermission::ManageWaitingList->value,
@@ -72,6 +73,7 @@ enum UserRole: string
                 UserPermission::ViewAllMeters->value,
                 UserPermission::ManageWorkEvents->value,
                 UserPermission::ManageInventory->value,
+                UserPermission::ManageGardenInspections->value,
             ],
             self::Tenant => [],
         };

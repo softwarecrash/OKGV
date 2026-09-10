@@ -30,6 +30,22 @@ final class PrivacyDataExportService
         ]);
 
         return [
+            'garden_inspection_findings' => DB::table('garden_inspection_findings')
+                ->join('parcel_tenants', 'parcel_tenants.parcel_id', '=', 'garden_inspection_findings.parcel_id')
+                ->join('garden_inspections', 'garden_inspections.id', '=', 'garden_inspection_findings.garden_inspection_id')
+                ->where('parcel_tenants.member_id', $member->id)
+                ->orderBy('garden_inspection_findings.id')
+                ->get([
+                    'garden_inspections.title as inspection_title',
+                    'garden_inspections.inspected_at',
+                    'garden_inspection_findings.category',
+                    'garden_inspection_findings.description',
+                    'garden_inspection_findings.due_at',
+                    'garden_inspection_findings.status',
+                    'garden_inspection_findings.resolved_at',
+                    'garden_inspection_findings.photo_original_name',
+                    'garden_inspection_findings.created_at',
+                ])->all(),
             'tasks' => DB::table('board_follow_ups')->where(function ($query) use ($member): void {
                 $query->where('member_id', $member->id);
                 if ($member->user_id !== null) {

@@ -1,0 +1,4 @@
+@extends('layouts.app')
+@section('content')
+<div class="container"><h1 class="h2">Gartenbegehung anlegen</h1><form method="POST" action="{{ route('garden-inspections.store') }}" class="card card-body">@csrf<x-validation-errors /><label class="form-label">Titel<input class="form-control" name="title" required maxlength="180"></label><label class="form-label mt-3">Termin<input class="form-control" type="datetime-local" name="inspected_at" required value="{{ now()->format('Y-m-d\TH:i') }}"></label><label class="form-label mt-3">Prüfer<textarea class="form-control" name="inspectors" required maxlength="2000"></textarea></label><label class="form-label mt-3">Interne Anleitung / Checkliste<textarea class="form-control" name="instructions" maxlength="5000"></textarea></label><button class="btn btn-primary align-self-start mt-3">Begehung speichern</button></form></div>
+@endsection

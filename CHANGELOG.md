@@ -2,6 +2,23 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.107] - 2026-09-10
+
+### Vorgezogene Phase 26: Gartenbegehungen
+
+- Neues, abschaltbares Modul für Gartenbegehungen mit granularer
+  Verwaltungsberechtigung für Administratoren, Vorstand und Gartenwarte.
+- Entwürfe mit Termin, Prüfern und interner Checkliste; Feststellungen je
+  Parzelle mit Kategorie, Frist, Zuständigkeit, privatem Foto und interner
+  Notiz. Erledigungen erfassen prüfendes Konto und Zeitpunkt revisionsfest.
+- Optionale Verknüpfung zu bestehenden Aufgaben, ohne zusätzliche Rechte zu
+  verleihen. Abschlüsse erzeugen ein privat gespeichertes PDF-Protokoll und
+  sperren die Begehung gegen spätere Änderungen.
+- Pächter sehen ausschließlich Hinweise zu ihren aktuellen Parzellen und
+  erhalten persönliche Aktionshinweise. Datenschutzexport enthält die eigenen
+  parzellenbezogenen Feststellungen; Auditlog dokumentiert den Workflow ohne
+  Freitextkopien.
+
 ## [0.2.0.106] - 2026-09-10
 
 ### Phase 24: Digitale Mitgliederversammlung

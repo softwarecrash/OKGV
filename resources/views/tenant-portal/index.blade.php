@@ -37,6 +37,11 @@
                         {{ $actionIndicators['invoices'] === 1 ? 'offene Rechnung' : 'offene Rechnungen' }}
                     </a>
                 @endif
+                @if ($actionIndicators['garden_inspections'] > 0)
+                    <a class="alert-link" href="{{ route('garden-inspections.index') }}">
+                        {{ $actionIndicators['garden_inspections'] }} {{ $actionIndicators['garden_inspections'] === 1 ? 'offene Gartenfeststellung' : 'offene Gartenfeststellungen' }}
+                    </a>
+                @endif
             </div>
         </div>
     @endif
@@ -54,6 +59,14 @@
             <h2 class="h5">Umfragen und Terminabfragen <x-action-indicator :count="$actionIndicators['polls']" label="offene Umfragen" /></h2>
             <p>Gib deine Rückmeldung zu aktuellen Vereinsfragen oder passenden Terminen ab.</p>
             <div><a class="btn btn-outline-primary" href="{{ route('polls.index', $actionIndicators['polls'] > 0 ? ['unanswered' => 1] : []) }}">Umfragen ansehen</a></div>
+        </div>
+    @endif
+
+    @if (App\Enums\FeatureModule::GardenInspections->enabled())
+        <div class="card card-body border-0 shadow-sm mb-4">
+            <h2 class="h5">Gartenbegehungen <x-action-indicator :count="$actionIndicators['garden_inspections']" label="offene Gartenfeststellungen" /></h2>
+            <p>Hinweise und Fristen aus Begehungen deiner aktuellen Parzellen.</p>
+            <div><a class="btn btn-outline-primary" href="{{ route('garden-inspections.index') }}">Hinweise ansehen</a></div>
         </div>
     @endif
 

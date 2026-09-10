@@ -18,6 +18,7 @@ enum FeatureModule: string
     case Tasks = 'tasks';
     case Polls = 'polls';
     case MemberAssemblies = 'member_assemblies';
+    case GardenInspections = 'garden_inspections';
     case WaitingList = 'waiting_list';
     case Inventory = 'inventory';
     case DataTransfer = 'data_transfer';
@@ -39,6 +40,7 @@ enum FeatureModule: string
             self::Tasks => 'Aufgaben und Wiedervorlagen',
             self::Polls => 'Umfragen und Terminabfragen',
             self::MemberAssemblies => 'Mitgliederversammlungen',
+            self::GardenInspections => 'Gartenbegehungen',
             self::WaitingList => 'Warteliste',
             self::Inventory => 'Inventarverwaltung',
             self::DataTransfer => 'Datenübertragung',

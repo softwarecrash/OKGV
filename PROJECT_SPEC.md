@@ -1,5 +1,33 @@
 # OKGV Projektspezifikation
 
+## Phase 26: Gartenbegehungen
+
+- Eigenes Modul `garden_inspections`, Recht `manage_garden_inspections` für
+  Administratoren, Standardvorstand und Gartenwarte. Pächter erhalten keinen
+  Zugang zur Gesamtbegehung, sondern ausschließlich Hinweise zu eigenen,
+  veröffentlichten offenen Mängeln.
+- Eine Begehung ist ein Entwurf mit Termin, Titel, interner Anleitung und
+  Prüfern. Einzelne Feststellungen gehören immer zu genau einer Parzelle und
+  speichern Kategorie, verständliche Beschreibung, Prüfer, Frist, Status,
+  optional verantwortliches Mitglied, interne Notiz und optionales privates Foto.
+  Kategorien sind frei verständlich vorgegeben: Allgemein, Laube, Bepflanzung,
+  Wege, Wasser/Strom, Sicherheit und Sonstiges.
+- Feststellungen sind nach Erfassung historisch unveränderbar. Eine bestätigte
+  Nachkontrolle setzt nachvollziehbar Status, Zeitpunkt und prüfendes Konto;
+  inhaltliche Korrekturen erfolgen als zusätzliche Feststellung. Keine physische
+  Löschung.
+- Fotos sind optional, nur JPG/PNG/WebP bis 10 MB, MIME-validiert und im
+  privaten Storage. Sie werden weder öffentlich noch pauschal allen Pächtern
+  gezeigt. Ein Pächter sieht nur Fotos und Texte seiner aktuellen Parzelle.
+- Eine offene Feststellung kann optional mit einer bestehenden zentralen Aufgabe
+  verknüpft werden; die Verknüpfung erweitert keine Rechte und Aufgaben bleiben
+  unabhängig historisch. Bei Abschluss der Begehung entsteht ein privates PDF
+  mit Prüfpunkten, Fristen und Status. Der Abschluss friert das Protokoll ein.
+- Auditlog für Anlage, Feststellung, Nachkontrolle und Abschluss ohne Kopien
+  personenbezogener Freitexte. Datenschutzexport umfasst nur eigene
+  parzellenbezogene Hinweise; Pseudonymisierung löst Benutzerbezüge, ohne
+  Prüfhistorie, Fotos oder Protokolle stillschweigend zu löschen.
+
 ## Phase 24: Digitale Mitgliederversammlung
 
 - Eigenes Modul `member_assemblies` und Verwaltungsrecht

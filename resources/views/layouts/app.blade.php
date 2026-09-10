@@ -48,6 +48,7 @@
                                 $communicationEnabled = App\Enums\FeatureModule::Communication->enabled();
                                 $pollsEnabled = App\Enums\FeatureModule::Polls->enabled();
                                 $assembliesEnabled = App\Enums\FeatureModule::MemberAssemblies->enabled();
+                                $gardenInspectionsEnabled = App\Enums\FeatureModule::GardenInspections->enabled();
                                 $documentsEnabled = App\Enums\FeatureModule::Documents->enabled();
                                 $waitingListEnabled = App\Enums\FeatureModule::WaitingList->enabled();
                                 $inventoryEnabled = App\Enums\FeatureModule::Inventory->enabled();
@@ -67,6 +68,7 @@
                                 $canViewCommunication = $communicationEnabled && auth()->user()->can('viewAny', App\Models\MailCampaign::class);
                                 $canViewPolls = $pollsEnabled && auth()->user()->can('viewAny', App\Models\Poll::class);
                                 $canViewAssemblies = $assembliesEnabled && auth()->user()->can('viewAny', App\Models\MemberAssembly::class);
+                                $canViewGardenInspections = $gardenInspectionsEnabled && auth()->user()->can('viewAny', App\Models\GardenInspection::class);
                                 $canViewDocuments = $documentsEnabled && auth()->user()->can('viewAny', App\Models\Document::class);
                                 $canViewInventory = $inventoryEnabled && auth()->user()->can('viewAny', App\Models\InventoryItem::class);
                             @endphp
@@ -120,6 +122,9 @@
                                     <a class="nav-link" href="{{ route('parcel-map.index') }}">Lageplan</a>
                                 </li>
                             @endcan
+                            @if ($canViewGardenInspections)
+                                <li class="nav-item"><a class="nav-link" href="{{ route('garden-inspections.index') }}">Gartenbegehungen</a></li>
+                            @endif
                             @if ($canViewMeters || $canViewMeterSubmissions)
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">

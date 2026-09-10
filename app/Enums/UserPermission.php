@@ -22,6 +22,7 @@ enum UserPermission: string
     case ManageTasks = 'manage_tasks';
     case ManagePolls = 'manage_polls';
     case ManageMemberAssemblies = 'manage_member_assemblies';
+    case ManageGardenInspections = 'manage_garden_inspections';
     case ManageDocuments = 'manage_documents';
     case ManageWorkEvents = 'manage_work_events';
     case ManageWaitingList = 'manage_waiting_list';
@@ -50,6 +51,7 @@ enum UserPermission: string
             self::ManageTasks => 'Aufgaben und Wiedervorlagen verwalten',
             self::ManagePolls => 'Umfragen und Terminabfragen verwalten',
             self::ManageMemberAssemblies => 'Mitgliederversammlungen verwalten',
+            self::ManageGardenInspections => 'Gartenbegehungen verwalten',
             self::ManageDocuments => 'Dokumente verwalten',
             self::ManageWorkEvents => 'Arbeitseinsätze verwalten',
             self::ManageWaitingList => 'Warteliste verwalten',
@@ -80,6 +82,7 @@ enum UserPermission: string
             self::ManageTasks => 'Erlaubt Aufgaben anzulegen, zuzuweisen, zu bearbeiten und abzubrechen. Vertrauliche Beschlüsse behalten ihre eigenen Rechte.',
             self::ManagePolls => 'Erlaubt Umfragen zu veröffentlichen, abzuschließen und aggregierte Ergebnisse zu exportieren. Gewährt keine zusätzliche Stimme.',
             self::ManageMemberAssemblies => 'Erlaubt Einladungen, Teilnehmerlisten, Beschlussvorschläge und protokollierte Abstimmungen zu verwalten.',
+            self::ManageGardenInspections => 'Erlaubt Begehungen, Mängel, Nachkontrollen und private Prüfprotokolle zu verwalten.',
             self::ManageDocuments => 'Erlaubt private Uploads, Dateiversionen, Freigaben und die zentrale Dokumentenverwaltung.',
             self::ManageWorkEvents => 'Erlaubt Termine, Teilnehmer und bestätigte Arbeitsstunden zu verwalten.',
             self::ManageWaitingList => 'Erlaubt den Zugriff auf Interessenten, Kontaktdaten, Prioritäten und Bearbeitungsstatus.',
@@ -106,6 +109,7 @@ enum UserPermission: string
             self::ViewTasks, self::ManageTasks => FeatureModule::Tasks,
             self::ManagePolls => FeatureModule::Polls,
             self::ManageMemberAssemblies => FeatureModule::MemberAssemblies,
+            self::ManageGardenInspections => FeatureModule::GardenInspections,
             self::ManageDocuments => FeatureModule::Documents,
             self::ManageWorkEvents => FeatureModule::WorkEvents,
             self::ManageWaitingList => FeatureModule::WaitingList,

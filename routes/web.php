@@ -14,6 +14,7 @@ use App\Http\Controllers\CommunicationSettingController;
 use App\Http\Controllers\DataTransferController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DunningNoticeController;
+use App\Http\Controllers\GardenInspectionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\InventoryLoanController;
@@ -102,6 +103,14 @@ Route::view('konto-wartet-auf-freigabe', 'auth.pending-approval')
     ->name('registration.pending');
 
 Route::middleware(['auth', 'verified', 'registration.approved'])->group(function (): void {
+    Route::middleware('module:garden_inspections')->group(function (): void {
+        Route::resource('gartenbegehungen', GardenInspectionController::class)->only(['index', 'create', 'store', 'show'])->parameters(['gartenbegehungen' => 'inspection'])->names('garden-inspections');
+        Route::post('gartenbegehungen/{inspection}/feststellungen', [GardenInspectionController::class, 'finding'])->name('garden-inspections.findings.store');
+        Route::post('gartenfeststellungen/{finding}/erledigen', [GardenInspectionController::class, 'resolve'])->name('garden-inspection-findings.resolve');
+        Route::get('gartenfeststellungen/{finding}/foto', [GardenInspectionController::class, 'photo'])->name('garden-inspection-findings.photo');
+        Route::post('gartenbegehungen/{inspection}/abschliessen', [GardenInspectionController::class, 'finalize'])->name('garden-inspections.finalize');
+        Route::get('gartenbegehungen/{inspection}/pdf', [GardenInspectionController::class, 'pdf'])->name('garden-inspections.pdf');
+    });
     Route::middleware('module:member_assemblies')->group(function (): void {
         Route::resource('mitgliederversammlungen', MemberAssemblyController::class)->only(['index', 'create', 'store', 'show'])->parameters(['mitgliederversammlungen' => 'assembly'])->names('member-assemblies');
         Route::post('mitgliederversammlungen/{assembly}/teilnehmen', [MemberAssemblyController::class, 'attend'])->name('member-assemblies.attend');

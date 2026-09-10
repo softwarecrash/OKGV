@@ -7,6 +7,13 @@
 
 Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 
+## Phase 26: Gartenbegehungen
+
+- [x] Ablauf, Rechte, Historie und Pächterisolation spezifizieren
+- [x] Tabellen, Models, Policies und private Dateien umsetzen
+- [x] Begehungen, Feststellungen, Nachkontrollen und Aufgabenbezüge umsetzen
+- [x] Portalhinweise, PDF-Protokoll, Datenschutz und Tests abschließen
+
 ## Phase 24: Digitale Mitgliederversammlung
 
 - [x] Rechtsrahmen, Grenzen und Datenmodell spezifizieren
