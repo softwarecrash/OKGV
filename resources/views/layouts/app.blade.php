@@ -115,14 +115,20 @@
                                 </li>
                             @endif
                             @can('viewAny', App\Models\Parcel::class)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('parcels.index') }}">Parzellen</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('parcel-map.index') }}">Lageplan</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                        Parzellen
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ route('parcels.index') }}">Parzellenübersicht</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('parcel-map.index') }}">Lageplan</a></li>
+                                        @if ($canViewGardenInspections)
+                                            <li><a class="dropdown-item" href="{{ route('garden-inspections.index') }}">Gartenbegehungen</a></li>
+                                        @endif
+                                    </ul>
                                 </li>
                             @endcan
-                            @if ($canViewGardenInspections)
+                            @if ($canViewGardenInspections && ! auth()->user()->can('viewAny', App\Models\Parcel::class))
                                 <li class="nav-item"><a class="nav-link" href="{{ route('garden-inspections.index') }}">Gartenbegehungen</a></li>
                             @endif
                             @if ($canViewMeters || $canViewMeterSubmissions)

@@ -2,6 +2,15 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.108] - 2026-09-10
+
+### Fehlerbehebung Gartenbegehungen
+
+- Blade-Übersicht der Gartenbegehungen in eine robuste Template-Struktur
+  überführt; der Parse-Fehler beim Öffnen von `/gartenbegehungen` ist behoben.
+- Navigation gestrafft: Parzellenübersicht, Lageplan und Gartenbegehungen sind
+  jetzt gemeinsam unter dem Menüpunkt „Parzellen“ erreichbar.
+
 ## [0.2.0.107] - 2026-09-10
 
 ### Vorgezogene Phase 26: Gartenbegehungen

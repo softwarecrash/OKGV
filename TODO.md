@@ -13,6 +13,7 @@ Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 - [x] Tabellen, Models, Policies und private Dateien umsetzen
 - [x] Begehungen, Feststellungen, Nachkontrollen und Aufgabenbezüge umsetzen
 - [x] Portalhinweise, PDF-Protokoll, Datenschutz und Tests abschließen
+- [x] Übersichtsansicht und Navigation nach erster Nutzung korrigieren
 
 ## Phase 24: Digitale Mitgliederversammlung
 
