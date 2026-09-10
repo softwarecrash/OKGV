@@ -16,6 +16,9 @@
                 @if ($actionIndicators['announcements'] > 0)
                     <a class="alert-link" href="{{ route('announcements.index', ['unread' => 1]) }}">{{ $actionIndicators['announcements'] }} ungelesene Bekanntmachungen</a>
                 @endif
+                @if ($actionIndicators['polls'] > 0)
+                    <a class="alert-link" href="{{ route('polls.index', ['unanswered' => 1]) }}">{{ $actionIndicators['polls'] }} {{ $actionIndicators['polls'] === 1 ? 'offene Umfrage' : 'offene Umfragen' }}</a>
+                @endif
                 @if ($actionIndicators['meter_readings'] > 0)
                     <a class="alert-link" href="{{ route('meter-reading-submissions.index', ['own' => 1]) }}">
                         {{ $actionIndicators['meter_readings'] }}
@@ -43,6 +46,14 @@
             <h2 class="h5">Schwarzes Brett <x-action-indicator :count="$actionIndicators['announcements']" label="ungelesene Bekanntmachungen" /></h2>
             <p>Neuigkeiten und wichtige Mitteilungen deines Vereins.</p>
             <div><a class="btn btn-outline-primary" href="{{ route('announcements.index') }}">Beiträge ansehen</a></div>
+        </div>
+    @endif
+
+    @if (App\Enums\FeatureModule::Polls->enabled() && auth()->user()->can('viewAny', App\Models\Poll::class))
+        <div class="card card-body border-0 shadow-sm mb-4">
+            <h2 class="h5">Umfragen und Terminabfragen <x-action-indicator :count="$actionIndicators['polls']" label="offene Umfragen" /></h2>
+            <p>Gib deine Rückmeldung zu aktuellen Vereinsfragen oder passenden Terminen ab.</p>
+            <div><a class="btn btn-outline-primary" href="{{ route('polls.index', $actionIndicators['polls'] > 0 ? ['unanswered' => 1] : []) }}">Umfragen ansehen</a></div>
         </div>
     @endif
 

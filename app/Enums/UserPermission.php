@@ -20,6 +20,7 @@ enum UserPermission: string
     case ManageBoardWork = 'manage_board_work';
     case ViewTasks = 'view_tasks';
     case ManageTasks = 'manage_tasks';
+    case ManagePolls = 'manage_polls';
     case ManageDocuments = 'manage_documents';
     case ManageWorkEvents = 'manage_work_events';
     case ManageWaitingList = 'manage_waiting_list';
@@ -46,6 +47,7 @@ enum UserPermission: string
             self::ManageBoardWork => 'Sitzungen und Beschlüsse verwalten',
             self::ViewTasks => 'Eigene Verwaltungsaufgaben bearbeiten',
             self::ManageTasks => 'Aufgaben und Wiedervorlagen verwalten',
+            self::ManagePolls => 'Umfragen und Terminabfragen verwalten',
             self::ManageDocuments => 'Dokumente verwalten',
             self::ManageWorkEvents => 'Arbeitseinsätze verwalten',
             self::ManageWaitingList => 'Warteliste verwalten',
@@ -74,6 +76,7 @@ enum UserPermission: string
             self::ManageBoardWork => 'Erlaubt Sitzungen, Protokollabschluss, Beschlüsse und deren Aufgaben zu verwalten. Umfasst vertrauliche Vorstandsunterlagen.',
             self::ViewTasks => 'Erlaubt zugewiesene Aufgaben zu lesen, zu beginnen und zu erledigen. Beschlussaufgaben benötigen zusätzlich Vorstandsleserecht.',
             self::ManageTasks => 'Erlaubt Aufgaben anzulegen, zuzuweisen, zu bearbeiten und abzubrechen. Vertrauliche Beschlüsse behalten ihre eigenen Rechte.',
+            self::ManagePolls => 'Erlaubt Umfragen zu veröffentlichen, abzuschließen und aggregierte Ergebnisse zu exportieren. Gewährt keine zusätzliche Stimme.',
             self::ManageDocuments => 'Erlaubt private Uploads, Dateiversionen, Freigaben und die zentrale Dokumentenverwaltung.',
             self::ManageWorkEvents => 'Erlaubt Termine, Teilnehmer und bestätigte Arbeitsstunden zu verwalten.',
             self::ManageWaitingList => 'Erlaubt den Zugriff auf Interessenten, Kontaktdaten, Prioritäten und Bearbeitungsstatus.',
@@ -98,6 +101,7 @@ enum UserPermission: string
             self::ManageAnnouncements => FeatureModule::Announcements,
             self::ViewBoardWork, self::ManageBoardWork => FeatureModule::BoardWork,
             self::ViewTasks, self::ManageTasks => FeatureModule::Tasks,
+            self::ManagePolls => FeatureModule::Polls,
             self::ManageDocuments => FeatureModule::Documents,
             self::ManageWorkEvents => FeatureModule::WorkEvents,
             self::ManageWaitingList => FeatureModule::WaitingList,

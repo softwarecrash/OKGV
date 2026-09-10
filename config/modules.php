@@ -13,6 +13,7 @@ return [
     'announcements' => env('OKGV_MODULE_ANNOUNCEMENTS', true),
     'board_work' => env('OKGV_MODULE_BOARD_WORK', true),
     'tasks' => env('OKGV_MODULE_TASKS', true),
+    'polls' => env('OKGV_MODULE_POLLS', true),
     'waiting_list' => env('OKGV_MODULE_WAITING_LIST', true),
     'inventory' => env('OKGV_MODULE_INVENTORY', true),
     'data_transfer' => env('OKGV_MODULE_DATA_TRANSFER', true),

@@ -18,6 +18,7 @@ use App\Models\InventoryLoan;
 use App\Models\Invoice;
 use App\Models\MailCampaign;
 use App\Models\MeterReadingSubmission;
+use App\Models\Poll;
 use App\Models\RegistrationRequest;
 use App\Models\Task;
 use App\Models\User;
@@ -30,6 +31,7 @@ final class ActionIndicatorService
     /**
      * @return array{
      *     announcements: int,
+     *     polls: int,
      *     board_work: int,
      *     tasks: int,
      *     registrations: int,
@@ -54,6 +56,7 @@ final class ActionIndicatorService
         $tasks = $user->can('viewAny', Task::class) ? Task::query()->actionableFor($user)->count() : 0;
         $boardNavigation = FeatureModule::Tasks->enabled() ? 0 : $boardWork;
         $announcements = $this->announcementCount($user);
+        $polls = $user->can('viewAny', Poll::class) ? Poll::query()->unansweredFor($user)->count() : 0;
         $registrations = FeatureModule::TenantPortal->enabled()
             && $user->canReviewTenantRegistrations()
             ? RegistrationRequest::query()
@@ -132,6 +135,7 @@ final class ActionIndicatorService
 
         return [
             'announcements' => $announcements,
+            'polls' => $polls,
             'board_work' => $boardWork,
             'tasks' => $tasks,
             'registrations' => $registrations,
@@ -145,9 +149,9 @@ final class ActionIndicatorService
             'members_group' => $registrations + $waitingList,
             'meters_group' => $meterReadings,
             'finance_group' => $invoices + $workHours + $workEvents + $workHourSubmissions,
-            'communication_group' => $failedCampaigns + $announcements + $boardNavigation + $tasks,
+            'communication_group' => $failedCampaigns + $announcements + $polls + $boardNavigation + $tasks,
             'dunning_notices' => $dunningNotices,
-            'total' => $registrations + $waitingList + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns + $inventory + $announcements + $boardNavigation + $tasks,
+            'total' => $registrations + $waitingList + $meterReadings + $invoices + $workHours + $workEvents + $workHourSubmissions + $failedCampaigns + $inventory + $announcements + $polls + $boardNavigation + $tasks,
         ];
     }
 
@@ -182,6 +186,7 @@ final class ActionIndicatorService
         }
 
         $announcements = $this->announcementCount($user);
+        $polls = $user->can('viewAny', Poll::class) ? Poll::query()->unansweredFor($user)->count() : 0;
         $meterReadings = FeatureModule::Meters->enabled()
             ? MeterReadingSubmission::query()
                 ->unresolvedRejectedForUser($user->id)
@@ -213,12 +218,13 @@ final class ActionIndicatorService
         return [
             ...$this->emptyIndicators(),
             'announcements' => $announcements,
+            'polls' => $polls,
             'meter_readings' => $meterReadings,
             'invoices' => $invoices,
             'work_hour_submissions' => $workHourSubmissions,
             'meters_group' => $meterReadings,
             'finance_group' => $invoices + $workHourSubmissions,
-            'total' => $meterReadings + $invoices + $workHourSubmissions + $announcements,
+            'total' => $meterReadings + $invoices + $workHourSubmissions + $announcements + $polls,
         ];
     }
 
@@ -229,6 +235,7 @@ final class ActionIndicatorService
     {
         return [
             'announcements' => 0,
+            'polls' => 0,
             'board_work' => 0,
             'tasks' => 0,
             'registrations' => 0,

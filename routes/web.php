@@ -34,6 +34,7 @@ use App\Http\Controllers\PaymentBatchController;
 use App\Http\Controllers\PaymentReminderController;
 use App\Http\Controllers\PaymentReturnController;
 use App\Http\Controllers\PermissionProfileController;
+use App\Http\Controllers\PollController;
 use App\Http\Controllers\PortalDocumentController;
 use App\Http\Controllers\PortalSepaMandateController;
 use App\Http\Controllers\PrivacyController;
@@ -100,6 +101,14 @@ Route::view('konto-wartet-auf-freigabe', 'auth.pending-approval')
     ->name('registration.pending');
 
 Route::middleware(['auth', 'verified', 'registration.approved'])->group(function (): void {
+    Route::middleware('module:polls')->group(function (): void {
+        Route::resource('umfragen', PollController::class)->except('destroy')->parameters(['umfragen' => 'poll'])->names('polls');
+        foreach (['publish', 'close', 'archive', 'restore'] as $action) {
+            Route::post('umfragen/{poll}/'.$action, [PollController::class, 'transition'])->defaults('action', $action)->name('polls.'.$action);
+        }
+        Route::post('umfragen/{poll}/antwort', [PollController::class, 'answer'])->middleware('throttle:30,1')->name('polls.answer');
+        Route::get('umfragen/{poll}/export', [PollController::class, 'export'])->name('polls.export');
+    });
     Route::middleware('module:tasks')->group(function (): void {
         Route::resource('aufgaben', TaskController::class)->except('destroy')->parameters(['aufgaben' => 'task'])->names('tasks');
         foreach (['start', 'complete', 'cancel', 'archive', 'restore'] as $action) {

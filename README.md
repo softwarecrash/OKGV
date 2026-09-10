@@ -8,6 +8,21 @@ OKGV ist eine moderne, sichere und selbsthostbare Laravel-Anwendung. Eine Instal
 
 ## Aktueller Stand
 
+**Umfragen und Terminabfragen:** Unter **Kommunikation → Umfragen & Termine**
+können Berechtigte Entwürfe für Mitglieder, aktuelle Pächter oder ausgewählte
+Rollen anlegen. Die bei der Veröffentlichung berechtigten, bestätigten Konten
+werden fest eingeladen; pro Konto ist eine verbindliche Antwort möglich,
+unabhängig von mehreren Parzellen. Einzel- und Mehrfachauswahl sowie
+Terminabfragen sind verfügbar. Eine ausdrückliche Enthaltung ist möglich.
+
+Ergebnisse bleiben bis zum Ablauf oder dem endgültigen Abschluss verborgen. Sie
+sind danach wahlweise für die Zielgruppe oder nur für die Umfrageverwaltung
+sichtbar und können dort aggregiert als CSV exportiert werden. Die Antworten
+sind vertraulich, aber nicht anonym: Sie werden für Nachvollziehbarkeit mit dem
+Konto gespeichert, während weder Oberfläche noch Export Namenslisten ausgeben.
+Das Modul lässt sich mit `OKGV_MODULE_POLLS=false` ohne Datenverlust
+deaktivieren. Nach einem Update `php artisan migrate --force` ausführen.
+
 **Aufgaben und Wiedervorlagen:** Unter **Kommunikation → Aufgaben / Wiedervorlagen**
 werden allgemeine Aufgaben und die bestehenden Beschlussaufgaben gemeinsam
 verwaltet. Zuweisung, Fälligkeit, Wiedervorlage, Status, Verknüpfungen und Verlauf

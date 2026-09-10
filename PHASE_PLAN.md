@@ -252,11 +252,14 @@ Wiedervorlagen, kalendergerechte Folgetermine und granulare Rechte sind geprüft
 
 ## Phase 23: Umfragen und Terminabfragen
 
-- [ ] Umfragen für Pächter und Mitglieder
-- [ ] Terminabfragen für Arbeitseinsätze und Vereinsveranstaltungen
-- [ ] Zielgruppen und Abstimmungszeitraum
-- [ ] Sichtbare oder geheime Ergebnisse
-- [ ] Export und Auditlog
+- [x] Umfragen für Pächter und Mitglieder
+- [x] Terminabfragen für Arbeitseinsätze und Vereinsveranstaltungen
+- [x] Zielgruppen und Abstimmungszeitraum
+- [x] Sichtbare oder geheime Ergebnisse
+- [x] Export und Auditlog
+
+Abgeschlossen in 0.2.0.105. Teilnahme und Ergebnisanzeige sind bewusst
+vertraulich, nicht anonym; die Auswertung ist bis zum Abschluss gesperrt.
 
 ## Phase 24: Digitale Mitgliederversammlung
 

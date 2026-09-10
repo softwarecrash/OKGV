@@ -245,6 +245,8 @@ final class PrivacyErasureService
                     DB::table('board_follow_ups')->where($field, $oldUserId)->update([$field => null]);
                 }
                 DB::table('task_events')->where('user_id', $oldUserId)->update(['user_id' => null]);
+                DB::table('poll_participations')->where('user_id', $oldUserId)->update(['user_id' => null]);
+                DB::table('polls')->where('created_by', $oldUserId)->update(['created_by' => null]);
 
                 DB::table('work_hour_submissions')
                     ->where('submitted_by', $oldUserId)

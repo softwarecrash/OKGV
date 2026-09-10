@@ -1,5 +1,49 @@
 # OKGV Projektspezifikation
 
+## Phase 23: Umfragen und Terminabfragen
+
+- Eigenes Modul `polls`, Verwaltungsrecht `manage_polls` für Standardvorstand
+  und Administratoren. Individuelle Rechte-Snapshots werden nicht erweitert.
+  Teilnahme benötigt ein verifiziertes und freigegebenes Konto, kein Verwaltungsrecht.
+- Umfrage mit Einfach-/Mehrfachauswahl oder Terminabfrage mit mehreren möglichen
+  Terminen. 2 bis 20 Optionen, optionaler Endzeitpunkt je Termin; Termine liegen
+  nach dem Ende der Antwortfrist. Keine automatische Anmeldung zu Arbeitseinsätzen
+  und keine rechtsverbindliche Mitgliederversammlungsabstimmung in dieser Phase.
+- Zielgruppe: aktive Mitglieder mit Konto, aktive Pächter oder ausgewählte Rollen.
+  Aktive Mitgliedschaft berücksichtigt Eintritt, Austritt und Archivierung;
+  Pächter zusätzlich eine am aktuellen Datum laufende Zuordnung.
+  Veröffentlichung speichert den berechtigten Kontenkreis als Snapshot in
+  `poll_participations` (eindeutig pro Umfrage/Konto). Neue Konten werden nicht
+  nachträglich aufgenommen. Aktuelle Zielgruppenzugehörigkeit wird bei jedem
+  Zugriff zusätzlich geprüft, damit ein Rechte-/Mitgliedschaftsverlust greift.
+- `polls`: Titel, Beschreibung, Typ, Mehrfachauswahl, Zielgruppe/Rollen,
+  Beginn/Ende, Ergebnissichtbarkeit, Ersteller, Veröffentlichung, vorzeitiger
+  Abschluss und Archivierung. `poll_options`: Umfrage, Position, Text, Termine.
+  Entwürfe und ihre Optionen sind bearbeitbar. Veröffentlichte Inhalte,
+  Antwortmöglichkeiten, Zielgruppe und Frist bleiben unveränderbar.
+- Teilnahme genau einmal je Konto, nicht je Parzelle; mehrere Pächter können
+  getrennt antworten. Bestätigung vor verbindlicher Abgabe. Alternativ ausdrücklich
+  „Keine Auswahl / kein Termin passt“. Das beantwortet die Anfrage und entfernt
+  den Aktionshinweis. Keine stellvertretenden Stimmen und keine Gästeantworten.
+- Ergebnis erst nach Fristende oder ausdrücklich bestätigtem vorzeitigen Abschluss.
+  Sichtbar entweder für weiterhin berechtigte Teilnehmende oder nur Verwaltung.
+  Dies bedeutet vertrauliche Ergebnisse, NICHT anonyme Stimmabgabe: Die Datenbank
+  speichert die eigene Auswahl am Teilnehmerkonto. Oberfläche und CSV zeigen
+  ausschließlich Summen; keine personenbezogenen Antwortlisten.
+  Auditlogs enthalten niemals gewählte Optionen oder Antworttexte.
+- Speicherung der Antwort als validierte Options-IDs in `poll_participations`,
+  mit Antwortzeitpunkt; keinerlei Bindung an fremde Umfrageoptionen möglich.
+  Transaktionale Sperre der Umfrage schützt vor Doppelantworten und Abschlussrennen.
+- Archivierung ist rücknehmbar und löscht keine Antworten. Offene veröffentlichte
+  Umfragen müssen vorher abgeschlossen werden. Geschlossene Umfragen werden
+  nicht wieder zur Stimmabgabe geöffnet. Korrekturen erfordern einen neuen Entwurf.
+- Zentraler Aktionshinweis und Portalverweis für eigene offene unbeantwortete
+  Umfragen; gleiche Prüfung in Liste und Formular. Keine Mail-/Cron-Abhängigkeit.
+- CSV-Export aggregierter Ergebnisse nur für Verwaltung nach Abschluss,
+  mit Schutz vor Tabellenformeln. Datenschutzexport enthält nur eigene Teilnahme;
+  Pseudonymisierung entfernt Kontenverweise, bewahrt Summen und Historie.
+  Bestehende Vollbackups umfassen alle drei neuen Tabellen.
+
 ## Phase 22: Aufgaben und Wiedervorlagen
 
 - Die vorhandene Tabelle `board_follow_ups` wird ohne Datenkopie zur zentralen

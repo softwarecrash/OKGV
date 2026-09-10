@@ -2,6 +2,32 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.105] - 2026-09-10
+
+### Phase 23: Umfragen und Terminabfragen
+
+- Neues, abschaltbares Umfragemodul für Mitglieder, aktuelle Pächter und
+  ausgewählte Rollen mit Einzel-, Mehrfach- und Terminabfragen.
+- Veröffentlichung erstellt einen festen Teilnehmerkreis aus bestätigten und
+  freigegebenen Konten. Später hinzukommende Konten werden nicht stillschweigend
+  ergänzt; beim Verlust der aktuellen Zielgruppenzugehörigkeit entfällt der Zugriff.
+- Antworten sind je Konto einmalig, ausdrücklich zu bestätigen und danach
+  unveränderbar. Eine bewusste Enthaltung ist möglich; Terminabfragen erlauben
+  mehrere passende Termine. Es werden keine Arbeitseinsätze automatisch gebucht.
+- Ergebnisse bleiben bis Fristablauf oder endgültigem Abschluss verborgen und
+  sind anschließend wahlweise für die Zielgruppe oder ausschließlich für die
+  Umfrageverwaltung sichtbar. Vertraulich bedeutet nicht anonym; Auswertungen
+  und CSV-Exporte enthalten ausschließlich aggregierte Werte.
+- Neue Policies, Auditeinträge, Aktionshinweise in Kommunikation und
+  Pächterportal sowie Datenschutzexport und Pseudonymisierung ergänzt.
+- Drei additive Migrationen für Umfragen, Antwortmöglichkeiten und Teilnahmen;
+  lokale MariaDB nur vorwärts migriert, vorhandene Daten blieben unverändert.
+- 295 Tests mit 2085 Assertions erfolgreich, einschließlich Fachtests für
+  Zielgruppe, Fristen, Antwortschutz, Enthaltung, Terminmehrfachauswahl,
+  Ergebnisvertraulichkeit, Rechte, Modulabschaltung und isoliertem
+  Migrations-Rollback. Pint, Build, Composer-Validierung und beide Paketaudits
+  erfolgreich; bekannte Bootstrap/Sass-Abkündigungshinweise bleiben.
+
 ## [0.2.0.104] - 2026-09-10
 
 ### Phase 22: Aufgaben und Wiedervorlagen

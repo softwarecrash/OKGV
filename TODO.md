@@ -5,7 +5,17 @@
 - [x] Vorstandsarbeit, Aufgaben, Umfragen und Mitgliederversammlung als Phasen 21 bis 24 vorziehen
 - [x] Offene Folgephasen neu nummerieren und Abhängigkeiten erhalten
 
-Als Nächstes: Phase 23 (Umfragen und Terminabfragen), gemäß `PHASE_PLAN.md`.
+Als Nächstes: Phase 24 (Digitale Mitgliederversammlung), gemäß `PHASE_PLAN.md`.
+
+## Phase 23: Umfragen und Terminabfragen
+
+- [x] Zielgruppen, Teilnahme, Ergebnissichtbarkeit und Lebenszyklus spezifizieren
+- [x] Tabellen, Models, Zielgruppenprüfung und Policies erstellen
+- [x] Entwürfe, Veröffentlichung, Teilnahme und Abschluss umsetzen
+- [x] Aggregierte Ergebnisse, CSV-Export und Archivierung umsetzen
+- [x] Navigation, Portalhinweise, Module und Datenschutz integrieren
+- [x] Fachtests, Migrationsprüfung, Gesamttests, Build und Audits abschließen
+- [ ] Entwicklungsstand dokumentieren und veröffentlichen
 
 ## Phase 22: Aufgaben und Wiedervorlagen
 

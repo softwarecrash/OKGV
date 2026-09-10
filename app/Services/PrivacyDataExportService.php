@@ -44,6 +44,11 @@ final class PrivacyDataExportService
             'exported_at' => now()->toIso8601String(),
             'announcement_reads' => $member->user_id === null ? [] : DB::table('announcement_reads')
                 ->where('user_id', $member->user_id)->orderBy('read_at')->get(['announcement_id', 'read_at'])->all(),
+            'poll_participations' => $member->user_id === null ? [] : DB::table('poll_participations')
+                ->join('polls', 'polls.id', '=', 'poll_participations.poll_id')
+                ->where('poll_participations.user_id', $member->user_id)
+                ->orderBy('poll_participations.poll_id')
+                ->get(['polls.title', 'poll_participations.option_ids', 'poll_participations.answered_at'])->all(),
             'application' => config('app.name'),
             'member' => $member->only([
                 'id',
