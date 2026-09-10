@@ -5,7 +5,15 @@
 - [x] Vorstandsarbeit, Aufgaben, Umfragen und Mitgliederversammlung als Phasen 21 bis 24 vorziehen
 - [x] Offene Folgephasen neu nummerieren und Abhängigkeiten erhalten
 
-Als Nächstes: Phase 24 (Digitale Mitgliederversammlung), gemäß `PHASE_PLAN.md`.
+Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
+
+## Phase 24: Digitale Mitgliederversammlung
+
+- [x] Rechtsrahmen, Grenzen und Datenmodell spezifizieren
+- [x] Einladung, Tagesordnung und Beschlussvorschläge umsetzen
+- [x] Teilnehmerliste und elektronische Teilnahme umsetzen
+- [x] Abstimmungen, Ergebnisprotokoll und Abschluss umsetzen
+- [x] Rechte, Hinweise, Datenschutz, Tests und Veröffentlichung abschließen
 
 ## Phase 23: Umfragen und Terminabfragen
 

@@ -20,6 +20,7 @@ use App\Http\Controllers\InventoryLoanController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LetterController;
 use App\Http\Controllers\MailCampaignController;
+use App\Http\Controllers\MemberAssemblyController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MeterController;
 use App\Http\Controllers\MeterReadingController;
@@ -101,6 +102,13 @@ Route::view('konto-wartet-auf-freigabe', 'auth.pending-approval')
     ->name('registration.pending');
 
 Route::middleware(['auth', 'verified', 'registration.approved'])->group(function (): void {
+    Route::middleware('module:member_assemblies')->group(function (): void {
+        Route::resource('mitgliederversammlungen', MemberAssemblyController::class)->only(['index', 'create', 'store', 'show'])->parameters(['mitgliederversammlungen' => 'assembly'])->names('member-assemblies');
+        Route::post('mitgliederversammlungen/{assembly}/teilnehmen', [MemberAssemblyController::class, 'attend'])->name('member-assemblies.attend');
+        Route::post('mitgliederversammlungen/{assembly}/abstimmen', [MemberAssemblyController::class, 'vote'])->name('member-assemblies.vote');
+        Route::post('mitgliederversammlungen/{assembly}/veroeffentlichen', [MemberAssemblyController::class, 'publish'])->name('member-assemblies.publish');
+        Route::post('mitgliederversammlungen/{assembly}/abschliessen', [MemberAssemblyController::class, 'finalize'])->name('member-assemblies.finalize');
+    });
     Route::middleware('module:polls')->group(function (): void {
         Route::resource('umfragen', PollController::class)->except('destroy')->parameters(['umfragen' => 'poll'])->names('polls');
         foreach (['publish', 'close', 'archive', 'restore'] as $action) {

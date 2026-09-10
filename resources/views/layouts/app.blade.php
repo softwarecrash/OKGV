@@ -47,6 +47,7 @@
                                 $sepaEnabled = App\Enums\FeatureModule::Sepa->enabled();
                                 $communicationEnabled = App\Enums\FeatureModule::Communication->enabled();
                                 $pollsEnabled = App\Enums\FeatureModule::Polls->enabled();
+                                $assembliesEnabled = App\Enums\FeatureModule::MemberAssemblies->enabled();
                                 $documentsEnabled = App\Enums\FeatureModule::Documents->enabled();
                                 $waitingListEnabled = App\Enums\FeatureModule::WaitingList->enabled();
                                 $inventoryEnabled = App\Enums\FeatureModule::Inventory->enabled();
@@ -65,6 +66,7 @@
                                 $canViewSepa = $sepaEnabled && auth()->user()->can('viewAny', App\Models\SepaMandate::class);
                                 $canViewCommunication = $communicationEnabled && auth()->user()->can('viewAny', App\Models\MailCampaign::class);
                                 $canViewPolls = $pollsEnabled && auth()->user()->can('viewAny', App\Models\Poll::class);
+                                $canViewAssemblies = $assembliesEnabled && auth()->user()->can('viewAny', App\Models\MemberAssembly::class);
                                 $canViewDocuments = $documentsEnabled && auth()->user()->can('viewAny', App\Models\Document::class);
                                 $canViewInventory = $inventoryEnabled && auth()->user()->can('viewAny', App\Models\InventoryItem::class);
                             @endphp
@@ -206,7 +208,7 @@
                                     </ul>
                                 </li>
                             @endif
-                            @if ($canViewCommunication || $canViewPolls || auth()->user()->can('viewAny', App\Models\Announcement::class) || auth()->user()->can('viewAny', App\Models\BoardMeeting::class) || auth()->user()->can('viewAny', App\Models\Task::class))
+                            @if ($canViewCommunication || $canViewPolls || $canViewAssemblies || auth()->user()->can('viewAny', App\Models\Announcement::class) || auth()->user()->can('viewAny', App\Models\BoardMeeting::class) || auth()->user()->can('viewAny', App\Models\Task::class))
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                         Kommunikation
@@ -218,6 +220,9 @@
                                         @endcan
                                         @if ($canViewPolls)
                                             <li><a class="dropdown-item d-flex justify-content-between gap-3" href="{{ route('polls.index', $actionIndicators['polls'] > 0 ? ['unanswered' => 1] : []) }}">Umfragen & Termine <x-action-indicator :count="$actionIndicators['polls']" label="offene Umfragen" /></a></li>
+                                        @endif
+                                        @if ($canViewAssemblies)
+                                            <li><a class="dropdown-item" href="{{ route('member-assemblies.index') }}">Mitgliederversammlungen</a></li>
                                         @endif
                                         @can('viewAny', App\Models\BoardMeeting::class)
                                             <li><a class="dropdown-item d-flex justify-content-between gap-3" href="{{ route('board-meetings.index', ! App\Enums\FeatureModule::Tasks->enabled() && $actionIndicators['board_work'] > 0 ? ['due' => 1] : []) }}">Vorstandssitzungen <x-action-indicator :count="App\Enums\FeatureModule::Tasks->enabled() ? 0 : $actionIndicators['board_work']" label="fällige Beschlussaufgaben" /></a></li>

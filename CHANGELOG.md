@@ -2,6 +2,22 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.106] - 2026-09-10
+
+### Phase 24: Digitale Mitgliederversammlung
+
+- Mitgliederversammlungen als eigenes abschaltbares Modul mit Entwurf,
+  Einberufung, Tagesordnung, Beschlussvorschlägen, elektronischer Teilnahme,
+  protokollierten Ja/Nein/Enthaltungsstimmen und unveränderbarem Ergebnisabschluss.
+- Hybride und virtuelle Einladungen verlangen eine Erklärung zum elektronischen
+  Rechteweg. Rein virtuelle Versammlungen benötigen zusätzlich eine dokumentierte
+  Satzungsregelung oder Mitgliederbeschlussreferenz.
+- Die rechtlichen Grenzen sind in der Projektspezifikation dokumentiert:
+  keine geheime Wahl, keine Stimmrechtsvertretung und keine automatische
+  Rechtswirksamkeitsprüfung durch OKGV.
+- 297 Tests mit 2100 Assertions sowie Pint, Composer-Validierung, Audits und
+  Frontend-Build erfolgreich. Bekannte Bootstrap/Sass-Abkündigungshinweise bleiben.
+
 ## [0.2.0.105] - 2026-09-10
 
 ### Phase 23: Umfragen und Terminabfragen

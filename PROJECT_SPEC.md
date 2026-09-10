@@ -1,5 +1,43 @@
 # OKGV Projektspezifikation
 
+## Phase 24: Digitale Mitgliederversammlung
+
+- Eigenes Modul `member_assemblies` und Verwaltungsrecht
+  `manage_member_assemblies`; Standardvorstand und Administratoren erhalten es.
+  Mitglieder sehen nur veröffentlichte Einladungen, ihre eigene Teilnahme und
+  offene elektronische Abstimmungen.
+- Versammlungsformen: Präsenz, hybrid und virtuell. Die virtuelle Form verlangt
+  vor Veröffentlichung eine vom Vorstand eingetragene Referenz auf den
+  Mitgliederbeschluss oder die Satzungsregelung. Hybrid und virtuell verlangen
+  außerdem eine verständliche Beschreibung, wie elektronische Teilnahme,
+  Rede-, Antrags-, Auskunfts- und Stimmrechte ausgeübt werden. OKGV bestätigt
+  keine rechtliche Wirksamkeit; Satzung, Einberufungsfrist, Beschlussgegenstand,
+  Beschlussfähigkeit und Einzelfall sind vom Verein zu prüfen.
+- Rechtsgrundlage: § 32 BGB verlangt einen bezeichneten Beschlussgegenstand bei
+  der Berufung. Bei hybrider oder virtueller Einberufung muss der elektronische
+  Rechteweg angegeben werden; rein virtuelle Versammlungen benötigen einen
+  Mitgliederbeschluss für künftige virtuelle Versammlungen. Quelle:
+  https://www.gesetze-im-internet.de/bgb/__32.html
+- Entwurf: Titel, Zeitpunkt, Ort/Online-Zugangshinweis, Einladungsfrist,
+  Tagesordnung, Rechts-/Satzungshinweise und Beschlussvorschläge. Veröffentlichung
+  friert Einladung, Tagesordnung und Beschlussgegenstände ein. Korrekturen
+  erfolgen durch Rücknahme und neuen Entwurf.
+- Die Teilnehmerliste hält Mitglied, optionales Konto, Anwesenheitsweg,
+  Zeitpunkt und Erfassungsart fest. Elektronische Selbstanmeldung setzt ein
+  verifiziertes, freigegebenes Mitgliedskonto voraus; Präsenzteilnahme kann der
+  Vorstand auch ohne Konto erfassen. Keine Stimmrechtsvertretung in dieser Phase.
+- Beschlussvorschläge haben Ja/Nein/Enthaltung. Elektronische Stimmen sind nur
+  nach Teilnahmebestätigung einmalig abzugeben. Die Verwaltung kann Stimmen
+  für persönlich erschienene Mitglieder protokollieren; doppelte Stimme pro
+  Mitglied und Beschluss wird technisch verhindert. Es gibt keine geheime Wahl:
+  Stimmen sind für die Protokollführung nachweisbar, Ergebnisse werden nur
+  aggregiert angezeigt.
+- Abschluss erzeugt ein unveränderbares Protokoll mit Teilnehmerzahl und
+  Ergebnis-Snapshots. Archivierung ist rücknehmbar; abgeschlossene Inhalte,
+  Teilnahmen und Stimmen werden nie überschrieben oder gelöscht. Auditlogs
+  speichern keine Stimmoptionen. Datenschutzexport enthält nur eigene Teilnahme
+  und Stimmen; Pseudonymisierung löst Nutzerbezüge, bewahrt Ergebniszahlen.
+
 ## Phase 23: Umfragen und Terminabfragen
 
 - Eigenes Modul `polls`, Verwaltungsrecht `manage_polls` für Standardvorstand

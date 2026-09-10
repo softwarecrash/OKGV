@@ -47,6 +47,7 @@ enum UserRole: string
                 UserPermission::ViewTasks->value,
                 UserPermission::ManageTasks->value,
                 UserPermission::ManagePolls->value,
+                UserPermission::ManageMemberAssemblies->value,
                 UserPermission::ManageDocuments->value,
                 UserPermission::ManageWorkEvents->value,
                 UserPermission::ManageWaitingList->value,

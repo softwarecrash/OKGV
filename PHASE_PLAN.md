@@ -263,11 +263,14 @@ vertraulich, nicht anonym; die Auswertung ist bis zum Abschluss gesperrt.
 
 ## Phase 24: Digitale Mitgliederversammlung
 
-- [ ] Einladungen und Tagesordnung
-- [ ] Teilnehmerliste
-- [ ] Abstimmungen und Ergebnisse
-- [ ] Beschlüsse mit Protokollverknüpfung
-- [ ] Rechtliche Anforderungen vor Umsetzung prüfen
+- [x] Einladungen und Tagesordnung
+- [x] Teilnehmerliste
+- [x] Abstimmungen und Ergebnisse
+- [x] Beschlüsse mit Protokollverknüpfung
+- [x] Rechtliche Anforderungen vor Umsetzung prüfen
+
+Abgeschlossen in 0.2.0.106. Die Funktion unterstützt keine geheimen Wahlen und
+ersetzt weder Satzungsprüfung noch eine rechtliche Prüfung der Einberufung.
 
 ## Phase 25: Bewerbermanagement
 

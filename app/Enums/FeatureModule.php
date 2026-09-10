@@ -17,6 +17,7 @@ enum FeatureModule: string
     case BoardWork = 'board_work';
     case Tasks = 'tasks';
     case Polls = 'polls';
+    case MemberAssemblies = 'member_assemblies';
     case WaitingList = 'waiting_list';
     case Inventory = 'inventory';
     case DataTransfer = 'data_transfer';
@@ -37,6 +38,7 @@ enum FeatureModule: string
             self::BoardWork => 'Vorstandsarbeit',
             self::Tasks => 'Aufgaben und Wiedervorlagen',
             self::Polls => 'Umfragen und Terminabfragen',
+            self::MemberAssemblies => 'Mitgliederversammlungen',
             self::WaitingList => 'Warteliste',
             self::Inventory => 'Inventarverwaltung',
             self::DataTransfer => 'Datenübertragung',
