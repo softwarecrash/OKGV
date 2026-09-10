@@ -69,26 +69,26 @@ Auth::routes([
 ]);
 
 Route::middleware('guest')->group(function (): void {
-    Route::get('paechter-registrierung', [TenantRegistrationController::class, 'create'])
+    Route::get('tenant-registration', [TenantRegistrationController::class, 'create'])
         ->middleware('module:tenant_portal')
         ->name('tenant-registration.create');
-    Route::post('paechter-registrierung', [TenantRegistrationController::class, 'store'])
+    Route::post('tenant-registration', [TenantRegistrationController::class, 'store'])
         ->middleware(['module:tenant_portal', 'throttle:5,10'])
         ->name('tenant-registration.store');
 });
 
-Route::get('freigabe/dokument/{token}', [PublicDocumentController::class, 'download'])
+Route::get('shared-documents/{token}', [PublicDocumentController::class, 'download'])
     ->where('token', '[A-Za-z0-9]{64}')
     ->middleware(['module:documents', 'throttle:30,1'])
     ->name('documents.public');
 
-Route::view('datenschutzinformationen', 'privacy.information')
+Route::view('privacy-information', 'privacy.information')
     ->name('privacy.information');
 
 Route::middleware('module:announcements')->group(function (): void {
-    Route::get('bekanntmachungen', [AnnouncementController::class, 'index'])->name('announcements.public.index');
-    Route::get('bekanntmachungen/{announcement}', [AnnouncementController::class, 'show'])->name('announcements.public.show');
-    Route::get('bekanntmachungen/{announcement}/dokumente/{document}', [AnnouncementController::class, 'document'])
+    Route::get('public-announcements', [AnnouncementController::class, 'index'])->name('announcements.public.index');
+    Route::get('public-announcements/{announcement}', [AnnouncementController::class, 'show'])->name('announcements.public.show');
+    Route::get('public-announcements/{announcement}/documents/{document}', [AnnouncementController::class, 'document'])
         ->middleware(['module:documents', 'throttle:30,1'])->name('announcements.public.document');
 });
 Route::get('vereinslogo', [AssociationLogoController::class, 'show'])
@@ -98,195 +98,193 @@ Route::get('/dashboard', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified', 'registration.approved'])
     ->name('home');
 
-Route::view('konto-wartet-auf-freigabe', 'auth.pending-approval')
+Route::view('account/pending-approval', 'auth.pending-approval')
     ->middleware(['auth', 'verified'])
     ->name('registration.pending');
 
 Route::middleware(['auth', 'verified', 'registration.approved'])->group(function (): void {
     Route::middleware('module:garden_inspections')->group(function (): void {
-        Route::resource('gartenbegehungen', GardenInspectionController::class)->only(['index', 'create', 'store', 'show'])->parameters(['gartenbegehungen' => 'inspection'])->names('garden-inspections');
-        Route::post('gartenbegehungen/{inspection}/feststellungen', [GardenInspectionController::class, 'finding'])->name('garden-inspections.findings.store');
-        Route::post('gartenfeststellungen/{finding}/erledigen', [GardenInspectionController::class, 'resolve'])->name('garden-inspection-findings.resolve');
-        Route::get('gartenfeststellungen/{finding}/foto', [GardenInspectionController::class, 'photo'])->name('garden-inspection-findings.photo');
-        Route::post('gartenbegehungen/{inspection}/abschliessen', [GardenInspectionController::class, 'finalize'])->name('garden-inspections.finalize');
-        Route::get('gartenbegehungen/{inspection}/pdf', [GardenInspectionController::class, 'pdf'])->name('garden-inspections.pdf');
+        Route::resource('garden-inspections', GardenInspectionController::class)->only(['index', 'create', 'store', 'show'])->parameters(['garden-inspections' => 'inspection'])->names('garden-inspections');
+        Route::post('garden-inspections/{inspection}/findings', [GardenInspectionController::class, 'finding'])->name('garden-inspections.findings.store');
+        Route::post('garden-inspection-findings/{finding}/resolve', [GardenInspectionController::class, 'resolve'])->name('garden-inspection-findings.resolve');
+        Route::get('garden-inspection-findings/{finding}/photo', [GardenInspectionController::class, 'photo'])->name('garden-inspection-findings.photo');
+        Route::post('garden-inspections/{inspection}/finalize', [GardenInspectionController::class, 'finalize'])->name('garden-inspections.finalize');
+        Route::get('garden-inspections/{inspection}/pdf', [GardenInspectionController::class, 'pdf'])->name('garden-inspections.pdf');
     });
     Route::middleware('module:member_assemblies')->group(function (): void {
-        Route::resource('mitgliederversammlungen', MemberAssemblyController::class)->only(['index', 'create', 'store', 'show'])->parameters(['mitgliederversammlungen' => 'assembly'])->names('member-assemblies');
-        Route::post('mitgliederversammlungen/{assembly}/teilnehmen', [MemberAssemblyController::class, 'attend'])->name('member-assemblies.attend');
-        Route::post('mitgliederversammlungen/{assembly}/abstimmen', [MemberAssemblyController::class, 'vote'])->name('member-assemblies.vote');
-        Route::post('mitgliederversammlungen/{assembly}/veroeffentlichen', [MemberAssemblyController::class, 'publish'])->name('member-assemblies.publish');
-        Route::post('mitgliederversammlungen/{assembly}/abschliessen', [MemberAssemblyController::class, 'finalize'])->name('member-assemblies.finalize');
+        Route::resource('member-assemblies', MemberAssemblyController::class)->only(['index', 'create', 'store', 'show'])->parameters(['member-assemblies' => 'assembly'])->names('member-assemblies');
+        Route::post('member-assemblies/{assembly}/attend', [MemberAssemblyController::class, 'attend'])->name('member-assemblies.attend');
+        Route::post('member-assemblies/{assembly}/vote', [MemberAssemblyController::class, 'vote'])->name('member-assemblies.vote');
+        Route::post('member-assemblies/{assembly}/publish', [MemberAssemblyController::class, 'publish'])->name('member-assemblies.publish');
+        Route::post('member-assemblies/{assembly}/finalize', [MemberAssemblyController::class, 'finalize'])->name('member-assemblies.finalize');
     });
     Route::middleware('module:polls')->group(function (): void {
-        Route::resource('umfragen', PollController::class)->except('destroy')->parameters(['umfragen' => 'poll'])->names('polls');
+        Route::resource('polls', PollController::class)->except('destroy')->parameters(['polls' => 'poll'])->names('polls');
         foreach (['publish', 'close', 'archive', 'restore'] as $action) {
-            Route::post('umfragen/{poll}/'.$action, [PollController::class, 'transition'])->defaults('action', $action)->name('polls.'.$action);
+            Route::post('polls/{poll}/'.$action, [PollController::class, 'transition'])->defaults('action', $action)->name('polls.'.$action);
         }
-        Route::post('umfragen/{poll}/antwort', [PollController::class, 'answer'])->middleware('throttle:30,1')->name('polls.answer');
-        Route::get('umfragen/{poll}/export', [PollController::class, 'export'])->name('polls.export');
+        Route::post('polls/{poll}/answer', [PollController::class, 'answer'])->middleware('throttle:30,1')->name('polls.answer');
+        Route::get('polls/{poll}/export', [PollController::class, 'export'])->name('polls.export');
     });
     Route::middleware('module:tasks')->group(function (): void {
-        Route::resource('aufgaben', TaskController::class)->except('destroy')->parameters(['aufgaben' => 'task'])->names('tasks');
+        Route::resource('tasks', TaskController::class)->except('destroy')->parameters(['tasks' => 'task'])->names('tasks');
         foreach (['start', 'complete', 'cancel', 'archive', 'restore'] as $action) {
-            Route::post('aufgaben/{task}/'.$action, [TaskController::class, 'action'])->name('tasks.'.$action);
+            Route::post('tasks/{task}/'.$action, [TaskController::class, 'action'])->name('tasks.'.$action);
         }
-        Route::get('aufgaben/{task}/dokument', [TaskController::class, 'document'])->middleware('module:documents')->name('tasks.document');
+        Route::get('tasks/{task}/document', [TaskController::class, 'document'])->middleware('module:documents')->name('tasks.document');
     });
     Route::middleware('module:board_work')->group(function (): void {
-        Route::get('beschlussbuch', [BoardMeetingController::class, 'book'])->name('board-meetings.book');
-        Route::resource('vorstandssitzungen', BoardMeetingController::class)->except('destroy')
-            ->parameters(['vorstandssitzungen' => 'meeting'])->names('board-meetings');
-        Route::post('vorstandssitzungen/{meeting}/abschliessen', [BoardMeetingController::class, 'finalize'])->name('board-meetings.finalize');
-        Route::post('vorstandssitzungen/{meeting}/archivieren', [BoardMeetingController::class, 'archive'])->name('board-meetings.archive');
-        Route::post('vorstandssitzungen/{meeting}/zurueckholen', [BoardMeetingController::class, 'unarchive'])->name('board-meetings.unarchive');
-        Route::get('vorstandssitzungen/{meeting}/pdf', [BoardMeetingController::class, 'pdf'])->name('board-meetings.pdf');
-        Route::get('vorstandssitzungen/{meeting}/dokumente/{document}', [BoardMeetingController::class, 'document'])->middleware('module:documents')->name('board-meetings.document');
-        Route::get('vorstandssitzungen/{meeting}/tagesordnung/neu', [BoardMeetingController::class, 'agendaForm'])->name('board-agenda.create');
-        Route::get('vorstandssitzungen/{meeting}/tagesordnung/{item}/bearbeiten', [BoardMeetingController::class, 'agendaForm'])->name('board-agenda.edit');
-        Route::post('vorstandssitzungen/{meeting}/tagesordnung', [BoardMeetingController::class, 'saveAgenda'])->name('board-agenda.store');
-        Route::put('vorstandssitzungen/{meeting}/tagesordnung/{item}', [BoardMeetingController::class, 'saveAgenda'])->name('board-agenda.update');
-        Route::get('vorstandssitzungen/{meeting}/beschluesse/neu', [BoardMeetingController::class, 'resolutionForm'])->name('board-resolutions.create');
-        Route::get('vorstandssitzungen/{meeting}/beschluesse/{resolution}/bearbeiten', [BoardMeetingController::class, 'resolutionForm'])->name('board-resolutions.edit');
-        Route::post('vorstandssitzungen/{meeting}/beschluesse', [BoardMeetingController::class, 'saveResolution'])->name('board-resolutions.store');
-        Route::put('vorstandssitzungen/{meeting}/beschluesse/{resolution}', [BoardMeetingController::class, 'saveResolution'])->name('board-resolutions.update');
-        Route::get('beschluesse/{resolution}/aufgabe', [BoardMeetingController::class, 'followUpForm'])->name('board-follow-ups.create');
-        Route::post('beschluesse/{resolution}/aufgabe', [BoardMeetingController::class, 'addFollowUp'])->name('board-follow-ups.store');
-        Route::post('beschlussaufgaben/{task}/erledigen', [BoardMeetingController::class, 'complete'])->name('board-follow-ups.complete');
+        Route::get('board-resolutions', [BoardMeetingController::class, 'book'])->name('board-meetings.book');
+        Route::resource('board-meetings', BoardMeetingController::class)->except('destroy')->parameters(['board-meetings' => 'meeting'])->names('board-meetings');
+        Route::post('board-meetings/{meeting}/finalize', [BoardMeetingController::class, 'finalize'])->name('board-meetings.finalize');
+        Route::post('board-meetings/{meeting}/archive', [BoardMeetingController::class, 'archive'])->name('board-meetings.archive');
+        Route::post('board-meetings/{meeting}/restore', [BoardMeetingController::class, 'unarchive'])->name('board-meetings.unarchive');
+        Route::get('board-meetings/{meeting}/pdf', [BoardMeetingController::class, 'pdf'])->name('board-meetings.pdf');
+        Route::get('board-meetings/{meeting}/documents/{document}', [BoardMeetingController::class, 'document'])->middleware('module:documents')->name('board-meetings.document');
+        Route::get('board-meetings/{meeting}/agenda/create', [BoardMeetingController::class, 'agendaForm'])->name('board-agenda.create');
+        Route::get('board-meetings/{meeting}/agenda/{item}/edit', [BoardMeetingController::class, 'agendaForm'])->name('board-agenda.edit');
+        Route::post('board-meetings/{meeting}/agenda', [BoardMeetingController::class, 'saveAgenda'])->name('board-agenda.store');
+        Route::put('board-meetings/{meeting}/agenda/{item}', [BoardMeetingController::class, 'saveAgenda'])->name('board-agenda.update');
+        Route::get('board-meetings/{meeting}/resolutions/create', [BoardMeetingController::class, 'resolutionForm'])->name('board-resolutions.create');
+        Route::get('board-meetings/{meeting}/resolutions/{resolution}/edit', [BoardMeetingController::class, 'resolutionForm'])->name('board-resolutions.edit');
+        Route::post('board-meetings/{meeting}/resolutions', [BoardMeetingController::class, 'saveResolution'])->name('board-resolutions.store');
+        Route::put('board-meetings/{meeting}/resolutions/{resolution}', [BoardMeetingController::class, 'saveResolution'])->name('board-resolutions.update');
+        Route::get('board-resolutions/{resolution}/task', [BoardMeetingController::class, 'followUpForm'])->name('board-follow-ups.create');
+        Route::post('board-resolutions/{resolution}/task', [BoardMeetingController::class, 'addFollowUp'])->name('board-follow-ups.store');
+        Route::post('board-follow-ups/{task}/complete', [BoardMeetingController::class, 'complete'])->name('board-follow-ups.complete');
     });
     Route::middleware('module:announcements')->group(function (): void {
-        Route::resource('schwarzes-brett', AnnouncementController::class)->except('destroy')
-            ->parameters(['schwarzes-brett' => 'announcement'])->names('announcements');
-        Route::post('schwarzes-brett/{announcement}/veroeffentlichen', [AnnouncementController::class, 'publish'])->name('announcements.publish');
-        Route::post('schwarzes-brett/{announcement}/zurueckziehen', [AnnouncementController::class, 'archive'])->name('announcements.archive');
-        Route::post('schwarzes-brett/{announcement}/gelesen', [AnnouncementController::class, 'acknowledge'])
+        Route::resource('announcements', AnnouncementController::class)->except('destroy')->parameters(['announcements' => 'announcement'])->names('announcements');
+        Route::post('announcements/{announcement}/publish', [AnnouncementController::class, 'publish'])->name('announcements.publish');
+        Route::post('announcements/{announcement}/archive', [AnnouncementController::class, 'archive'])->name('announcements.archive');
+        Route::post('announcements/{announcement}/acknowledge', [AnnouncementController::class, 'acknowledge'])
             ->middleware('throttle:60,1')->name('announcements.acknowledge');
-        Route::get('schwarzes-brett/{announcement}/dokumente/{document}', [AnnouncementController::class, 'document'])
+        Route::get('announcements/{announcement}/documents/{document}', [AnnouncementController::class, 'document'])
             ->middleware(['module:documents', 'throttle:30,1'])->name('announcements.document');
     });
-    Route::get('konto/passwort', [AccountPasswordController::class, 'edit'])
+    Route::get('account/password', [AccountPasswordController::class, 'edit'])
         ->name('account.password.edit');
-    Route::put('konto/passwort', [AccountPasswordController::class, 'update'])
+    Route::put('account/password', [AccountPasswordController::class, 'update'])
         ->name('account.password.update');
-    Route::get('datenschutz', [PrivacyController::class, 'index'])
+    Route::get('privacy', [PrivacyController::class, 'index'])
         ->name('privacy.index');
-    Route::put('datenschutz/freigaben', [PrivacyController::class, 'update'])
+    Route::put('privacy/sharing', [PrivacyController::class, 'update'])
         ->name('privacy.settings.update');
-    Route::get('datenschutz/auskunft/{member}', [PrivacyController::class, 'export'])
+    Route::get('privacy/export/{member}', [PrivacyController::class, 'export'])
         ->middleware('throttle:10,1')
         ->name('privacy.export');
-    Route::post('datenschutz/loeschanfragen', [PrivacyErasureRequestController::class, 'store'])
+    Route::post('privacy/erasure-requests', [PrivacyErasureRequestController::class, 'store'])
         ->middleware('throttle:5,10')
         ->name('privacy-erasure-requests.store');
-    Route::post('datenschutz/loeschanfragen/{privacy_erasure_request}/pruefen', [PrivacyErasureRequestController::class, 'review'])
+    Route::post('privacy/erasure-requests/{privacy_erasure_request}/review', [PrivacyErasureRequestController::class, 'review'])
         ->name('privacy-erasure-requests.review');
-    Route::post('datenschutz/loeschanfragen/{privacy_erasure_request}/pseudonymisieren', [PrivacyErasureRequestController::class, 'anonymize'])
+    Route::post('privacy/erasure-requests/{privacy_erasure_request}/anonymize', [PrivacyErasureRequestController::class, 'anonymize'])
         ->middleware('throttle:3,10')
         ->name('privacy-erasure-requests.anonymize');
-    Route::get('paechterportal', [TenantPortalController::class, 'index'])
+    Route::get('tenant-portal', [TenantPortalController::class, 'index'])
         ->middleware('module:tenant_portal')
         ->name('tenant-portal.index');
-    Route::get('paechterportal/dokumente', [PortalDocumentController::class, 'index'])
+    Route::get('tenant-portal/documents', [PortalDocumentController::class, 'index'])
         ->middleware(['module:tenant_portal', 'module:documents'])
         ->name('tenant-portal.documents');
-    Route::get('paechterportal/dokumente/{document}', [PortalDocumentController::class, 'download'])
+    Route::get('tenant-portal/documents/{document}', [PortalDocumentController::class, 'download'])
         ->middleware(['module:tenant_portal', 'module:documents'])
         ->name('tenant-portal.documents.download');
-    Route::get('paechterportal/sepa-mandate', [PortalSepaMandateController::class, 'index'])
+    Route::get('tenant-portal/sepa-mandates', [PortalSepaMandateController::class, 'index'])
         ->middleware(['module:tenant_portal', 'module:sepa'])
         ->name('tenant-portal.sepa-mandates.index');
-    Route::get('paechterportal/sepa-mandate/neu', [PortalSepaMandateController::class, 'create'])
+    Route::get('tenant-portal/sepa-mandates/create', [PortalSepaMandateController::class, 'create'])
         ->middleware(['module:tenant_portal', 'module:sepa'])
         ->name('tenant-portal.sepa-mandates.create');
-    Route::post('paechterportal/sepa-mandate', [PortalSepaMandateController::class, 'store'])
+    Route::post('tenant-portal/sepa-mandates', [PortalSepaMandateController::class, 'store'])
         ->middleware(['module:tenant_portal', 'module:sepa', 'throttle:5,10'])
         ->name('tenant-portal.sepa-mandates.store');
-    Route::post('paechterportal/sepa-mandate/{sepaMandate}/widerrufen', [PortalSepaMandateController::class, 'revoke'])
+    Route::post('tenant-portal/sepa-mandates/{sepaMandate}/revoke', [PortalSepaMandateController::class, 'revoke'])
         ->middleware(['module:tenant_portal', 'module:sepa', 'throttle:5,10'])
         ->name('tenant-portal.sepa-mandates.revoke');
-    Route::get('registrierungsanfragen', [RegistrationRequestController::class, 'index'])
+    Route::get('registration-requests', [RegistrationRequestController::class, 'index'])
         ->middleware('module:tenant_portal')
         ->name('registration-requests.index');
-    Route::get('registrierungsanfragen/{registration_request}', [RegistrationRequestController::class, 'show'])
+    Route::get('registration-requests/{registration_request}', [RegistrationRequestController::class, 'show'])
         ->middleware('module:tenant_portal')
         ->name('registration-requests.show');
-    Route::post('registrierungsanfragen/{registration_request}/freigeben', [RegistrationRequestController::class, 'approve'])
+    Route::post('registration-requests/{registration_request}/approve', [RegistrationRequestController::class, 'approve'])
         ->middleware('module:tenant_portal')
         ->name('registration-requests.approve');
-    Route::post('registrierungsanfragen/{registration_request}/konto-verknuepfen', [RegistrationRequestController::class, 'linkAccount'])
+    Route::post('registration-requests/{registration_request}/link-account', [RegistrationRequestController::class, 'linkAccount'])
         ->middleware('module:tenant_portal')
         ->name('registration-requests.link-account');
-    Route::post('registrierungsanfragen/{registration_request}/mitglied-anlegen', [RegistrationRequestController::class, 'createMember'])
+    Route::post('registration-requests/{registration_request}/create-member', [RegistrationRequestController::class, 'createMember'])
         ->middleware('module:tenant_portal')
         ->name('registration-requests.create-member');
-    Route::post('registrierungsanfragen/{registration_request}/mitglied-verknuepfen', [RegistrationRequestController::class, 'linkMember'])
+    Route::post('registration-requests/{registration_request}/link-member', [RegistrationRequestController::class, 'linkMember'])
         ->middleware('module:tenant_portal')
         ->name('registration-requests.link-member');
-    Route::post('registrierungsanfragen/{registration_request}/ablehnen', [RegistrationRequestController::class, 'reject'])
+    Route::post('registration-requests/{registration_request}/reject', [RegistrationRequestController::class, 'reject'])
         ->middleware('module:tenant_portal')
         ->name('registration-requests.reject');
-    Route::get('zaehlerstandsmeldungen', [MeterReadingSubmissionController::class, 'index'])
+    Route::get('meter-reading-submissions', [MeterReadingSubmissionController::class, 'index'])
         ->middleware('module:meters')
         ->name('meter-reading-submissions.index');
-    Route::get('zaehler/{meter}/stand-melden', [MeterReadingSubmissionController::class, 'create'])
+    Route::get('meters/{meter}/report-reading', [MeterReadingSubmissionController::class, 'create'])
         ->middleware('module:meters')
         ->name('meter-reading-submissions.create');
-    Route::post('zaehler/{meter}/stand-melden', [MeterReadingSubmissionController::class, 'store'])
+    Route::post('meters/{meter}/report-reading', [MeterReadingSubmissionController::class, 'store'])
         ->middleware('module:meters')
         ->name('meter-reading-submissions.store');
-    Route::get('zaehlerstandsmeldungen/{meter_reading_submission}/foto', [MeterReadingSubmissionController::class, 'photo'])
+    Route::get('meter-reading-submissions/{meter_reading_submission}/photo', [MeterReadingSubmissionController::class, 'photo'])
         ->middleware('module:meters')
         ->name('meter-reading-submissions.photo');
-    Route::post('zaehlerstandsmeldungen/{meter_reading_submission}/freigeben', [MeterReadingSubmissionController::class, 'approve'])
+    Route::post('meter-reading-submissions/{meter_reading_submission}/approve', [MeterReadingSubmissionController::class, 'approve'])
         ->middleware('module:meters')
         ->name('meter-reading-submissions.approve');
-    Route::post('zaehlerstandsmeldungen/{meter_reading_submission}/ablehnen', [MeterReadingSubmissionController::class, 'reject'])
+    Route::post('meter-reading-submissions/{meter_reading_submission}/reject', [MeterReadingSubmissionController::class, 'reject'])
         ->middleware('module:meters')
         ->name('meter-reading-submissions.reject');
     Route::get('user-permissions', [UserPermissionController::class, 'index'])
         ->name('user-permissions.index');
     Route::put('user-permissions/{user}', [UserPermissionController::class, 'update'])
         ->name('user-permissions.update');
-    Route::get('globale-konfiguration', [ApplicationSettingController::class, 'edit'])
+    Route::get('application-settings', [ApplicationSettingController::class, 'edit'])
         ->name('application-settings.edit');
-    Route::put('globale-konfiguration', [ApplicationSettingController::class, 'update'])
+    Route::put('application-settings', [ApplicationSettingController::class, 'update'])
         ->name('application-settings.update');
-    Route::get('nummernkreise', [NumberSequenceController::class, 'edit'])
+    Route::get('number-sequences', [NumberSequenceController::class, 'edit'])
         ->name('number-sequences.edit');
-    Route::put('nummernkreise', [NumberSequenceController::class, 'update'])
+    Route::put('number-sequences', [NumberSequenceController::class, 'update'])
         ->name('number-sequences.update');
     Route::resource('permission-profiles', PermissionProfileController::class)
         ->only(['index', 'create', 'store', 'edit', 'update']);
-    Route::put('globale-konfiguration/smtp', [CommunicationSettingController::class, 'update'])
+    Route::put('application-settings/smtp', [CommunicationSettingController::class, 'update'])
         ->name('communication-settings.update');
-    Route::post('globale-konfiguration/smtp/test', [CommunicationSettingController::class, 'test'])
+    Route::post('application-settings/smtp/test', [CommunicationSettingController::class, 'test'])
         ->middleware('throttle:smtp-tests')
         ->name('communication-settings.test');
-    Route::get('datenuebertragung', [DataTransferController::class, 'index'])
+    Route::get('data-transfer', [DataTransferController::class, 'index'])
         ->middleware('module:data_transfer')
         ->name('data-transfer.index');
-    Route::post('datenuebertragung/app-key', [DataTransferController::class, 'revealAppKey'])
+    Route::post('data-transfer/app-key', [DataTransferController::class, 'revealAppKey'])
         ->middleware(['module:data_transfer', 'throttle:3,10'])
         ->name('data-transfer.app-key');
-    Route::post('datenuebertragung/import', [DataTransferController::class, 'import'])
+    Route::post('data-transfer/import', [DataTransferController::class, 'import'])
         ->middleware(['module:data_transfer', 'throttle:10,1'])
         ->name('data-transfer.import');
-    Route::get('datenuebertragung/export/{type}', [DataTransferController::class, 'export'])
+    Route::get('data-transfer/export/{type}', [DataTransferController::class, 'export'])
         ->middleware(['module:data_transfer', 'throttle:30,1'])
         ->name('data-transfer.export');
-    Route::get('datenuebertragung/vorlage/{type}', [DataTransferController::class, 'template'])
+    Route::get('data-transfer/template/{type}', [DataTransferController::class, 'template'])
         ->middleware(['module:data_transfer', 'throttle:30,1'])
         ->name('data-transfer.template');
-    Route::post('datenuebertragung/backups', [BackupController::class, 'create'])
+    Route::post('data-transfer/backups', [BackupController::class, 'create'])
         ->middleware(['module:data_transfer', 'throttle:3,10'])
         ->name('backups.create');
-    Route::get('datenuebertragung/backups/{backup}', [BackupController::class, 'download'])
+    Route::get('data-transfer/backups/{backup}', [BackupController::class, 'download'])
         ->middleware(['module:data_transfer', 'throttle:10,1'])
         ->name('backups.download');
-    Route::delete('datenuebertragung/backups/{backup}', [BackupController::class, 'destroy'])
+    Route::delete('data-transfer/backups/{backup}', [BackupController::class, 'destroy'])
         ->middleware('module:data_transfer')
         ->name('backups.destroy');
-    Route::post('datenuebertragung/wiederherstellen', [BackupController::class, 'restore'])
+    Route::post('data-transfer/restore', [BackupController::class, 'restore'])
         ->middleware(['module:data_transfer', 'throttle:2,60'])
         ->name('backups.restore');
     Route::post('mail-campaigns/{mail_campaign}/send', [MailCampaignController::class, 'send'])
@@ -364,25 +362,25 @@ Route::middleware(['auth', 'verified', 'registration.approved'])->group(function
     Route::put('work-event-participants/{work_event_participant}', [WorkEventParticipantController::class, 'update'])
         ->middleware('module:work_events')
         ->name('work-event-participants.update');
-    Route::get('arbeitsstundenmeldungen', [WorkHourSubmissionController::class, 'index'])
+    Route::get('work-hour-submissions', [WorkHourSubmissionController::class, 'index'])
         ->middleware('module:work_hours')
         ->name('work-hour-submissions.index');
-    Route::get('arbeitsstunden-melden', [WorkHourSubmissionController::class, 'create'])
+    Route::get('work-hour-submissions/create', [WorkHourSubmissionController::class, 'create'])
         ->middleware('module:work_hours')
         ->name('work-hour-submissions.create');
-    Route::post('arbeitsstundenmeldungen', [WorkHourSubmissionController::class, 'store'])
+    Route::post('work-hour-submissions', [WorkHourSubmissionController::class, 'store'])
         ->middleware('module:work_hours')
         ->name('work-hour-submissions.store');
-    Route::get('arbeitsstundenmeldungen/{work_hour_submission}/foto', [WorkHourSubmissionController::class, 'photo'])
+    Route::get('work-hour-submissions/{work_hour_submission}/photo', [WorkHourSubmissionController::class, 'photo'])
         ->middleware('module:work_hours')
         ->name('work-hour-submissions.photo');
-    Route::post('arbeitsstundenmeldungen/{work_hour_submission}/freigeben', [WorkHourSubmissionController::class, 'approve'])
+    Route::post('work-hour-submissions/{work_hour_submission}/approve', [WorkHourSubmissionController::class, 'approve'])
         ->middleware('module:work_hours')
         ->name('work-hour-submissions.approve');
-    Route::post('arbeitsstundenmeldungen/{work_hour_submission}/ablehnen', [WorkHourSubmissionController::class, 'reject'])
+    Route::post('work-hour-submissions/{work_hour_submission}/reject', [WorkHourSubmissionController::class, 'reject'])
         ->middleware('module:work_hours')
         ->name('work-hour-submissions.reject');
-    Route::post('arbeitsstundenmeldungen/{work_hour_submission}/gelesen', [WorkHourSubmissionController::class, 'acknowledge'])
+    Route::post('work-hour-submissions/{work_hour_submission}/acknowledge', [WorkHourSubmissionController::class, 'acknowledge'])
         ->middleware('module:work_hours')
         ->name('work-hour-submissions.acknowledge');
     Route::resource('billing-periods.billing-rates', BillingRateController::class)
@@ -452,15 +450,15 @@ Route::middleware(['auth', 'verified', 'registration.approved'])->group(function
     Route::patch('members/{member}/archive', [MemberController::class, 'archive'])
         ->name('members.archive');
     Route::resource('members', MemberController::class)->except('destroy');
-    Route::get('lageplan', [ParcelMapController::class, 'index'])
+    Route::get('parcel-map', [ParcelMapController::class, 'index'])
         ->name('parcel-map.index');
-    Route::get('lageplan/hintergrund', [ParcelMapController::class, 'background'])
+    Route::get('parcel-map/background', [ParcelMapController::class, 'background'])
         ->name('parcel-map.background');
-    Route::get('lageplan/bearbeiten', [ParcelMapController::class, 'edit'])
+    Route::get('parcel-map/edit', [ParcelMapController::class, 'edit'])
         ->name('parcel-map.edit');
-    Route::put('lageplan/hintergrund', [ParcelMapController::class, 'updateBackground'])
+    Route::put('parcel-map/background', [ParcelMapController::class, 'updateBackground'])
         ->name('parcel-map.background.update');
-    Route::put('lageplan/parzellen/{parcel}', [ParcelMapController::class, 'updatePolygon'])
+    Route::put('parcel-map/parcels/{parcel}', [ParcelMapController::class, 'updatePolygon'])
         ->name('parcel-map.polygon.update');
     Route::resource('parcels', ParcelController::class)->except('destroy');
     Route::get('meters/{meter}/replace', [MeterReplacementController::class, 'create'])
@@ -484,32 +482,32 @@ Route::middleware(['auth', 'verified', 'registration.approved'])->group(function
     Route::resource('parcel-tenants', ParcelTenantController::class)
         ->only(['create', 'store', 'edit', 'update'])
         ->parameters(['parcel-tenants' => 'parcel_tenant']);
-    Route::get('paechterwechsel/{tenant_transition}/dokumente/{document}', [TenantTransitionController::class, 'document'])
+    Route::get('tenant-transitions/{tenant_transition}/documents/{document}', [TenantTransitionController::class, 'document'])
         ->name('tenant-transitions.documents.download');
-    Route::resource('paechterwechsel', TenantTransitionController::class)
+    Route::resource('tenant-transitions', TenantTransitionController::class)
         ->only(['index', 'create', 'store', 'show'])
-        ->parameters(['paechterwechsel' => 'tenant_transition'])
+        ->parameters(['tenant-transitions' => 'tenant_transition'])
         ->names('tenant-transitions');
-    Route::resource('warteliste', WaitingListEntryController::class)
+    Route::resource('waiting-list', WaitingListEntryController::class)
         ->except(['destroy'])
-        ->parameters(['warteliste' => 'waiting_list_entry'])
+        ->parameters(['waiting-list' => 'waiting_list_entry'])
         ->names('waiting-list-entries')
         ->middleware('module:waiting_list');
-    Route::get('inventar/{inventory_item}/ausgeben', [InventoryLoanController::class, 'create'])
+    Route::get('inventory/{inventory_item}/loans/create', [InventoryLoanController::class, 'create'])
         ->middleware('module:inventory')
         ->name('inventory-items.loans.create');
-    Route::post('inventar/{inventory_item}/ausgaben', [InventoryLoanController::class, 'store'])
+    Route::post('inventory/{inventory_item}/loans', [InventoryLoanController::class, 'store'])
         ->middleware('module:inventory')
         ->name('inventory-items.loans.store');
-    Route::get('inventar/{inventory_item}/ausgaben/{inventory_loan}/rueckgabe', [InventoryLoanController::class, 'editReturn'])
+    Route::get('inventory/{inventory_item}/loans/{inventory_loan}/return', [InventoryLoanController::class, 'editReturn'])
         ->middleware('module:inventory')
         ->name('inventory-items.loans.return.edit');
-    Route::put('inventar/{inventory_item}/ausgaben/{inventory_loan}/rueckgabe', [InventoryLoanController::class, 'updateReturn'])
+    Route::put('inventory/{inventory_item}/loans/{inventory_loan}/return', [InventoryLoanController::class, 'updateReturn'])
         ->middleware('module:inventory')
         ->name('inventory-items.loans.return.update');
-    Route::resource('inventar', InventoryItemController::class)
+    Route::resource('inventory', InventoryItemController::class)
         ->except(['destroy'])
-        ->parameters(['inventar' => 'inventory_item'])
+        ->parameters(['inventory' => 'inventory_item'])
         ->names('inventory-items')
         ->middleware('module:inventory');
 });

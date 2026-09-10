@@ -2,6 +2,17 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.109] - 2026-09-10
+
+### Einheitliche URLs
+
+- Sämtliche fachlichen URLs auf englische, URL-konforme Bezeichnungen
+  vereinheitlicht, darunter Portal, Registrierung, Begehungen, Sitzungen,
+  Umfragen, Aufgaben, Datenschutz, Zähler-, Arbeitsstunden- und
+  Datenübertragungsabläufe, Lageplan, Pächterwechsel, Warteliste und Inventar.
+- Deutsche Benutzeroberfläche und bestehende Routennamen bleiben unverändert.
+  Alte deutsche URLs werden auf Wunsch nicht weitergeleitet.
+
 ## [0.2.0.108] - 2026-09-10
 
 ### Fehlerbehebung Gartenbegehungen

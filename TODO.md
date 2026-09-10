@@ -4,6 +4,7 @@
 
 - [x] Vorstandsarbeit, Aufgaben, Umfragen und Mitgliederversammlung als Phasen 21 bis 24 vorziehen
 - [x] Offene Folgephasen neu nummerieren und Abhängigkeiten erhalten
+- [x] Fachliche URLs einheitlich auf Englisch umstellen
 
 Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 
