@@ -94,6 +94,13 @@ Demo-Daten verwenden `OKGV_DEMO_PASSWORD` als Passwort für die Demo-Konten.
 
 ## Updates
 
+Für eine produktive Instanz mit GitHub-Release-Freigabe verwende statt `main`
+den Branch `production` und folge vollständig
+[PRODUCTION_UPDATES.md](PRODUCTION_UPDATES.md). Das bisherige
+`plesk-deploy.sh` bleibt für manuelle Test- und Demo-Deployments gedacht.
+Im produktiven Ablauf wird der Webhook erst durch die freigegebene
+Release-Promotion ausgelöst.
+
 Empfohlene Reihenfolge bei einem Update:
 
 ```bash

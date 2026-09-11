@@ -369,6 +369,14 @@ Browser und enthalten keine Fotos.
 - [ ] Automatische Backups und Restore-Strategie
 - [ ] Klare Trennung zur selbstverwalteten Einzelinstanz dokumentieren
 
+### Vorgezogene Teilphase 33.1: Release-gesteuerte Updates
+
+- [x] GitHub-Workflow für die kontrollierte Promotion veröffentlichter Releases erstellen
+- [x] Freigabepunkt über das GitHub-Environment `production` vorsehen
+- [x] Plesk-Webhook und zusätzliche Bereitstellungsaktion dokumentieren
+- [x] Wartungsmodus, additive Migrationen und Cache-Optimierung im Plesk-Script absichern
+- [x] Backup- und Rollback-Grenzen von Shared Hosting verbindlich dokumentieren
+
 ## Phase 34: Deployment
 
 - [ ] Deployment

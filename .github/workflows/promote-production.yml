@@ -1,0 +1,54 @@
+name: Promote published release to production
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Published GitHub release tag to deploy, for example v0.2.0.111
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: production-release
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    name: Promote release
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Validate release tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          printf '%s\n' "$RELEASE_TAG" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$' || {
+            echo "A four-part OKGV version tag is required." >&2
+            exit 1
+          }
+          gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json isDraft,isPrerelease,tagName \
+            --jq 'select(.isDraft == false and .isPrerelease == false) | .tagName' | grep -Fx "$RELEASE_TAG"
+
+      - name: Move production to the published release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          release_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${RELEASE_TAG}" --jq '.object.sha')"
+          release_type="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${RELEASE_TAG}" --jq '.object.type')"
+
+          if [ "$release_type" = "tag" ]; then
+            release_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/tags/${release_sha}" --jq '.object.sha')"
+          fi
+
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/production" >/dev/null 2>&1; then
+            gh api --method PATCH "repos/${GITHUB_REPOSITORY}/git/refs/heads/production" \
+              -f sha="$release_sha" -F force=true
+          else
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/git/refs" \
+              -f ref=refs/heads/production -f sha="$release_sha"
+          fi

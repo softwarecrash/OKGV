@@ -580,6 +580,11 @@ Das Script kann als zusätzliche Git-Bereitstellungsaktion im Laravel Toolkit
 hinterlegt werden und führt Migrationen, Admin-Bootstrap und Laravel-Optimierung
 über `php artisan okgv:deploy` aus.
 
+Für produktive Instanzen mit Plesk und GitHub ist der freigabepflichtige
+Release-Ablauf in [PRODUCTION_UPDATES.md](PRODUCTION_UPDATES.md) dokumentiert.
+Er bindet Plesk an den Branch `production`, der ausschließlich durch einen
+veröffentlichten GitHub-Release nach manueller Freigabe aktualisiert wird.
+
 Die verbindliche Reihenfolge steht in [PHASE_PLAN.md](PHASE_PLAN.md), die
 Fachspezifikation in [PROJECT_SPEC.md](PROJECT_SPEC.md), Arbeitsregeln in
 [AGENTS.md](AGENTS.md) und der aktuelle Fortschritt in [TODO.md](TODO.md).

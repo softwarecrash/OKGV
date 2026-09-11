@@ -2,6 +2,20 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.111] - 2026-09-11
+
+### Release-gesteuerte Produktionsupdates
+
+- GitHub-Workflow ergänzt, der ausschließlich veröffentlichte, nicht als
+  Vorabversion markierte OKGV-Releases nach manueller Freigabe auf den Branch
+  `production` promotet.
+- Produktionsscript für Plesk ergänzt: Wartungsmodus, Cache-Bereinigung,
+  additive Migrationen und Laravel-Optimierung. Ein Trap hebt den
+  Wartungsmodus auch nach einem Fehler wieder auf; Daten werden nie geleert.
+- `PRODUCTION_UPDATES.md` erstellt sowie README, Plesk-Anleitung,
+  Spezifikation, Phasenplan und TODO um GitHub-, Webhook-, Backup- und
+  Rollback-Ablauf ergänzt.
+
 ## [0.2.0.110] - 2026-09-10
 
 ### Vorgezogene Phase 31: Mobile Nutzung und PWA

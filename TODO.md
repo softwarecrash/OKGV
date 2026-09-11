@@ -8,6 +8,14 @@
 
 Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 
+## Vorgezogene Teilphase 33.1: Release-gesteuerte Produktionsupdates
+
+- [x] `production` als ausschließlich freigegebener Release-Branch spezifizieren
+- [x] GitHub-Action für veröffentlichte Releases und manuelle Environment-Freigabe ergänzen
+- [x] Plesk-Produktionsscript mit Wartungsmodus, Migrationen und garantiertem Wiederhochfahren ergänzen
+- [x] GitHub-, Plesk-, Backup- und Rollback-Ablauf in `PRODUCTION_UPDATES.md` dokumentieren
+- [ ] GitHub-Environment, Branch-Schutz und Plesk-Webhook einmalig im jeweiligen Hosting-Konto konfigurieren
+
 ## Vorgezogene Phase 31: Mobile Nutzung und PWA
 
 - [x] Installierbares Manifest und Service Worker für statische Dateien

@@ -1,5 +1,26 @@
 # OKGV Projektspezifikation
 
+## Vorgezogene Teilphase 33.1: Release-gesteuerte Produktionsupdates
+
+- Produktivinstallationen aktualisieren sich nicht selbst aus der Anwendung.
+  Die Anwendung erhält weder GitHub-Zugangsdaten noch Schreibzugriff auf ihren
+  Quellcode.
+- `main` bleibt Entwicklungsbranch. `production` enthält ausschließlich den
+  Stand eines veröffentlichten, nicht als Vorabversion markierten GitHub-
+  Releases mit vierteiliger OKGV-Version (`vX.Y.Z.N`).
+- Eine GitHub-Action promotet einen ausgewählten Release-Tag erst nach
+  Freigabe im Environment `production` auf den Branch `production`. Plesk
+  reagiert auf dessen Push per Webhook und führt Composer-/Node-Schritte sowie
+  `scripts/plesk-production-deploy.sh` aus.
+- Das Produktionsscript aktiviert kurz den Wartungsmodus, leert Caches, führt
+  additive Migrationen, den optionalen Administrator-Bootstrap und Laravel-
+  Optimierungen aus. Es leert nie eine Datenbank und bringt die Anwendung auch
+  bei einem Fehler wieder aus dem Wartungsmodus.
+- Vor einer Release-Freigabe ist ein Hoster-Snapshot oder ein manuelles,
+  geprüftes OKGV-Backup Pflicht. Ein Code-Rollback ist die Promotion des
+  vorherigen Releases; Datenbank-Rollbacks erfolgen ausschließlich aus einem
+  getesteten Backup und nie automatisch.
+
 ## Phase 26: Gartenbegehungen
 
 - Eigenes Modul `garden_inspections`, Recht `manage_garden_inspections` für
