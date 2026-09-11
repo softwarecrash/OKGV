@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -42,5 +44,25 @@ class DeployCommandTest extends TestCase
         ])
             ->expectsOutput('OKGV_ADMIN_EMAIL oder OKGV_ADMIN_PASSWORD fehlt. Administrator-Bootstrap wurde übersprungen.')
             ->assertSuccessful();
+    }
+
+    public function test_deploy_command_migrates_before_clearing_a_missing_database_cache_table(): void
+    {
+        Schema::dropIfExists('cache');
+        Schema::dropIfExists('cache_locks');
+        DB::table('migrations')
+            ->where('migration', '0001_01_01_000001_create_cache_table')
+            ->delete();
+
+        config([
+            'admin.email' => null,
+            'admin.password' => null,
+        ]);
+
+        $this->artisan('okgv:deploy', [
+            '--skip-optimize' => true,
+        ])->assertSuccessful();
+
+        $this->assertTrue(Schema::hasTable('cache'));
     }
 }

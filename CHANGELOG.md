@@ -2,6 +2,15 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.112] - 2026-09-11
+
+### Fehlerbehebung Erstinstallation
+
+- `okgv:deploy` führt Datenbankmigrationen jetzt vor der Cache-Bereinigung
+  aus. Frische MariaDB-Installationen mit `CACHE_STORE=database` scheitern
+  dadurch nicht mehr an der noch nicht vorhandenen Tabelle `cache`.
+- Regressionstest für die Erstinstallation ohne Cache-Tabellen ergänzt.
+
 ## [0.2.0.111] - 2026-09-11
 
 ### Release-gesteuerte Produktionsupdates

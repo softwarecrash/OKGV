@@ -17,6 +17,10 @@ class DeployApplication extends Command
 
     public function handle(): int
     {
+        if ($this->call('migrate', ['--force' => true]) !== self::SUCCESS) {
+            return self::FAILURE;
+        }
+
         if (! $this->option('skip-clear')) {
             if ($this->call('optimize:clear') !== self::SUCCESS) {
                 return self::FAILURE;
@@ -27,10 +31,6 @@ class DeployApplication extends Command
             if ($this->call('okgv:demo-purge', ['--force' => true]) !== self::SUCCESS) {
                 return self::FAILURE;
             }
-        }
-
-        if ($this->call('migrate', ['--force' => true]) !== self::SUCCESS) {
-            return self::FAILURE;
         }
 
         if (! $this->option('skip-admin')) {

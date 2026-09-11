@@ -16,6 +16,11 @@ Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 - [x] GitHub-, Plesk-, Backup- und Rollback-Ablauf in `PRODUCTION_UPDATES.md` dokumentieren
 - [ ] GitHub-Environment, Branch-Schutz und Plesk-Webhook einmalig im jeweiligen Hosting-Konto konfigurieren
 
+## Fehlerbehebung Erstinstallation
+
+- [x] Datenbankmigration vor Cache-Bereinigung im Deploy-Befehl ausführen
+- [x] Frische Installation mit Datenbank-Cache per Regressionstest absichern
+
 ## Vorgezogene Phase 31: Mobile Nutzung und PWA
 
 - [x] Installierbares Manifest und Service Worker für statische Dateien
