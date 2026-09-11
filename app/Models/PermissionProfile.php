@@ -14,6 +14,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable(['name', 'description', 'permissions', 'is_active', 'created_by'])]
 class PermissionProfile extends Model
 {
+    public const BUILT_IN_NAMES = [
+        'Vorstand Standard',
+        'Pächter Standard',
+    ];
+
     /** @use HasFactory<PermissionProfileFactory> */
     use HasFactory;
 
@@ -42,5 +47,10 @@ class PermissionProfile extends Model
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
+    }
+
+    public function isBuiltIn(): bool
+    {
+        return in_array($this->name, self::BUILT_IN_NAMES, true);
     }
 }

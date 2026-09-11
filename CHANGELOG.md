@@ -2,6 +2,16 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.115] - 2026-09-11
+
+### Rechtevorlagen
+
+- Die Rechtevorlagenübersicht hebt das Anlegen neuer Vorlagen klarer hervor
+  und erlaubt das Löschen ungenutzter eigener Vorlagen.
+- Standardvorlagen, die globale Vorstandsvorlage sowie bereits zugewiesene
+  Vorlagen sind vor dem Löschen geschützt. Jeder Löschvorgang wird im
+  Auditlog festgehalten.
+
 ## [0.2.0.114] - 2026-09-11
 
 ### Rechtevorlagen

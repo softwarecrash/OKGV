@@ -21,4 +21,9 @@ class PermissionProfilePolicy
     {
         return $user->isAdministrator();
     }
+
+    public function delete(User $user, PermissionProfile $profile): bool
+    {
+        return $user->isAdministrator();
+    }
 }

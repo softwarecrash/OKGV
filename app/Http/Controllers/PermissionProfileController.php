@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserPermission;
 use App\Http\Requests\PermissionProfileRequest;
+use App\Models\ApplicationSetting;
 use App\Models\PermissionProfile;
+use App\Models\User;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class PermissionProfileController extends Controller
@@ -17,7 +21,11 @@ class PermissionProfileController extends Controller
         $this->authorize('viewAny', PermissionProfile::class);
 
         return view('permission-profiles.index', [
-            'profiles' => PermissionProfile::query()->orderBy('name')->get(),
+            'profiles' => PermissionProfile::query()->withCount('users')->orderBy('name')->get(),
+            'defaultProfileIds' => ApplicationSetting::query()
+                ->whereNotNull('default_board_permission_profile_id')
+                ->pluck('default_board_permission_profile_id')
+                ->all(),
         ]);
     }
 
@@ -76,5 +84,44 @@ class PermissionProfileController extends Controller
         return redirect()
             ->route('permission-profiles.index')
             ->with('status', 'Rechtevorlage wurde aktualisiert.');
+    }
+
+    public function destroy(Request $request, PermissionProfile $permissionProfile): RedirectResponse
+    {
+        $this->authorize('delete', $permissionProfile);
+
+        DB::transaction(function () use ($request, $permissionProfile): void {
+            $profile = PermissionProfile::query()->lockForUpdate()->findOrFail($permissionProfile->id);
+
+            if ($profile->isBuiltIn()) {
+                throw ValidationException::withMessages([
+                    'profile' => 'Die feste Standardvorlage kann nicht gelöscht werden.',
+                ]);
+            }
+
+            $isAssigned = User::query()
+                ->where('permission_profile_id', $profile->id)
+                ->lockForUpdate()
+                ->exists();
+            $isDefault = ApplicationSetting::query()
+                ->where('default_board_permission_profile_id', $profile->id)
+                ->lockForUpdate()
+                ->exists();
+
+            if ($isAssigned || $isDefault) {
+                throw ValidationException::withMessages([
+                    'profile' => 'Die Vorlage wird noch verwendet und kann deshalb nicht gelöscht werden.',
+                ]);
+            }
+
+            AuditLogger::log('permission_profile.deleted', $request->user(), $profile, [
+                'name' => $profile->name,
+            ]);
+            $profile->delete();
+        });
+
+        return redirect()
+            ->route('permission-profiles.index')
+            ->with('status', 'Rechtevorlage wurde gelöscht.');
     }
 }

@@ -254,7 +254,7 @@ Route::middleware(['auth', 'verified', 'registration.approved'])->group(function
     Route::put('number-sequences', [NumberSequenceController::class, 'update'])
         ->name('number-sequences.update');
     Route::resource('permission-profiles', PermissionProfileController::class)
-        ->only(['index', 'create', 'store', 'edit', 'update']);
+        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::put('application-settings/smtp', [CommunicationSettingController::class, 'update'])
         ->name('communication-settings.update');
     Route::post('application-settings/smtp/test', [CommunicationSettingController::class, 'test'])

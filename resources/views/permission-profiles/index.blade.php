@@ -7,7 +7,7 @@
             <h1 class="h2 mb-1">Rechtevorlagen</h1>
             <p class="text-secondary mb-0">Wiederverwendbare, verständliche Rechtepakete für Vereinsrollen und den Pächterzugang.</p>
         </div>
-        <a class="btn btn-primary" href="{{ route('permission-profiles.create') }}">Vorlage anlegen</a>
+        <a class="btn btn-primary" href="{{ route('permission-profiles.create') }}">Neue Rechtevorlage</a>
     </div>
 
     <div class="alert alert-info">
@@ -37,6 +37,16 @@
                     </div>
                     <div class="card-footer bg-body border-0">
                         <a class="btn btn-sm btn-outline-primary" href="{{ route('permission-profiles.edit', $profile) }}">Bearbeiten</a>
+                        @if (! $profile->isBuiltIn() && $profile->users_count === 0 && ! in_array($profile->id, $defaultProfileIds, true))
+                            <form class="d-inline" method="POST" action="{{ route('permission-profiles.destroy', $profile) }}"
+                                  onsubmit="return confirm('Rechtevorlage {{ addslashes($profile->name) }} wirklich löschen?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-outline-danger">Löschen</button>
+                            </form>
+                        @else
+                            <span class="text-secondary small ms-2">Wird verwendet oder ist eine Standardvorlage</span>
+                        @endif
                     </div>
                 </div>
             </div>

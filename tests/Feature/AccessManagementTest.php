@@ -156,6 +156,40 @@ class AccessManagementTest extends TestCase
         $this->assertFalse($board->canManageBilling());
     }
 
+    public function test_administrator_can_delete_unused_custom_permission_profile(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $profile = PermissionProfile::factory()->create(['name' => 'Temporäre Vorlage']);
+
+        $this->actingAs($administrator)
+            ->delete(route('permission-profiles.destroy', $profile))
+            ->assertRedirect(route('permission-profiles.index'));
+
+        $this->assertModelMissing($profile);
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'permission_profile.deleted',
+            'subject_id' => $profile->id,
+        ]);
+    }
+
+    public function test_used_or_built_in_permission_profile_cannot_be_deleted(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $usedProfile = PermissionProfile::factory()->create(['name' => 'Genutzte Vorlage']);
+        User::factory()->create(['permission_profile_id' => $usedProfile->id]);
+        $tenantProfile = PermissionProfile::query()->where('name', 'Pächter Standard')->firstOrFail();
+
+        $this->actingAs($administrator)
+            ->delete(route('permission-profiles.destroy', $usedProfile))
+            ->assertSessionHasErrors('profile');
+        $this->assertModelExists($usedProfile);
+
+        $this->actingAs($administrator)
+            ->delete(route('permission-profiles.destroy', $tenantProfile))
+            ->assertSessionHasErrors('profile');
+        $this->assertModelExists($tenantProfile);
+    }
+
     public function test_system_admin_can_manage_admin_flag_and_gets_full_management_access(): void
     {
         $administrator = User::factory()->administrator()->create([
