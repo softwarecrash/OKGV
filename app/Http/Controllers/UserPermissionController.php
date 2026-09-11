@@ -44,6 +44,9 @@ class UserPermissionController extends Controller
             'permissions' => UserPermission::availableCases(),
             'defaultProfileId' => ApplicationSetting::current()
                 ->default_board_permission_profile_id,
+            'tenantProfileId' => PermissionProfile::query()
+                ->where('name', 'Pächter Standard')
+                ->value('id'),
             'assignableRoles' => $actor->isAdministrator()
                 ? [
                     UserRole::Board,
@@ -82,6 +85,14 @@ class UserPermissionController extends Controller
             $permissions = $targetRole === UserRole::Board && $profile === null
                 ? UserRole::Board->defaultPermissions()
                 : [];
+        }
+
+        if ($targetRole === UserRole::Tenant) {
+            $profile = PermissionProfile::query()
+                ->where('name', 'Pächter Standard')
+                ->where('is_active', true)
+                ->first();
+            $permissions = [];
         }
 
         $this->manager->update(

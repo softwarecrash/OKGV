@@ -60,7 +60,9 @@ final class UserAccessManager
                 'role' => $role,
                 'is_system_admin' => $isSystemAdmin,
                 'permissions' => $explicitPermissions,
-                'permission_profile_id' => $role === UserRole::Board ? $profile?->id : null,
+                'permission_profile_id' => in_array($role, [UserRole::Board, UserRole::Tenant], true)
+                    ? $profile?->id
+                    : null,
                 'can_correct_meter_readings' => in_array(
                     UserPermission::CorrectMeterReadings->value,
                     $explicitPermissions ?? [],

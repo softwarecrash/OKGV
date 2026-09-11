@@ -77,13 +77,13 @@
                                     </div>
                                     @if ($canManagePermissionDetails)
                                         <div class="col-lg-7">
-                                            <label class="form-label" for="profile-{{ $user->id }}">Rechtevorlage für Vorstand</label>
+                                            <label class="form-label" for="profile-{{ $user->id }}">Rechtevorlage</label>
                                             <select class="form-select" id="profile-{{ $user->id }}" name="permission_profile_id">
                                                 <option value="">Individuelle Auswahl verwenden</option>
                                                 @foreach ($profiles as $profile)
                                                     <option value="{{ $profile->id }}"
                                                             @selected($user->permission_profile_id === $profile->id)
-                                                            @selected($user->role === App\Enums\UserRole::Tenant && $defaultProfileId === $profile->id)>
+                                                            @selected($user->role === App\Enums\UserRole::Tenant && $tenantProfileId === $profile->id)>
                                                         {{ $profile->name }}
                                                     </option>
                                                 @endforeach
@@ -91,6 +91,7 @@
                                             <div class="form-text">
                                                 Bei ausgewählter Vorlage werden deren aktuelle Rechte als Snapshot übernommen.
                                                 Spätere Vorlagenänderungen verändern bestehende Konten nicht automatisch.
+                                                Pächter erhalten immer die feste Vorlage „Pächter Standard“ ohne Verwaltungsrechte.
                                             </div>
                                         </div>
                                     @else

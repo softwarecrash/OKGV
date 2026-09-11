@@ -22,6 +22,11 @@ Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 - [x] Frische Installation mit Datenbank-Cache per Regressionstest absichern
 - [x] Optionale Parzellennummer bei der Registrierung verständlich validieren
 
+## Rechteverwaltung
+
+- [x] Feste, rechtefreie Vorlage „Pächter Standard“ ergänzen und bei einer
+  Herabstufung automatisch zuweisen
+
 ## Vorgezogene Phase 31: Mobile Nutzung und PWA
 
 - [x] Installierbares Manifest und Service Worker für statische Dateien

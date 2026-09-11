@@ -2,6 +2,17 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.114] - 2026-09-11
+
+### Rechtevorlagen
+
+- Feste Vorlage „Pächter Standard“ ergänzt. Sie gewährt bewusst keine
+  Verwaltungsrechte; der Zugang zum eigenen Portal bleibt an die
+  Mitgliederzuordnung gebunden.
+- Bei einer Herabstufung zum Pächter wird diese sichere Vorlage automatisch
+  zugewiesen. Die Rechteverwaltung und Vorlagenübersicht erläutern den
+  Unterschied zwischen Portalzugang und Verwaltungsrechten.
+
 ## [0.2.0.113] - 2026-09-11
 
 ### Benutzerfreundliche Registrierung

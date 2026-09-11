@@ -120,11 +120,40 @@ class AccessManagementTest extends TestCase
             ])
             ->assertRedirect();
 
-        $this->assertSame(UserRole::Tenant, $tenant->fresh()->role);
+        $tenant->refresh();
+        $this->assertSame(UserRole::Tenant, $tenant->role);
+        $this->assertSame(
+            PermissionProfile::query()->where('name', 'Pächter Standard')->value('id'),
+            $tenant->permission_profile_id,
+        );
 
         $this->actingAs($board)
             ->get(route('permission-profiles.index'))
             ->assertForbidden();
+    }
+
+    public function test_tenant_standard_profile_is_assigned_without_management_permissions(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $tenantProfile = PermissionProfile::query()->where('name', 'Pächter Standard')->firstOrFail();
+
+        $this->assertSame([], $tenantProfile->permissions);
+
+        $this->actingAs($administrator)
+            ->put(route('user-permissions.update', $board), [
+                'role' => UserRole::Tenant->value,
+                'permission_profile_id' => PermissionProfile::query()
+                    ->where('name', 'Vorstand Standard')
+                    ->value('id'),
+            ])
+            ->assertRedirect();
+
+        $board->refresh();
+        $this->assertSame(UserRole::Tenant, $board->role);
+        $this->assertSame($tenantProfile->id, $board->permission_profile_id);
+        $this->assertNull($board->permissions);
+        $this->assertFalse($board->canManageBilling());
     }
 
     public function test_system_admin_can_manage_admin_flag_and_gets_full_management_access(): void

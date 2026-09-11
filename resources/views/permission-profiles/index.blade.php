@@ -5,13 +5,14 @@
     <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
         <div>
             <h1 class="h2 mb-1">Rechtevorlagen</h1>
-            <p class="text-secondary mb-0">Wiederverwendbare, verständliche Rechtepakete für Vorstandsmitglieder.</p>
+            <p class="text-secondary mb-0">Wiederverwendbare, verständliche Rechtepakete für Vereinsrollen und den Pächterzugang.</p>
         </div>
         <a class="btn btn-primary" href="{{ route('permission-profiles.create') }}">Vorlage anlegen</a>
     </div>
 
     <div class="alert alert-info">
         Vorlagenänderungen wirken nur bei der nächsten Anwendung. Bereits zugewiesene Konten behalten ihren bisherigen Rechte-Snapshot.
+        „Pächter Standard“ gewährt bewusst keine Verwaltungsrechte; der Zugang zum eigenen Portal richtet sich nach der Mitgliederzuordnung.
     </div>
 
     <div class="row g-4">
