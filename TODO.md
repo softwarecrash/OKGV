@@ -15,6 +15,7 @@ Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 - [x] Plesk-Produktionsscript mit Wartungsmodus, Migrationen und garantiertem Wiederhochfahren ergänzen
 - [x] GitHub-, Plesk-, Backup- und Rollback-Ablauf in `PRODUCTION_UPDATES.md` dokumentieren
 - [ ] GitHub-Environment, Branch-Schutz und Plesk-Webhook einmalig im jeweiligen Hosting-Konto konfigurieren
+- [x] Automatischen Produktions-Release mit Tests und Tag verifiziert
 
 ## Fehlerbehebung Erstinstallation
 

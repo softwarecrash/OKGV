@@ -2,6 +2,15 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.116] - 2026-09-11
+
+### Produktionsbereitstellung
+
+- Release-Smoke-Test mit vollständiger Testsuite, Produktions-Build,
+  Composer-Validierung und Sicherheitsprüfung durchgeführt.
+- Getesteten Stand für die automatische Bereitstellung über den Branch
+  `production` veröffentlicht.
+
 ## [0.2.0.115] - 2026-09-11
 
 ### Rechtevorlagen
