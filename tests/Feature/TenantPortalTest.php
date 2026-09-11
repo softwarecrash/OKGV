@@ -123,6 +123,23 @@ class TenantPortalTest extends TestCase
         ]);
     }
 
+    public function test_registration_explains_when_an_unknown_optional_parcel_number_is_entered(): void
+    {
+        $this->from(route('tenant-registration.create'))
+            ->post(route('tenant-registration.store'), [
+                'first_name' => 'Technik',
+                'last_name' => 'Helfer',
+                'email' => 'technik@example.test',
+                'parcel_number' => 'NICHT-VORHANDEN',
+                'password' => 'SicheresPasswort123',
+                'password_confirmation' => 'SicheresPasswort123',
+            ])
+            ->assertRedirect(route('tenant-registration.create'))
+            ->assertSessionHasErrors([
+                'parcel_number' => 'Die Parzellennummer wurde nicht gefunden. Lass das Feld leer, wenn noch keine Parzelle zugeordnet ist.',
+            ]);
+    }
+
     public function test_board_can_approve_registration_without_parcel_and_create_member(): void
     {
         Notification::fake();

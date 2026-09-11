@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="alert alert-info mt-4 mb-3">
-                            Die Anfrage legt ein Benutzerkonto an, das erst nach E-Mail-Bestätigung und Freigabe durch den Verein nutzbar wird. Eine Parzellenzuordnung kann direkt über die angegebene Parzellennummer oder später in der Verwaltung ergänzt werden.
+                            Die Anfrage legt sofort ein Benutzerkonto an. Nach der E-Mail-Bestätigung kannst du dich anmelden; bis zur Freigabe durch den Verein wird der Bearbeitungsstand angezeigt. Eine Parzellenzuordnung kann direkt über die angegebene Parzellennummer oder später in der Verwaltung ergänzt werden.
                         </div>
                         <div class="d-flex gap-2">
                             <button class="btn btn-primary">Anfrage absenden</button>

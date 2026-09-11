@@ -40,6 +40,13 @@ class TenantRegistrationRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'parcel_number.exists' => 'Die Parzellennummer wurde nicht gefunden. Lass das Feld leer, wenn noch keine Parzelle zugeordnet ist.',
+        ];
+    }
+
     protected function prepareForValidation(): void
     {
         $this->merge([

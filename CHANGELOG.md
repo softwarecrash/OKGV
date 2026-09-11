@@ -2,6 +2,16 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.113] - 2026-09-11
+
+### Benutzerfreundliche Registrierung
+
+- Optionales Feld „Parzellennummer“ erklärt bei einem unbekannten Wert jetzt
+  verständlich, dass die Eingabe leer bleiben darf, solange keine Parzelle
+  angelegt oder zugeordnet ist.
+- Registrierungshinweis an den tatsächlichen Ablauf angepasst: Konto nach
+  E-Mail-Bestätigung nutzbar, bis zur Vereinsfreigabe mit Statusanzeige.
+
 ## [0.2.0.112] - 2026-09-11
 
 ### Fehlerbehebung Erstinstallation
