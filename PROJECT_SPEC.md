@@ -797,7 +797,7 @@ immer die anschließend zu bestätigende Registrierungsadresse.
 
 Die Bestätigungsnachricht wird bei der Registrierung versendet. Bei alten
 Anfragen ohne Benutzerkonto wird sie nach dessen Anlage versendet. Das Konto bleibt bis zur
-Bestätigung der signierten, zeitlich begrenzten E-Mail-Adresse für alle
+Bestätigung der signierten E-Mail-Adresse für alle
 geschützten Anwendungsbereiche gesperrt. Ein neuer Bestätigungslink kann
 rate-limitiert angefordert werden. Bereits vor Einführung dieser Pflicht
 bestehende Konten gelten bei der Migration als bestätigt, damit kein

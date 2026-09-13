@@ -27,7 +27,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
 
 class TenantPortalTest extends TestCase
@@ -50,10 +49,9 @@ class TenantPortalTest extends TestCase
             'email' => $user->email,
             'password' => 'SicheresPasswort123',
         ])->assertRedirect('/dashboard');
-        $this->get(URL::temporarySignedRoute('verification.verify', now()->addMinutes(60), [
-            'id' => $user->id,
-            'hash' => sha1($user->email),
-        ]))->assertRedirect();
+        $verificationUrl = (new VerifyEmailNotification)->toMail($user)->actionUrl;
+        $this->assertStringNotContainsString('expires=', $verificationUrl);
+        $this->get($verificationUrl)->assertRedirect();
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
         $this->get(route('home'))->assertRedirect(route('registration.pending'));
 

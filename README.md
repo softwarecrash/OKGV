@@ -368,8 +368,8 @@ Administrator oder Vorstandsmitglied muss die Anfrage anschließend unter
 `/registrierungsanfragen` einem aktuell eingetragenen Mitglied zuordnen und
 freigeben.
 
-Nach der Freigabe erhält der Pächter einen zeitlich begrenzten
-Bestätigungslink. Bis zur Einrichtung im Abschnitt `Mailversand` der
+Nach der Freigabe erhält der Pächter einen signierten Bestätigungslink. Er
+bleibt gültig, bis die E-Mail-Adresse bestätigt oder geändert wird. Bis zur Einrichtung im Abschnitt `Mailversand` der
 `Globalen Konfiguration`
 verwendet Laravel die Werte aus `.env`. Mit dem voreingestellten
 `MAIL_MAILER=log` wird die Nachricht nur in `storage/logs/laravel.log`

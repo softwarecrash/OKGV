@@ -2,6 +2,14 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.117] - 2026-09-13
+
+### Registrierung
+
+- E-Mail-Bestätigungslinks laufen nicht mehr nach einer Stunde ab. Sie bleiben
+  kryptografisch signiert und sind gültig, bis die betreffende E-Mail-Adresse
+  bestätigt oder am Konto geändert wird.
+
 ## [0.2.0.116] - 2026-09-11
 
 ### Produktionsbereitstellung
