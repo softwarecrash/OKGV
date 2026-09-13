@@ -9,6 +9,7 @@ use App\Models\GardenInspectionFinding;
 use App\Models\Member;
 use App\Models\Parcel;
 use App\Models\Task;
+use App\Services\AccountEmailNotifier;
 use App\Services\GardenInspectionManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class GardenInspectionController extends Controller
 {
-    public function __construct(private readonly GardenInspectionManager $manager) {}
+    public function __construct(
+        private readonly GardenInspectionManager $manager,
+        private readonly AccountEmailNotifier $notifier,
+    ) {}
 
     public function index(Request $request): View
     {
@@ -52,7 +56,8 @@ class GardenInspectionController extends Controller
 
     public function finding(GardenInspectionFindingRequest $request, GardenInspection $inspection): RedirectResponse
     {
-        $this->manager->finding($inspection, $request->validated(), $request->file('photo'), $request->user());
+        $finding = $this->manager->finding($inspection, $request->validated(), $request->file('photo'), $request->user());
+        $this->notifier->gardenFindingCreated($finding->load('parcel'));
 
         return back()->with('status', 'Feststellung gespeichert.');
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountNotificationPreferenceController;
 use App\Http\Controllers\AccountPasswordController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\ApplicationSettingController;
@@ -166,6 +167,10 @@ Route::middleware(['auth', 'verified', 'registration.approved'])->group(function
         ->name('account.password.edit');
     Route::put('account/password', [AccountPasswordController::class, 'update'])
         ->name('account.password.update');
+    Route::get('account/notifications', [AccountNotificationPreferenceController::class, 'edit'])
+        ->name('account.notifications.edit');
+    Route::put('account/notifications', [AccountNotificationPreferenceController::class, 'update'])
+        ->name('account.notifications.update');
     Route::get('privacy', [PrivacyController::class, 'index'])
         ->name('privacy.index');
     Route::put('privacy/sharing', [PrivacyController::class, 'update'])

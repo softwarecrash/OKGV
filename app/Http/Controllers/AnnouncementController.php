@@ -10,6 +10,7 @@ use App\Http\Requests\AnnouncementActionRequest;
 use App\Http\Requests\AnnouncementRequest;
 use App\Models\Announcement;
 use App\Models\Document;
+use App\Services\AccountEmailNotifier;
 use App\Services\AnnouncementManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,7 +20,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AnnouncementController extends Controller
 {
-    public function __construct(private readonly AnnouncementManager $manager) {}
+    public function __construct(
+        private readonly AnnouncementManager $manager,
+        private readonly AccountEmailNotifier $notifier,
+    ) {}
 
     public function index(Request $request): View
     {
@@ -106,6 +110,7 @@ class AnnouncementController extends Controller
     public function publish(AnnouncementActionRequest $request, Announcement $announcement): RedirectResponse
     {
         $this->manager->publish($announcement, $request->user());
+        $this->notifier->announcementPublished($announcement->fresh());
 
         return back()->with('status', 'Beitrag veröffentlicht. Er ist innerhalb des angegebenen Zeitraums sichtbar.');
     }

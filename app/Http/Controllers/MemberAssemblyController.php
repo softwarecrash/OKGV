@@ -6,6 +6,7 @@ use App\Enums\MemberAssemblyMode;
 use App\Enums\MemberAssemblyVoteChoice;
 use App\Http\Requests\MemberAssemblyRequest;
 use App\Models\MemberAssembly;
+use App\Services\AccountEmailNotifier;
 use App\Services\MemberAssemblyManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,7 +15,10 @@ use Illuminate\View\View;
 
 class MemberAssemblyController extends Controller
 {
-    public function __construct(private readonly MemberAssemblyManager $manager) {}
+    public function __construct(
+        private readonly MemberAssemblyManager $manager,
+        private readonly AccountEmailNotifier $notifier,
+    ) {}
 
     public function index(Request $request): View
     {
@@ -71,6 +75,7 @@ class MemberAssemblyController extends Controller
         $this->authorize('publish', $assembly);
         $request->validate(['confirmed' => ['accepted']]);
         $this->manager->publish($assembly, $request->user());
+        $this->notifier->memberAssemblyPublished($assembly->fresh());
 
         return back()->with('status', 'Einladung veröffentlicht; Tagesordnung und Beschlussgegenstände sind eingefroren.');
     }

@@ -328,6 +328,9 @@
                                     <a class="dropdown-item" href="{{ route('account.password.edit') }}">
                                         Passwort ändern
                                     </a>
+                                    <a class="dropdown-item" href="{{ route('account.notifications.edit') }}">
+                                        E-Mail-Benachrichtigungen
+                                    </a>
                                     <div class="dropdown-divider"></div>
                                     <form action="{{ route('logout') }}" method="POST" data-logout-form>
                                         @csrf

@@ -2,6 +2,22 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.118] - 2026-09-13
+
+### E-Mail-Benachrichtigungen
+
+- Persönliche, standardmäßig aktivierte E-Mail-Präferenzen ergänzt. Je nach
+  Konto und Berechtigung lassen sich Beiträge, Arbeitseinsätze,
+  Gartenfeststellungen, Umfragen, Mitgliederversammlungen und
+  Registrierungsanfragen deaktivieren.
+- Neue Registrierungen benachrichtigen berechtigte Prüfer. Veröffentlichte
+  Beiträge, Arbeitseinsätze, Umfragen und Mitgliederversammlungen informieren
+  ausschließlich die jeweilige Zielgruppe. Feststellungen aus Gartenbegehungen
+  gehen nur an aktuelle Pächter der betroffenen Parzelle.
+- Sicherheitsmails zur Kontobestätigung und Passwortzurücksetzung bleiben von
+  den optionalen Präferenzen ausgenommen. Fehlgeschlagene optionale
+  Zustellungen blockieren keine Vereinsaktion.
+
 ## [0.2.0.117] - 2026-09-13
 
 ### Registrierung

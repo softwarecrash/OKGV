@@ -10,6 +10,7 @@ use App\Models\BillingPeriod;
 use App\Models\Member;
 use App\Models\Parcel;
 use App\Models\WorkEvent;
+use App\Services\AccountEmailNotifier;
 use App\Services\WorkEventManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ class WorkEventController extends Controller
 {
     public function __construct(
         private readonly WorkEventManager $manager,
+        private readonly AccountEmailNotifier $notifier,
     ) {}
 
     public function index(Request $request): View
@@ -74,6 +76,7 @@ class WorkEventController extends Controller
             $request->validated(),
             $request->user(),
         );
+        $this->notifier->workEventCreated($event);
 
         return redirect()->route('work-events.show', $event)
             ->with('status', 'Arbeitseinsatz wurde angelegt.');

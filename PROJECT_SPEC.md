@@ -1672,6 +1672,14 @@ SMTP bleibt Teil der globalen Kernkonfiguration, weil auch Passwort-Reset und
 E-Mail-Verifizierung darauf angewiesen sind. Serienmails und PDF-Briefe
 gehören dagegen zum schaltbaren Kommunikationsmodul.
 
+Optionale E-Mail-Benachrichtigungen sind je Konto standardmäßig aktiviert und
+können getrennt nach Thema deaktiviert werden. Sicherheitsmails zur
+E-Mail-Bestätigung und Passwortzurücksetzung sind keine optionalen
+Benachrichtigungen. Empfänger werden immer aus der tatsächlichen Zielgruppe
+abgeleitet: Registrierungsprüfer erhalten neue Anfragen, Beiträge erreichen
+nur die jeweilige Sichtbarkeitsgruppe, und Gartenfeststellungen ausschließlich
+aktuelle Pächter der betroffenen Parzelle.
+
 ## Versionen
 
 Die bisherige Basisversion `0.2.0` bleibt während der weiteren Bauphase bestehen. Veröffentlichte Entwicklungsstände erhalten eine fortlaufende vierte Stelle:

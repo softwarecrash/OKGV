@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EmailNotificationTopic;
 use App\Enums\RegistrationRequestStatus;
 use App\Enums\UserPermission;
 use App\Enums\UserRole;
@@ -26,6 +27,7 @@ use Illuminate\Notifications\Notifiable;
     'can_correct_meter_readings',
     'permissions',
     'permission_profile_id',
+    'notification_preferences',
     'email_verified_at',
 ])]
 #[Hidden(['password', 'remember_token'])]
@@ -48,6 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'is_system_admin' => 'boolean',
             'can_correct_meter_readings' => 'boolean',
             'permissions' => 'array',
+            'notification_preferences' => 'array',
         ];
     }
 
@@ -220,5 +223,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification(): void
     {
         $this->notify(new VerifyEmailNotification);
+    }
+
+    public function wantsEmailNotification(EmailNotificationTopic $topic): bool
+    {
+        return ($this->notification_preferences[$topic->value] ?? true) === true;
     }
 }

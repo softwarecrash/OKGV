@@ -8,6 +8,7 @@ use App\Http\Requests\TenantRegistrationRequest;
 use App\Models\Parcel;
 use App\Models\RegistrationRequest;
 use App\Models\User;
+use App\Services\AccountEmailNotifier;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,8 @@ use Illuminate\View\View;
 
 class TenantRegistrationController extends Controller
 {
+    public function __construct(private readonly AccountEmailNotifier $notifier) {}
+
     public function create(): View
     {
         return view('tenant-registration.create');
@@ -53,6 +56,7 @@ class TenantRegistrationController extends Controller
         ]);
 
         $user->sendEmailVerificationNotification();
+        $this->notifier->registrationRequested($registrationRequest);
 
         return redirect()->route('login')->with(
             'status',

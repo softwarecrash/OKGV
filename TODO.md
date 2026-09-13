@@ -30,6 +30,12 @@ Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
   Herabstufung automatisch zuweisen
 - [x] Eigene, ungenutzte Rechtevorlagen anlegen und geschützt löschen
 
+## Kommunikation
+
+- [x] Zielgruppenbezogene E-Mail-Benachrichtigungen mit persönlichem Opt-out
+  für Registrierung, Bekanntmachungen, Arbeitseinsätze, Gartenfeststellungen,
+  Umfragen und Mitgliederversammlungen ergänzen
+
 ## Vorgezogene Phase 31: Mobile Nutzung und PWA
 
 - [x] Installierbares Manifest und Service Worker für statische Dateien

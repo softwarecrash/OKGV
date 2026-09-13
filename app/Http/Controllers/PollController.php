@@ -9,6 +9,7 @@ use App\Enums\UserRole;
 use App\Http\Requests\PollActionRequest;
 use App\Http\Requests\PollRequest;
 use App\Models\Poll;
+use App\Services\AccountEmailNotifier;
 use App\Services\AuditLogger;
 use App\Services\PollManager;
 use Illuminate\Http\RedirectResponse;
@@ -18,7 +19,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PollController extends Controller
 {
-    public function __construct(private readonly PollManager $manager) {}
+    public function __construct(
+        private readonly PollManager $manager,
+        private readonly AccountEmailNotifier $notifier,
+    ) {}
 
     public function index(Request $request): View
     {
@@ -84,6 +88,9 @@ class PollController extends Controller
     {
         $action = $request->route()->defaults['action'];
         $this->manager->transition($poll, $request->user(), $action);
+        if ($action === 'publish') {
+            $this->notifier->pollPublished($poll->fresh());
+        }
         $message = match ($action) {
             'publish' => 'Umfrage veröffentlicht. Die Zielgruppe ist festgelegt.', 'close' => 'Umfrage endgültig abgeschlossen.', 'archive' => 'Umfrage archiviert. Antworten bleiben erhalten.', 'restore' => 'Umfrage aus dem Archiv geholt. Abgeschlossene Umfragen bleiben abgeschlossen.'
         };
