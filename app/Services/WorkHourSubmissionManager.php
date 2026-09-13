@@ -18,6 +18,7 @@ final class WorkHourSubmissionManager
     public function __construct(
         private readonly BillingPeriodManager $periodManager,
         private readonly WorkHourManager $workHourManager,
+        private readonly AccountEmailNotifier $notifier,
     ) {}
 
     /**
@@ -118,7 +119,7 @@ final class WorkHourSubmissionManager
         WorkHourSubmissionStatus $status,
         ?string $note,
     ): WorkHourSubmission {
-        return $this->periodManager->changeCalculationInputs(
+        $submission = $this->periodManager->changeCalculationInputs(
             $submission->billingPeriod,
             $actor,
             'work_hour_submission_reviewed',
@@ -149,5 +150,9 @@ final class WorkHourSubmissionManager
                 return $record->refresh();
             },
         );
+
+        $this->notifier->workHourSubmissionReviewed($submission->load('submitter'));
+
+        return $submission;
     }
 }

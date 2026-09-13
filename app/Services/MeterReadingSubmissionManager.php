@@ -15,7 +15,10 @@ use Throwable;
 
 final class MeterReadingSubmissionManager
 {
-    public function __construct(private readonly MeterReadingManager $readingManager) {}
+    public function __construct(
+        private readonly MeterReadingManager $readingManager,
+        private readonly AccountEmailNotifier $notifier,
+    ) {}
 
     /**
      * @param  array<string, mixed>  $data
@@ -94,7 +97,7 @@ final class MeterReadingSubmissionManager
         User $actor,
         ?string $reviewNote = null,
     ): MeterReadingSubmission {
-        return DB::transaction(function () use ($submission, $actor, $reviewNote): MeterReadingSubmission {
+        $submission = DB::transaction(function () use ($submission, $actor, $reviewNote): MeterReadingSubmission {
             $submission = MeterReadingSubmission::query()
                 ->lockForUpdate()
                 ->findOrFail($submission->id);
@@ -124,6 +127,10 @@ final class MeterReadingSubmissionManager
 
             return $submission;
         });
+
+        $this->notifier->meterReadingReviewed($submission->load('submitter'));
+
+        return $submission;
     }
 
     public function reject(
@@ -131,7 +138,7 @@ final class MeterReadingSubmissionManager
         User $actor,
         string $reviewNote,
     ): MeterReadingSubmission {
-        return DB::transaction(function () use ($submission, $actor, $reviewNote): MeterReadingSubmission {
+        $submission = DB::transaction(function () use ($submission, $actor, $reviewNote): MeterReadingSubmission {
             $submission = MeterReadingSubmission::query()
                 ->lockForUpdate()
                 ->findOrFail($submission->id);
@@ -148,6 +155,10 @@ final class MeterReadingSubmissionManager
 
             return $submission;
         });
+
+        $this->notifier->meterReadingReviewed($submission->load('submitter'));
+
+        return $submission;
     }
 
     private function ensurePending(MeterReadingSubmission $submission): void

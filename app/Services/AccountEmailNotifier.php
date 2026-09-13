@@ -5,12 +5,18 @@ namespace App\Services;
 use App\Enums\AnnouncementAudience;
 use App\Enums\EmailNotificationTopic;
 use App\Models\Announcement;
+use App\Models\Document;
+use App\Models\DunningNotice;
 use App\Models\GardenInspectionFinding;
+use App\Models\Invoice;
 use App\Models\MemberAssembly;
+use App\Models\MeterReadingSubmission;
 use App\Models\Poll;
 use App\Models\RegistrationRequest;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\WorkEvent;
+use App\Models\WorkHourSubmission;
 use App\Notifications\AccountEmailNotification;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -104,11 +110,56 @@ final class AccountEmailNotifier
         );
     }
 
+    public function invoiceApproved(Invoice $invoice): void
+    {
+        $this->send($this->invoiceUsers($invoice), EmailNotificationTopic::Finance, 'Neue Rechnung: '.$invoice->invoice_number, 'Eine neue Rechnung wurde freigegeben und steht in deinem Pächterportal bereit.', 'Pächterportal öffnen', route('tenant-portal.index'));
+    }
+
+    public function paymentSettled(Invoice $invoice): void
+    {
+        $this->send($this->invoiceUsers($invoice), EmailNotificationTopic::Finance, 'Zahlung bestätigt: '.$invoice->invoice_number, 'Der Zahlungseingang zu deiner Rechnung wurde erfasst.', 'Pächterportal öffnen', route('tenant-portal.index'));
+    }
+
+    public function paymentReturned(Invoice $invoice): void
+    {
+        $this->send($this->invoiceUsers($invoice), EmailNotificationTopic::Finance, 'Rücklastschrift: '.$invoice->invoice_number, 'Die Lastschrift zu deiner Rechnung wurde zurückgegeben. Bitte prüfe die Rechnung im Pächterportal.', 'Pächterportal öffnen', route('tenant-portal.index'));
+    }
+
+    public function dunningNoticeIssued(DunningNotice $notice): void
+    {
+        $this->send($this->invoiceUsers($notice->invoice), EmailNotificationTopic::Finance, "Mahnung Stufe {$notice->level}: {$notice->invoice_number}", 'Zu einer offenen Rechnung wurde eine Mahnung erstellt.', 'Pächterportal öffnen', route('tenant-portal.index'));
+    }
+
+    public function documentPublished(Document $document): void
+    {
+        $document->load('member.user', 'parcel.tenancies.member.user');
+        $users = collect([$document->member?->user])
+            ->merge($document->parcel?->tenancies()->activeOn()->with('member.user')->get()->map(fn ($tenancy) => $tenancy->member?->user) ?? []);
+
+        $this->send($users, EmailNotificationTopic::Documents, 'Neues Dokument: '.$document->title, 'Ein für dich bestimmtes Dokument wurde freigegeben.', 'Dokumente öffnen', route('tenant-portal.documents'));
+    }
+
+    public function meterReadingReviewed(MeterReadingSubmission $submission): void
+    {
+        $this->send([$submission->submitter()->first()], EmailNotificationTopic::Submissions, 'Zählerstand '.$submission->status->label(), 'Deine Zählerstandsmeldung wurde '.$submission->status->label().'.'.($submission->review_note ? ' Hinweis: '.$submission->review_note : ''), 'Meldung öffnen', route('meter-reading-submissions.index', ['own' => 1]));
+    }
+
+    public function workHourSubmissionReviewed(WorkHourSubmission $submission): void
+    {
+        $this->send([$submission->submitter()->first()], EmailNotificationTopic::Submissions, 'Arbeitsstunden '.$submission->status->label(), 'Deine Arbeitsstundenmeldung wurde '.$submission->status->label().'.'.($submission->review_note ? ' Hinweis: '.$submission->review_note : ''), 'Meldung öffnen', route('work-hour-submissions.index', ['own' => 1]));
+    }
+
+    public function taskAssigned(Task $task): void
+    {
+        $this->send([$task->assignee()->first()], EmailNotificationTopic::Tasks, 'Neue Aufgabe: '.$task->title, 'Dir wurde eine Aufgabe zugewiesen.', 'Aufgabe öffnen', route('tasks.show', $task));
+    }
+
     /** @param Collection<int, User>|iterable<User> $users */
     private function send(iterable $users, EmailNotificationTopic $topic, string $subject, string $intro, string $actionText, string $url): void
     {
         collect($users)->filter(fn ($user): bool => $user instanceof User)
             ->unique('id')
+            ->filter(fn (User $user): bool => $this->isEligible($user))
             ->filter(fn (User $user): bool => $user->wantsEmailNotification($topic))
             ->each(function (User $user) use ($topic, $subject, $intro, $actionText, $url): void {
                 try {
@@ -128,6 +179,20 @@ final class AccountEmailNotifier
     {
         return User::query()->whereNotNull('email_verified_at')->get()
             ->reject(fn (User $user): bool => $user->hasPendingRegistrationApproval());
+    }
+
+    private function isEligible(User $user): bool
+    {
+        return $user->email_verified_at !== null && ! $user->hasPendingRegistrationApproval();
+    }
+
+    /** @return Collection<int, User> */
+    private function invoiceUsers(Invoice $invoice): Collection
+    {
+        $invoice->load('member.user', 'recipients.member.user');
+
+        return collect([$invoice->member?->user])
+            ->merge($invoice->recipients->map(fn ($recipient) => $recipient->member?->user));
     }
 
     /** @return Collection<int, User> */

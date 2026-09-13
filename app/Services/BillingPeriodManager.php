@@ -14,6 +14,7 @@ final class BillingPeriodManager
 {
     public function __construct(
         private readonly InvoicePdfArchive $invoicePdfArchive,
+        private readonly AccountEmailNotifier $notifier,
     ) {}
 
     /**
@@ -91,7 +92,7 @@ final class BillingPeriodManager
 
     public function approve(BillingPeriod $period, User $actor): BillingPeriod
     {
-        return DB::transaction(function () use ($period, $actor): BillingPeriod {
+        $period = DB::transaction(function () use ($period, $actor): BillingPeriod {
             $period = BillingPeriod::query()->lockForUpdate()->findOrFail($period->id);
 
             if ($period->status !== BillingPeriodStatus::Calculated) {
@@ -136,6 +137,11 @@ final class BillingPeriodManager
 
             return $period->refresh();
         });
+
+        $period->invoices()->where('status', InvoiceStatus::Approved)->get()
+            ->each(fn ($invoice) => $this->notifier->invoiceApproved($invoice));
+
+        return $period;
     }
 
     public function archive(BillingPeriod $period, User $actor): BillingPeriod

@@ -5,9 +5,12 @@ namespace Tests\Feature;
 use App\Enums\AnnouncementAudience;
 use App\Enums\EmailNotificationTopic;
 use App\Models\Announcement;
+use App\Models\Invoice;
 use App\Models\Member;
+use App\Models\MeterReadingSubmission;
 use App\Models\Parcel;
 use App\Models\ParcelTenant;
+use App\Models\Task;
 use App\Models\User;
 use App\Notifications\AccountEmailNotification;
 use App\Services\AccountEmailNotifier;
@@ -28,7 +31,10 @@ class AccountNotificationPreferenceTest extends TestCase
             ->assertOk()
             ->assertSee('Beiträge am Schwarzen Brett')
             ->assertSee('Neue Arbeitseinsätze')
-            ->assertSee('Gartenbegehungen und Feststellungen');
+            ->assertSee('Gartenbegehungen und Feststellungen')
+            ->assertSee('Rechnungen, Zahlungen und Mahnungen')
+            ->assertSee('Persönliche Dokumente')
+            ->assertSee('Prüfung von Zählerständen und Arbeitsstunden');
 
         $this->put(route('account.notifications.update'), [
             'preferences' => [
@@ -83,6 +89,46 @@ class AccountNotificationPreferenceTest extends TestCase
         Notification::assertSentTo($recipient, AccountEmailNotification::class);
         Notification::assertNotSentTo($optedOut, AccountEmailNotification::class);
         Notification::assertNotSentTo($publisher, AccountEmailNotification::class);
+    }
+
+    public function test_finance_and_submission_notifications_respect_their_individual_preferences(): void
+    {
+        Notification::fake();
+        $tenant = $this->currentTenant();
+        $invoice = Invoice::factory()->create(['member_id' => $tenant->member->id]);
+        $submission = MeterReadingSubmission::factory()->create(['submitted_by' => $tenant->id]);
+
+        app(AccountEmailNotifier::class)->invoiceApproved($invoice);
+        app(AccountEmailNotifier::class)->meterReadingReviewed($submission->load('submitter'));
+
+        Notification::assertSentTo($tenant, AccountEmailNotification::class, 2);
+
+        Notification::fake();
+        $tenant->update(['notification_preferences' => [
+            EmailNotificationTopic::Finance->value => false,
+            EmailNotificationTopic::Submissions->value => false,
+        ]]);
+
+        app(AccountEmailNotifier::class)->invoiceApproved($invoice);
+        app(AccountEmailNotifier::class)->meterReadingReviewed($submission->load('submitter'));
+
+        Notification::assertNothingSent();
+    }
+
+    public function test_task_assignment_notifies_the_assignee_by_default_and_respects_opt_out(): void
+    {
+        Notification::fake();
+        $assignee = User::factory()->administrator()->create();
+        $task = Task::factory()->create(['assigned_to' => $assignee->id]);
+
+        app(AccountEmailNotifier::class)->taskAssigned($task->load('assignee'));
+        Notification::assertSentTo($assignee, AccountEmailNotification::class);
+
+        Notification::fake();
+        $assignee->update(['notification_preferences' => [EmailNotificationTopic::Tasks->value => false]]);
+
+        app(AccountEmailNotifier::class)->taskAssigned($task->load('assignee'));
+        Notification::assertNothingSent();
     }
 
     private function currentTenant(): User

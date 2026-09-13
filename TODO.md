@@ -37,6 +37,8 @@ Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 - [x] Zielgruppenbezogene E-Mail-Benachrichtigungen mit persönlichem Opt-out
   für Registrierung, Bekanntmachungen, Arbeitseinsätze, Gartenfeststellungen,
   Umfragen und Mitgliederversammlungen ergänzen
+- [x] Handlungsrelevante Finanz-, Dokument-, Meldungs- und Aufgabenmails mit
+  getrennten persönlichen Opt-out-Schaltern ergänzen
 
 ## Vorgezogene Phase 31: Mobile Nutzung und PWA
 

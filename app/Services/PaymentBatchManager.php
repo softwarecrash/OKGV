@@ -19,6 +19,8 @@ use Illuminate\Validation\ValidationException;
 
 final class PaymentBatchManager
 {
+    public function __construct(private readonly AccountEmailNotifier $notifier) {}
+
     /**
      * @param  array<int, int>  $invoiceIds
      */
@@ -139,7 +141,7 @@ final class PaymentBatchManager
 
     public function markSubmitted(PaymentBatch $batch, User $actor): PaymentBatch
     {
-        return DB::transaction(function () use ($batch, $actor): PaymentBatch {
+        $batch = DB::transaction(function () use ($batch, $actor): PaymentBatch {
             $batch = PaymentBatch::query()->lockForUpdate()->findOrFail($batch->id);
 
             if ($batch->status !== PaymentBatchStatus::Exported) {
@@ -167,6 +169,12 @@ final class PaymentBatchManager
 
             return $batch;
         });
+
+        $batch->items()->with('invoice.member.user', 'invoice.recipients.member.user')->get()
+            ->where('status', '!=', PaymentBatchItemStatus::Returned)
+            ->each(fn (PaymentBatchItem $item) => $this->notifier->paymentSettled($item->invoice));
+
+        return $batch;
     }
 
     public function markSettled(PaymentBatch $batch, User $actor): PaymentBatch
@@ -219,7 +227,7 @@ final class PaymentBatchManager
         string $returnedAt,
         User $actor,
     ): PaymentBatchItem {
-        return DB::transaction(function () use ($item, $reasonCode, $reasonText, $returnedAt, $actor): PaymentBatchItem {
+        $item = DB::transaction(function () use ($item, $reasonCode, $reasonText, $returnedAt, $actor): PaymentBatchItem {
             $item = PaymentBatchItem::query()->lockForUpdate()->findOrFail($item->id);
 
             if (! in_array($item->batch->status, [
@@ -256,6 +264,10 @@ final class PaymentBatchManager
 
             return $item;
         });
+
+        $this->notifier->paymentReturned($item->load('invoice.member.user', 'invoice.recipients.member.user')->invoice);
+
+        return $item;
     }
 
     private function validateInvoice(Invoice $invoice, string $collectionDate): SepaMandate

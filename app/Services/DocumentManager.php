@@ -17,6 +17,7 @@ final class DocumentManager
 {
     public function __construct(
         private readonly NumberSequenceManager $numberSequenceManager,
+        private readonly AccountEmailNotifier $notifier,
     ) {}
 
     /**
@@ -27,7 +28,7 @@ final class DocumentManager
         $path = $file->store('documents', 'local');
 
         try {
-            return DB::transaction(function () use ($data, $file, $actor, $path): Document {
+            $document = DB::transaction(function () use ($data, $file, $actor, $path): Document {
                 $document = Document::create([
                     'document_number' => $this->numberSequenceManager->next(
                         NumberSequenceType::Document,
@@ -46,6 +47,11 @@ final class DocumentManager
 
                 return $document;
             });
+            if ($document->visibility === DocumentVisibility::Tenant && $document->isPublished()) {
+                $this->notifier->documentPublished($document);
+            }
+
+            return $document;
         } catch (Throwable $exception) {
             Storage::disk('local')->delete($path);
             throw $exception;
@@ -60,7 +66,8 @@ final class DocumentManager
         $path = $file?->store('documents', 'local');
 
         try {
-            return DB::transaction(function () use ($document, $data, $file, $actor, $path): Document {
+            $wasPublished = $document->visibility === DocumentVisibility::Tenant && $document->isPublished();
+            $document = DB::transaction(function () use ($document, $data, $file, $actor, $path): Document {
                 $document = Document::query()->lockForUpdate()->findOrFail($document->id);
                 $before = [
                     'type' => $document->type->value,
@@ -88,6 +95,11 @@ final class DocumentManager
 
                 return $document->refresh();
             });
+            if (! $wasPublished && $document->visibility === DocumentVisibility::Tenant && $document->isPublished()) {
+                $this->notifier->documentPublished($document);
+            }
+
+            return $document;
         } catch (Throwable $exception) {
             if ($path) {
                 Storage::disk('local')->delete($path);

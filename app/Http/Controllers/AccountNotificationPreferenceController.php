@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\EmailNotificationTopic;
 use App\Http\Requests\AccountNotificationPreferenceRequest;
+use App\Models\Task;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -19,6 +20,8 @@ class AccountNotificationPreferenceController extends Controller
                 EmailNotificationTopic::RegistrationRequests => $user->canReviewTenantRegistrations(),
                 EmailNotificationTopic::WorkEvents, EmailNotificationTopic::GardenInspections => $user->member?->parcelTenancies()->activeOn()->exists() ?? false,
                 EmailNotificationTopic::Polls, EmailNotificationTopic::MemberAssemblies => $user->member()->exists(),
+                EmailNotificationTopic::Finance, EmailNotificationTopic::Documents, EmailNotificationTopic::Submissions => $user->hasTenantAccess(),
+                EmailNotificationTopic::Tasks => $user->can('viewAny', Task::class),
                 EmailNotificationTopic::Announcements => true,
             }),
             'user' => $user,
@@ -48,6 +51,8 @@ class AccountNotificationPreferenceController extends Controller
             EmailNotificationTopic::RegistrationRequests => $user->canReviewTenantRegistrations(),
             EmailNotificationTopic::WorkEvents, EmailNotificationTopic::GardenInspections => $user->member?->parcelTenancies()->activeOn()->exists() ?? false,
             EmailNotificationTopic::Polls, EmailNotificationTopic::MemberAssemblies => $user->member()->exists(),
+            EmailNotificationTopic::Finance, EmailNotificationTopic::Documents, EmailNotificationTopic::Submissions => $user->hasTenantAccess(),
+            EmailNotificationTopic::Tasks => $user->can('viewAny', Task::class),
             EmailNotificationTopic::Announcements => true,
         })->map(fn (EmailNotificationTopic $topic): string => $topic->value)->all();
     }

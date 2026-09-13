@@ -16,6 +16,7 @@ final class DunningNoticeManager
 {
     public function __construct(
         private readonly AssociationDocumentProfile $associationProfile,
+        private readonly AccountEmailNotifier $notifier,
     ) {}
 
     /**
@@ -23,7 +24,7 @@ final class DunningNoticeManager
      */
     public function create(Invoice $invoice, array $data, User $actor): DunningNotice
     {
-        return DB::transaction(function () use ($invoice, $data, $actor): DunningNotice {
+        $notice = DB::transaction(function () use ($invoice, $data, $actor): DunningNotice {
             $invoice = Invoice::query()
                 ->with('recipients')
                 ->lockForUpdate()
@@ -95,6 +96,10 @@ final class DunningNoticeManager
 
             return $notice;
         });
+
+        $this->notifier->dunningNoticeIssued($notice->load('invoice.member.user', 'invoice.recipients.member.user'));
+
+        return $notice;
     }
 
     public function cancel(DunningNotice $notice, string $reason, User $actor): void

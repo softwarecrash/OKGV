@@ -17,9 +17,12 @@ use Illuminate\Validation\ValidationException;
 
 final class TaskManager
 {
+    public function __construct(private readonly AccountEmailNotifier $notifier) {}
+
     public function save(array $data, User $actor, ?Task $task = null): Task
     {
-        return DB::transaction(function () use ($data, $actor, $task): Task {
+        $previousAssigneeId = $task?->assigned_to;
+        $task = DB::transaction(function () use ($data, $actor, $task): Task {
             $task = $task ? Task::query()->lockForUpdate()->findOrFail($task->id) : new Task;
             $actor = $actor->fresh();
             Gate::forUser($actor)->authorize($task->exists ? 'update' : 'create', $task->exists ? $task : Task::class);
@@ -69,6 +72,12 @@ final class TaskManager
 
             return $task;
         });
+
+        if ($task->assigned_to && $task->assigned_to !== $previousAssigneeId && $task->assigned_to !== $actor->id) {
+            $this->notifier->taskAssigned($task->load('assignee'));
+        }
+
+        return $task;
     }
 
     public function complete(Task $task, User $actor): void

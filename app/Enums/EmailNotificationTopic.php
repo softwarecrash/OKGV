@@ -10,6 +10,10 @@ enum EmailNotificationTopic: string
     case GardenInspections = 'garden_inspections';
     case Polls = 'polls';
     case MemberAssemblies = 'member_assemblies';
+    case Finance = 'finance';
+    case Documents = 'documents';
+    case Submissions = 'submissions';
+    case Tasks = 'tasks';
 
     public function label(): string
     {
@@ -20,6 +24,10 @@ enum EmailNotificationTopic: string
             self::GardenInspections => 'Gartenbegehungen und Feststellungen',
             self::Polls => 'Neue Umfragen und Terminabfragen',
             self::MemberAssemblies => 'Einladungen zu Mitgliederversammlungen',
+            self::Finance => 'Rechnungen, Zahlungen und Mahnungen',
+            self::Documents => 'Persönliche Dokumente',
+            self::Submissions => 'Prüfung von Zählerständen und Arbeitsstunden',
+            self::Tasks => 'Mir zugewiesene Aufgaben',
         };
     }
 
@@ -32,6 +40,10 @@ enum EmailNotificationTopic: string
             self::GardenInspections => 'Bei Feststellungen zu deiner Parzelle und künftig angekündigten Begehungen.',
             self::Polls => 'Wenn du zu einer Umfrage oder Terminabfrage eingeladen wirst.',
             self::MemberAssemblies => 'Wenn eine Mitgliederversammlung veröffentlicht wird.',
+            self::Finance => 'Bei freigegebenen Rechnungen, Zahlungsbestätigungen, Rücklastschriften und Mahnungen.',
+            self::Documents => 'Wenn ein für dich bestimmtes Dokument erstmals freigegeben wird.',
+            self::Submissions => 'Wenn deine Zählerstands- oder Arbeitsstundenmeldung geprüft wurde.',
+            self::Tasks => 'Wenn dir eine neue Aufgabe zugewiesen oder eine Aufgabe an dich übergeben wird.',
         };
     }
 }

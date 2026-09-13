@@ -2,6 +2,19 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.120] - 2026-09-13
+
+### E-Mail-Benachrichtigungen
+
+- Zusätzliche, einzeln abschaltbare Benachrichtigungen für freigegebene
+  Rechnungen, Zahlungsbestätigungen, Rücklastschriften und Mahnungen ergänzt.
+- Pächter erhalten eine Nachricht, wenn ein für sie bestimmtes Dokument
+  erstmals freigegeben wird oder ihre Zählerstands- bzw.
+  Arbeitsstundenmeldung geprüft wurde.
+- Zugewiesene und an andere Personen übergebene Aufgaben benachrichtigen die
+  betreffende Person. Allgemeine Stammdatenänderungen lösen weiterhin keine
+  E-Mails aus.
+
 ## [0.2.0.119] - 2026-09-13
 
 ### Mitglieder und Rechte
