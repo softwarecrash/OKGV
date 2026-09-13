@@ -2,6 +2,19 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.119] - 2026-09-13
+
+### Mitglieder und Rechte
+
+- Die Rechteverwaltung ist aus dem persönlichen Kontomenü in die jeweilige
+  Mitgliederakte umgezogen. Berechtigte Personen finden sie beim Bearbeiten
+  eines Mitglieds im neuen Reiter „Zugang und Rechte“.
+- Die Mitgliederübersicht zeigt für Berechtigte Konto, Rolle, technischen
+  Administratorstatus und eine noch offene E-Mail-Bestätigung.
+- Die bestehenden Sicherheitsregeln bleiben erhalten: Eigene Rechte und der
+  letzte technische Administrator lassen sich nicht versehentlich ändern;
+  im Demo-Modus bleibt die Rechteverwaltung schreibgeschützt.
+
 ## [0.2.0.118] - 2026-09-13
 
 ### E-Mail-Benachrichtigungen

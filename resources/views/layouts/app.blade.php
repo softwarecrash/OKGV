@@ -303,9 +303,6 @@
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     @can('viewAny', App\Models\User::class)
-                                        <a class="dropdown-item" href="{{ route('user-permissions.index') }}">
-                                            Rechteverwaltung
-                                        </a>
                                         @if (auth()->user()->isAdministrator())
                                             <a class="dropdown-item" href="{{ route('application-settings.edit') }}">
                                                 Globale Konfiguration

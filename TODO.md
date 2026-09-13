@@ -29,6 +29,8 @@ Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 - [x] Feste, rechtefreie Vorlage „Pächter Standard“ ergänzen und bei einer
   Herabstufung automatisch zuweisen
 - [x] Eigene, ungenutzte Rechtevorlagen anlegen und geschützt löschen
+- [x] Zugang und Rollen je Mitglied in die Mitgliederakte verlagern und
+  Kontostatus in der Mitgliederübersicht anzeigen
 
 ## Kommunikation
 

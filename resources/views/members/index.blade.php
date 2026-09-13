@@ -39,6 +39,7 @@
                         <th>Name</th>
                         <th>Ort</th>
                         <th>Status</th>
+                        @if ($canViewUserAccess)<th>Konto</th>@endif
                         <th class="text-end">Aktion</th>
                     </tr>
                 </thead>
@@ -49,12 +50,23 @@
                             <td>{{ $member->full_name }}</td>
                             <td>{{ $member->zip }} {{ $member->city }}</td>
                             <td>{{ $member->status->label() }}</td>
+                            @if ($canViewUserAccess)
+                                <td>
+                                    @if ($member->user)
+                                        <span class="badge text-bg-success">{{ $member->user->role->label() }}</span>
+                                        @if ($member->user->isAdministrator())<span class="badge text-bg-primary ms-1">Admin</span>@endif
+                                        @if (! $member->user->hasVerifiedEmail())<span class="badge text-bg-warning ms-1">E-Mail offen</span>@endif
+                                    @else
+                                        <span class="text-secondary">Kein Konto</span>
+                                    @endif
+                                </td>
+                            @endif
                             <td class="text-end">
                                 <a class="btn btn-sm btn-outline-primary" href="{{ route('members.show', $member) }}">Öffnen</a>
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="text-center py-4"><strong>Keine passenden Mitglieder gefunden.</strong><br><span class="text-secondary">Prüfe Suchbegriff und Statusfilter oder lege ein neues Mitglied an.</span></td></tr>
+                        <tr><td colspan="{{ $canViewUserAccess ? 6 : 5 }}" class="text-center py-4"><strong>Keine passenden Mitglieder gefunden.</strong><br><span class="text-secondary">Prüfe Suchbegriff und Statusfilter oder lege ein neues Mitglied an.</span></td></tr>
                     @endforelse
                 </tbody>
             </table>

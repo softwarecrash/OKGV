@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Enums\MemberStatus;
 use App\Enums\NumberSequenceType;
+use App\Enums\UserPermission;
 use App\Enums\UserRole;
 use App\Http\Requests\MemberRequest;
 use App\Models\Member;
+use App\Models\PermissionProfile;
 use App\Models\User;
 use App\Services\AuditLogger;
 use App\Services\NumberSequenceManager;
@@ -26,6 +28,7 @@ class MemberController extends Controller
         $this->authorize('viewAny', Member::class);
 
         $members = Member::query()
+            ->with('user')
             ->when(
                 ! $request->user()->canViewAllMasterData(),
                 fn ($query) => $query->where('user_id', $request->user()->id),
@@ -44,6 +47,7 @@ class MemberController extends Controller
         return view('members.index', [
             'members' => $members,
             'statuses' => MemberStatus::cases(),
+            'canViewUserAccess' => $request->user()->can('viewAny', User::class),
         ]);
     }
 
@@ -92,10 +96,24 @@ class MemberController extends Controller
     {
         $this->authorize('update', $member);
 
+        $member->load('user');
+        $actor = request()->user();
+        $account = $member->user;
+
         return view('members.edit', [
             'member' => $member,
             'statuses' => MemberStatus::cases(),
             'users' => $this->availableTenantUsers($member),
+            'canViewUserAccess' => $actor->can('viewAny', User::class),
+            'canUpdateUserAccess' => $account !== null && $actor->can('updateAccess', $account),
+            'profiles' => PermissionProfile::query()->where('is_active', true)->orderBy('name')->get(),
+            'permissions' => UserPermission::availableCases(),
+            'tenantProfileId' => PermissionProfile::query()->where('name', 'Pächter Standard')->value('id'),
+            'assignableRoles' => $actor->isAdministrator()
+                ? [UserRole::Board, UserRole::Treasurer, UserRole::WaterManager, UserRole::GardenManager, UserRole::Tenant]
+                : [UserRole::Board, UserRole::Tenant],
+            'canManagePermissionDetails' => $actor->isAdministrator(),
+            'administratorCount' => User::query()->where('is_system_admin', true)->count(),
         ]);
     }
 

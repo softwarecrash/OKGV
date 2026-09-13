@@ -45,7 +45,7 @@ class NavigationExperienceTest extends TestCase
             ->assertSee('Finanzen')
             ->assertSee('2 wartende Registrierungen')
             ->assertSee('1 offene Zählerstandsmeldung')
-            ->assertSee('Rechteverwaltung');
+            ->assertDontSee('Rechteverwaltung');
     }
 
     public function test_tenant_only_receives_indicators_for_own_required_actions(): void
@@ -87,7 +87,7 @@ class NavigationExperienceTest extends TestCase
             ->assertDontSee('Registrierungsanfragen');
     }
 
-    public function test_administrator_finds_rights_management_in_account_menu(): void
+    public function test_administrator_finds_member_management_without_rights_management_in_account_menu(): void
     {
         $administrator = User::factory()->administrator()->create();
 
@@ -99,7 +99,7 @@ class NavigationExperienceTest extends TestCase
             ->assertSee('Finanzen')
             ->assertSee('Kommunikation')
             ->assertSee('Dokumente')
-            ->assertSee('Rechteverwaltung')
+            ->assertDontSee('Rechteverwaltung')
             ->assertSee('data-theme-toggle', false)
             ->assertSee('js/theme-init.js')
             ->assertSee('Darstellungsmodus wechseln')

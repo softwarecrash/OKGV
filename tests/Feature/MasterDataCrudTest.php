@@ -83,6 +83,20 @@ class MasterDataCrudTest extends TestCase
             ->assertSee('Mitglied bearbeiten')
             ->assertSee('Tobias Rocktäschel')
             ->assertSee('tobias@example.test');
+
+        $this->actingAs($administrator)
+            ->get(route('members.index'))
+            ->assertOk()
+            ->assertSee('Konto')
+            ->assertSee('Pächter')
+            ->assertDontSee('Rechteverwaltung');
+
+        $this->actingAs($administrator)
+            ->get(route('members.edit', ['member' => $member, 'tab' => 'access']))
+            ->assertOk()
+            ->assertSee('Zugang und Rechte')
+            ->assertSee('Technischer Administrator')
+            ->assertSee('Zugang und Rechte speichern');
     }
 
     public function test_administrator_can_create_and_update_parcel(): void
