@@ -23,6 +23,8 @@ Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 - [x] Frische Installation mit Datenbank-Cache per Regressionstest absichern
 - [x] Optionale Parzellennummer bei der Registrierung verständlich validieren
 - [x] E-Mail-Bestätigungslink dauerhaft signiert statt auf eine Stunde begrenzt ausstellen
+- [x] Mitgliedskontoverknüpfung beim Bearbeiten auch für Vorstands- und
+  technische Administratorkonten erhalten
 
 ## Rechteverwaltung
 

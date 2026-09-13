@@ -58,7 +58,7 @@ class MemberController extends Controller
         return view('members.create', [
             'member' => new Member,
             'statuses' => MemberStatus::cases(),
-            'users' => $this->availableTenantUsers(),
+            'users' => $this->availableUsers(),
         ]);
     }
 
@@ -103,7 +103,7 @@ class MemberController extends Controller
         return view('members.edit', [
             'member' => $member,
             'statuses' => MemberStatus::cases(),
-            'users' => $this->availableTenantUsers($member),
+            'users' => $this->availableUsers($member),
             'canViewUserAccess' => $actor->can('viewAny', User::class),
             'canUpdateUserAccess' => $account !== null && $actor->can('updateAccess', $account),
             'profiles' => PermissionProfile::query()->where('is_active', true)->orderBy('name')->get(),
@@ -152,10 +152,9 @@ class MemberController extends Controller
         return $data;
     }
 
-    private function availableTenantUsers(?Member $member = null)
+    private function availableUsers(?Member $member = null)
     {
         return User::query()
-            ->where('role', UserRole::Tenant)
             ->where(function ($query) use ($member): void {
                 $query->whereDoesntHave('member');
 

@@ -2,6 +2,16 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.121] - 2026-09-13
+
+### Mitglieder
+
+- Beim Bearbeiten eines Mitglieds bleiben verknüpfte Vorstands- und technische
+  Administratorkonten erhalten. Die Kontoauswahl berücksichtigt nun alle noch
+  nicht verknüpften Benutzerkonten statt ausschließlich Pächterkonten.
+- Die Bezeichnung „Benutzerkonto“ verdeutlicht, dass ein Vereins- oder
+  Technikkonto zugleich einem Mitglied zugeordnet sein kann.
+
 ## [0.2.0.120] - 2026-09-13
 
 ### E-Mail-Benachrichtigungen

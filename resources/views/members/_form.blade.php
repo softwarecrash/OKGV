@@ -61,14 +61,14 @@
         <div class="form-text">„Archiviert“ blendet das Mitglied in der Standardsuche aus; Historien bleiben erhalten.</div>
     </div>
     <div class="col-md-3">
-        <label class="form-label" for="user_id">Pächterkonto</label>
+        <label class="form-label" for="user_id">Benutzerkonto</label>
         <select class="form-select" id="user_id" name="user_id">
             <option value="">Nicht verknüpft</option>
             @foreach ($users as $user)
                 <option value="{{ $user->id }}" @selected((string) old('user_id', $member->user_id) === (string) $user->id)>{{ $user->name }} ({{ $user->email }})</option>
             @endforeach
         </select>
-        <div class="form-text">Optional. Verknüpft dieses Mitglied mit einem vorhandenen Login für das spätere Pächterportal.</div>
+        <div class="form-text">Optional. Verknüpft dieses Mitglied mit einem vorhandenen Login. Auch Vorstands- und technische Administratorkonten können zugleich einem Mitglied zugeordnet sein.</div>
     </div>
     <div class="col-12">
         <label class="form-label" for="notes">Interne Notizen</label>

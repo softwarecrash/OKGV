@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\MemberStatus;
+use App\Enums\UserRole;
 use App\Models\ApplicationSetting;
 use App\Models\BillingPeriod;
 use App\Models\Member;
@@ -97,6 +98,42 @@ class MasterDataCrudTest extends TestCase
             ->assertSee('Zugang und Rechte')
             ->assertSee('Technischer Administrator')
             ->assertSee('Zugang und Rechte speichern');
+    }
+
+    public function test_editing_member_data_keeps_a_linked_board_account(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $boardAccount = User::factory()->create(['role' => UserRole::Board]);
+        $member = Member::factory()->create([
+            'user_id' => $boardAccount->id,
+            'joined_at' => '2020-01-01',
+        ]);
+
+        $this->actingAs($administrator)
+            ->get(route('members.edit', $member))
+            ->assertOk()
+            ->assertSee($boardAccount->email)
+            ->assertSee('Benutzerkonto');
+
+        $this->actingAs($administrator)
+            ->put(route('members.update', $member), [
+                'user_id' => $boardAccount->id,
+                'member_number' => $member->member_number,
+                'first_name' => $member->first_name,
+                'last_name' => $member->last_name,
+                'street' => $member->street,
+                'zip' => $member->zip,
+                'city' => $member->city,
+                'email' => $member->email,
+                'joined_at' => '2019-01-01',
+                'status' => $member->status->value,
+            ])->assertRedirect(route('members.show', $member));
+
+        $this->assertDatabaseHas('members', [
+            'id' => $member->id,
+            'user_id' => $boardAccount->id,
+            'joined_at' => '2019-01-01 00:00:00',
+        ]);
     }
 
     public function test_administrator_can_create_and_update_parcel(): void
