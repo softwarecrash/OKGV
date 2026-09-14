@@ -2,6 +2,13 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.125] - 2026-09-14
+
+### Produktionsbereitstellung
+
+- Minimaler Release zur Prüfung der automatischen Plesk-Bereitstellung mit
+  den vom Hosting bestätigten PHP-, Composer- und Node.js-Pfaden.
+
 ## [0.2.0.124] - 2026-09-14
 
 ### Mitgliederkonten
