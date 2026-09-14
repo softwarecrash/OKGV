@@ -2,6 +2,15 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.124] - 2026-09-14
+
+### Mitgliederkonten
+
+- Die Kontoauswahl einer Mitgliederakte zeigt keine fremden oder überholten
+  unverknüpften Zugänge mehr. Zusätzlich verhindert die serverseitige
+  Validierung eine abweichende Login- und Kontakt-E-Mail bei einer neuen
+  Kontozuordnung.
+
 ## [0.2.0.123] - 2026-09-14
 
 ### Benutzerkonten und Datenschutz

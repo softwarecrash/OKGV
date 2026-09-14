@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\MemberStatus;
 use App\Models\Member;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -21,6 +22,7 @@ class MemberRequest extends FormRequest
     public function rules(): array
     {
         $member = $this->route('member');
+        $currentUserId = $member instanceof Member ? $member->user_id : null;
 
         return [
             'user_id' => [
@@ -28,6 +30,17 @@ class MemberRequest extends FormRequest
                 'integer',
                 Rule::exists('users', 'id'),
                 Rule::unique('members', 'user_id')->ignore($member),
+                function (string $attribute, mixed $value, \Closure $fail) use ($member, $currentUserId): void {
+                    if (! $member instanceof Member || (int) $value === $currentUserId) {
+                        return;
+                    }
+
+                    $account = User::query()->find($value);
+
+                    if ($account && strcasecmp($account->email, (string) $this->input('email')) !== 0) {
+                        $fail('Das ausgewählte Benutzerkonto muss dieselbe E-Mail-Adresse wie die Mitgliedsstammdaten verwenden. Korrigiere zuerst die Login- oder Kontakt-E-Mail.');
+                    }
+                },
             ],
             'member_number' => [
                 Rule::requiredIf($member instanceof Member),

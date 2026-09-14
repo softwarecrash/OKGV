@@ -164,6 +164,12 @@ class MemberController extends Controller
                     $query->orWhere('id', $member->user_id);
                 }
             })
+            ->when($member?->email, function ($query) use ($member): void {
+                $query->where(function ($query) use ($member): void {
+                    $query->where('id', $member->user_id)
+                        ->orWhere('email', $member->email);
+                });
+            })
             ->orderBy('name')
             ->get();
     }

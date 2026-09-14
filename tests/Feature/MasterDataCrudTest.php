@@ -136,6 +136,23 @@ class MasterDataCrudTest extends TestCase
         ]);
     }
 
+    public function test_member_account_selection_hides_unlinked_accounts_with_a_different_email(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $correctAccount = User::factory()->create(['email' => 'regina@example.test']);
+        User::factory()->create(['email' => 'falsch@example.test']);
+        $member = Member::factory()->create([
+            'email' => 'regina@example.test',
+            'user_id' => $correctAccount->id,
+        ]);
+
+        $this->actingAs($administrator)
+            ->get(route('members.edit', $member))
+            ->assertOk()
+            ->assertSee('regina@example.test')
+            ->assertDontSee('falsch@example.test');
+    }
+
     public function test_administrator_can_create_and_update_parcel(): void
     {
         $administrator = User::factory()->administrator()->create();
