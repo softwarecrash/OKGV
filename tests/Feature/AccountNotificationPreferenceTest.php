@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Notifications\AccountEmailNotification;
 use App\Services\AccountEmailNotifier;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Mail\Markdown;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
@@ -63,6 +64,23 @@ class AccountNotificationPreferenceTest extends TestCase
         ])->assertRedirect(route('login'));
 
         Notification::assertSentTo($reviewer, AccountEmailNotification::class);
+    }
+
+    public function test_action_email_fallback_is_rendered_in_german(): void
+    {
+        $html = app(Markdown::class)->render('notifications::email', [
+            'greeting' => 'Hallo Test,',
+            'level' => 'primary',
+            'introLines' => ['Eine Nachricht.'],
+            'actionText' => 'Registrierungsanfragen öffnen',
+            'actionUrl' => 'https://example.test/registration-requests',
+            'displayableActionUrl' => 'https://example.test/registration-requests',
+            'outroLines' => [],
+            'salutation' => null,
+        ])->toHtml();
+
+        $this->assertStringContainsString('Falls der Button', $html);
+        $this->assertStringNotContainsString("If you're having trouble", $html);
     }
 
     public function test_announcement_email_respects_audience_and_opt_out(): void

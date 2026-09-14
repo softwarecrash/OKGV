@@ -30,7 +30,7 @@ final class AccountEmailNotifier
             $this->eligibleUsers()->filter(fn (User $user): bool => $user->canReviewTenantRegistrations()),
             EmailNotificationTopic::RegistrationRequests,
             'Neue Registrierungsanfrage',
-            'Eine neue Zugangsanfrage wartet auf Prüfung und Freigabe.',
+            "Eine neue Zugangsanfrage von {$request->full_name} ({$request->email}) wartet auf Prüfung und Freigabe.",
             'Registrierungsanfragen öffnen',
             route('registration-requests.index'),
         );

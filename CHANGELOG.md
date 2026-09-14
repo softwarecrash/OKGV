@@ -2,6 +2,16 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.122] - 2026-09-14
+
+### E-Mail
+
+- Die Laravel-Fallback-Zeile unter Aktionsbuttons ist nun unabhängig von der
+  Server-Locale deutsch formuliert. Auch die Standardanreden und Grußformeln
+  sind lokal übersetzt.
+- Benachrichtigungen über neue Registrierungsanfragen enthalten nun Namen und
+  E-Mail-Adresse der anfragenden Person.
+
 ## [0.2.0.121] - 2026-09-13
 
 ### Mitglieder

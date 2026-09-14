@@ -41,6 +41,9 @@ Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
   Umfragen und Mitgliederversammlungen ergänzen
 - [x] Handlungsrelevante Finanz-, Dokument-, Meldungs- und Aufgabenmails mit
   getrennten persönlichen Opt-out-Schaltern ergänzen
+- [x] Systemmails inklusive Aktionsbutton-Fallback vollständig deutsch
+  lokalisieren und Registrierungsbenachrichtigungen mit Antragstellerdaten
+  ergänzen
 
 ## Vorgezogene Phase 31: Mobile Nutzung und PWA
 
