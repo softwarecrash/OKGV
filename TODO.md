@@ -25,6 +25,8 @@ Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 - [x] E-Mail-Bestätigungslink dauerhaft signiert statt auf eine Stunde begrenzt ausstellen
 - [x] Mitgliedskontoverknüpfung beim Bearbeiten auch für Vorstands- und
   technische Administratorkonten erhalten
+- [x] Login-E-Mail in der Mitgliederakte korrigierbar machen und versehentlich
+  angelegte DSGVO-Löschprüfungen zurückziehbar machen
 
 ## Rechteverwaltung
 

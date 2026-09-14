@@ -13,7 +13,7 @@
                 <form method="POST" action="{{ route('privacy-erasure-requests.store') }}">
                     @csrf
                     <input type="hidden" name="member_id" value="{{ $member->id }}">
-                    <button class="btn btn-outline-danger" type="submit">Löschprüfung anlegen</button>
+                    <button class="btn btn-outline-danger" type="submit" title="DSGVO-Prüfung, keine Zugangslöschung">DSGVO-Löschprüfung anlegen</button>
                 </form>
             @endif
             @can('update', $member)

@@ -106,6 +106,8 @@ class MemberController extends Controller
             'users' => $this->availableUsers($member),
             'canViewUserAccess' => $actor->can('viewAny', User::class),
             'canUpdateUserAccess' => $account !== null && $actor->can('updateAccess', $account),
+            'canUpdateUserAccount' => $account !== null && $actor->isAdministrator(),
+            'canDeleteUserAccount' => $account !== null && $actor->can('delete', $account),
             'profiles' => PermissionProfile::query()->where('is_active', true)->orderBy('name')->get(),
             'permissions' => UserPermission::availableCases(),
             'tenantProfileId' => PermissionProfile::query()->where('name', 'Pächter Standard')->value('id'),

@@ -8,6 +8,12 @@
                 Diesem Mitglied ist noch kein Benutzerkonto zugeordnet. Verknüpfe ein bestehendes Konto in den Stammdaten oder lasse das Mitglied eine Registrierung durchführen.
             </div>
         @else
+            @if ($canUpdateUserAccount)
+                <div class="alert alert-info d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <span>Falsch oder doppelt angelegte Zugänge ohne Mitgliedszuordnung verwaltest du separat.</span>
+                    <a class="btn btn-sm btn-outline-primary" href="{{ route('user-accounts.index') }}">Nicht zugeordnete Konten</a>
+                </div>
+            @endif
             <dl class="row mb-4">
                 <dt class="col-sm-3">Login-E-Mail</dt><dd class="col-sm-9">{{ $member->user->email }}</dd>
                 <dt class="col-sm-3">E-Mail-Status</dt><dd class="col-sm-9">{{ $member->user->hasVerifiedEmail() ? 'Bestätigt' : 'Noch nicht bestätigt' }}</dd>
@@ -80,6 +86,60 @@
                         <p class="form-text mb-0 mt-3">Im Demo-Modus können Zugang und Rechte nicht verändert werden.</p>
                     @endif
                 </form>
+            @endif
+
+            @if ($canUpdateUserAccount)
+                <div class="border-top mt-4 pt-4">
+                    <h3 class="h5">Login-E-Mail ändern</h3>
+                    <p class="text-secondary">Diese Adresse wird nur für die Anmeldung und Sicherheitsmails verwendet. Die Kontakt-E-Mail in den Stammdaten bleibt unverändert. Nach der Änderung erhält die neue Adresse eine Bestätigungsmail.</p>
+                    @if (config('demo.enabled'))
+                        <p class="form-text">Im Demo-Modus kann die Login-E-Mail nicht geändert werden.</p>
+                    @endif
+                    <form method="POST" action="{{ route('user-accounts.email.update', $member->user) }}">
+                        @csrf
+                        @method('PUT')
+                        <fieldset @disabled(config('demo.enabled'))>
+                            <label class="form-label" for="login_email">Login-E-Mail</label>
+                            <div class="row g-2 align-items-end">
+                                <div class="col-lg-7">
+                                    <input class="form-control" id="login_email" name="email" type="email" value="{{ old('email', $member->user->email) }}" required autocomplete="email">
+                                </div>
+                                <div class="col-lg-auto">
+                                    <button class="btn btn-outline-primary" type="submit">Login-E-Mail ändern</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            @endif
+
+            @if ($canDeleteUserAccount)
+                <div class="border border-danger rounded p-3 mt-4">
+                    <h3 class="h5 text-danger">Benutzerkonto entfernen</h3>
+                    <p class="text-secondary small">Entfernt nur den Zugang und hebt die Verknüpfung zum Mitglied auf. Mitglied, Parzellen, Rechnungen und Vereinsdaten bleiben erhalten. Konten mit eigener Fachhistorie können nicht entfernt werden.</p>
+                    @if (config('demo.enabled'))
+                        <p class="form-text">Im Demo-Modus können Benutzerkonten nicht entfernt werden.</p>
+                    @endif
+                    <form method="POST" action="{{ route('user-accounts.destroy', $member->user) }}" onsubmit="return confirm('Das Benutzerkonto wirklich entfernen? Die Person kann sich danach nicht mehr anmelden.')">
+                        @csrf
+                        @method('DELETE')
+                        <fieldset @disabled(config('demo.enabled'))>
+                            <div class="row g-3">
+                                <div class="col-lg-5">
+                                    <label class="form-label" for="account_current_password">Dein aktuelles Administratorpasswort</label>
+                                    <input class="form-control" id="account_current_password" name="current_password" type="password" required autocomplete="current-password">
+                                </div>
+                                <div class="col-lg-4">
+                                    <label class="form-label" for="account_confirmation">Zur Bestätigung KONTO LÖSCHEN eingeben</label>
+                                    <input class="form-control" id="account_confirmation" name="confirmation" required autocomplete="off">
+                                </div>
+                                <div class="col-lg-auto d-flex align-items-end">
+                                    <button class="btn btn-outline-danger" type="submit">Benutzerkonto entfernen</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
             @endif
         @endif
     </div>

@@ -50,6 +50,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TenantPortalController;
 use App\Http\Controllers\TenantRegistrationController;
 use App\Http\Controllers\TenantTransitionController;
+use App\Http\Controllers\UserAccountController;
 use App\Http\Controllers\UserPermissionController;
 use App\Http\Controllers\WaitingListEntryController;
 use App\Http\Controllers\WorkEventController;
@@ -186,6 +187,8 @@ Route::middleware(['auth', 'verified', 'registration.approved'])->group(function
     Route::post('privacy/erasure-requests/{privacy_erasure_request}/anonymize', [PrivacyErasureRequestController::class, 'anonymize'])
         ->middleware('throttle:3,10')
         ->name('privacy-erasure-requests.anonymize');
+    Route::post('privacy/erasure-requests/{privacy_erasure_request}/cancel', [PrivacyErasureRequestController::class, 'cancel'])
+        ->name('privacy-erasure-requests.cancel');
     Route::get('tenant-portal', [TenantPortalController::class, 'index'])
         ->middleware('module:tenant_portal')
         ->name('tenant-portal.index');
@@ -250,6 +253,12 @@ Route::middleware(['auth', 'verified', 'registration.approved'])->group(function
         ->name('user-permissions.index');
     Route::put('user-permissions/{user}', [UserPermissionController::class, 'update'])
         ->name('user-permissions.update');
+    Route::get('user-accounts', [UserAccountController::class, 'index'])
+        ->name('user-accounts.index');
+    Route::put('user-accounts/{user}/email', [UserAccountController::class, 'updateEmail'])
+        ->name('user-accounts.email.update');
+    Route::delete('user-accounts/{user}', [UserAccountController::class, 'destroy'])
+        ->name('user-accounts.destroy');
     Route::get('application-settings', [ApplicationSettingController::class, 'edit'])
         ->name('application-settings.edit');
     Route::put('application-settings', [ApplicationSettingController::class, 'update'])

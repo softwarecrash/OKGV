@@ -2,6 +2,20 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.123] - 2026-09-14
+
+### Benutzerkonten und Datenschutz
+
+- Technische Administratoren können die Login-E-Mail eines Mitgliedskontos im
+  Reiter „Zugang und Rechte“ korrigieren. Die neue Adresse muss anschließend
+  bestätigt werden; die Kontaktadresse des Mitglieds bleibt davon getrennt.
+- Unbenutzte Zugänge lassen sich mit Administratorpasswort gezielt entfernen,
+  ohne Mitgliedsstammsatz, Parzellen, Rechnungen oder andere Vereinsdaten zu
+  löschen. Konten mit fachlicher Historie bleiben geschützt.
+- DSGVO-Löschprüfungen lassen sich zurückziehen. Die Aktion ist nun klar als
+  Datenschutzprozess gekennzeichnet und nicht mehr mit einer Zugangslöschung
+  zu verwechseln.
+
 ## [0.2.0.122] - 2026-09-14
 
 ### E-Mail

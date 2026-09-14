@@ -16,6 +16,7 @@ class ProtectDemoInstallation
             'password.update',
             'account.password.update',
             'user-permissions.update',
+            'user-accounts.*',
             'backups.*',
             'data-transfer.app-key',
             'privacy-erasure-requests.anonymize',

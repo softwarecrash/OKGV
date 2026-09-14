@@ -138,6 +138,14 @@
                                 </form>
                             @endif
                         @endcan
+                        @can('cancel', $erasureRequest)
+                            @if ($erasureRequest->status !== App\Enums\PrivacyErasureStatus::Rejected)
+                                <form class="mt-3" method="POST" action="{{ route('privacy-erasure-requests.cancel', $erasureRequest) }}" onsubmit="return confirm('Diese DSGVO-Löschprüfung wirklich zurückziehen?')">
+                                    @csrf
+                                    <button class="btn btn-sm btn-outline-secondary" type="submit">DSGVO-Löschprüfung zurückziehen</button>
+                                </form>
+                            @endif
+                        @endcan
                     </div>
                 @empty
                     <p class="mb-0 text-secondary">Keine Löschanfragen vorhanden.</p>

@@ -81,6 +81,22 @@ class PrivacyErasureRequestController extends Controller
             ->with('status', 'Die personenbezogenen Stammdaten wurden pseudonymisiert.');
     }
 
+    public function cancel(Request $request, PrivacyErasureRequest $privacyErasureRequest): RedirectResponse
+    {
+        $this->authorize('cancel', $privacyErasureRequest);
+
+        $privacyErasureRequest->update([
+            'status' => PrivacyErasureStatus::Rejected,
+            'reviewed_by' => $request->user()->id,
+            'reviewed_at' => now(),
+            'review_note' => 'Löschanfrage wurde zurückgezogen.',
+            'blockers' => null,
+        ]);
+        AuditLogger::log('privacy.erasure_cancelled', $request->user(), $privacyErasureRequest);
+
+        return redirect()->route('privacy.index')->with('status', 'Die Löschanfrage wurde zurückgezogen.');
+    }
+
     private function requestedMember(Request $request): Member
     {
         if ($request->filled('member_id') && $request->user()->canManagePrivacy()) {
