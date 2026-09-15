@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BackupRestoreRequest;
 use App\Services\AuditLogger;
 use App\Services\BackupManager;
-use Illuminate\Http\BinaryFileResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
 
 class BackupController extends Controller
@@ -35,15 +35,28 @@ class BackupController extends Controller
         return back()->with('status', "Backup {$backup['name']} wurde erstellt.");
     }
 
-    public function download(Request $request, string $backup): BinaryFileResponse
+    public function download(Request $request, string $backup): StreamedResponse
     {
         abort_unless($request->user()->isAdministrator(), 403);
+        $path = $this->backups->path($backup);
+        abort_unless(is_readable($path), 404);
+
         AuditLogger::log('backup.downloaded', $request->user(), metadata: [
             'filename' => $backup,
         ]);
 
-        return response()->download($this->backups->path($backup), $backup, [
+        return response()->streamDownload(static function () use ($path): void {
+            $stream = fopen($path, 'rb');
+
+            if ($stream === false) {
+                return;
+            }
+
+            fpassthru($stream);
+            fclose($stream);
+        }, $backup, [
             'Content-Type' => 'application/zip',
+            'Content-Length' => (string) filesize($path),
             'X-Content-Type-Options' => 'nosniff',
         ]);
     }

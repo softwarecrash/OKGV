@@ -2,6 +2,14 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.130] - 2026-09-15
+
+### Backup und Wiederherstellung
+
+- Backup-Dateien werden aus dem privaten Speicher nun über einen PHP-Stream
+  ausgeliefert. Das vermeidet 500-Fehler bei hosterabhängiger direkter
+  Dateiübertragung.
+
 ## [0.2.0.129] - 2026-09-15
 
 ### Backup und Wiederherstellung

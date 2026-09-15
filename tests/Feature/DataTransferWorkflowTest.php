@@ -162,6 +162,23 @@ class DataTransferWorkflowTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_administrator_can_stream_a_backup_download_from_private_storage(): void
+    {
+        Storage::fake('local');
+        $administrator = User::factory()->administrator()->create();
+        $name = 'okgv-backup-20260915-120000-abc123.zip';
+        Storage::disk('local')->put("backups/{$name}", 'backup-data');
+
+        $response = $this->actingAs($administrator)
+            ->get(route('backups.download', $name));
+
+        $response
+            ->assertOk()
+            ->assertHeader('content-type', 'application/zip')
+            ->assertHeader('content-length', '11');
+        $this->assertSame('backup-data', $response->streamedContent());
+    }
+
     public function test_backup_creation_failure_is_shown_in_the_form_instead_of_a_server_error(): void
     {
         $administrator = User::factory()->administrator()->create();
