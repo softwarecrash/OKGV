@@ -9,6 +9,8 @@ use Illuminate\Http\BinaryFileResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class BackupController extends Controller
 {
@@ -19,7 +21,16 @@ class BackupController extends Controller
     public function create(Request $request): RedirectResponse
     {
         abort_unless($request->user()->isAdministrator(), 403);
-        $backup = $this->backups->create($request->user());
+
+        try {
+            $backup = $this->backups->create($request->user());
+        } catch (Throwable $exception) {
+            Log::error('OKGV backup creation failed.', ['exception' => $exception]);
+
+            return back()->withErrors([
+                'backup' => 'Das Backup konnte nicht erstellt werden: '.$exception->getMessage(),
+            ]);
+        }
 
         return back()->with('status', "Backup {$backup['name']} wurde erstellt.");
     }

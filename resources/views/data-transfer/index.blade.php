@@ -148,18 +148,6 @@
                                 @enderror
                             </div>
                             <div class="col-lg-4">
-                                <label class="form-label" for="app-key-confirmation">Bestätigung</label>
-                                <input class="form-control @error('app_key_confirmation') is-invalid @enderror"
-                                       id="app-key-confirmation"
-                                       name="app_key_confirmation"
-                                       type="text"
-                                       placeholder="APP_KEY ANZEIGEN"
-                                       required>
-                                @error('app_key_confirmation')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-lg-4">
                                 <button class="btn btn-warning w-100">APP_KEY anzeigen</button>
                             </div>
                         </div>

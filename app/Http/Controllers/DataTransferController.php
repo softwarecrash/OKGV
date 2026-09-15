@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Enums\DataTransferType;
 use App\Enums\FeatureModule;
 use App\Http\Requests\CsvImportRequest;
+use App\Services\AuditLogger;
 use App\Services\BackupManager;
 use App\Services\CsvDataTransferService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -33,8 +33,9 @@ class DataTransferController extends Controller
 
         $request->validate([
             'app_key_password' => ['required', 'current_password'],
-            'app_key_confirmation' => ['required', Rule::in(['APP_KEY ANZEIGEN'])],
         ]);
+
+        AuditLogger::log('data_transfer.app_key_revealed', $request->user());
 
         return $this->view($request, (string) config('app.key'));
     }

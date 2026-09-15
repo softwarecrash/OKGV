@@ -15,6 +15,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Mockery;
+use RuntimeException;
 use Tests\TestCase;
 use ZipArchive;
 
@@ -161,6 +162,21 @@ class DataTransferWorkflowTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_backup_creation_failure_is_shown_in_the_form_instead_of_a_server_error(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $database = Mockery::mock(DatabaseDumpService::class);
+        $database->shouldReceive('dump')
+            ->once()
+            ->andThrow(new RuntimeException('MariaDB-Dump nicht verfügbar.'));
+        $this->app->instance(DatabaseDumpService::class, $database);
+
+        $this->actingAs($administrator)
+            ->post(route('backups.create'))
+            ->assertRedirect()
+            ->assertSessionHasErrors('backup');
+    }
+
     public function test_backup_contains_database_manifest_and_private_files(): void
     {
         Storage::fake('local');
@@ -220,14 +236,12 @@ class DataTransferWorkflowTest extends TestCase
         $this->actingAs($administrator)
             ->post(route('data-transfer.app-key'), [
                 'app_key_password' => 'wrong-password',
-                'app_key_confirmation' => 'APP_KEY ANZEIGEN',
             ])
             ->assertSessionHasErrors(['app_key_password']);
 
         $this->actingAs($administrator)
             ->post(route('data-transfer.app-key'), [
                 'app_key_password' => 'secret-password',
-                'app_key_confirmation' => 'APP_KEY ANZEIGEN',
             ])
             ->assertOk()
             ->assertSee((string) config('app.key'));

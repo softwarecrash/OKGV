@@ -2,6 +2,19 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.127] - 2026-09-15
+
+### Backup und Wiederherstellung
+
+- Die Backup-Erstellung verwendet bei einem auf Shared Hosting gesperrten
+  MariaDB-Kommandozeilenprogramm automatisch die vorhandene PHP-
+  Datenbankverbindung als Fallback.
+- Fehler bei der Backup-Erstellung werden als konkrete Formularmeldung statt
+  einer leeren Fehlerseite angezeigt.
+- Die Anzeige des APP_KEY verlangt weiterhin Administratorrechte, das eigene
+  Passwort und ein Rate-Limit; die zusätzliche manuelle Bestätigungsphrase
+  entfällt.
+
 ## [0.2.0.126] - 2026-09-15
 
 ### Performance

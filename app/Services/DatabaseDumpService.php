@@ -2,13 +2,33 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\DB;
+use PDO;
 use RuntimeException;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
+use Throwable;
 
 class DatabaseDumpService
 {
     public function dump(string $destination): void
+    {
+        try {
+            $this->dumpWithClient($destination);
+        } catch (Throwable $clientException) {
+            try {
+                $this->dumpWithPdo($destination);
+            } catch (Throwable $pdoException) {
+                throw new RuntimeException(
+                    'Der Datenbankdump konnte weder über das MariaDB-Programm noch über die PHP-Datenbankverbindung erstellt werden. '
+                    .'MariaDB: '.$clientException->getMessage().' PHP: '.$pdoException->getMessage(),
+                    previous: $pdoException,
+                );
+            }
+        }
+    }
+
+    private function dumpWithClient(string $destination): void
     {
         $connection = $this->connection();
         $handle = fopen($destination, 'wb');
@@ -37,6 +57,77 @@ class DatabaseDumpService
             @unlink($destination);
             throw new RuntimeException('Der Datenbankdump konnte nicht erstellt werden: '.$process->getErrorOutput());
         }
+    }
+
+    /**
+     * Shared hosting may permit PHP's database connection but not external
+     * processes. OKGV does not rely on database routines or triggers, so a
+     * schema and data dump through PDO is a portable fallback.
+     */
+    private function dumpWithPdo(string $destination): void
+    {
+        $pdo = DB::connection()->getPdo();
+        $handle = fopen($destination, 'wb');
+
+        if ($handle === false) {
+            throw new RuntimeException('Die temporäre Dump-Datei konnte nicht geöffnet werden.');
+        }
+
+        chmod($destination, 0600);
+
+        try {
+            $pdo->exec('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+            $pdo->beginTransaction();
+            fwrite($handle, "SET FOREIGN_KEY_CHECKS=0;\nSET SQL_MODE='NO_AUTO_VALUE_ON_ZERO';\n\n");
+            $tables = $pdo->query("SHOW FULL TABLES WHERE Table_type = 'BASE TABLE'")->fetchAll(PDO::FETCH_COLUMN);
+
+            foreach ($tables as $table) {
+                $quotedTable = $this->quoteIdentifier((string) $table);
+                $create = $pdo->query("SHOW CREATE TABLE {$quotedTable}")->fetch(PDO::FETCH_ASSOC);
+                $definition = is_array($create) ? array_values($create)[1] ?? null : null;
+
+                if (! is_string($definition)) {
+                    throw new RuntimeException("Das Tabellenschema für {$table} konnte nicht gelesen werden.");
+                }
+
+                fwrite($handle, "DROP TABLE IF EXISTS {$quotedTable};\n{$definition};\n");
+                $statement = $pdo->query("SELECT * FROM {$quotedTable}");
+                $columns = null;
+
+                while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    $columns ??= array_keys($row);
+                    $values = array_map(
+                        fn (mixed $value): string => $value === null ? 'NULL' : $pdo->quote((string) $value),
+                        array_values($row),
+                    );
+                    fwrite(
+                        $handle,
+                        'INSERT INTO '.$quotedTable.' ('
+                        .implode(', ', array_map($this->quoteIdentifier(...), $columns)).') VALUES ('
+                        .implode(', ', $values).");\n",
+                    );
+                }
+
+                fwrite($handle, "\n");
+            }
+
+            fwrite($handle, "SET FOREIGN_KEY_CHECKS=1;\n");
+            $pdo->commit();
+        } catch (Throwable $exception) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            @unlink($destination);
+
+            throw $exception;
+        } finally {
+            fclose($handle);
+        }
+    }
+
+    private function quoteIdentifier(string $identifier): string
+    {
+        return '`'.str_replace('`', '``', $identifier).'`';
     }
 
     public function restore(string $source): void

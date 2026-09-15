@@ -115,6 +115,9 @@ Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 
 ## Stabilisierung bestehender Abläufe
 
+- [x] Backup-Erstellung für Hosting ohne MariaDB-Kommandozeilenprozess mit
+  PHP-Datenbank-Fallback und verständlicher Fehlerausgabe absichern
+
 - [x] Navigationsindikatoren für Shared Hosting kurzzeitig cachen und
   wiederholte Kontozuordnungsabfragen vermeiden
 
