@@ -2,6 +2,17 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.126] - 2026-09-15
+
+### Performance
+
+- Die auf jeder Seite angezeigten Menüindikatoren werden pro Benutzer für
+  15 Sekunden zwischengespeichert. Das reduziert insbesondere auf Shared
+  Hosting die vielen einzelnen Zählabfragen bei Mitglieder- und
+  Parzellenlisten deutlich.
+- Die Mitgliedszuordnung des angemeldeten Kontos wird pro Request nur einmal
+  geladen, statt mehrfach eine Datenbankabfrage auszulösen.
+
 ## [0.2.0.125] - 2026-09-14
 
 ### Produktionsbereitstellung

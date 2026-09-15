@@ -115,6 +115,9 @@ Als Nächstes: Phase 25 (Bewerbermanagement), gemäß `PHASE_PLAN.md`.
 
 ## Stabilisierung bestehender Abläufe
 
+- [x] Navigationsindikatoren für Shared Hosting kurzzeitig cachen und
+  wiederholte Kontozuordnungsabfragen vermeiden
+
 - [x] Registrierungsfreigabe von E-Mail-Bestätigung trennen und Mitgliedsabschluss sichtbar machen
 - [x] Rechtewechsel serverseitig gegen veraltete Zustände und ungültige Eingaben absichern
 - [x] Demo-Zugänge, Schlüssel, Backups und externen Mailversand schützen

@@ -92,6 +92,7 @@ use Illuminate\Auth\Events\Logout;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
@@ -151,17 +152,36 @@ class AppServiceProvider extends ServiceProvider
         View::composer('layouts.app', function ($view): void {
             $user = auth()->user();
             $indicatorService = app(ActionIndicatorService::class);
+            $user?->loadMissing('member');
+            $cacheSeconds = max(0, (int) config('app.navigation_indicator_cache_seconds', 15));
+
+            $indicators = function (string $scope) use ($user, $indicatorService): array {
+                if (! $user) {
+                    return $indicatorService->emptyIndicators();
+                }
+
+                return $scope === 'tenant-portal'
+                    ? $indicatorService->forTenantPortal($user)
+                    : $indicatorService->forUser($user);
+            };
+            $navigationIndicators = function (string $scope) use ($user, $cacheSeconds, $indicators): array {
+                if (! $user || $cacheSeconds === 0) {
+                    return $indicators($scope);
+                }
+
+                return Cache::remember(
+                    "navigation-indicators:{$scope}:{$user->id}:{$user->updated_at?->getTimestamp()}",
+                    now()->addSeconds($cacheSeconds),
+                    fn (): array => $indicators($scope),
+                );
+            };
             $view->with(
                 'actionIndicators',
-                $user
-                    ? $indicatorService->forUser($user)
-                    : $indicatorService->emptyIndicators(),
+                $navigationIndicators('main'),
             );
             $view->with(
                 'tenantPortalIndicators',
-                $user
-                    ? $indicatorService->forTenantPortal($user)
-                    : $indicatorService->emptyIndicators(),
+                $navigationIndicators('tenant-portal'),
             );
         });
 

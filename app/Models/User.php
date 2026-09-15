@@ -61,6 +61,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function hasTenantAccess(): bool
     {
+        if ($this->relationLoaded('member')) {
+            return $this->member !== null;
+        }
+
         return $this->member()->exists();
     }
 

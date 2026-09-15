@@ -60,6 +60,10 @@ return [
 
     'version' => trim((string) file_get_contents(base_path('VERSION'))),
 
+    // Navigation indicators combine several open-workflow counts. A short
+    // per-user cache prevents them from delaying every regular page request.
+    'navigation_indicator_cache_seconds' => (int) env('OKGV_NAVIGATION_INDICATOR_CACHE_SECONDS', 15),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
