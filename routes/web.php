@@ -278,7 +278,7 @@ Route::middleware(['auth', 'verified', 'registration.approved'])->group(function
         ->middleware('module:data_transfer')
         ->name('data-transfer.index');
     Route::post('data-transfer/app-key', [DataTransferController::class, 'revealAppKey'])
-        ->middleware(['module:data_transfer', 'throttle:3,10'])
+        ->middleware(['module:data_transfer', 'throttle:app-key-reveal'])
         ->name('data-transfer.app-key');
     Route::post('data-transfer/import', [DataTransferController::class, 'import'])
         ->middleware(['module:data_transfer', 'throttle:10,1'])
@@ -290,7 +290,7 @@ Route::middleware(['auth', 'verified', 'registration.approved'])->group(function
         ->middleware(['module:data_transfer', 'throttle:30,1'])
         ->name('data-transfer.template');
     Route::post('data-transfer/backups', [BackupController::class, 'create'])
-        ->middleware(['module:data_transfer', 'throttle:3,10'])
+        ->middleware(['module:data_transfer', 'throttle:backup-create'])
         ->name('backups.create');
     Route::get('data-transfer/backups/{backup}', [BackupController::class, 'download'])
         ->middleware(['module:data_transfer', 'throttle:10,1'])

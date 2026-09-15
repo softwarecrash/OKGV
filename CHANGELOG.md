@@ -2,6 +2,14 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.128] - 2026-09-15
+
+### Backup und Wiederherstellung
+
+- Die Rate-Limits für APP_KEY-Anzeige und Backup-Erstellung sind jetzt pro
+  Aktion und Administrator getrennt. Ein Versuch bei einer Aktion sperrt die
+  andere nicht mehr; eine Sperre erscheint als verständliche Formularmeldung.
+
 ## [0.2.0.127] - 2026-09-15
 
 ### Backup und Wiederherstellung
