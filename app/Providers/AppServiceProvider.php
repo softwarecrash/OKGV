@@ -138,22 +138,6 @@ class AppServiceProvider extends ServiceProvider
                     ->withHeaders($headers));
         });
 
-        RateLimiter::for('app-key-reveal', function ($request): Limit {
-            return Limit::perMinute(3)
-                ->by('app-key-reveal:'.(string) $request->user()->id)
-                ->response(fn ($request, array $headers) => back()
-                    ->withErrors(['app_key_password' => 'Zu viele Versuche. Bitte warte etwa eine Minute und versuche es erneut.'])
-                    ->withHeaders($headers));
-        });
-
-        RateLimiter::for('backup-create', function ($request): Limit {
-            return Limit::perMinute(3)
-                ->by('backup-create:'.(string) $request->user()->id)
-                ->response(fn ($request, array $headers) => back()
-                    ->withErrors(['backup' => 'Zu viele Backup-Versuche in kurzer Zeit. Bitte warte etwa eine Minute und versuche es erneut.'])
-                    ->withHeaders($headers));
-        });
-
         if (Schema::hasTable('application_settings')) {
             $systemName = ApplicationSetting::query()->value('system_name');
 

@@ -2,6 +2,15 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.129] - 2026-09-15
+
+### Backup und Wiederherstellung
+
+- Die fehleranfällige HTTP-Drosselung für Backup-Erstellung und APP_KEY-
+  Anzeige entfällt. Beide Aktionen sind weiterhin ausschließlich für
+  Administratoren, mit aktuellem Passwort beziehungsweise CSRF-Schutz und
+  Auditprotokoll zugänglich.
+
 ## [0.2.0.128] - 2026-09-15
 
 ### Backup und Wiederherstellung
