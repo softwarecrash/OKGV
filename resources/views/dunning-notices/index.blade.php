@@ -20,7 +20,7 @@
         <div class="card-body row g-3 align-items-end">
             <div class="col-md-4">
                 <label class="form-label" for="status">Status</label>
-                <select class="form-select" id="status" name="status">
+                <select class="form-select" id="status" name="status" onchange="this.form.submit()">
                     <option value="">Alle Status</option>
                     @foreach ($statuses as $status)
                         <option value="{{ $status->value }}" @selected(request('status') === $status->value)>{{ $status->label() }}</option>
@@ -28,7 +28,7 @@
                 </select>
             </div>
             <div class="col-md-8">
-                <button class="btn btn-outline-primary">Filtern</button>
+                <noscript><button class="btn btn-outline-primary">Filtern</button></noscript>
                 <a class="btn btn-outline-secondary" href="{{ route('dunning-notices.index') }}">Zurücksetzen</a>
             </div>
         </div>

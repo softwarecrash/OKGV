@@ -2,6 +2,13 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.137] - 2026-09-16
+
+### Bedienung
+
+- Auswahlfilter für Registrierungsanfragen, Arbeitsstunden, Arbeitseinsätze
+  und Mahnungen werden direkt beim Ändern angewendet.
+
 ## [0.2.0.136] - 2026-09-16
 
 ### Oberfläche

@@ -7,14 +7,14 @@
     <form method="GET" class="d-flex flex-wrap align-items-end gap-2 mb-3">
         <div>
             <label class="form-label" for="status">Anfragen anzeigen</label>
-            <select class="form-select" name="status" id="status">
+            <select class="form-select" name="status" id="status" onchange="this.form.submit()">
                 @foreach (\App\Enums\RegistrationRequestStatus::cases() as $status)
                     <option value="{{ $status->value }}" @selected($selectedStatus === $status->value)>{{ $status->label() }}</option>
                 @endforeach
                 <option value="all" @selected($selectedStatus === 'all')>Alle Anfragen</option>
             </select>
         </div>
-        <button class="btn btn-outline-primary">Anzeigen</button>
+        <noscript><button class="btn btn-outline-primary">Anzeigen</button></noscript>
     </form>
     <div class="card border-0 shadow-sm">
         <div class="table-responsive">
