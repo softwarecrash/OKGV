@@ -39,6 +39,13 @@ class MasterDataCrudTest extends TestCase
         ]);
     }
 
+    public function test_missing_use_type_falls_back_to_lease_for_legacy_data(): void
+    {
+        $parcel = Parcel::factory()->make(['use_type' => null]);
+
+        $this->assertSame(ParcelUseType::Lease, $parcel->use_type);
+    }
+
     public function test_administrator_can_create_search_update_and_archive_member(): void
     {
         $administrator = User::factory()->administrator()->create();

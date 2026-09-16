@@ -2,6 +2,15 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.135] - 2026-09-16
+
+### Fehlerbehebung
+
+- Die Parzellenübersicht bleibt auch dann erreichbar, wenn eine Instanz noch
+  nicht auf die neue Eigentumsparzellen-Migration aktualisiert wurde.
+- Fehlende Nutzungsarten in Bestandsdaten werden beim Update auf
+  „Pachtparzelle“ normalisiert.
+
 ## [0.2.0.134] - 2026-09-16
 
 ### Eigentumsparzellen

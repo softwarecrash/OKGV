@@ -6,6 +6,7 @@ use App\Enums\ParcelStatus;
 use App\Enums\ParcelUseType;
 use Database\Factories\ParcelFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -44,6 +45,14 @@ class Parcel extends Model
             'map_height' => 'integer',
             'map_polygon' => 'array',
         ];
+    }
+
+    protected function useType(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value): ParcelUseType => ParcelUseType::tryFrom($value ?? '')
+                ?? ParcelUseType::Lease,
+        );
     }
 
     public function tenancies(): HasMany
