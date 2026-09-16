@@ -2,6 +2,13 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.138] - 2026-09-16
+
+### Fehlerbehebung
+
+- Auswahlfilter werden CSP-konform über das JavaScript-Bundle abgesendet und
+  funktionieren damit auch bei aktivierten Sicherheitsheadern sofort.
+
 ## [0.2.0.137] - 2026-09-16
 
 ### Bedienung

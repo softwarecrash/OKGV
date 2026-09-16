@@ -61,6 +61,16 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', () => localStorage.removeItem(key));
     });
 
+    document.querySelectorAll('select[data-auto-submit]').forEach((select) => {
+        select.addEventListener('change', () => {
+            const form = select.form;
+
+            if (form?.method.toLowerCase() === 'get') {
+                form.submit();
+            }
+        });
+    });
+
     updateThemeToggle();
 
     document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {

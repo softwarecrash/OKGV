@@ -14,7 +14,7 @@
             <form class="row g-3 align-items-end" method="GET">
                 <div class="col-md-8">
                     <label class="form-label" for="billing_period_id">Abrechnungsperiode</label>
-                    <select class="form-select" id="billing_period_id" name="billing_period_id" onchange="this.form.submit()">
+                    <select class="form-select" id="billing_period_id" name="billing_period_id" data-auto-submit>
                         <option value="">Alle Perioden</option>
                         @foreach ($periods as $period)
                             <option value="{{ $period->id }}" @selected($selectedPeriodId === $period->id)>
