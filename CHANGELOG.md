@@ -2,6 +2,12 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.136] - 2026-09-16
+
+### Oberfläche
+
+- Die Nutzungsarten von Parzellen heißen kurz „Pacht“ und „Eigentum“.
+
 ## [0.2.0.135] - 2026-09-16
 
 ### Fehlerbehebung

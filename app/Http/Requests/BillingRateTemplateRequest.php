@@ -83,7 +83,7 @@ class BillingRateTemplateRequest extends FormRequest
                     && ! $this->boolean('applies_to_owned_parcels')) {
                     $validator->errors()->add(
                         'applies_to_leased_parcels',
-                        'Ein Parzellenpreis muss für Pachtparzellen, Eigentumsparzellen oder beide gelten.',
+                        'Ein Parzellenpreis muss für Pacht, Eigentum oder beide gelten.',
                     );
                 }
 

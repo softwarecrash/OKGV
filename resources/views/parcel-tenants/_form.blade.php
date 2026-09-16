@@ -1,6 +1,6 @@
 <x-validation-errors />
 <div class="alert alert-info">
-    Jede verantwortliche Person erhält eine eigene Zuordnung. Bei Pachtparzellen entspricht dies dem Pachtvertrag, bei Eigentumsparzellen der Eigentümerzuordnung. Mehrere Mitglieder können gleichzeitig derselben Parzelle zugeordnet sein und erscheinen dadurch gemeinsam auf der Rechnung.
+    Jede verantwortliche Person erhält eine eigene Zuordnung. Bei Pacht entspricht dies dem Pachtvertrag, bei Eigentum der Eigentümerzuordnung. Mehrere Mitglieder können gleichzeitig derselben Parzelle zugeordnet sein und erscheinen dadurch gemeinsam auf der Rechnung.
 </div>
 <div class="row g-3">
     <div class="col-md-6">
@@ -33,7 +33,7 @@
             <input type="hidden" name="is_primary" value="0">
             <input class="form-check-input" type="checkbox" id="is_primary" name="is_primary" value="1" @checked(old('is_primary', $parcelTenant->is_primary))>
             <label class="form-check-label" for="is_primary">Hauptverantwortliche Person</label>
-            <div class="form-text">Pro Zeitraum kann genau eine Person hauptverantwortlich sein. Bei Pachtparzellen ist das der Hauptpächter, bei Eigentumsparzellen der Eigentümer.</div>
+            <div class="form-text">Pro Zeitraum kann genau eine Person hauptverantwortlich sein. Bei Pacht ist das der Hauptpächter, bei Eigentum der Eigentümer.</div>
         </div>
     </div>
     <div class="col-12">

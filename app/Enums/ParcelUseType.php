@@ -10,8 +10,8 @@ enum ParcelUseType: string
     public function label(): string
     {
         return match ($this) {
-            self::Lease => 'Pachtparzelle',
-            self::Ownership => 'Eigentumsparzelle',
+            self::Lease => 'Pacht',
+            self::Ownership => 'Eigentum',
         };
     }
 
