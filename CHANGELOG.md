@@ -2,6 +2,12 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.133] - 2026-09-16
+
+### Lageplan
+
+- Hinweis zum Öffnen einer Parzelle sprachlich vereinfacht.
+
 ## [0.2.0.132] - 2026-09-16
 
 ### Lageplan

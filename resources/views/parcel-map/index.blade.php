@@ -110,7 +110,7 @@
                         </svg>
                     </div>
                 </div>
-                <p class="small text-secondary mt-3 mb-0">Vergrößere den Plan mit den Schaltflächen oder mit Strg und Mausrad. Greife den vergrößerten Plan mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Ein kurzer Klick auf eine Parzelle öffnet weiterhin ihre Details.</p>
+                <p class="small text-secondary mt-3 mb-0">Vergrößere den Plan mit den Schaltflächen oder mit Strg und Mausrad. Greife den vergrößerten Plan mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Ein kurzer Klick auf eine Parzelle öffnet ihre Details.</p>
             @endif
         </div>
     </div>
