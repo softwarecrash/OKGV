@@ -50,6 +50,8 @@ class BillingRateRequest extends FormRequest
                 Rule::in(array_column(BillingRateType::availableCases(), 'value')),
             ],
             'scope' => ['required', Rule::enum(BillingRateScope::class)],
+            'applies_to_leased_parcels' => ['sometimes', 'boolean'],
+            'applies_to_owned_parcels' => ['sometimes', 'boolean'],
             'settlement_type' => ['required', Rule::enum(BillingSettlementType::class)],
             'service_starts_at' => ['required', 'date'],
             'service_ends_at' => ['required', 'date', 'after_or_equal:service_starts_at'],
@@ -89,6 +91,15 @@ class BillingRateRequest extends FormRequest
                     );
                 }
 
+                if ($scope === BillingRateScope::Parcel
+                    && ! $this->boolean('applies_to_leased_parcels')
+                    && ! $this->boolean('applies_to_owned_parcels')) {
+                    $validator->errors()->add(
+                        'applies_to_leased_parcels',
+                        'Ein Parzellenpreis muss für Pachtparzellen, Eigentumsparzellen oder beide gelten.',
+                    );
+                }
+
                 if (in_array($type, [
                     BillingRateType::PerKilowattHour,
                     BillingRateType::PerCubicMeter,
@@ -122,6 +133,16 @@ class BillingRateRequest extends FormRequest
             'calculation_type' => $template?->calculation_type->value
                 ?? $this->input('calculation_type'),
             'scope' => $template?->scope->value ?? $this->input('scope'),
+            'applies_to_leased_parcels' => $template
+                ? $template->applies_to_leased_parcels
+                : ($this->has('applies_to_leased_parcels')
+                    ? $this->boolean('applies_to_leased_parcels')
+                    : true),
+            'applies_to_owned_parcels' => $template
+                ? $template->applies_to_owned_parcels
+                : ($this->has('applies_to_owned_parcels')
+                    ? $this->boolean('applies_to_owned_parcels')
+                    : false),
             'settlement_type' => $template?->settlement_type->value
                 ?? $this->input('settlement_type', BillingSettlementType::Arrears->value),
             'service_starts_at' => $this->input(

@@ -43,7 +43,7 @@ enum DataTransferType: string
                 'status', 'notes',
             ],
             self::Parcels => [
-                'parcel_number', 'area_sqm', 'status', 'location_description',
+                'parcel_number', 'area_sqm', 'status', 'use_type', 'has_operating_permit', 'location_description',
                 'map_polygon', 'notes',
             ],
             self::Meters => [
@@ -74,7 +74,7 @@ enum DataTransferType: string
                 '', 'active', '',
             ],
             self::Parcels => [
-                'A-01', '320.50', 'free', 'Nordweg',
+                'A-01', '320.50', 'free', 'lease', '0', 'Nordweg',
                 '[{"x":100,"y":100},{"x":300,"y":90},{"x":320,"y":300},{"x":90,"y":310}]',
                 '',
             ],

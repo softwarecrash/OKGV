@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\MemberStatus;
+use App\Enums\ParcelUseType;
 use App\Enums\UserRole;
 use App\Models\ApplicationSetting;
 use App\Models\BillingPeriod;
@@ -16,6 +17,27 @@ use Tests\TestCase;
 class MasterDataCrudTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_administrator_can_create_an_ownership_parcel_with_operating_permit(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+
+        $this->actingAs($administrator)
+            ->post(route('parcels.store'), [
+                'parcel_number' => 'E-01',
+                'area_sqm' => '250.00',
+                'status' => 'assigned',
+                'use_type' => ParcelUseType::Ownership->value,
+                'has_operating_permit' => '1',
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('parcels', [
+            'parcel_number' => 'E-01',
+            'use_type' => ParcelUseType::Ownership->value,
+            'has_operating_permit' => true,
+        ]);
+    }
 
     public function test_administrator_can_create_search_update_and_archive_member(): void
     {

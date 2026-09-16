@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ParcelStatus;
+use App\Enums\ParcelUseType;
 use Database\Factories\ParcelFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'parcel_number',
     'area_sqm',
     'status',
+    'use_type',
+    'has_operating_permit',
     'location_description',
     'map_x',
     'map_y',
@@ -33,6 +36,8 @@ class Parcel extends Model
         return [
             'area_sqm' => 'decimal:2',
             'status' => ParcelStatus::class,
+            'use_type' => ParcelUseType::class,
+            'has_operating_permit' => 'boolean',
             'map_x' => 'integer',
             'map_y' => 'integer',
             'map_width' => 'integer',

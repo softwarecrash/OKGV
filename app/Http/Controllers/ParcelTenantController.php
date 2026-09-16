@@ -58,8 +58,8 @@ class ParcelTenantController extends Controller
             ->with(
                 'status',
                 $createdAccounts > 0
-                    ? "Pächterzuordnung wurde angelegt. {$createdAccounts} Arbeitsstundenkonten wurden automatisch ergänzt."
-                    : 'Pächterzuordnung wurde angelegt.',
+                    ? "Person wurde zugeordnet. {$createdAccounts} Arbeitsstundenkonten wurden automatisch ergänzt."
+                    : 'Person wurde zugeordnet.',
             );
     }
 
@@ -106,8 +106,8 @@ class ParcelTenantController extends Controller
             ->with(
                 'status',
                 $createdAccounts > 0
-                    ? "Pächterzuordnung wurde aktualisiert. {$createdAccounts} Arbeitsstundenkonten wurden automatisch ergänzt."
-                    : 'Pächterzuordnung wurde aktualisiert.',
+                    ? "Zuordnung wurde aktualisiert. {$createdAccounts} Arbeitsstundenkonten wurden automatisch ergänzt."
+                    : 'Zuordnung wurde aktualisiert.',
             );
     }
 }

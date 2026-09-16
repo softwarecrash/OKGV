@@ -22,6 +22,8 @@ class BillingRateTemplateFactory extends Factory
             'name' => fake()->words(3, true),
             'calculation_type' => BillingRateType::Fixed,
             'scope' => BillingRateScope::Member,
+            'applies_to_leased_parcels' => true,
+            'applies_to_owned_parcels' => false,
             'settlement_type' => BillingSettlementType::Arrears,
             'default_amount' => fake()->randomFloat(4, 1, 500),
             'prorate' => false,

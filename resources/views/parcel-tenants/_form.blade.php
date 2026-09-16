@@ -1,13 +1,13 @@
 <x-validation-errors />
 <div class="alert alert-info">
-    Jede Person im Pachtvertrag erhält eine eigene Zuordnung. Mehrere Mitglieder können gleichzeitig derselben Parzelle zugeordnet sein und erscheinen dadurch gemeinsam auf der Rechnung.
+    Jede verantwortliche Person erhält eine eigene Zuordnung. Bei Pachtparzellen entspricht dies dem Pachtvertrag, bei Eigentumsparzellen der Eigentümerzuordnung. Mehrere Mitglieder können gleichzeitig derselben Parzelle zugeordnet sein und erscheinen dadurch gemeinsam auf der Rechnung.
 </div>
 <div class="row g-3">
     <div class="col-md-6">
         <label class="form-label" for="parcel_id">Parzelle</label>
         <select class="form-select" id="parcel_id" name="parcel_id" required>
             @foreach ($parcels as $parcel)
-                <option value="{{ $parcel->id }}" @selected((string) old('parcel_id', $parcelTenant->parcel_id) === (string) $parcel->id)>{{ $parcel->parcel_number }}</option>
+                <option value="{{ $parcel->id }}" @selected((string) old('parcel_id', $parcelTenant->parcel_id) === (string) $parcel->id)>{{ $parcel->parcel_number }} · {{ $parcel->use_type->label() }}</option>
             @endforeach
         </select>
     </div>
@@ -26,14 +26,14 @@
     <div class="col-md-4">
         <label class="form-label" for="ends_at">Ende</label>
         <input class="form-control" type="date" id="ends_at" name="ends_at" value="{{ old('ends_at', $parcelTenant->ends_at?->format('Y-m-d')) }}">
-        <div class="form-text">Leer lassen, solange die Person aktuell im Pachtvertrag steht.</div>
+        <div class="form-text">Leer lassen, solange die Person aktuell für diese Parzelle verantwortlich ist.</div>
     </div>
     <div class="col-md-4 d-flex align-items-end">
         <div class="form-check mb-2">
             <input type="hidden" name="is_primary" value="0">
             <input class="form-check-input" type="checkbox" id="is_primary" name="is_primary" value="1" @checked(old('is_primary', $parcelTenant->is_primary))>
-            <label class="form-check-label" for="is_primary">Hauptpächter</label>
-            <div class="form-text">Pro Zeitraum kann genau eine Person Hauptpächter sein. Weitere Vertragsparteien werden als Mitpächter angelegt.</div>
+            <label class="form-check-label" for="is_primary">Hauptverantwortliche Person</label>
+            <div class="form-text">Pro Zeitraum kann genau eine Person hauptverantwortlich sein. Bei Pachtparzellen ist das der Hauptpächter, bei Eigentumsparzellen der Eigentümer.</div>
         </div>
     </div>
     <div class="col-12">

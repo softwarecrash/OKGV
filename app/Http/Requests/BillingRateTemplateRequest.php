@@ -39,6 +39,8 @@ class BillingRateTemplateRequest extends FormRequest
                 Rule::in(array_column(BillingRateType::availableCases(), 'value')),
             ],
             'scope' => ['required', Rule::enum(BillingRateScope::class)],
+            'applies_to_leased_parcels' => ['sometimes', 'boolean'],
+            'applies_to_owned_parcels' => ['sometimes', 'boolean'],
             'settlement_type' => ['required', Rule::enum(BillingSettlementType::class)],
             'default_amount' => ['nullable', 'numeric', 'decimal:0,4', 'min:0'],
             'prorate' => ['sometimes', 'boolean'],
@@ -76,6 +78,15 @@ class BillingRateTemplateRequest extends FormRequest
                     );
                 }
 
+                if ($scope === BillingRateScope::Parcel
+                    && ! $this->boolean('applies_to_leased_parcels')
+                    && ! $this->boolean('applies_to_owned_parcels')) {
+                    $validator->errors()->add(
+                        'applies_to_leased_parcels',
+                        'Ein Parzellenpreis muss für Pachtparzellen, Eigentumsparzellen oder beide gelten.',
+                    );
+                }
+
                 if (in_array($type, [
                     BillingRateType::PerKilowattHour,
                     BillingRateType::PerCubicMeter,
@@ -99,6 +110,12 @@ class BillingRateTemplateRequest extends FormRequest
                 'settlement_type',
                 BillingSettlementType::Arrears->value,
             ),
+            'applies_to_leased_parcels' => $this->has('applies_to_leased_parcels')
+                ? $this->boolean('applies_to_leased_parcels')
+                : true,
+            'applies_to_owned_parcels' => $this->has('applies_to_owned_parcels')
+                ? $this->boolean('applies_to_owned_parcels')
+                : false,
             'prorate' => $this->boolean('prorate'),
             'is_active' => $this->boolean('is_active'),
         ]);

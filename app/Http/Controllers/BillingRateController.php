@@ -40,6 +40,8 @@ class BillingRateController extends Controller
             'service_starts_at' => $billingPeriod->starts_at,
             'service_ends_at' => $billingPeriod->ends_at,
             'prorate' => false,
+            'applies_to_leased_parcels' => true,
+            'applies_to_owned_parcels' => false,
         ]);
 
         if ($selectedTemplate) {
@@ -57,6 +59,8 @@ class BillingRateController extends Controller
                 'description' => $selectedTemplate->description,
                 'calculation_type' => $selectedTemplate->calculation_type,
                 'scope' => $selectedTemplate->scope,
+                'applies_to_leased_parcels' => $selectedTemplate->applies_to_leased_parcels,
+                'applies_to_owned_parcels' => $selectedTemplate->applies_to_owned_parcels,
                 'settlement_type' => $selectedTemplate->settlement_type,
                 'service_starts_at' => $serviceStartsAt,
                 'service_ends_at' => $serviceEndsAt,

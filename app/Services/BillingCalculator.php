@@ -9,6 +9,7 @@ use App\Enums\FeatureModule;
 use App\Enums\InvoiceStatus;
 use App\Enums\MeterType;
 use App\Enums\NumberSequenceType;
+use App\Enums\ParcelUseType;
 use App\Models\BillingPeriod;
 use App\Models\BillingRate;
 use App\Models\BillingRateAssignment;
@@ -289,6 +290,9 @@ final class BillingCalculator
         foreach ($primaryTenancies->groupBy('parcel_id') as $parcelTenancies) {
             /** @var Parcel $parcel */
             $parcel = $parcelTenancies->first()->parcel;
+            if (! $this->rateAppliesToParcel($rate, $parcel)) {
+                continue;
+            }
             $overlaps = $parcelTenancies
                 ->map(fn (ParcelTenant $tenancy) => $this->overlap(
                     $tenancy->starts_at,
@@ -343,6 +347,14 @@ final class BillingCalculator
         }
 
         return $total;
+    }
+
+    private function rateAppliesToParcel(BillingRate $rate, Parcel $parcel): bool
+    {
+        return match ($parcel->use_type) {
+            ParcelUseType::Lease => $rate->applies_to_leased_parcels,
+            ParcelUseType::Ownership => $rate->applies_to_owned_parcels,
+        };
     }
 
     /**

@@ -23,6 +23,8 @@
         <input type="hidden" name="name" value="{{ $selectedTemplate->name }}">
         <input type="hidden" name="calculation_type" value="{{ $selectedTemplate->calculation_type->value }}">
         <input type="hidden" name="scope" value="{{ $selectedTemplate->scope->value }}">
+        <input type="hidden" name="applies_to_leased_parcels" value="{{ $selectedTemplate->applies_to_leased_parcels ? 1 : 0 }}">
+        <input type="hidden" name="applies_to_owned_parcels" value="{{ $selectedTemplate->applies_to_owned_parcels ? 1 : 0 }}">
         <input type="hidden" name="settlement_type" value="{{ $selectedTemplate->settlement_type->value }}">
         <input type="hidden" name="prorate" value="{{ $selectedTemplate->prorate ? 1 : 0 }}">
         <input type="hidden" name="description" value="{{ $selectedTemplate->description }}">
@@ -34,6 +36,12 @@
                 <strong>{{ $selectedTemplate->name }}</strong>
                 <div class="mt-2">
                     {{ $selectedTemplate->calculation_type->label() }} · {{ $selectedTemplate->scope->label() }} · {{ $selectedTemplate->settlement_type->label() }}
+                    @if ($selectedTemplate->scope === App\Enums\BillingRateScope::Parcel)
+                        · {{ collect([
+                            $selectedTemplate->applies_to_leased_parcels ? 'Pachtparzellen' : null,
+                            $selectedTemplate->applies_to_owned_parcels ? 'Eigentumsparzellen' : null,
+                        ])->filter()->implode(' und ') }}
+                    @endif
                     @if ($selectedTemplate->prorate)
                         · taggenau anteilig
                     @endif
@@ -56,6 +64,24 @@
                value="{{ old('code', $billingRate->code) }}" placeholder="LEASE_PER_SQM"
                x-on:input="$el.value = $el.value.toUpperCase().replace(/\s+/g, '_')">
         <div class="form-text">Eindeutige Kurzbezeichnung, zum Beispiel PACHT_PRO_QM. Leerzeichen werden automatisch ersetzt.</div>
+    </div>
+    <div class="col-12">
+        <fieldset>
+            <legend class="fs-6 mb-2">Gültigkeit für Parzellen</legend>
+            <div class="form-check">
+                <input type="hidden" name="applies_to_leased_parcels" value="0">
+                <input class="form-check-input" type="checkbox" id="applies_to_leased_parcels" name="applies_to_leased_parcels" value="1"
+                       @checked(old('applies_to_leased_parcels', $billingRate->applies_to_leased_parcels ?? true))>
+                <label class="form-check-label" for="applies_to_leased_parcels">Für Pachtparzellen berechnen</label>
+            </div>
+            <div class="form-check">
+                <input type="hidden" name="applies_to_owned_parcels" value="0">
+                <input class="form-check-input" type="checkbox" id="applies_to_owned_parcels" name="applies_to_owned_parcels" value="1"
+                       @checked(old('applies_to_owned_parcels', $billingRate->applies_to_owned_parcels ?? false))>
+                <label class="form-check-label" for="applies_to_owned_parcels">Für Eigentumsparzellen berechnen</label>
+            </div>
+            <div class="form-text">Gilt nur für den Bereich „Parzelle“. Für Mitgliedspreise und manuelle Zuordnungen wird diese Auswahl nicht ausgewertet. Pacht ist üblicherweise nur für Pachtparzellen aktiv; Wasser und Strom meist für beide.</div>
+        </fieldset>
     </div>
     <div class="col-md-8">
         <label class="form-label" for="name">Bezeichnung</label>

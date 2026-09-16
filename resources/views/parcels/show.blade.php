@@ -5,7 +5,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
         <div>
             <h1 class="h2 mb-1">Parzelle {{ $parcel->parcel_number }}</h1>
-            <span class="text-secondary">{{ $parcel->status->label() }} · {{ number_format((float) $parcel->area_sqm, 2, ',', '.') }} m²</span>
+            <span class="text-secondary">{{ $parcel->use_type->label() }} · {{ $parcel->status->label() }} · {{ number_format((float) $parcel->area_sqm, 2, ',', '.') }} m²</span>
         </div>
         <div class="d-flex gap-2">
             <a class="btn btn-outline-secondary" href="{{ route('parcel-map.index') }}">Im Lageplan</a>
@@ -13,10 +13,11 @@
                 <a class="btn btn-primary" href="{{ route('parcels.edit', $parcel) }}">Bearbeiten</a>
             @endcan
             @can('create', App\Models\ParcelTenant::class)
-                <a class="btn btn-outline-primary" href="{{ route('parcel-tenants.create', ['parcel_id' => $parcel->id]) }}">Pächter zuordnen</a>
+                <a class="btn btn-outline-primary" href="{{ route('parcel-tenants.create', ['parcel_id' => $parcel->id]) }}">Person zuordnen</a>
             @endcan
             @can('create', App\Models\TenantTransition::class)
-                @if ($parcel->tenancies->contains(fn ($tenancy) => $tenancy->is_primary
+                @if ($parcel->use_type === App\Enums\ParcelUseType::Lease
+                    && $parcel->tenancies->contains(fn ($tenancy) => $tenancy->is_primary
                     && $tenancy->starts_at->lte(today())
                     && ($tenancy->ends_at === null || $tenancy->ends_at->gte(today()))))
                     <a class="btn btn-outline-warning" href="{{ route('tenant-transitions.create', ['parcel_id' => $parcel->id]) }}">Pächterwechsel</a>
@@ -36,7 +37,9 @@
                 <div class="card-body">
                     <dl class="row mb-0">
                         <dt class="col-sm-5">Lage</dt><dd class="col-sm-7">{{ $parcel->location_description ?: '–' }}</dd>
+                        <dt class="col-sm-5">Nutzungsart</dt><dd class="col-sm-7">{{ $parcel->use_type->label() }}</dd>
                         <dt class="col-sm-5">Status</dt><dd class="col-sm-7">{{ $parcel->status->label() }}</dd>
+                        <dt class="col-sm-5">Betreibergenehmigung</dt><dd class="col-sm-7">{{ $parcel->has_operating_permit ? 'Liegt vor' : 'Nicht hinterlegt' }}</dd>
                     </dl>
                     @if (auth()->user()->canViewAllMasterData())
                         <hr>
@@ -48,7 +51,7 @@
         </div>
         <div class="col-lg-7">
             <div class="card border-0 shadow-sm">
-                <div class="card-header">Pächterhistorie</div>
+                <div class="card-header">Zuordnungshistorie</div>
                 <div class="table-responsive">
                     <table class="table align-middle mb-0">
                         <thead><tr><th>Mitglied</th><th>Zeitraum</th><th>Rolle</th><th></th></tr></thead>
@@ -57,7 +60,7 @@
                                 <tr>
                                     <td><a href="{{ route('members.show', $tenancy->member) }}">{{ $tenancy->member->full_name }}</a></td>
                                     <td>{{ $tenancy->starts_at->format('d.m.Y') }} – {{ $tenancy->ends_at?->format('d.m.Y') ?? 'heute' }}</td>
-                                    <td>{{ $tenancy->is_primary ? 'Hauptpächter' : 'Mitpächter' }}</td>
+                                    <td>{{ $parcel->use_type->assignmentLabel($tenancy->is_primary) }}</td>
                                     <td class="text-end">
                                         @can('update', $tenancy)
                                             <a class="btn btn-sm btn-outline-primary" href="{{ route('parcel-tenants.edit', $tenancy) }}">Bearbeiten</a>
@@ -65,7 +68,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="4" class="text-center py-4"><strong>Noch keine Vertragspartei zugeordnet.</strong><br><span class="text-secondary">Lege für jede im Pachtvertrag genannte Person eine eigene Zuordnung an.</span></td></tr>
+                                <tr><td colspan="4" class="text-center py-4"><strong>Noch keine Person zugeordnet.</strong><br><span class="text-secondary">Lege die verantwortliche Person und bei Bedarf weitere Beteiligte mit einem gültigen Zeitraum an.</span></td></tr>
                             @endforelse
                         </tbody>
                     </table>

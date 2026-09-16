@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\ParcelStatus;
+use App\Enums\ParcelUseType;
 use App\Models\Parcel;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -29,8 +30,18 @@ class ParcelRequest extends FormRequest
             ],
             'area_sqm' => ['required', 'numeric', 'decimal:0,2', 'gt:0', 'max:99999999.99'],
             'status' => ['required', Rule::enum(ParcelStatus::class)],
+            'use_type' => ['required', Rule::enum(ParcelUseType::class)],
+            'has_operating_permit' => ['sometimes', 'boolean'],
             'location_description' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:10000'],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'use_type' => $this->input('use_type', ParcelUseType::Lease->value),
+            'has_operating_permit' => $this->boolean('has_operating_permit'),
+        ]);
     }
 }

@@ -2,6 +2,22 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.134] - 2026-09-16
+
+### Eigentumsparzellen
+
+- Parzellen besitzen nun die feste Nutzungsart „Pachtparzelle“ oder
+  „Eigentumsparzelle“; bestehende Parzellen bleiben automatisch Pachtparzellen.
+- Eine hinterlegte Betreibergenehmigung wird als separates Parzellenmerkmal
+  dokumentiert. Sie verändert noch keine Berechtigungen.
+- Die bestehende Zuordnung und der Portalzugang bleiben erhalten; an
+  Eigentumsparzellen erscheinen Personen als Eigentümer oder Miteigentümer.
+- Parzellenpreise können gezielt für Pachtparzellen, Eigentumsparzellen oder
+  beide gelten. So bleibt Pacht für Eigentumsparzellen ausgeschlossen, während
+  Wasser und Strom bei Bedarf für beide Nutzungsarten abgerechnet werden.
+- Der CSV-Import und -Export enthalten die neue Nutzungsart und bleiben zu
+  bisherigen Parzellen-Dateien kompatibel.
+
 ## [0.2.0.133] - 2026-09-16
 
 ### Lageplan

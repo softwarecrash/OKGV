@@ -8,6 +8,7 @@ use App\Enums\MeterReadingSource;
 use App\Enums\MeterStatus;
 use App\Enums\MeterType;
 use App\Enums\ParcelStatus;
+use App\Enums\ParcelUseType;
 use App\Models\ApplicationSetting;
 use App\Models\Invoice;
 use App\Models\Member;
@@ -134,6 +135,14 @@ final class CsvDataTransferService
             'location_description',
             'notes',
         ];
+        $mappedParcelHeaders = [
+            'parcel_number',
+            'area_sqm',
+            'status',
+            'location_description',
+            'map_polygon',
+            'notes',
+        ];
         $rectangleParcelHeaders = [
             'parcel_number',
             'area_sqm',
@@ -146,7 +155,7 @@ final class CsvDataTransferService
             'notes',
         ];
         $usesLegacyParcelHeaders = $type === DataTransferType::Parcels
-            && in_array($headers, [$legacyParcelHeaders, $rectangleParcelHeaders], true);
+            && in_array($headers, [$legacyParcelHeaders, $mappedParcelHeaders, $rectangleParcelHeaders], true);
 
         if ($headers !== $type->headers() && ! $usesLegacyParcelHeaders) {
             fclose($handle);
@@ -178,6 +187,8 @@ final class CsvDataTransferService
             ));
 
             if ($usesLegacyParcelHeaders) {
+                $row['use_type'] = ParcelUseType::Lease->value;
+                $row['has_operating_permit'] = '0';
                 $row['map_polygon'] = $headers === $rectangleParcelHeaders
                     && filled($row['map_x'] ?? null)
                     && filled($row['map_y'] ?? null)
@@ -270,6 +281,8 @@ final class CsvDataTransferService
                 'parcel_number' => ['required', 'string', 'max:50'],
                 'area_sqm' => ['required', 'numeric', 'decimal:0,2', 'gt:0', 'max:99999999.99'],
                 'status' => ['required', Rule::enum(ParcelStatus::class)],
+                'use_type' => ['required', Rule::enum(ParcelUseType::class)],
+                'has_operating_permit' => ['required', 'boolean'],
                 'location_description' => ['nullable', 'string', 'max:255'],
                 'map_polygon' => ['nullable', 'json'],
                 'notes' => ['nullable', 'string', 'max:10000'],
@@ -468,6 +481,7 @@ final class CsvDataTransferService
         foreach (Parcel::query()->orderBy('parcel_number')->cursor() as $parcel) {
             yield [
                 $parcel->parcel_number, $parcel->area_sqm, $parcel->status->value,
+                $parcel->use_type->value, $parcel->has_operating_permit ? '1' : '0',
                 $parcel->location_description,
                 $parcel->map_polygon
                     ? json_encode($parcel->map_polygon, JSON_THROW_ON_ERROR)

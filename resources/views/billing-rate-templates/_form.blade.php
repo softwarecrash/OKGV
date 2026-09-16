@@ -17,6 +17,24 @@
                x-on:input="$el.value = $el.value.toUpperCase().replace(/\s+/g, '_')">
         <div class="form-text">Eindeutige Kurzbezeichnung. Leerzeichen werden automatisch durch Unterstriche ersetzt.</div>
     </div>
+    <div class="col-12">
+        <fieldset>
+            <legend class="fs-6 mb-2">Gültigkeit für Parzellen</legend>
+            <div class="form-check">
+                <input type="hidden" name="applies_to_leased_parcels" value="0">
+                <input class="form-check-input" type="checkbox" id="applies_to_leased_parcels" name="applies_to_leased_parcels" value="1"
+                       @checked(old('applies_to_leased_parcels', $template->applies_to_leased_parcels ?? true))>
+                <label class="form-check-label" for="applies_to_leased_parcels">Für Pachtparzellen berechnen</label>
+            </div>
+            <div class="form-check">
+                <input type="hidden" name="applies_to_owned_parcels" value="0">
+                <input class="form-check-input" type="checkbox" id="applies_to_owned_parcels" name="applies_to_owned_parcels" value="1"
+                       @checked(old('applies_to_owned_parcels', $template->applies_to_owned_parcels ?? false))>
+                <label class="form-check-label" for="applies_to_owned_parcels">Für Eigentumsparzellen berechnen</label>
+            </div>
+            <div class="form-text">Diese Auswahl wird nur bei Parzellenpreisen ausgewertet. Pacht gilt üblicherweise nur für Pachtparzellen; Wasser und Strom meist für beide.</div>
+        </fieldset>
+    </div>
     <div class="col-md-8">
         <label class="form-label" for="name">Bezeichnung auf der Rechnung</label>
         <input class="form-control" id="name" name="name" maxlength="255" required

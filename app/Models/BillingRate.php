@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'description',
     'calculation_type',
     'scope',
+    'applies_to_leased_parcels',
+    'applies_to_owned_parcels',
     'settlement_type',
     'service_starts_at',
     'service_ends_at',
@@ -37,6 +39,8 @@ class BillingRate extends Model
         return [
             'calculation_type' => BillingRateType::class,
             'scope' => BillingRateScope::class,
+            'applies_to_leased_parcels' => 'boolean',
+            'applies_to_owned_parcels' => 'boolean',
             'settlement_type' => BillingSettlementType::class,
             'service_starts_at' => 'date',
             'service_ends_at' => 'date',

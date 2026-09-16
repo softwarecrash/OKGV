@@ -9,6 +9,7 @@ use App\Enums\BillingSettlementType;
 use App\Enums\InvoiceStatus;
 use App\Enums\MeterStatus;
 use App\Enums\MeterType;
+use App\Enums\ParcelUseType;
 use App\Models\AuditLog;
 use App\Models\BillingPeriod;
 use App\Models\BillingRate;
@@ -111,6 +112,51 @@ class BillingWorkflowTest extends TestCase
         ]);
         $this->assertDatabaseHas('meters', ['id' => $oldMeter->id]);
         $this->assertSame('25.0000', $invoice->items->firstWhere('billing_rate_id', $memberRate->id)->unit_price);
+    }
+
+    public function test_ownership_parcel_excludes_lease_but_includes_enabled_utilities(): void
+    {
+        [$administrator, $period, $member, $parcel] = $this->billingScenario();
+        $parcel->update(['use_type' => ParcelUseType::Ownership]);
+
+        BillingRate::factory()->create([
+            'billing_period_id' => $period->id,
+            'code' => 'LEASE_PER_SQM',
+            'name' => 'Pacht',
+            'calculation_type' => BillingRateType::PerSquareMeter,
+            'scope' => BillingRateScope::Parcel,
+            'amount' => '1.0000',
+            'applies_to_leased_parcels' => true,
+            'applies_to_owned_parcels' => false,
+        ]);
+        BillingRate::factory()->create([
+            'billing_period_id' => $period->id,
+            'code' => 'WATER_PER_M3',
+            'name' => 'Wasser',
+            'calculation_type' => BillingRateType::PerCubicMeter,
+            'scope' => BillingRateScope::Parcel,
+            'amount' => '2.0000',
+            'applies_to_leased_parcels' => true,
+            'applies_to_owned_parcels' => true,
+        ]);
+        $meter = Meter::factory()->create([
+            'parcel_id' => $parcel->id,
+            'type' => MeterType::Water,
+            'installed_at' => '2025-01-01',
+            'start_reading' => '0.0000',
+        ]);
+        MeterReading::factory()->create([
+            'meter_id' => $meter->id,
+            'reading_date' => '2025-12-31',
+            'reading_value' => '10.0000',
+        ]);
+
+        app(BillingCalculator::class)->calculate($period, $administrator);
+
+        $invoice = Invoice::query()->where('member_id', $member->id)->with('items')->firstOrFail();
+        $this->assertSame('20.00', $invoice->total_amount);
+        $this->assertNull($invoice->items->firstWhere('code', 'LEASE_PER_SQM'));
+        $this->assertSame('20.00', $invoice->items->firstWhere('code', 'WATER_PER_M3')->total_amount);
     }
 
     public function test_approval_makes_invoice_and_items_immutable(): void

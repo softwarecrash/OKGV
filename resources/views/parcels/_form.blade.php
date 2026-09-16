@@ -1,5 +1,5 @@
 <x-validation-errors />
-<div class="alert alert-info">Die Parzellennummer muss eindeutig sein. Pächter werden nach dem Speichern separat und mit einem gültigen Vertragszeitraum zugeordnet.</div>
+<div class="alert alert-info">Die Parzellennummer muss eindeutig sein. Zugeordnete Personen werden nach dem Speichern separat und mit einem gültigen Zeitraum erfasst.</div>
 <div class="row g-3">
     <div class="col-md-4">
         <label class="form-label" for="parcel_number">Parzellennummer</label>
@@ -17,7 +17,25 @@
                 <option value="{{ $status->value }}" @selected(old('status', $parcel->status?->value ?? 'free') === $status->value)>{{ $status->label() }}</option>
             @endforeach
         </select>
-        <div class="form-text">Der Status beschreibt die aktuelle Nutzbarkeit; die Pächterhistorie wird unabhängig davon geführt.</div>
+        <div class="form-text">Der Status beschreibt die aktuelle Nutzbarkeit; die Zuordnungshistorie wird unabhängig davon geführt.</div>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label" for="use_type">Nutzungsart</label>
+        <select class="form-select" id="use_type" name="use_type" required>
+            @foreach ($useTypes as $useType)
+                <option value="{{ $useType->value }}" @selected(old('use_type', $parcel->use_type?->value ?? 'lease') === $useType->value)>{{ $useType->label() }}</option>
+            @endforeach
+        </select>
+        <div class="form-text">Die Nutzungsart gehört dauerhaft zur Parzelle, nicht zur zugeordneten Person.</div>
+    </div>
+    <div class="col-md-6 d-flex align-items-end">
+        <div class="form-check mb-2">
+            <input type="hidden" name="has_operating_permit" value="0">
+            <input class="form-check-input" type="checkbox" id="has_operating_permit" name="has_operating_permit" value="1"
+                   @checked(old('has_operating_permit', $parcel->has_operating_permit ?? false))>
+            <label class="form-check-label" for="has_operating_permit">Betreibergenehmigung liegt vor</label>
+            <div class="form-text">Wird als Parzellenmerkmal dokumentiert. Zusätzliche Rechte werden erst nach fachlicher Klärung daraus abgeleitet.</div>
+        </div>
     </div>
     <div class="col-12">
         <label class="form-label" for="location_description">Lagebeschreibung</label>

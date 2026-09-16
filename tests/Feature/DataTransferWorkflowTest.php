@@ -335,7 +335,7 @@ class DataTransferWorkflowTest extends TestCase
             ->streamedContent();
 
         $this->assertStringContainsString(
-            'parcel_number;area_sqm;status;location_description;map_polygon;notes',
+            'parcel_number;area_sqm;status;use_type;has_operating_permit;location_description;map_polygon;notes',
             $content,
         );
     }

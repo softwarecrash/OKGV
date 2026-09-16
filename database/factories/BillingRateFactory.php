@@ -22,6 +22,8 @@ class BillingRateFactory extends Factory
             'name' => fake()->words(3, true),
             'calculation_type' => BillingRateType::Fixed,
             'scope' => BillingRateScope::Member,
+            'applies_to_leased_parcels' => true,
+            'applies_to_owned_parcels' => false,
             'settlement_type' => BillingSettlementType::Arrears,
             'service_starts_at' => fn (array $attributes) => BillingPeriod::query()
                 ->find($attributes['billing_period_id'])?->starts_at,

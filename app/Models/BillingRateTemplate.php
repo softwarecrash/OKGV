@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'description',
     'calculation_type',
     'scope',
+    'applies_to_leased_parcels',
+    'applies_to_owned_parcels',
     'settlement_type',
     'default_amount',
     'prorate',
@@ -32,6 +34,8 @@ class BillingRateTemplate extends Model
         return [
             'calculation_type' => BillingRateType::class,
             'scope' => BillingRateScope::class,
+            'applies_to_leased_parcels' => 'boolean',
+            'applies_to_owned_parcels' => 'boolean',
             'settlement_type' => BillingSettlementType::class,
             'default_amount' => 'decimal:4',
             'prorate' => 'boolean',

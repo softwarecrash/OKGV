@@ -34,18 +34,19 @@
     <div class="card border-0 shadow-sm">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
-                <thead><tr><th>Nummer</th><th>Fläche</th><th>Status</th><th>Lage</th><th class="text-end">Aktion</th></tr></thead>
+                <thead><tr><th>Nummer</th><th>Fläche</th><th>Nutzungsart</th><th>Status</th><th>Lage</th><th class="text-end">Aktion</th></tr></thead>
                 <tbody>
                     @forelse ($parcels as $parcel)
                         <tr>
                             <td>{{ $parcel->parcel_number }}</td>
                             <td>{{ number_format((float) $parcel->area_sqm, 2, ',', '.') }} m²</td>
+                            <td>{{ $parcel->use_type->label() }}</td>
                             <td>{{ $parcel->status->label() }}</td>
                             <td>{{ $parcel->location_description ?: '–' }}</td>
                             <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ route('parcels.show', $parcel) }}">Öffnen</a></td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="text-center py-4"><strong>Keine passenden Parzellen gefunden.</strong><br><span class="text-secondary">Prüfe Suchbegriff und Statusfilter oder lege eine neue Parzelle an.</span></td></tr>
+                        <tr><td colspan="6" class="text-center py-4"><strong>Keine passenden Parzellen gefunden.</strong><br><span class="text-secondary">Prüfe Suchbegriff und Statusfilter oder lege eine neue Parzelle an.</span></td></tr>
                     @endforelse
                 </tbody>
             </table>

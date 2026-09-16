@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\FeatureModule;
 use App\Enums\ParcelStatus;
+use App\Enums\ParcelUseType;
 use App\Http\Requests\ParcelRequest;
 use App\Models\BillingPeriod;
 use App\Models\Parcel;
@@ -41,6 +42,7 @@ class ParcelController extends Controller
         return view('parcels.index', [
             'parcels' => $parcels,
             'statuses' => ParcelStatus::cases(),
+            'useTypes' => ParcelUseType::cases(),
         ]);
     }
 
@@ -51,6 +53,7 @@ class ParcelController extends Controller
         return view('parcels.create', [
             'parcel' => new Parcel,
             'statuses' => ParcelStatus::cases(),
+            'useTypes' => ParcelUseType::cases(),
         ]);
     }
 
@@ -107,6 +110,7 @@ class ParcelController extends Controller
         return view('parcels.edit', [
             'parcel' => $parcel,
             'statuses' => ParcelStatus::cases(),
+            'useTypes' => ParcelUseType::cases(),
         ]);
     }
 

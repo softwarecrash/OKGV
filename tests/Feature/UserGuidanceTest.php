@@ -89,7 +89,7 @@ class UserGuidanceTest extends TestCase
             ->get(route('parcel-tenants.create'))
             ->assertOk()
             ->assertSee('Mehrere Mitglieder können gleichzeitig derselben Parzelle zugeordnet sein')
-            ->assertSee('Pro Zeitraum kann genau eine Person Hauptpächter sein.');
+            ->assertSee('Pro Zeitraum kann genau eine Person hauptverantwortlich sein.');
     }
 
     public function test_meter_workflows_explain_append_only_history(): void
