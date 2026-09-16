@@ -209,6 +209,19 @@ class ParcelMapTest extends TestCase
             ->assertDontSee('data-map-pan-toggle', false)
             ->assertSee('Ziehe freie Bildfläche');
 
+        $unplacedParcel = Parcel::factory()->create(['parcel_number' => 'PLAN-NEU']);
+        $this->actingAs($administrator)
+            ->get(route('parcel-map.index'))
+            ->assertSee(route('parcel-map.edit', ['parcel' => $unplacedParcel]), false)
+            ->assertDontSee(route('parcels.edit', $unplacedParcel), false);
+
+        $this->actingAs($administrator)
+            ->get(route('parcel-map.edit', ['parcel' => $unplacedParcel]))
+            ->assertOk()
+            ->assertSee('value="'.$unplacedParcel->id.'"', false)
+            ->assertSee('selected', false)
+            ->assertSee('data-map-reference-parcel="'.$parcel->id.'"', false);
+
         $this->actingAs($administrator)
             ->put(route('parcel-map.polygon.update', $parcel), [
                 'polygon' => '[]',

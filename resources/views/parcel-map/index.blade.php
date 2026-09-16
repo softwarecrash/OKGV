@@ -128,7 +128,7 @@
                         <div class="d-flex gap-2">
                             <a class="btn btn-sm btn-outline-primary" href="{{ route('parcels.show', $parcel) }}">Details</a>
                             @can('update', $parcel)
-                                <a class="btn btn-sm btn-primary" href="{{ route('parcels.edit', $parcel) }}">Platzieren</a>
+                                <a class="btn btn-sm btn-primary" href="{{ route('parcel-map.edit', ['parcel' => $parcel]) }}">Platzieren</a>
                             @endcan
                         </div>
                     </div>

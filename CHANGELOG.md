@@ -2,6 +2,16 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.131] - 2026-09-16
+
+### Lageplan
+
+- „Platzieren“ bei einer noch nicht eingezeichneten Parzelle öffnet jetzt
+  direkt den Lageplan-Editor mit dieser Parzelle vorausgewählt.
+- Im Editor bleiben alle anderen bereits platzierten Parzellen samt Nummern
+  sichtbar. Nur die ausgewählte Fläche kann gezeichnet, verschoben oder
+  verändert werden.
+
 ## [0.2.0.130] - 2026-09-15
 
 ### Backup und Wiederherstellung

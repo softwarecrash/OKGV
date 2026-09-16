@@ -46,13 +46,19 @@ class ParcelMapController extends Controller
         ]);
     }
 
-    public function edit(): View
+    public function edit(Request $request): View
     {
         $this->authorize('manageMap', Parcel::class);
 
+        $parcels = Parcel::query()->orderBy('parcel_number')->get();
+        $selectedParcelId = $request->integer('parcel');
+
         return view('parcel-map.edit', [
             'settings' => ApplicationSetting::current(),
-            'parcels' => Parcel::query()->orderBy('parcel_number')->get(),
+            'parcels' => $parcels,
+            'selectedParcelId' => $parcels->contains('id', $selectedParcelId)
+                ? $selectedParcelId
+                : null,
         ]);
     }
 

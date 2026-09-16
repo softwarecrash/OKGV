@@ -73,7 +73,8 @@
                                 data-number="{{ $parcel->parcel_number }}"
                                 data-color="{{ $parcel->status->mapColor() }}"
                                 data-polygon="{{ json_encode($parcel->map_polygon ?? [], JSON_THROW_ON_ERROR) }}"
-                                data-action="{{ route('parcel-map.polygon.update', $parcel) }}">
+                                data-action="{{ route('parcel-map.polygon.update', $parcel) }}"
+                                @selected($selectedParcelId === $parcel->id)>
                                 {{ $parcel->parcel_number }} · {{ $parcel->status->label() }}
                             </option>
                         @endforeach
@@ -118,11 +119,41 @@
                         <rect width="100%" height="100%" fill="currentColor" fill-opacity="0.04"/>
                         <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="currentColor">Bitte zuerst ein Hintergrundbild hochladen</text>
                     @endif
-                    <polygon class="parcel-map-editor-polygon" data-map-polygon points=""/>
+                    @foreach ($parcels->filter(fn ($parcel) => $parcel->isPlacedOnMap()) as $parcel)
+                        @php
+                            $centerX = collect($parcel->map_polygon)->avg('x');
+                            $centerY = collect($parcel->map_polygon)->avg('y');
+                        @endphp
+                        <g data-map-reference-parcel="{{ $parcel->id }}" pointer-events="none">
+                            <polygon
+                                points="{{ collect($parcel->map_polygon)->map(fn ($point) => $point['x'].','.$point['y'])->implode(' ') }}"
+                                fill="{{ $parcel->status->mapColor() }}"
+                                fill-opacity="0.28"
+                                stroke="var(--bs-body-color)"
+                                stroke-opacity="0.65"
+                                stroke-width="3"
+                                vector-effect="non-scaling-stroke"/>
+                            <text
+                                x="{{ $centerX }}"
+                                y="{{ $centerY }}"
+                                fill="#FFFFFF"
+                                stroke="#263238"
+                                stroke-width="4"
+                                paint-order="stroke"
+                                font-size="24"
+                                font-weight="700"
+                                text-anchor="middle"
+                                dominant-baseline="middle">
+                                {{ $parcel->parcel_number }}
+                            </text>
+                        </g>
+                    @endforeach
+                    <polygon class="parcel-map-editor-polygon" data-map-polygon points="" fill-opacity="0.58" stroke="var(--bs-body-color)" stroke-width="4" vector-effect="non-scaling-stroke"/>
+                    <text data-map-active-label fill="#FFFFFF" stroke="#263238" stroke-width="4" paint-order="stroke" font-size="24" font-weight="700" text-anchor="middle" dominant-baseline="middle"></text>
                     <g data-map-handles></g>
                 </svg>
             </div>
-            <p class="small text-secondary mt-2 mb-0">Nutze die Zoomschaltflächen oder Strg und Mausrad. Ziehe freie Bildfläche mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Eckpunkte und die markierte Parzellenfläche bleiben direkt bearbeitbar.</p>
+            <p class="small text-secondary mt-2 mb-0">Die übrigen Parzellen sind zur Orientierung sichtbar, aber nicht bearbeitbar. Nutze die Zoomschaltflächen oder Strg und Mausrad. Ziehe freie Bildfläche mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Eckpunkte und die markierte Parzellenfläche bleiben direkt bearbeitbar.</p>
 
             <form class="mt-3" method="POST" data-map-form>
                 @csrf

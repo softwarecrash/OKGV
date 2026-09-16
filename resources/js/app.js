@@ -351,6 +351,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const saveButton = editor.querySelector('[data-map-save]');
         const pointCount = editor.querySelector('[data-map-point-count]');
         const help = editor.querySelector('[data-map-help]');
+        const activeLabel = editor.querySelector('[data-map-active-label]');
+        const referenceParcels = editor.querySelectorAll('[data-map-reference-parcel]');
 
         if (!(svg instanceof SVGSVGElement)
             || !(polygonElement instanceof SVGPolygonElement)
@@ -403,6 +405,17 @@ document.addEventListener('DOMContentLoaded', () => {
             saveButton.disabled = !selection.value || (points.length > 0 && points.length < 3);
             handlesElement.replaceChildren();
 
+            const option = selection.selectedOptions[0];
+            const hasLabel = selection.value && points.length >= 3 && activeLabel instanceof SVGTextElement;
+            if (activeLabel instanceof SVGTextElement) {
+                activeLabel.hidden = !hasLabel;
+                if (hasLabel) {
+                    activeLabel.textContent = option?.dataset.number ?? '';
+                    activeLabel.setAttribute('x', String(points.reduce((sum, point) => sum + point.x, 0) / points.length));
+                    activeLabel.setAttribute('y', String(points.reduce((sum, point) => sum + point.y, 0) / points.length));
+                }
+            }
+
             points.forEach((point, index) => {
                 const handle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                 handle.setAttribute('cx', point.x);
@@ -421,6 +434,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 : [];
             form.action = option?.dataset.action ?? '';
             polygonElement.style.fill = option?.dataset.color ?? '#66BB6A';
+            referenceParcels.forEach((reference) => {
+                reference.hidden = reference.dataset.mapReferenceParcel === selection.value;
+            });
             drawing = false;
             editor.dataset.mapDrawing = 'false';
             removeInput.value = '0';
@@ -537,7 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         svg.addEventListener('pointerup', stopDragging);
         svg.addEventListener('pointercancel', stopDragging);
-        update();
+        selectParcel();
     });
 
     document.querySelectorAll('[data-private-photo-modal]').forEach((modal) => {
