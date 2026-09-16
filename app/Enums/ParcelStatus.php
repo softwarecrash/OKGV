@@ -25,8 +25,9 @@ enum ParcelStatus: string
     {
         return match ($this) {
             self::Free => '#2E7D32',
-            self::Assigned => '#66BB6A',
-            self::Reserved, self::Terminated => '#F9A825',
+            self::Assigned => '#1565C0',
+            self::Reserved => '#F9A825',
+            self::Terminated => '#EF6C00',
             self::Blocked => '#C62828',
         };
     }

@@ -18,8 +18,10 @@
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body">
             <div class="d-flex flex-wrap gap-3 mb-3" aria-label="Legende">
-                <span><span class="badge rounded-pill" style="background:#2E7D32">Frei / vergeben</span></span>
-                <span><span class="badge rounded-pill text-dark" style="background:#F9A825">Reserviert / gekündigt</span></span>
+                <span><span class="badge rounded-pill" style="background:#2E7D32">Frei</span></span>
+                <span><span class="badge rounded-pill" style="background:#1565C0">Vergeben</span></span>
+                <span><span class="badge rounded-pill text-dark" style="background:#F9A825">Reserviert</span></span>
+                <span><span class="badge rounded-pill" style="background:#EF6C00">Gekündigt</span></span>
                 <span><span class="badge rounded-pill" style="background:#C62828">Gesperrt</span></span>
             </div>
 

@@ -2,6 +2,13 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.132] - 2026-09-16
+
+### Lageplan
+
+- Frei, vergeben, reserviert, gekündigt und gesperrt besitzen nun jeweils
+  eine eigene Kartenfarbe und einen separaten Legendeneintrag.
+
 ## [0.2.0.131] - 2026-09-16
 
 ### Lageplan
