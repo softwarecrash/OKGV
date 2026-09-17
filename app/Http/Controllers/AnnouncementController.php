@@ -81,13 +81,15 @@ class AnnouncementController extends Controller
     public function store(AnnouncementRequest $request): RedirectResponse
     {
         $announcement = $this->manager->save($request->validated(), $request->user());
+        $this->attachUploadedDocument($request, $announcement);
 
         return redirect()->route('announcements.show', $announcement)->with('status', 'Entwurf gespeichert. Prüfe die Vorschau und veröffentliche den Beitrag anschließend.');
     }
 
     public function update(AnnouncementRequest $request, Announcement $announcement): RedirectResponse
     {
-        $this->manager->save($request->validated(), $request->user(), $announcement);
+        $announcement = $this->manager->save($request->validated(), $request->user(), $announcement);
+        $this->attachUploadedDocument($request, $announcement);
 
         return redirect()->route('announcements.show', $announcement)->with('status', 'Entwurf aktualisiert.');
     }
@@ -97,7 +99,7 @@ class AnnouncementController extends Controller
         $publicView = $request->routeIs('announcements.public.*');
         $this->authorizeView($announcement, $publicView);
         $documents = FeatureModule::Documents->enabled()
-            ? $announcement->documents->filter(fn (Document $document) => $this->canReadDocument($document, $publicView))
+            ? $announcement->documents->filter(fn (Document $document) => $this->canReadDocument($document, $publicView, $announcement))
             : collect();
         $read = $request->user() ? $announcement->reads()->where('user_id', $request->user()->id)->first() : null;
         $reads = ! $publicView && $request->user()?->can('create', Announcement::class)
@@ -133,7 +135,7 @@ class AnnouncementController extends Controller
     {
         $publicView = $request->routeIs('announcements.public.*');
         $this->authorizeView($announcement, $publicView);
-        abort_unless($announcement->documents()->whereKey($document->id)->exists() && $this->canReadDocument($document, $publicView), 404);
+        abort_unless($announcement->documents()->whereKey($document->id)->exists() && $this->canReadDocument($document, $publicView, $announcement), 404);
         abort_unless(Storage::disk('local')->exists($document->file_path), 404);
 
         return Storage::disk('local')->download($document->file_path, $document->original_name, ['X-Content-Type-Options' => 'nosniff']);
@@ -148,7 +150,7 @@ class AnnouncementController extends Controller
         }
     }
 
-    private function canReadDocument(Document $document, bool $publicView): bool
+    private function canReadDocument(Document $document, bool $publicView, Announcement $announcement): bool
     {
         if (! $document->isPublished()) {
             return false;
@@ -157,6 +159,25 @@ class AnnouncementController extends Controller
             return true;
         }
 
+        if ($document->created_for_announcement_id === $announcement->id) {
+            return true;
+        }
+
         return ! $publicView && (request()->user()?->can('view', $document) ?? false);
+    }
+
+    private function attachUploadedDocument(AnnouncementRequest $request, Announcement $announcement): void
+    {
+        if (! FeatureModule::Documents->enabled() || ! $request->hasFile('attachment')) {
+            return;
+        }
+
+        $document = $this->manager->attachUploadedDocument(
+            $announcement,
+            $request->file('attachment'),
+            $request->string('attachment_title')->trim()->toString(),
+            $request->user(),
+        );
+        $announcement->documents()->syncWithoutDetaching([$document->id]);
     }
 }

@@ -4,23 +4,29 @@ namespace App\Services;
 
 use App\Enums\AnnouncementAudience;
 use App\Enums\DocumentVisibility;
+use App\Enums\DocumentType;
 use App\Enums\FeatureModule;
 use App\Models\Announcement;
 use App\Models\Document;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\ValidationException;
 
 final class AnnouncementManager
 {
+    public function __construct(
+        private readonly DocumentManager $documentManager,
+    ) {}
+
     public function save(array $data, User $actor, ?Announcement $announcement = null): Announcement
     {
         return DB::transaction(function () use ($data, $actor, $announcement): Announcement {
             $announcement = $announcement === null ? new Announcement : Announcement::query()->lockForUpdate()->findOrFail($announcement->id);
             Gate::forUser($actor)->authorize($announcement->exists ? 'update' : 'create', $announcement->exists ? $announcement : Announcement::class);
             $documentIds = $data['document_ids'] ?? [];
-            unset($data['document_ids']);
+            unset($data['document_ids'], $data['attachment'], $data['attachment_title']);
             $announcement->fill([
                 ...$data,
                 'roles' => $data['audience'] === AnnouncementAudience::Roles->value ? $data['roles'] : [],
@@ -41,6 +47,28 @@ final class AnnouncementManager
 
             return $announcement;
         });
+    }
+
+    public function attachUploadedDocument(
+        Announcement $announcement,
+        UploadedFile $file,
+        ?string $title,
+        User $actor,
+    ): Document {
+        Gate::forUser($actor)->authorize('create', Document::class);
+
+        $defaultTitle = trim(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+
+        return $this->documentManager->create([
+            'created_for_announcement_id' => $announcement->id,
+            'title' => filled($title) ? $title : ($defaultTitle ?: "Anhang zu {$announcement->title}"),
+            'description' => "Direkt an Beitrag „{$announcement->title}“ angehängt.",
+            'type' => DocumentType::Other->value,
+            'visibility' => $announcement->audience === AnnouncementAudience::Public
+                ? DocumentVisibility::Public->value
+                : DocumentVisibility::Internal->value,
+            'published' => true,
+        ], $file, $actor);
     }
 
     public function publish(Announcement $announcement, User $actor): void

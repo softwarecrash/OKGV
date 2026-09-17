@@ -134,6 +134,7 @@ final class DocumentManager
         return [
             'member_id' => $data['member_id'] ?? null,
             'parcel_id' => $data['parcel_id'] ?? null,
+            'created_for_announcement_id' => $data['created_for_announcement_id'] ?? null,
             'title' => $data['title'],
             'description' => $data['description'] ?? null,
             'type' => $data['type'],

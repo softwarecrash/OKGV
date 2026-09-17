@@ -4,7 +4,7 @@
 <div class="container">
     <h1 class="h2">{{ $announcement->exists ? 'Entwurf bearbeiten' : 'Beitrag anlegen' }}</h1>
     <p class="text-secondary">Speichere zuerst einen Entwurf. Nach dem Veröffentlichen bleiben Text und Zielgruppe unverändert; bei Korrekturen kannst du den Beitrag zurückziehen und einen neuen anlegen.</p>
-    <form method="POST" action="{{ $announcement->exists ? route('announcements.update', $announcement) : route('announcements.store') }}" class="card card-body shadow-sm border-0">
+    <form method="POST" enctype="multipart/form-data" action="{{ $announcement->exists ? route('announcements.update', $announcement) : route('announcements.store') }}" class="card card-body shadow-sm border-0">
         @csrf
         @if ($announcement->exists) @method('PUT') @endif
         <x-validation-errors />
@@ -55,6 +55,24 @@
             </div>
         @endforeach
         @if (App\Enums\FeatureModule::Documents->enabled())
+            @can('create', App\Models\Document::class)
+                <fieldset class="mt-3">
+                    <legend class="h6">Datei direkt anhängen (optional)</legend>
+                    <p class="form-text">Die Datei wird sicher in der Dokumentenablage gespeichert und direkt mit diesem Beitrag verknüpft. Bei öffentlichen Beiträgen ist auch der Anhang öffentlich; bei allen anderen Zielgruppen ist er nur über diesen Beitrag erreichbar.</p>
+                    <div class="row g-3">
+                        <div class="col-md-7">
+                            <label class="form-label" for="attachment">Datei</label>
+                            <input class="form-control" type="file" id="attachment" name="attachment" accept=".pdf,.jpg,.jpeg,.png,.webp,.txt,.docx,.xlsx">
+                            <div class="form-text">PDF, Bilder, TXT, DOCX oder XLSX, höchstens 20 MB.</div>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label" for="attachment_title">Bezeichnung (optional)</label>
+                            <input class="form-control" id="attachment_title" name="attachment_title" maxlength="255" value="{{ old('attachment_title') }}">
+                            <div class="form-text">Leer lassen, um den Dateinamen zu verwenden.</div>
+                        </div>
+                    </div>
+                </fieldset>
+            @endcan
             <fieldset class="mt-3">
                 <legend class="h6">Dokumente verknüpfen (optional, höchstens 10)</legend>
                 <p class="form-text">Anhänge werden in der Dokumentenverwaltung hochgeladen und freigegeben. Jeder Leser benötigt weiterhin Zugriff auf das Dokument. Öffentliche Beiträge dürfen nur öffentliche Dokumente enthalten.</p>

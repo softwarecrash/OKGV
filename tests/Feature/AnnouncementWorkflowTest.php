@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Services\ActionIndicatorService;
 use App\Services\PrivacyDataExportService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -179,6 +180,37 @@ class AnnouncementWorkflowTest extends TestCase
         $this->get(route('announcements.public.document', [$public, $document]))->assertOk();
         $document->update(['archived_at' => now()]);
         $this->get(route('announcements.public.document', [$public, $document]))->assertNotFound();
+    }
+
+    public function test_board_can_upload_an_attachment_directly_with_an_announcement(): void
+    {
+        Storage::fake('local');
+        $administrator = User::factory()->administrator()->create();
+
+        $this->actingAs($administrator)->post(route('announcements.store'), [
+            'title' => 'Wasser wird abgestellt',
+            'body' => 'Bitte die Leitungen sichern.',
+            'audience' => AnnouncementAudience::All->value,
+            'starts_at' => now()->toDateTimeString(),
+            'attachment' => UploadedFile::fake()->createWithContent('wasserinfo.pdf', '%PDF-1.4'),
+            'attachment_title' => 'Wasserinformation',
+        ])->assertRedirect();
+
+        $announcement = Announcement::query()->firstOrFail();
+        $document = Document::query()->firstOrFail();
+
+        $this->assertSame($announcement->id, $document->created_for_announcement_id);
+        $this->assertSame('Wasserinformation', $document->title);
+        $this->assertSame(DocumentVisibility::Internal, $document->visibility);
+        $this->assertTrue($document->isPublished());
+        $this->assertTrue(Storage::disk('local')->exists($document->file_path));
+        $this->assertTrue($announcement->documents()->whereKey($document->id)->exists());
+
+        $reader = User::factory()->create();
+        $announcement->update(['published_at' => now()]);
+        $this->actingAs($reader)
+            ->get(route('announcements.document', [$announcement, $document]))
+            ->assertOk();
     }
 
     public function test_invalid_roles_periods_and_missing_documents_do_not_create_partial_posts(): void

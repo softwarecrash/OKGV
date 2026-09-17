@@ -2,6 +2,17 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.140] - 2026-09-17
+
+### Schwarzes Brett
+
+- Beiträge können beim Anlegen oder Bearbeiten direkt einen optionalen
+  Dateianhang erhalten. Die Datei wird sicher in der Dokumentenablage
+  gespeichert und automatisch mit dem Beitrag verknüpft.
+- Nicht-öffentliche Direktanhänge sind nur über den passenden Beitrag für
+  dessen Zielgruppe abrufbar; öffentliche Beiträge veröffentlichen auch den
+  zugehörigen Anhang.
+
 ## [0.2.0.139] - 2026-09-17
 
 ### Zählerverwaltung

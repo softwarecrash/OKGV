@@ -15,6 +15,7 @@ use LogicException;
     'member_id',
     'parcel_id',
     'uploaded_by',
+    'created_for_announcement_id',
     'title',
     'description',
     'type',

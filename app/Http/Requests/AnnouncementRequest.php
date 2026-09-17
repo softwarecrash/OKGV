@@ -32,11 +32,19 @@ class AnnouncementRequest extends FormRequest
             'requires_confirmation' => ['sometimes', 'boolean'],
             'document_ids' => [FeatureModule::Documents->enabled() ? 'nullable' : 'prohibited', 'array', 'max:10'],
             'document_ids.*' => ['integer', 'distinct', Rule::exists('documents', 'id')],
+            'attachment' => [
+                FeatureModule::Documents->enabled() ? 'nullable' : 'prohibited',
+                'file',
+                'max:20480',
+                'extensions:pdf,jpg,jpeg,png,webp,txt,docx,xlsx',
+                'mimetypes:application/pdf,image/jpeg,image/png,image/webp,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ],
+            'attachment_title' => [FeatureModule::Documents->enabled() ? 'nullable' : 'prohibited', 'string', 'max:255'],
         ];
     }
 
     public function attributes(): array
     {
-        return ['title' => 'Titel', 'body' => 'Mitteilung', 'roles' => 'Zielrollen', 'roles.*' => 'Zielrolle', 'starts_at' => 'Beginn', 'ends_at' => 'Ende', 'document_ids' => 'Dokumente', 'document_ids.*' => 'Dokument'];
+        return ['title' => 'Titel', 'body' => 'Mitteilung', 'roles' => 'Zielrollen', 'roles.*' => 'Zielrolle', 'starts_at' => 'Beginn', 'ends_at' => 'Ende', 'document_ids' => 'Dokumente', 'document_ids.*' => 'Dokument', 'attachment' => 'Dateianhang', 'attachment_title' => 'Bezeichnung des Dateianhangs'];
     }
 }
