@@ -25,12 +25,17 @@ class MeterRequest extends FormRequest
         $meter = $this->route('meter');
 
         if ($meter instanceof Meter) {
+            $canReassign = ! $meter->readings()->exists()
+                && ! $meter->readingSubmissions()->exists();
             $rules = [
                 'meter_number' => [
                     'required', 'string', 'max:100',
                     Rule::unique('meters', 'meter_number')->ignore($meter),
                 ],
                 'notes' => ['nullable', 'string', 'max:10000'],
+                'parcel_id' => $canReassign
+                    ? ['nullable', 'integer', 'exists:parcels,id']
+                    : ['prohibited'],
             ];
 
             if (in_array($meter->status, [MeterStatus::Active, MeterStatus::Defective], true)) {
@@ -66,7 +71,7 @@ class MeterRequest extends FormRequest
                 }
 
                 $activeMeterExists = Meter::query()
-                    ->where('parcel_id', $meter->parcel_id)
+                    ->where('parcel_id', $this->integer('parcel_id') ?: $meter->parcel_id)
                     ->where('type', $meter->type)
                     ->where('status', MeterStatus::Active)
                     ->whereKeyNot($meter->id)

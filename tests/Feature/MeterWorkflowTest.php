@@ -67,6 +67,45 @@ class MeterWorkflowTest extends TestCase
         $this->assertDatabaseCount('meter_readings', 1);
     }
 
+    public function test_unread_meter_can_be_moved_to_the_correct_parcel(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $wrongParcel = Parcel::factory()->create();
+        $correctParcel = Parcel::factory()->create();
+        $meter = Meter::factory()->create([
+            'parcel_id' => $wrongParcel->id,
+            'status' => MeterStatus::Active,
+        ]);
+
+        $this->actingAs($administrator)
+            ->put(route('meters.update', $meter), [
+                'parcel_id' => $correctParcel->id,
+                'meter_number' => $meter->meter_number,
+                'status' => MeterStatus::Active->value,
+            ])
+            ->assertRedirect(route('meters.show', $meter));
+
+        $this->assertSame($correctParcel->id, $meter->fresh()->parcel_id);
+    }
+
+    public function test_meter_with_readings_cannot_be_moved_to_another_parcel(): void
+    {
+        $administrator = User::factory()->administrator()->create();
+        $meter = Meter::factory()->create(['status' => MeterStatus::Active]);
+        $correctParcel = Parcel::factory()->create();
+        MeterReading::factory()->create(['meter_id' => $meter->id]);
+
+        $this->actingAs($administrator)
+            ->put(route('meters.update', $meter), [
+                'parcel_id' => $correctParcel->id,
+                'meter_number' => $meter->meter_number,
+                'status' => MeterStatus::Active->value,
+            ])
+            ->assertSessionHasErrors('parcel_id');
+
+        $this->assertNotSame($correctParcel->id, $meter->fresh()->parcel_id);
+    }
+
     public function test_meter_replacement_closes_old_meter_and_creates_new_meter(): void
     {
         $administrator = User::factory()->administrator()->create();

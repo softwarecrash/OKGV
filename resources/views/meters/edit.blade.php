@@ -14,6 +14,23 @@
         </div>
 
         <div class="row g-3">
+            @if ($canReassign)
+                <div class="col-md-6">
+                    <label class="form-label" for="parcel_id">Parzelle</label>
+                    <select class="form-select" id="parcel_id" name="parcel_id" required>
+                        @foreach ($parcels as $parcel)
+                            <option value="{{ $parcel->id }}" @selected((string) old('parcel_id', $meter->parcel_id) === (string) $parcel->id)>{{ $parcel->parcel_number }}</option>
+                        @endforeach
+                    </select>
+                    <div class="form-text">Korrektur ist nur möglich, solange noch keine Zählerstände oder Pächtermeldungen vorliegen.</div>
+                </div>
+            @else
+                <div class="col-md-6">
+                    <label class="form-label">Parzelle</label>
+                    <div class="form-control-plaintext">{{ $meter->parcel->parcel_number }}</div>
+                    <div class="form-text">Nach Zählerständen oder Pächtermeldungen bleibt die Zuordnung zum Schutz der Verbrauchshistorie unveränderlich.</div>
+                </div>
+            @endif
             <div class="col-md-6">
                 <label class="form-label" for="meter_number">Zählernummer</label>
                 <input class="form-control" id="meter_number" name="meter_number" value="{{ old('meter_number', $meter->meter_number) }}" required>

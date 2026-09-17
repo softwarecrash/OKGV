@@ -98,6 +98,40 @@ final class MeterManager
         });
     }
 
+    public function moveToParcel(Meter $meter, int $parcelId): Meter
+    {
+        return DB::transaction(function () use ($meter, $parcelId): Meter {
+            $meter = Meter::query()->lockForUpdate()->findOrFail($meter->id);
+
+            if ($meter->parcel_id === $parcelId) {
+                return $meter;
+            }
+
+            if ($meter->readings()->exists() || $meter->readingSubmissions()->exists()) {
+                throw ValidationException::withMessages([
+                    'parcel_id' => 'Die Parzelle kann nach Zählerständen oder Pächtermeldungen nicht mehr geändert werden.',
+                ]);
+            }
+
+            Parcel::query()->whereKey($parcelId)->lockForUpdate()->firstOrFail();
+
+            if ($meter->status === MeterStatus::Active && Meter::query()
+                ->where('parcel_id', $parcelId)
+                ->where('type', $meter->type)
+                ->where('status', MeterStatus::Active)
+                ->whereKeyNot($meter->id)
+                ->exists()) {
+                throw ValidationException::withMessages([
+                    'parcel_id' => 'Auf der Zielparzelle existiert bereits ein aktiver Zähler dieser Verbrauchsart.',
+                ]);
+            }
+
+            $meter->update(['parcel_id' => $parcelId]);
+
+            return $meter;
+        });
+    }
+
     private function ensureNoActiveMeter(int $parcelId, string $type): void
     {
         if (Meter::query()

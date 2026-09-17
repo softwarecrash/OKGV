@@ -86,12 +86,29 @@ class MeterController extends Controller
     {
         $this->authorize('update', $meter);
 
-        return view('meters.edit', compact('meter'));
+        $canReassign = ! $meter->readings()->exists()
+            && ! $meter->readingSubmissions()->exists();
+
+        return view('meters.edit', [
+            'meter' => $meter,
+            'canReassign' => $canReassign,
+            'parcels' => $canReassign
+                ? Parcel::query()->orderBy('parcel_number')->get()
+                : collect(),
+        ]);
     }
 
     public function update(MeterRequest $request, Meter $meter): RedirectResponse
     {
-        $meter->update($request->validated());
+        $data = $request->validated();
+        $parcelId = $data['parcel_id'] ?? null;
+        unset($data['parcel_id']);
+
+        if ($parcelId && $meter->parcel_id !== $parcelId) {
+            $meter = $this->meterManager->moveToParcel($meter, $parcelId);
+        }
+
+        $meter->update($data);
         AuditLogger::log('meter.updated', $request->user(), $meter, [
             'changed_fields' => array_keys($meter->getChanges()),
         ]);

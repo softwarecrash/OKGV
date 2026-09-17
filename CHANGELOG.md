@@ -2,6 +2,16 @@
 
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
+## [0.2.0.139] - 2026-09-17
+
+### Zählerverwaltung
+
+- Die Parzelle eines neu angelegten Zählers kann in der Bearbeitung korrigiert
+  werden, solange noch keine Zählerstände oder Pächtermeldungen vorliegen.
+- Sobald eine Verbrauchshistorie besteht, bleibt die Zuordnung gesperrt, damit
+  Ablesungen und Abrechnungen nicht versehentlich einer anderen Parzelle
+  zugeordnet werden.
+
 ## [0.2.0.138] - 2026-09-16
 
 ### Fehlerbehebung
