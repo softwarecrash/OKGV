@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 class DeployApplication extends Command
 {
     protected $signature = 'okgv:deploy
+        {--force : Kompatibilitaetsoption fuer Produktions-Deployments}
         {--skip-clear : Vorherige Laravel-Caches nicht leeren}
         {--skip-admin : Administrator aus OKGV_ADMIN_* nicht anlegen oder aktualisieren}
         {--skip-optimize : Laravel-Caches am Ende nicht neu aufbauen}

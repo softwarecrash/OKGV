@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0.141] - 2026-09-17
+
+### Fehlerbehebungen
+
+- `okgv:deploy` akzeptiert jetzt die in Plesk uebliche Option `--force`, damit Bereitstellungsaktionen nicht vor den Migrationen abbrechen.
+
 Alle wesentlichen Änderungen an OKGV werden in dieser Datei dokumentiert.
 
 ## [0.2.0.140] - 2026-09-17
