@@ -96,7 +96,7 @@
             </div>
 
             <div class="small text-secondary mb-3" aria-label="Zeichenhilfen">
-                <strong>Zeichenhilfen:</strong> Halte <kbd>Strg</kbd> beziehungsweise <kbd>Cmd</kbd> zum Einrasten an fremden Ecken und <kbd>Umschalt</kbd> für parallele Kanten gedrückt.
+                <kbd>Strg</kbd>/<kbd>Cmd</kbd> = Einrasten · <kbd>Umschalt</kbd> = Parallel
                 <span class="ms-2" data-map-assist-status aria-live="polite"></span>
             </div>
 
@@ -165,7 +165,7 @@
                     <g data-map-handles></g>
                 </svg>
             </div>
-            <p class="small text-secondary mt-2 mb-0">Die übrigen Parzellen sind zur Orientierung sichtbar, aber nicht bearbeitbar. Beim Gedrückthalten von Strg oder Cmd rasten Ecken nur in unmittelbarer Nähe ein. Halte Umschalt für die Parallelhilfe. Nutze die Zoomschaltflächen oder Strg und Mausrad. Ziehe freie Bildfläche mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Eckpunkte und die markierte Parzellenfläche bleiben direkt bearbeitbar.</p>
+            <p class="small text-secondary mt-2 mb-0">Die übrigen Parzellen sind zur Orientierung sichtbar, aber nicht bearbeitbar. Nutze die Zoomschaltflächen oder Strg und Mausrad. Ziehe freie Bildfläche mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Eckpunkte und die markierte Parzellenfläche bleiben direkt bearbeitbar.</p>
 
             <form class="mt-3" method="POST" data-map-form>
                 @csrf

@@ -206,8 +206,8 @@ class ParcelMapTest extends TestCase
             ->assertSee('data-parcel-map-zoom', false)
             ->assertSee('data-map-handle-radius="9"', false)
             ->assertSee('data-map-snap-radius="9"', false)
-            ->assertSee('Halte <kbd>Strg</kbd>', false)
-            ->assertSee('Umschalt</kbd> für parallele Kanten', false)
+            ->assertSee('<kbd>Strg</kbd>/<kbd>Cmd</kbd> = Einrasten', false)
+            ->assertSee('<kbd>Umschalt</kbd> = Parallel', false)
             ->assertSee('Strg und Mausrad')
             ->assertDontSee('data-map-pan-toggle', false)
             ->assertSee('Ziehe freie Bildfläche');
