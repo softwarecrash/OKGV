@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0.144] - 2026-09-20
+
+### Änderungen
+
+- `Meine Daten` zeigt die eigenen Kontaktdaten zunächst schreibgeschützt; Änderungen erfolgen erst über eine separate Bearbeitungsseite mit Speichern und Abbrechen.
+
 ## [0.2.0.143] - 2026-09-20
 
 ### Änderungen

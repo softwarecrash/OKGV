@@ -173,7 +173,9 @@ Route::middleware(['auth', 'verified', 'registration.approved'])->group(function
         ->name('account.notifications.edit');
     Route::put('account/notifications', [AccountNotificationPreferenceController::class, 'update'])
         ->name('account.notifications.update');
-    Route::get('account/member-profile', [AccountMemberProfileController::class, 'edit'])
+    Route::get('account/member-profile', [AccountMemberProfileController::class, 'show'])
+        ->name('account.member-profile.show');
+    Route::get('account/member-profile/edit', [AccountMemberProfileController::class, 'edit'])
         ->name('account.member-profile.edit');
     Route::put('account/member-profile', [AccountMemberProfileController::class, 'update'])
         ->name('account.member-profile.update');

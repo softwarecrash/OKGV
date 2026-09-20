@@ -47,10 +47,16 @@ class MasterDataAuthorizationTest extends TestCase
         $this->actingAs($tenant)->get(route('members.show', $otherMember))->assertForbidden();
 
         $this->actingAs($tenant)
-            ->get(route('account.member-profile.edit'))
+            ->get(route('account.member-profile.show'))
             ->assertOk()
             ->assertSee('Meine Daten')
-            ->assertSee($ownMember->last_name);
+            ->assertSee($ownMember->last_name)
+            ->assertSee('Daten bearbeiten');
+
+        $this->actingAs($tenant)
+            ->get(route('account.member-profile.edit'))
+            ->assertOk()
+            ->assertSee('Meine Daten bearbeiten');
 
         $this->actingAs($tenant)
             ->put(route('account.member-profile.update'), [
@@ -64,7 +70,7 @@ class MasterDataAuthorizationTest extends TestCase
                 'email' => 'kontakt@example.test',
                 'status' => 'archived',
             ])
-            ->assertRedirect(route('account.member-profile.edit'));
+            ->assertRedirect(route('account.member-profile.show'));
 
         $this->assertDatabaseHas('members', [
             'id' => $ownMember->id,

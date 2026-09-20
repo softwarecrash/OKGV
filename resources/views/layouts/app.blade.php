@@ -323,7 +323,7 @@
                                         Datenschutz
                                     </a>
                                     @if (auth()->user()->member()->exists())
-                                        <a class="dropdown-item" href="{{ route('account.member-profile.edit') }}">
+                                        <a class="dropdown-item" href="{{ route('account.member-profile.show') }}">
                                             Meine Daten
                                         </a>
                                     @endif

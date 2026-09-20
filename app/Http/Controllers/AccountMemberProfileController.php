@@ -9,9 +9,17 @@ use Illuminate\View\View;
 
 class AccountMemberProfileController extends Controller
 {
-    public function edit(): View
+    public function show(): View
     {
         return view('account.member-profile', [
+            'member' => request()->user()->member()->firstOrFail(),
+            'user' => request()->user(),
+        ]);
+    }
+
+    public function edit(): View
+    {
+        return view('account.member-profile-edit', [
             'member' => request()->user()->member()->firstOrFail(),
             'user' => request()->user(),
         ]);
@@ -27,7 +35,7 @@ class AccountMemberProfileController extends Controller
         ]);
 
         return redirect()
-            ->route('account.member-profile.edit')
+            ->route('account.member-profile.show')
             ->with('status', 'Deine Kontaktdaten wurden gespeichert.');
     }
 }
