@@ -93,7 +93,7 @@ class WorkHourSubmissionWorkflowTest extends TestCase
                 'Parzelle B-12',
             ])
             ->assertSee('Parzelle B-12')
-            ->assertSee('offen 10,00 Std.');
+            ->assertSee('noch offen: 10,00 Std.');
 
         $this->actingAs($board)
             ->post(route('work-hour-submissions.store'), [

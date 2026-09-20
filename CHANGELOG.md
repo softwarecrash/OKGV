@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0.146] - 2026-09-20
+
+### Änderungen
+
+- Die Auswahl bei stellvertretend erfassten Arbeitsstunden zeigt verständliche Stundenstände statt des technischen Hinweises `noch kein Konto`.
+
 ## [0.2.0.145] - 2026-09-20
 
 ### Änderungen

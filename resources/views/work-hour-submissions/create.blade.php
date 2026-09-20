@@ -42,10 +42,10 @@
                                 · eigene Parzelle
                             @endif
                             @if ($summary)
-                                · offen {{ number_format((float) $summary['missing'], 2, ',', '.') }} Std.
+                                · noch offen: {{ number_format((float) $summary['missing'], 2, ',', '.') }} Std.
                                 · {{ $summary['period'] }}
                             @elseif ($canManageAllParcels)
-                                · noch kein Konto
+                                · noch keine Arbeitsstunden erfasst
                             @endif
                         </option>
                     @endforeach
