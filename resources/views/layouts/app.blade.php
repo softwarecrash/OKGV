@@ -122,7 +122,7 @@
                                         Parzellen
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('parcels.index') }}">Parzellenübersicht</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('parcels.index') }}">{{ auth()->user()->canViewAllMasterData() ? 'Parzellenübersicht' : 'Meine Parzellen' }}</a></li>
                                         <li><a class="dropdown-item" href="{{ route('parcel-map.index') }}">Lageplan</a></li>
                                         @if ($canViewGardenInspections)
                                             <li><a class="dropdown-item" href="{{ route('garden-inspections.index') }}">Gartenbegehungen</a></li>

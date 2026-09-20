@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0.143] - 2026-09-20
+
+### Änderungen
+
+- Der Parzelleneinstieg heißt für Pächter jetzt `Meine Parzellen` statt `Parzellen und Pächter` beziehungsweise `Parzellenübersicht`.
+
 ## [0.2.0.142] - 2026-09-20
 
 ### Änderungen

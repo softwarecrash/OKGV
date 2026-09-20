@@ -86,6 +86,7 @@ class NavigationExperienceTest extends TestCase
             ->assertSee('1 offene Rechnungen')
             ->assertDontSee('Registrierungsanfragen')
             ->assertSee('Meine Daten')
+            ->assertSee('Meine Parzellen')
             ->assertDontSee('Mitglieder verwalten');
     }
 
