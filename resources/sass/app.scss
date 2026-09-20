@@ -59,6 +59,19 @@
     cursor: grab;
 }
 
+.parcel-map-parallel-guide {
+    stroke: #0dcaf0;
+    stroke-width: 2;
+    stroke-dasharray: 7 5;
+    opacity: .9;
+}
+
+.parcel-map-snap-indicator {
+    fill: #ffc107;
+    stroke: #263238;
+    stroke-width: 2;
+}
+
 .private-photo-viewport {
     display: flex;
     align-items: flex-start;

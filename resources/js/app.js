@@ -363,6 +363,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const help = editor.querySelector('[data-map-help]');
         const activeLabel = editor.querySelector('[data-map-active-label]');
         const referenceParcels = editor.querySelectorAll('[data-map-reference-parcel]');
+        const snapCorners = editor.querySelector('[data-map-snap-corners]');
+        const parallelGuide = editor.querySelector('[data-map-parallel-guide]');
+        const assistStatus = editor.querySelector('[data-map-assist-status]');
+        const parallelLine = editor.querySelector('[data-map-parallel-line]');
+        const snapIndicator = editor.querySelector('[data-map-snap-indicator]');
 
         if (!(svg instanceof SVGSVGElement)
             || !(polygonElement instanceof SVGPolygonElement)
@@ -398,6 +403,180 @@ document.addEventListener('DOMContentLoaded', () => {
                 x: Math.max(0, Math.min(dimensions.width, Number(point.x.toFixed(2)))),
                 y: Math.max(0, Math.min(dimensions.height, Number(point.y.toFixed(2)))),
             };
+        };
+
+        const roundedPoint = (point) => ({
+            x: Number(point.x.toFixed(2)),
+            y: Number(point.y.toFixed(2)),
+        });
+
+        const clearAssists = () => {
+            if (parallelLine instanceof SVGLineElement) {
+                parallelLine.hidden = true;
+            }
+
+            if (snapIndicator instanceof SVGCircleElement) {
+                snapIndicator.hidden = true;
+            }
+
+            if (assistStatus instanceof HTMLElement) {
+                assistStatus.textContent = '';
+            }
+        };
+
+        const referencePolygons = () => Array.from(referenceParcels)
+            .filter((reference) => reference.dataset.mapReferenceParcel !== selection.value)
+            .map((reference) => {
+                try {
+                    return JSON.parse(reference.dataset.mapReferencePolygon ?? '[]');
+                } catch {
+                    return [];
+                }
+            })
+            .filter((polygon) => Array.isArray(polygon));
+
+        const pointOnScreen = (point) => {
+            const matrix = svg.getScreenCTM();
+
+            if (!matrix) {
+                return null;
+            }
+
+            return new DOMPoint(point.x, point.y).matrixTransform(matrix);
+        };
+
+        const findSnapPoint = (event) => {
+            if (!(snapCorners instanceof HTMLInputElement) || !snapCorners.checked) {
+                return null;
+            }
+
+            const radius = Number(editor.dataset.mapSnapRadius ?? 9);
+            let closest = null;
+
+            referencePolygons().flat().forEach((point) => {
+                const screenPoint = pointOnScreen(point);
+
+                if (!screenPoint) {
+                    return;
+                }
+
+                const distance = Math.hypot(screenPoint.x - event.clientX, screenPoint.y - event.clientY);
+
+                if (distance <= radius && (!closest || distance < closest.distance)) {
+                    closest = { point: roundedPoint(point), distance };
+                }
+            });
+
+            return closest?.point ?? null;
+        };
+
+        const addSegments = (target, polygon, closePolygon) => {
+            for (let index = 1; index < polygon.length; index += 1) {
+                target.push([polygon[index - 1], polygon[index]]);
+            }
+
+            if (closePolygon && polygon.length > 2) {
+                target.push([polygon.at(-1), polygon[0]]);
+            }
+        };
+
+        const findParallel = (point, origin) => {
+            if (!(parallelGuide instanceof HTMLInputElement) || !parallelGuide.checked || !origin) {
+                return null;
+            }
+
+            const vector = { x: point.x - origin.x, y: point.y - origin.y };
+            const vectorLength = Math.hypot(vector.x, vector.y);
+
+            if (vectorLength < 0.01) {
+                return null;
+            }
+
+            const segments = [];
+            referencePolygons().forEach((polygon) => addSegments(segments, polygon, true));
+            addSegments(segments, points, false);
+
+            const minimumAlignment = Math.cos((Number(editor.dataset.mapParallelThreshold ?? 10) * Math.PI) / 180);
+            let best = null;
+
+            segments.forEach(([start, end]) => {
+                const direction = { x: end.x - start.x, y: end.y - start.y };
+                const length = Math.hypot(direction.x, direction.y);
+
+                if (length < 0.01) {
+                    return;
+                }
+
+                const unit = { x: direction.x / length, y: direction.y / length };
+                const alignment = Math.abs((vector.x * unit.x + vector.y * unit.y) / vectorLength);
+
+                if (alignment >= minimumAlignment && (!best || alignment > best.alignment)) {
+                    best = { unit, alignment };
+                }
+            });
+
+            if (!best) {
+                return null;
+            }
+
+            const projection = vector.x * best.unit.x + vector.y * best.unit.y;
+            const constrained = roundedPoint({
+                x: Math.max(0, Math.min(dimensions.width, origin.x + (best.unit.x * projection))),
+                y: Math.max(0, Math.min(dimensions.height, origin.y + (best.unit.y * projection))),
+            });
+
+            return { point: constrained, origin, direction: best.unit };
+        };
+
+        const showParallelGuide = (parallel) => {
+            if (!(parallelLine instanceof SVGLineElement)) {
+                return;
+            }
+
+            if (!parallel) {
+                parallelLine.hidden = true;
+
+                return;
+            }
+
+            const reach = Math.max(dimensions.width, dimensions.height) * 2;
+            parallelLine.setAttribute('x1', String(parallel.origin.x - (parallel.direction.x * reach)));
+            parallelLine.setAttribute('y1', String(parallel.origin.y - (parallel.direction.y * reach)));
+            parallelLine.setAttribute('x2', String(parallel.origin.x + (parallel.direction.x * reach)));
+            parallelLine.setAttribute('y2', String(parallel.origin.y + (parallel.direction.y * reach)));
+            parallelLine.hidden = false;
+        };
+
+        const applyAssists = (event, origin = null) => {
+            const rawPoint = svgPoint(event);
+
+            if (!rawPoint) {
+                return null;
+            }
+
+            const snappedPoint = findSnapPoint(event);
+            const parallel = snappedPoint ? null : findParallel(rawPoint, origin);
+            const point = snappedPoint ?? parallel?.point ?? rawPoint;
+
+            if (snapIndicator instanceof SVGCircleElement) {
+                snapIndicator.hidden = !snappedPoint;
+                if (snappedPoint) {
+                    snapIndicator.setAttribute('cx', String(snappedPoint.x));
+                    snapIndicator.setAttribute('cy', String(snappedPoint.y));
+                }
+            }
+
+            showParallelGuide(parallel);
+
+            if (assistStatus instanceof HTMLElement) {
+                assistStatus.textContent = snappedPoint
+                    ? 'Eckpunkt eingerastet'
+                    : parallel
+                        ? 'Parallel geführt'
+                        : '';
+            }
+
+            return point;
         };
 
         const update = () => {
@@ -450,6 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
             drawing = false;
             editor.dataset.mapDrawing = 'false';
             removeInput.value = '0';
+            clearAssists();
             drawButton.disabled = !selection.value;
             help.textContent = selection.value
                 ? 'Ziehe vorhandene Eckpunkte oder die Fläche. Mit „Punkte zeichnen“ setzt du eine neue Form.'
@@ -464,6 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
             editor.dataset.mapDrawing = 'true';
             points = [];
             removeInput.value = '0';
+            clearAssists();
             help.textContent = 'Zeichenmodus: Klicke die Eckpunkte der Parzelle der Reihe nach an. Mindestens drei Punkte sind erforderlich.';
             update();
         });
@@ -471,6 +652,7 @@ document.addEventListener('DOMContentLoaded', () => {
         undoButton?.addEventListener('click', () => {
             points.pop();
             removeInput.value = '0';
+            clearAssists();
             update();
         });
 
@@ -479,6 +661,7 @@ document.addEventListener('DOMContentLoaded', () => {
             drawing = false;
             editor.dataset.mapDrawing = 'false';
             removeInput.value = '1';
+            clearAssists();
             help.textContent = 'Die Fläche wird beim Speichern aus dem Lageplan entfernt. Der Parzellendatensatz bleibt erhalten.';
             update();
         });
@@ -488,9 +671,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const point = svgPoint(event);
+            const rawPoint = svgPoint(event);
 
-            if (!point) {
+            if (!rawPoint) {
                 return;
             }
 
@@ -506,7 +689,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (event.target === polygonElement && points.length >= 3 && !drawing) {
                 drag = {
                     type: 'polygon',
-                    start: point,
+                    start: rawPoint,
                     original: points.map((item) => ({ ...item })),
                 };
                 svg.setPointerCapture(event.pointerId);
@@ -514,28 +697,47 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (drawing) {
+                const point = applyAssists(event, points.at(-1));
+
+                if (!point) {
+                    return;
+                }
+
                 points.push(point);
                 removeInput.value = '0';
+                clearAssists();
                 update();
             }
         });
 
         svg.addEventListener('pointermove', (event) => {
+            if (drawing && !drag) {
+                applyAssists(event, points.at(-1));
+
+                return;
+            }
+
             if (!drag) {
                 return;
             }
 
-            const point = svgPoint(event);
+            const rawPoint = svgPoint(event);
 
-            if (!point) {
+            if (!rawPoint) {
                 return;
             }
 
             if (drag.type === 'point') {
+                const point = applyAssists(event, points[drag.index - 1]);
+
+                if (!point) {
+                    return;
+                }
+
                 points[drag.index] = point;
             } else {
-                const deltaX = point.x - drag.start.x;
-                const deltaY = point.y - drag.start.y;
+                const deltaX = rawPoint.x - drag.start.x;
+                const deltaY = rawPoint.y - drag.start.y;
                 const minX = Math.min(...drag.original.map((item) => item.x));
                 const maxX = Math.max(...drag.original.map((item) => item.x));
                 const minY = Math.min(...drag.original.map((item) => item.y));
@@ -559,6 +761,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             drag = null;
+            clearAssists();
         };
 
         svg.addEventListener('pointerup', stopDragging);

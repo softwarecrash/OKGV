@@ -59,6 +59,8 @@
         data-parcel-map-editor
         data-parcel-map-zoom
         data-map-handle-radius="9"
+        data-map-snap-radius="9"
+        data-map-parallel-threshold="10"
         data-width="{{ $settings->map_background_width }}"
         data-height="{{ $settings->map_background_height }}">
         <div class="card-body">
@@ -93,6 +95,18 @@
                 Wähle eine Parzelle. Setze anschließend mindestens drei Punkte. Eckpunkte lassen sich ziehen; die gefüllte Fläche kann als Ganzes verschoben werden.
             </div>
 
+            <div class="d-flex flex-wrap align-items-center gap-3 mb-3" aria-label="Zeichenhilfen">
+                <div class="form-check mb-0">
+                    <input class="form-check-input" id="map-snap-corners" type="checkbox" data-map-snap-corners checked>
+                    <label class="form-check-label" for="map-snap-corners">An fremden Ecken einrasten</label>
+                </div>
+                <div class="form-check mb-0">
+                    <input class="form-check-input" id="map-parallel-guide" type="checkbox" data-map-parallel-guide checked>
+                    <label class="form-check-label" for="map-parallel-guide">Parallele Kanten führen</label>
+                </div>
+                <span class="small text-secondary" data-map-assist-status aria-live="polite"></span>
+            </div>
+
             <div class="parcel-map-toolbar mb-2" aria-label="Kartengröße">
                 <div class="btn-group" role="group" aria-label="Lageplan vergrößern oder verkleinern">
                     <button class="btn btn-sm btn-outline-secondary" type="button" data-map-zoom-out title="Verkleinern">−</button>
@@ -124,7 +138,10 @@
                             $centerX = collect($parcel->map_polygon)->avg('x');
                             $centerY = collect($parcel->map_polygon)->avg('y');
                         @endphp
-                        <g data-map-reference-parcel="{{ $parcel->id }}" pointer-events="none">
+                        <g
+                            data-map-reference-parcel="{{ $parcel->id }}"
+                            data-map-reference-polygon="{{ json_encode($parcel->map_polygon, JSON_THROW_ON_ERROR) }}"
+                            pointer-events="none">
                             <polygon
                                 points="{{ collect($parcel->map_polygon)->map(fn ($point) => $point['x'].','.$point['y'])->implode(' ') }}"
                                 fill="{{ $parcel->status->mapColor() }}"
@@ -150,10 +167,12 @@
                     @endforeach
                     <polygon class="parcel-map-editor-polygon" data-map-polygon points="" fill-opacity="0.58" stroke="var(--bs-body-color)" stroke-width="4" vector-effect="non-scaling-stroke"/>
                     <text data-map-active-label fill="#FFFFFF" stroke="#263238" stroke-width="4" paint-order="stroke" font-size="24" font-weight="700" text-anchor="middle" dominant-baseline="middle"></text>
+                    <line class="parcel-map-parallel-guide" data-map-parallel-line hidden pointer-events="none" vector-effect="non-scaling-stroke"/>
+                    <circle class="parcel-map-snap-indicator" data-map-snap-indicator r="7" hidden pointer-events="none" vector-effect="non-scaling-stroke"/>
                     <g data-map-handles></g>
                 </svg>
             </div>
-            <p class="small text-secondary mt-2 mb-0">Die übrigen Parzellen sind zur Orientierung sichtbar, aber nicht bearbeitbar. Nutze die Zoomschaltflächen oder Strg und Mausrad. Ziehe freie Bildfläche mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Eckpunkte und die markierte Parzellenfläche bleiben direkt bearbeitbar.</p>
+            <p class="small text-secondary mt-2 mb-0">Die übrigen Parzellen sind zur Orientierung sichtbar, aber nicht bearbeitbar. Ecken rasten nur in unmittelbarer Nähe ein. Die Parallelhilfe erscheint, wenn die nächste Kante annähernd parallel zu einer vorhandenen Kante verläuft. Nutze die Zoomschaltflächen oder Strg und Mausrad. Ziehe freie Bildfläche mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Eckpunkte und die markierte Parzellenfläche bleiben direkt bearbeitbar.</p>
 
             <form class="mt-3" method="POST" data-map-form>
                 @csrf
