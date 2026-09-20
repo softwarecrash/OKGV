@@ -53,6 +53,9 @@
                             </td>
                             <td>{{ $submission->status->label() }}</td>
                             <td style="min-width:18rem">
+                                @if (! $submission->billing_period_id)
+                                    <div class="small text-info mb-2">Für eine künftige Abrechnungsperiode vorgemerkt.</div>
+                                @endif
                                 @can('review', $submission)
                                     <form class="d-flex gap-2 mb-2" method="POST" action="{{ route('work-hour-submissions.approve', $submission) }}">
                                         @csrf

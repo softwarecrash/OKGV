@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0.147] - 2026-09-20
+
+### Änderungen
+
+- Arbeitsstunden können jetzt auch ohne bereits angelegte Abrechnungsperiode gemeldet und geprüft werden. Sie bleiben vorgemerkt und werden beim Anlegen einer passenden offenen Periode automatisch zugeordnet und angerechnet.
+- Abgeschlossene Abrechnungsperioden bleiben für nachträgliche Arbeitsstundenmeldungen gesperrt.
+
 ## [0.2.0.146] - 2026-09-20
 
 ### Änderungen

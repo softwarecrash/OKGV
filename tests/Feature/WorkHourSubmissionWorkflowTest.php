@@ -117,6 +117,58 @@ class WorkHourSubmissionWorkflowTest extends TestCase
         ]);
     }
 
+    public function test_work_hours_can_be_submitted_before_a_billing_period_exists(): void
+    {
+        $tenant = User::factory()->create(['role' => UserRole::Tenant]);
+        $member = Member::factory()->create(['user_id' => $tenant->id]);
+        $parcel = Parcel::factory()->create();
+        ParcelTenant::factory()->create([
+            'parcel_id' => $parcel->id,
+            'member_id' => $member->id,
+            'starts_at' => '2020-01-01',
+            'is_primary' => true,
+        ]);
+
+        $this->actingAs($tenant)
+            ->post(route('work-hour-submissions.store'), [
+                'parcel_id' => $parcel->id,
+                'worked_at' => '2026-07-01',
+                'hours' => '3.00',
+                'description' => 'Gemeinschaftsweg gepflegt.',
+            ])
+            ->assertRedirect(route('work-hour-submissions.index'))
+            ->assertSessionHas('status', 'Arbeitsstunden wurden vorgemerkt. Sie werden beim Anlegen einer passenden offenen Abrechnungsperiode automatisch berücksichtigt.');
+
+        $submission = WorkHourSubmission::query()->firstOrFail();
+        $this->assertNull($submission->billing_period_id);
+        $this->assertSame(WorkHourSubmissionStatus::Pending, $submission->status);
+
+        $board = User::factory()->create(['role' => UserRole::Board]);
+        $this->actingAs($board)
+            ->post(route('work-hour-submissions.approve', $submission), ['review_note' => 'Geprüft.'])
+            ->assertRedirect();
+        $this->assertSame(WorkHourSubmissionStatus::Approved, $submission->fresh()->status);
+        $this->assertNull($submission->fresh()->billing_period_id);
+
+        $this->actingAs($board)
+            ->post(route('billing-periods.store'), [
+                'name' => 'Abrechnung 2026',
+                'starts_at' => '2026-01-01',
+                'ends_at' => '2026-12-31',
+                'due_at' => '2027-02-01',
+            ])
+            ->assertRedirect();
+
+        $period = BillingPeriod::query()->where('name', 'Abrechnung 2026')->firstOrFail();
+        $this->assertSame($period->id, $submission->fresh()->billing_period_id);
+        $this->assertDatabaseHas('work_hours', [
+            'billing_period_id' => $period->id,
+            'parcel_id' => $parcel->id,
+            'submission_hours_done' => 3,
+            'hours_done' => 3,
+        ]);
+    }
+
     public function test_tenant_without_assigned_parcel_sees_an_explanation(): void
     {
         $tenant = User::factory()->create(['role' => UserRole::Tenant]);

@@ -24,7 +24,7 @@
         @else
             <div class="alert alert-info">
                 @if ($canManageAllParcels)
-                    Wähle die betroffene Parzelle aus und beschreibe die Tätigkeit nachvollziehbar. Die offenen Stunden der aktuellsten bearbeitbaren Abrechnungsperiode werden in der Auswahl angezeigt, sofern ein Arbeitsstundenkonto existiert.
+                    Wähle die betroffene Parzelle aus und beschreibe die Tätigkeit nachvollziehbar. Die offenen Stunden der aktuellsten bearbeitbaren Abrechnungsperiode werden in der Auswahl angezeigt. Liegt das Arbeitsdatum noch in keiner offenen Periode, wird die Meldung vorgemerkt und später automatisch zugeordnet.
                 @else
                     Beschreibe die Tätigkeit nachvollziehbar. Ein Foto ist optional und bleibt ausschließlich für berechtigte Prüfer sichtbar.
                 @endif

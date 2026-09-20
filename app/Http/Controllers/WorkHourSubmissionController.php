@@ -128,9 +128,11 @@ class WorkHourSubmissionController extends Controller
             $request->user(),
         );
 
-        $statusMessage = $submission->status === WorkHourSubmissionStatus::Approved
+        $statusMessage = ! $submission->billing_period_id
+            ? 'Arbeitsstunden wurden vorgemerkt. Sie werden beim Anlegen einer passenden offenen Abrechnungsperiode automatisch berücksichtigt.'
+            : ($submission->status === WorkHourSubmissionStatus::Approved
             ? 'Arbeitsstunden wurden stellvertretend erfasst und direkt anerkannt.'
-            : 'Arbeitsstunden wurden eingereicht und warten auf Prüfung.';
+            : 'Arbeitsstunden wurden eingereicht und warten auf Prüfung.');
 
         return redirect()->route('work-hour-submissions.index')
             ->with('status', $statusMessage);

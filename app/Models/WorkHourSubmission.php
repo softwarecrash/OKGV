@@ -32,7 +32,7 @@ class WorkHourSubmission extends Model
     {
         static::updating(function (WorkHourSubmission $submission): void {
             if ($submission->getRawOriginal('status') !== WorkHourSubmissionStatus::Pending->value) {
-                $allowedDirtyFields = ['tenant_acknowledged_at', 'updated_at'];
+                $allowedDirtyFields = ['billing_period_id', 'tenant_acknowledged_at', 'updated_at'];
 
                 if (array_diff(array_keys($submission->getDirty()), $allowedDirtyFields) === []) {
                     return;

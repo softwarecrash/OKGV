@@ -12,6 +12,7 @@ use App\Services\AuditLogger;
 use App\Services\BillingCalculator;
 use App\Services\BillingPeriodManager;
 use App\Services\WorkHourManager;
+use App\Services\WorkHourSubmissionManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +24,7 @@ class BillingPeriodController extends Controller
         private readonly BillingPeriodManager $periodManager,
         private readonly BillingCalculator $billingCalculator,
         private readonly WorkHourManager $workHourManager,
+        private readonly WorkHourSubmissionManager $workHourSubmissionManager,
     ) {}
 
     public function index(): View
@@ -49,20 +51,23 @@ class BillingPeriodController extends Controller
 
     public function store(BillingPeriodRequest $request): RedirectResponse
     {
-        [$period, $createdAccounts] = DB::transaction(function () use ($request): array {
+        [$period, $createdAccounts, $assignedSubmissions] = DB::transaction(function () use ($request): array {
             $period = $this->periodManager->save($request->validated());
             $createdAccounts = FeatureModule::WorkHours->enabled()
                 ? $this->workHourManager->initializePeriod($period, $request->user())
                 : 0;
+            $assignedSubmissions = FeatureModule::WorkHours->enabled()
+                ? $this->workHourSubmissionManager->assignUnassignedToPeriod($period, $request->user())
+                : 0;
             AuditLogger::log('billing.period.created', $request->user(), $period);
 
-            return [$period, $createdAccounts];
+            return [$period, $createdAccounts, $assignedSubmissions];
         });
 
         return redirect()->route('billing-periods.show', $period)
             ->with(
                 'status',
-                "Abrechnungsperiode wurde angelegt. {$createdAccounts} Arbeitsstundenkonten wurden automatisch eingerichtet.",
+                "Abrechnungsperiode wurde angelegt. {$createdAccounts} Arbeitsstundenkonten und {$assignedSubmissions} vorgemerkte Arbeitsstundenmeldungen wurden automatisch zugeordnet.",
             );
     }
 
@@ -101,7 +106,7 @@ class BillingPeriodController extends Controller
         BillingPeriodRequest $request,
         BillingPeriod $billingPeriod,
     ): RedirectResponse {
-        [$period, $createdAccounts] = DB::transaction(
+        [$period, $createdAccounts, $assignedSubmissions] = DB::transaction(
             function () use ($request, $billingPeriod): array {
                 $period = $this->periodManager->save(
                     $request->validated(),
@@ -111,16 +116,19 @@ class BillingPeriodController extends Controller
                 $createdAccounts = FeatureModule::WorkHours->enabled()
                     ? $this->workHourManager->initializePeriod($period, $request->user())
                     : 0;
+                $assignedSubmissions = FeatureModule::WorkHours->enabled()
+                    ? $this->workHourSubmissionManager->assignUnassignedToPeriod($period, $request->user())
+                    : 0;
                 AuditLogger::log('billing.period.updated', $request->user(), $period);
 
-                return [$period, $createdAccounts];
+                return [$period, $createdAccounts, $assignedSubmissions];
             },
         );
 
         return redirect()->route('billing-periods.show', $period)
             ->with(
                 'status',
-                "Abrechnungsperiode wurde aktualisiert. {$createdAccounts} fehlende Arbeitsstundenkonten wurden automatisch ergänzt.",
+                "Abrechnungsperiode wurde aktualisiert. {$createdAccounts} fehlende Arbeitsstundenkonten und {$assignedSubmissions} vorgemerkte Arbeitsstundenmeldungen wurden automatisch zugeordnet.",
             );
     }
 

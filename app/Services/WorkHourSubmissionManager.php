@@ -42,9 +42,9 @@ final class WorkHourSubmissionManager
                     ->whereDate('ends_at', '>=', $data['worked_at'])
                     ->first();
 
-                if (! $period || ! $period->isEditable()) {
+                if ($period && ! $period->isEditable()) {
                     throw ValidationException::withMessages([
-                        'worked_at' => 'Für dieses Datum gibt es keine bearbeitbare Abrechnungsperiode.',
+                        'worked_at' => 'Die Abrechnungsperiode für dieses Datum ist bereits abgeschlossen. Arbeitsstunden können dort nicht mehr nachträglich erfasst werden.',
                     ]);
                 }
 
@@ -68,7 +68,7 @@ final class WorkHourSubmissionManager
                 }
 
                 $submission = WorkHourSubmission::create([
-                    'billing_period_id' => $period->id,
+                    'billing_period_id' => $period?->id,
                     'parcel_id' => $data['parcel_id'],
                     'submitted_by' => $actor->id,
                     'worked_at' => $data['worked_at'],
@@ -95,7 +95,7 @@ final class WorkHourSubmissionManager
                     'delegated_by_management' => $canManageWorkEvents,
                 ]);
 
-                if ($canManageWorkEvents) {
+                if ($canManageWorkEvents && $period) {
                     $this->workHourManager->synchronizeParcel($period, $submission->parcel_id, $actor);
                     AuditLogger::log('work_hour_submission.approved', $actor, $submission, [
                         'delegated_by_management' => true,
@@ -119,6 +119,39 @@ final class WorkHourSubmissionManager
         WorkHourSubmissionStatus $status,
         ?string $note,
     ): WorkHourSubmission {
+        if (! $submission->billing_period_id) {
+            $submission = DB::transaction(function () use ($submission, $actor, $status, $note): WorkHourSubmission {
+                $record = WorkHourSubmission::query()->lockForUpdate()->findOrFail($submission->id);
+
+                if ($record->status !== WorkHourSubmissionStatus::Pending) {
+                    throw ValidationException::withMessages([
+                        'status' => 'Diese Arbeitsstundenmeldung wurde bereits bearbeitet.',
+                    ]);
+                }
+
+                $record->update([
+                    'status' => $status,
+                    'reviewed_by' => $actor->id,
+                    'reviewed_at' => now(),
+                    'review_note' => $note,
+                ]);
+                AuditLogger::log(
+                    $status === WorkHourSubmissionStatus::Approved
+                        ? 'work_hour_submission.approved'
+                        : 'work_hour_submission.rejected',
+                    $actor,
+                    $record,
+                    ['awaiting_billing_period' => true],
+                );
+
+                return $record->refresh();
+            });
+
+            $this->notifier->workHourSubmissionReviewed($submission->load('submitter'));
+
+            return $submission;
+        }
+
         $submission = $this->periodManager->changeCalculationInputs(
             $submission->billingPeriod,
             $actor,
@@ -154,5 +187,41 @@ final class WorkHourSubmissionManager
         $this->notifier->workHourSubmissionReviewed($submission->load('submitter'));
 
         return $submission;
+    }
+
+    public function assignUnassignedToPeriod(BillingPeriod $period, User $actor): int
+    {
+        return $this->periodManager->changeCalculationInputs(
+            $period,
+            $actor,
+            'work_hour_submissions_assigned_to_period',
+            function (BillingPeriod $lockedPeriod) use ($actor): int {
+                $submissions = WorkHourSubmission::query()
+                    ->whereNull('billing_period_id')
+                    ->whereDate('worked_at', '>=', $lockedPeriod->starts_at)
+                    ->whereDate('worked_at', '<=', $lockedPeriod->ends_at)
+                    ->lockForUpdate()
+                    ->get();
+
+                if ($submissions->isEmpty()) {
+                    return 0;
+                }
+
+                foreach ($submissions as $submission) {
+                    $submission->update(['billing_period_id' => $lockedPeriod->id]);
+                    AuditLogger::log('work_hour_submission.assigned_to_period', $actor, $submission, [
+                        'billing_period_id' => $lockedPeriod->id,
+                    ]);
+                }
+
+                $submissions
+                    ->where('status', WorkHourSubmissionStatus::Approved)
+                    ->pluck('parcel_id')
+                    ->unique()
+                    ->each(fn (int $parcelId) => $this->workHourManager->synchronizeParcel($lockedPeriod, $parcelId, $actor));
+
+                return $submissions->count();
+            },
+        );
     }
 }

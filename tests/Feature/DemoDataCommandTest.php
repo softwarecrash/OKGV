@@ -72,12 +72,13 @@ class DemoDataCommandTest extends TestCase
             'paechter3.demo@okgv.test',
             'paechter4.demo@okgv.test',
         ] as $email) {
+            $user = User::query()->where('email', $email)->firstOrFail();
             $this->post(route('login'), [
                 'email' => $email,
                 'password' => 'Demo1234!',
-            ])->assertRedirect('/dashboard');
+            ])->assertRedirect($user->role === UserRole::Tenant ? route('tenant-portal.index') : '/dashboard');
 
-            $this->assertAuthenticatedAs(User::query()->where('email', $email)->firstOrFail());
+            $this->assertAuthenticatedAs($user);
             $this->post(route('logout'))->assertRedirect('/');
             $this->assertGuest();
         }
@@ -99,12 +100,13 @@ class DemoDataCommandTest extends TestCase
             'paechter3.demo@okgv.test',
             'paechter4.demo@okgv.test',
         ] as $email) {
+            $user = User::query()->where('email', $email)->firstOrFail();
             $this->post(route('login'), [
                 'email' => $email,
                 'password' => 'Demo1234!',
-            ])->assertRedirect('/dashboard');
+            ])->assertRedirect($user->role === UserRole::Tenant ? route('tenant-portal.index') : '/dashboard');
 
-            $this->assertAuthenticatedAs(User::query()->where('email', $email)->firstOrFail());
+            $this->assertAuthenticatedAs($user);
             $this->post(route('logout'))->assertRedirect('/');
             $this->assertGuest();
         }
