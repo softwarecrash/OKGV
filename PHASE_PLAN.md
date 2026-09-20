@@ -392,6 +392,10 @@ Browser und enthalten keine Fotos.
 - [ ] Beschlüsse und Aufgaben extrahieren
 - [ ] Lokale oder datenschutzkonforme Modellnutzung bewerten
 
+## Langfristiger Backlog
+
+- [ ] Nachträglichen historischen Vorgängerzähler erfassen: Einen bereits angelegten Zähler als Nachfolger einordnen, Vorgänger mit Einbau-, Ausbau- und Endstand ergänzen sowie bestehende Ablesungen und Abrechnungszeiträume auf zeitliche Konsistenz prüfen.
+
 ## Nächster Schritt
 
 Die Stabilisierung von Registrierung, Rechtewechseln, Demo-Schutz und
