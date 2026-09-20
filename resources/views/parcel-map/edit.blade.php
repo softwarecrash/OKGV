@@ -95,11 +95,6 @@
                 Wähle eine Parzelle. Setze anschließend mindestens drei Punkte. Eckpunkte lassen sich ziehen; die gefüllte Fläche kann als Ganzes verschoben werden.
             </div>
 
-            <div class="small text-secondary mb-3" aria-label="Zeichenhilfen">
-                <kbd>Strg</kbd>/<kbd>Cmd</kbd> = Einrasten · <kbd>Umschalt</kbd> = Parallel
-                <span class="ms-2" data-map-assist-status aria-live="polite"></span>
-            </div>
-
             <div class="parcel-map-toolbar mb-2" aria-label="Kartengröße">
                 <div class="btn-group" role="group" aria-label="Lageplan vergrößern oder verkleinern">
                     <button class="btn btn-sm btn-outline-secondary" type="button" data-map-zoom-out title="Verkleinern">−</button>
@@ -164,6 +159,10 @@
                     <circle class="parcel-map-snap-indicator" data-map-snap-indicator r="7" hidden pointer-events="none" vector-effect="non-scaling-stroke"/>
                     <g data-map-handles></g>
                 </svg>
+            </div>
+            <div class="small text-secondary mt-2" aria-label="Zeichenhilfen">
+                <kbd>Strg</kbd>/<kbd>Cmd</kbd> = Einrasten · <kbd>Umschalt</kbd> = Parallel
+                <span class="ms-2" data-map-assist-status aria-live="polite"></span>
             </div>
             <p class="small text-secondary mt-2 mb-0">Die übrigen Parzellen sind zur Orientierung sichtbar, aber nicht bearbeitbar. Nutze die Zoomschaltflächen oder Strg und Mausrad. Ziehe freie Bildfläche mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Eckpunkte und die markierte Parzellenfläche bleiben direkt bearbeitbar.</p>
 
