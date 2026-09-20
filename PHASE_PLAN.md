@@ -63,6 +63,24 @@ vorherigen Phase geprüft sein.
 - [x] Vorauszahlungen und Verbrauchsnachberechnungen in einem Rechnungslauf
 - [x] Eigene Leistungszeiträume je Preis
 
+### Vorgezogene Teilphase 3.1: Jahresabrechnung nach bestätigtem Ablesestand
+
+- [ ] Reale Ablesedaten unverändert speichern; keine künstliche Rückdatierung auf den Jahreswechsel verlangen
+- [ ] Abrechnungsstände je Periode und Zählersegment versionierbar speichern: Ausgangs- und Endstand, jeweilige Ablesedaten, referenzierte Zählerstände oder Wechselstände, Verbrauch und Auswahlart
+- [ ] Startstand vorrangig aus dem für die Vorjahresabrechnung verwendeten Endstand ableiten; Zählerwechsel über mehrere Segmente berücksichtigen
+- [ ] Kandidatenliste aus bestätigten Zählerständen bereitstellen und den neuesten plausiblen Stand als Vorschlag markieren, auch wenn dessen echtes Datum nach dem Periodenende liegt
+- [ ] Abrechnungsansicht für Vorstand und berechtigte Fachrollen: Ablesestände je Parzelle/Zähler prüfen, auswählen, begründen und vor der Berechnung verbindlich festlegen
+- [ ] Verbrauchsrechnung ausschließlich aus den festgelegten Abrechnungsständen erzeugen; Auswahl und Werte in Rechnungspositionen snapshotten
+- [ ] Fehlende Start- oder Endstände vor der Berechnung sichtbar blockieren statt Verbrauch stillschweigend mit null anzusetzen
+- [ ] Nachträgliche Meldungen vor Freigabe über Neuauswahl und Neuberechnung berücksichtigen; nach Freigabe nur noch über die Folgeabrechnung oder eine dokumentierte Korrektur behandeln
+- [ ] Rechte, Auditlog, E-Mail-Hinweise für fehlende Stände, Zählerwechsel, Pächterwechsel und historische Bestände prüfen
+- [ ] Migrations-, Regressions- und Fachtests für verspätete Meldungen, Jahreswechsel, Zählerwechsel, mehrere Parzellen und bereits freigegebene Rechnungen ergänzen
+
+Diese Teilphase bildet die bisherige Vereinspraxis ab: Für die Jahresabrechnung
+wird der zuletzt bestätigte Ablesestand verwendet und gegen den in der
+Vorjahresabrechnung festgehaltenen Stand gerechnet. Die tatsächlichen
+Ablesedaten bleiben transparent; der Abrechnungszeitpunkt wird nicht geschätzt.
+
 ## Phase 4: SEPA
 
 - [x] SEPA-Mandate
