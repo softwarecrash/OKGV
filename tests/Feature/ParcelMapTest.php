@@ -48,7 +48,8 @@ class ParcelMapTest extends TestCase
         $this->actingAs($administrator)
             ->get(route('parcel-map.background'))
             ->assertOk()
-            ->assertHeader('X-Content-Type-Options', 'nosniff');
+            ->assertHeader('X-Content-Type-Options', 'nosniff')
+            ->assertHeader('Cache-Control', 'immutable, max-age=31536000, private');
         $this->assertDatabaseHas('audit_logs', [
             'action' => 'parcel_map.background.updated',
             'subject_id' => $settings->id,

@@ -108,7 +108,8 @@ class ParcelMapController extends Controller
             $settings->map_background_original_name,
             [
                 'Content-Type' => $settings->map_background_mime,
-                'Cache-Control' => 'private, max-age=3600',
+                // The versioned image URL changes whenever the background is replaced.
+                'Cache-Control' => 'private, max-age=31536000, immutable',
                 'X-Content-Type-Options' => 'nosniff',
             ],
         );

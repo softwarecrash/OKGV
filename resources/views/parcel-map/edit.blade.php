@@ -113,7 +113,7 @@
                     data-map-zoom-target>
                     @if ($settings->map_background_path)
                         <image
-                            href="{{ route('parcel-map.background', ['v' => $settings->updated_at?->timestamp]) }}"
+                            href="{{ route('parcel-map.background', ['v' => hash('sha256', $settings->map_background_path)]) }}"
                             width="{{ $settings->map_background_width }}"
                             height="{{ $settings->map_background_height }}"
                             preserveAspectRatio="none"/>
