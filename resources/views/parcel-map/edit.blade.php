@@ -95,16 +95,9 @@
                 Wähle eine Parzelle. Setze anschließend mindestens drei Punkte. Eckpunkte lassen sich ziehen; die gefüllte Fläche kann als Ganzes verschoben werden.
             </div>
 
-            <div class="d-flex flex-wrap align-items-center gap-3 mb-3" aria-label="Zeichenhilfen">
-                <div class="form-check mb-0">
-                    <input class="form-check-input" id="map-snap-corners" type="checkbox" data-map-snap-corners checked>
-                    <label class="form-check-label" for="map-snap-corners">An fremden Ecken einrasten</label>
-                </div>
-                <div class="form-check mb-0">
-                    <input class="form-check-input" id="map-parallel-guide" type="checkbox" data-map-parallel-guide checked>
-                    <label class="form-check-label" for="map-parallel-guide">Parallele Kanten führen</label>
-                </div>
-                <span class="small text-secondary" data-map-assist-status aria-live="polite"></span>
+            <div class="small text-secondary mb-3" aria-label="Zeichenhilfen">
+                <strong>Zeichenhilfen:</strong> Halte <kbd>Strg</kbd> beziehungsweise <kbd>Cmd</kbd> zum Einrasten an fremden Ecken und <kbd>Umschalt</kbd> für parallele Kanten gedrückt.
+                <span class="ms-2" data-map-assist-status aria-live="polite"></span>
             </div>
 
             <div class="parcel-map-toolbar mb-2" aria-label="Kartengröße">
@@ -172,7 +165,7 @@
                     <g data-map-handles></g>
                 </svg>
             </div>
-            <p class="small text-secondary mt-2 mb-0">Die übrigen Parzellen sind zur Orientierung sichtbar, aber nicht bearbeitbar. Ecken rasten nur in unmittelbarer Nähe ein. Die Parallelhilfe erscheint, wenn die nächste Kante annähernd parallel zu einer vorhandenen Kante verläuft. Nutze die Zoomschaltflächen oder Strg und Mausrad. Ziehe freie Bildfläche mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Eckpunkte und die markierte Parzellenfläche bleiben direkt bearbeitbar.</p>
+            <p class="small text-secondary mt-2 mb-0">Die übrigen Parzellen sind zur Orientierung sichtbar, aber nicht bearbeitbar. Beim Gedrückthalten von Strg oder Cmd rasten Ecken nur in unmittelbarer Nähe ein. Halte Umschalt für die Parallelhilfe. Nutze die Zoomschaltflächen oder Strg und Mausrad. Ziehe freie Bildfläche mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Eckpunkte und die markierte Parzellenfläche bleiben direkt bearbeitbar.</p>
 
             <form class="mt-3" method="POST" data-map-form>
                 @csrf

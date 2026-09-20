@@ -363,8 +363,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const help = editor.querySelector('[data-map-help]');
         const activeLabel = editor.querySelector('[data-map-active-label]');
         const referenceParcels = editor.querySelectorAll('[data-map-reference-parcel]');
-        const snapCorners = editor.querySelector('[data-map-snap-corners]');
-        const parallelGuide = editor.querySelector('[data-map-parallel-guide]');
         const assistStatus = editor.querySelector('[data-map-assist-status]');
         const parallelLine = editor.querySelector('[data-map-parallel-line]');
         const snapIndicator = editor.querySelector('[data-map-snap-indicator]');
@@ -446,7 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const findSnapPoint = (event) => {
-            if (!(snapCorners instanceof HTMLInputElement) || !snapCorners.checked) {
+            if (!event.ctrlKey && !event.metaKey) {
                 return null;
             }
 
@@ -480,8 +478,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        const findParallel = (point, origin) => {
-            if (!(parallelGuide instanceof HTMLInputElement) || !parallelGuide.checked || !origin) {
+        const findParallel = (event, point, origin) => {
+            if (!event.shiftKey || !origin) {
                 return null;
             }
 
@@ -555,7 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const snappedPoint = findSnapPoint(event);
-            const parallel = snappedPoint ? null : findParallel(rawPoint, origin);
+            const parallel = snappedPoint ? null : findParallel(event, rawPoint, origin);
             const point = snappedPoint ?? parallel?.point ?? rawPoint;
 
             if (snapIndicator instanceof SVGCircleElement) {
