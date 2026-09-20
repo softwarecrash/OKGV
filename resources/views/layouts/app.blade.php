@@ -55,6 +55,9 @@
                                 $waitingListEnabled = App\Enums\FeatureModule::WaitingList->enabled();
                                 $inventoryEnabled = App\Enums\FeatureModule::Inventory->enabled();
                                 $canViewMembers = auth()->user()->canViewAllMasterData();
+                                $parcelNavigationLabel = auth()->user()->canViewAllMasterData()
+                                    ? 'Parzellenübersicht'
+                                    : (auth()->user()->activeParcelCount() === 1 ? 'Meine Parzelle' : 'Meine Parzellen');
                                 $canViewRegistrations = $tenantPortalEnabled && auth()->user()->can('viewAny', App\Models\RegistrationRequest::class);
                                 $canViewWaitingList = $waitingListEnabled && auth()->user()->can('viewAny', App\Models\WaitingListEntry::class);
                                 $canViewTenantTransitions = auth()->user()->can('viewAny', App\Models\TenantTransition::class);
@@ -122,7 +125,7 @@
                                         Parzellen
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ route('parcels.index') }}">{{ auth()->user()->canViewAllMasterData() ? 'Parzellenübersicht' : 'Meine Parzellen' }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('parcels.index') }}">{{ $parcelNavigationLabel }}</a></li>
                                         <li><a class="dropdown-item" href="{{ route('parcel-map.index') }}">Lageplan</a></li>
                                         @if ($canViewGardenInspections)
                                             <li><a class="dropdown-item" href="{{ route('garden-inspections.index') }}">Gartenbegehungen</a></li>

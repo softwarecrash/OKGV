@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0.145] - 2026-09-20
+
+### Änderungen
+
+- Freigegebene Pächter starten nach der Anmeldung direkt im Pächterportal; Verwaltungsrollen bleiben beim Dashboard.
+- Die Parzellennavigation verwendet bei genau einer aktiven Zuordnung die Einzahl `Meine Parzelle`.
+
 ## [0.2.0.144] - 2026-09-20
 
 ### Änderungen

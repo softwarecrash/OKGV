@@ -218,7 +218,7 @@ class TenantPortalTest extends TestCase
         $this->post(route('login'), [
             'email' => $user->email,
             'password' => 'SicheresPasswort123',
-        ])->assertRedirect('/dashboard');
+        ])->assertRedirect(route('tenant-portal.index'));
         $this->assertAuthenticatedAs($user);
     }
 

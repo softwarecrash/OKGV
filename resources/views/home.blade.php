@@ -21,7 +21,7 @@
                             <div class="col-12"><a class="btn btn-primary w-100" href="{{ route('tenant-portal.index') }}">Mein Pächterportal öffnen</a></div>
                         @endif
                         @can('viewAny', App\Models\Parcel::class)
-                            <div class="col-md-6"><a class="btn btn-outline-primary w-100" href="{{ route('parcels.index') }}">{{ auth()->user()->canViewAllMasterData() ? 'Parzellen und Pächter' : 'Meine Parzellen' }}</a></div>
+                            <div class="col-md-6"><a class="btn btn-outline-primary w-100" href="{{ route('parcels.index') }}">{{ auth()->user()->canViewAllMasterData() ? 'Parzellen und Pächter' : (auth()->user()->activeParcelCount() === 1 ? 'Meine Parzelle' : 'Meine Parzellen') }}</a></div>
                         @endcan
                         @if (App\Enums\FeatureModule::Meters->enabled())
                         @can('viewAny', App\Models\Meter::class)

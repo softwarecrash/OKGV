@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Enums\UserRole;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -26,6 +27,19 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = '/dashboard';
+
+    protected function redirectTo(): string
+    {
+        $user = auth()->user();
+
+        if ($user?->role === UserRole::Tenant
+            && $user->hasTenantAccess()
+            && ! $user->hasPendingRegistrationApproval()) {
+            return route('tenant-portal.index');
+        }
+
+        return '/dashboard';
+    }
 
     /**
      * Create a new controller instance.

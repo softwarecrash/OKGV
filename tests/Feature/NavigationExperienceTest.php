@@ -11,6 +11,8 @@ use App\Models\Invoice;
 use App\Models\Member;
 use App\Models\Meter;
 use App\Models\MeterReadingSubmission;
+use App\Models\Parcel;
+use App\Models\ParcelTenant;
 use App\Models\RegistrationRequest;
 use App\Models\User;
 use App\Services\ActionIndicatorService;
@@ -52,6 +54,7 @@ class NavigationExperienceTest extends TestCase
     {
         $tenant = User::factory()->create(['role' => UserRole::Tenant]);
         $member = Member::factory()->create(['user_id' => $tenant->id]);
+        ParcelTenant::factory()->create(['member_id' => $member->id, 'parcel_id' => Parcel::factory()->create()->id]);
         $otherTenant = User::factory()->create(['role' => UserRole::Tenant]);
         $otherMember = Member::factory()->create(['user_id' => $otherTenant->id]);
 
@@ -86,7 +89,7 @@ class NavigationExperienceTest extends TestCase
             ->assertSee('1 offene Rechnungen')
             ->assertDontSee('Registrierungsanfragen')
             ->assertSee('Meine Daten')
-            ->assertSee('Meine Parzellen')
+            ->assertSee('Meine Parzelle')
             ->assertDontSee('Mitglieder verwalten');
     }
 

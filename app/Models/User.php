@@ -73,6 +73,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Member::class);
     }
 
+    public function activeParcelCount(): int
+    {
+        $member = $this->member()->first();
+
+        return $member
+            ? $member->parcelTenancies()->activeOn()->distinct('parcel_id')->count('parcel_id')
+            : 0;
+    }
+
     public function permissionProfile(): BelongsTo
     {
         return $this->belongsTo(PermissionProfile::class);
