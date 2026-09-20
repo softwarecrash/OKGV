@@ -62,6 +62,15 @@ class ParcelMapController extends Controller
         ]);
     }
 
+    public function editBackground(): View
+    {
+        $this->authorize('manageMap', Parcel::class);
+
+        return view('parcel-map.background-edit', [
+            'settings' => ApplicationSetting::current(),
+        ]);
+    }
+
     public function updateBackground(
         ParcelMapBackgroundRequest $request,
     ): RedirectResponse {

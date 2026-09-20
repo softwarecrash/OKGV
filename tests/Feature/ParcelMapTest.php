@@ -211,7 +211,16 @@ class ParcelMapTest extends TestCase
             ->assertSee('<kbd>Umschalt</kbd> = Parallel', false)
             ->assertSee('Strg und Mausrad')
             ->assertDontSee('data-map-pan-toggle', false)
-            ->assertSee('Ziehe freie Bildfläche');
+            ->assertSee('Ziehe freie Bildfläche')
+            ->assertSee(route('parcel-map.background.edit'), false)
+            ->assertDontSee('Quelle und Nutzungsrecht');
+
+        $this->actingAs($administrator)
+            ->get(route('parcel-map.background.edit'))
+            ->assertOk()
+            ->assertSee('Lageplan-Hintergrund verwalten')
+            ->assertSee('Quelle und Nutzungsrecht')
+            ->assertDontSee('data-parcel-map-editor', false);
 
         $unplacedParcel = Parcel::factory()->create(['parcel_number' => 'PLAN-NEU']);
         $this->actingAs($administrator)

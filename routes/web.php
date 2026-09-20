@@ -477,6 +477,8 @@ Route::middleware(['auth', 'verified', 'registration.approved'])->group(function
         ->name('parcel-map.background');
     Route::get('parcel-map/edit', [ParcelMapController::class, 'edit'])
         ->name('parcel-map.edit');
+    Route::get('parcel-map/background/manage', [ParcelMapController::class, 'editBackground'])
+        ->name('parcel-map.background.edit');
     Route::put('parcel-map/background', [ParcelMapController::class, 'updateBackground'])
         ->name('parcel-map.background.update');
     Route::put('parcel-map/parcels/{parcel}', [ParcelMapController::class, 'updatePolygon'])
