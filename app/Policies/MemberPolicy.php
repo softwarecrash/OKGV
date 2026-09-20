@@ -9,7 +9,7 @@ class MemberPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->canViewAllMasterData() || $user->member()->exists();
+        return $user->canViewAllMasterData();
     }
 
     public function view(User $user, Member $member): bool

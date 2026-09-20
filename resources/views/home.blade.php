@@ -20,9 +20,6 @@
                         @if (App\Enums\FeatureModule::TenantPortal->enabled() && auth()->user()->hasTenantAccess())
                             <div class="col-12"><a class="btn btn-primary w-100" href="{{ route('tenant-portal.index') }}">Mein Pächterportal öffnen</a></div>
                         @endif
-                        @can('viewAny', App\Models\Member::class)
-                            <div class="col-md-6"><a class="btn btn-primary w-100" href="{{ route('members.index') }}">Mitglieder verwalten</a></div>
-                        @endcan
                         @can('viewAny', App\Models\Parcel::class)
                             <div class="col-md-6"><a class="btn btn-outline-primary w-100" href="{{ route('parcels.index') }}">Parzellen und Pächter</a></div>
                         @endcan

@@ -54,7 +54,7 @@
                                 $documentsEnabled = App\Enums\FeatureModule::Documents->enabled();
                                 $waitingListEnabled = App\Enums\FeatureModule::WaitingList->enabled();
                                 $inventoryEnabled = App\Enums\FeatureModule::Inventory->enabled();
-                                $canViewMembers = auth()->user()->can('viewAny', App\Models\Member::class);
+                                $canViewMembers = auth()->user()->canViewAllMasterData();
                                 $canViewRegistrations = $tenantPortalEnabled && auth()->user()->can('viewAny', App\Models\RegistrationRequest::class);
                                 $canViewWaitingList = $waitingListEnabled && auth()->user()->can('viewAny', App\Models\WaitingListEntry::class);
                                 $canViewTenantTransitions = auth()->user()->can('viewAny', App\Models\TenantTransition::class);
@@ -322,6 +322,11 @@
                                     <a class="dropdown-item" href="{{ route('privacy.index') }}">
                                         Datenschutz
                                     </a>
+                                    @if (auth()->user()->member()->exists())
+                                        <a class="dropdown-item" href="{{ route('account.member-profile.edit') }}">
+                                            Meine Daten
+                                        </a>
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('account.password.edit') }}">
                                         Passwort ändern
                                     </a>

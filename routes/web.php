@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountNotificationPreferenceController;
+use App\Http\Controllers\AccountMemberProfileController;
 use App\Http\Controllers\AccountPasswordController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\ApplicationSettingController;
@@ -172,6 +173,10 @@ Route::middleware(['auth', 'verified', 'registration.approved'])->group(function
         ->name('account.notifications.edit');
     Route::put('account/notifications', [AccountNotificationPreferenceController::class, 'update'])
         ->name('account.notifications.update');
+    Route::get('account/member-profile', [AccountMemberProfileController::class, 'edit'])
+        ->name('account.member-profile.edit');
+    Route::put('account/member-profile', [AccountMemberProfileController::class, 'update'])
+        ->name('account.member-profile.update');
     Route::get('privacy', [PrivacyController::class, 'index'])
         ->name('privacy.index');
     Route::put('privacy/sharing', [PrivacyController::class, 'update'])

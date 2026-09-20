@@ -84,7 +84,9 @@ class NavigationExperienceTest extends TestCase
             ->assertOk()
             ->assertSee('2 offene Portalhinweise')
             ->assertSee('1 offene Rechnungen')
-            ->assertDontSee('Registrierungsanfragen');
+            ->assertDontSee('Registrierungsanfragen')
+            ->assertSee('Meine Daten')
+            ->assertDontSee('Mitglieder verwalten');
     }
 
     public function test_administrator_finds_member_management_without_rights_management_in_account_menu(): void

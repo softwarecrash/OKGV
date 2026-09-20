@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0.142] - 2026-09-20
+
+### Änderungen
+
+- Pächter pflegen ihre eigenen Kontaktdaten jetzt über `Meine Daten` im Kontomenü statt über eine irreführende einpersonige Mitgliederübersicht.
+- Die Mitgliederübersicht und der Dashboard-Schnellzugriff stehen nur noch Konten mit Einsicht in alle Mitgliedsstammdaten zur Verfügung.
+
 ## [0.2.0.141] - 2026-09-17
 
 ### Fehlerbehebungen
