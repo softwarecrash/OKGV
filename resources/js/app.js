@@ -283,7 +283,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const targetIsEditorControl = isEditor
-                && (map.dataset.mapDrawing === 'true'
+                && (map.dataset.mapDragging === 'true'
+                    || map.dataset.mapDrawing === 'true'
                     || event.target instanceof SVGCircleElement
                     || event.target === map.querySelector('[data-map-polygon]'));
 
@@ -303,6 +304,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         viewport.addEventListener('pointermove', (event) => {
+            if (isEditor && map.dataset.mapDragging === 'true') {
+                return;
+            }
+
             if (!panDrag || panDrag.pointerId !== event.pointerId) {
                 return;
             }
@@ -409,6 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             viewport.style.overflow = locked ? 'hidden' : '';
+            editor.dataset.mapDragging = String(locked);
             document.documentElement.classList.toggle('parcel-map-dragging', locked);
         };
 
