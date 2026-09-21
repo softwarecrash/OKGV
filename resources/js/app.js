@@ -393,6 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let points = [];
         let drawing = false;
         let drag = null;
+        let dragSurface = null;
         editor.dataset.mapDrawing = 'false';
 
         const dimensions = {
@@ -786,73 +787,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        svg.addEventListener('pointerdown', (event) => {
-            if (!selection.value) {
-                return;
-            }
-
-            const rawPoint = svgPoint(event);
-
-            if (!rawPoint) {
-                return;
-            }
-
-            const handle = event.target instanceof Element
-                ? event.target.closest('[data-map-handles] circle')
-                : null;
-
-            if (handle instanceof SVGCircleElement) {
-                event.preventDefault();
-                event.stopPropagation();
-                drag = {
-                    type: 'point',
-                    index: Number(handle.dataset.index),
-                };
-                svg.setPointerCapture(event.pointerId);
-                return;
-            }
-
-            if (event.target === polygonElement) {
-                event.preventDefault();
-                event.stopPropagation();
-
-                if (!event.altKey || points.length < 3 || drawing) {
-                    return;
-                }
-
-                drag = {
-                    type: 'polygon',
-                    start: rawPoint,
-                    original: points.map((item) => ({ ...item })),
-                };
-                svg.setPointerCapture(event.pointerId);
-                return;
-            }
-
-            if (drawing) {
-                event.preventDefault();
-                event.stopPropagation();
-                const point = applyAssists(event, points.at(-1));
-
-                if (!point) {
-                    return;
-                }
-
-                points.push(point);
-                removeInput.value = '0';
-                clearAssists();
-                update();
-            }
-        });
-
-        svg.addEventListener('pointermove', (event) => {
-            if (drawing && !drag) {
-                applyAssists(event, points.at(-1));
-
-                return;
-            }
-
-            if (!drag) {
+        const moveDraggedShape = (event) => {
+            if (!drag || drag.pointerId !== event.pointerId) {
                 return;
             }
 
@@ -891,16 +827,106 @@ document.addEventListener('DOMContentLoaded', () => {
 
             removeInput.value = '0';
             update();
-        });
+        };
 
         const stopDragging = (event) => {
-            if (drag && svg.hasPointerCapture(event.pointerId)) {
-                svg.releasePointerCapture(event.pointerId);
+            if (!drag || drag.pointerId !== event.pointerId) {
+                return;
+            }
+
+            if (dragSurface instanceof HTMLElement) {
+                if (dragSurface.hasPointerCapture(event.pointerId)) {
+                    dragSurface.releasePointerCapture(event.pointerId);
+                }
+
+                dragSurface.remove();
+                dragSurface = null;
             }
 
             drag = null;
             clearAssists();
         };
+
+        const startDragSurface = (event) => {
+            dragSurface = document.createElement('div');
+            dragSurface.className = 'parcel-map-drag-surface';
+            document.body.append(dragSurface);
+            dragSurface.addEventListener('pointermove', moveDraggedShape);
+            dragSurface.addEventListener('pointerup', stopDragging);
+            dragSurface.addEventListener('pointercancel', stopDragging);
+            dragSurface.setPointerCapture(event.pointerId);
+        };
+
+        svg.addEventListener('pointerdown', (event) => {
+            if (!selection.value) {
+                return;
+            }
+
+            const rawPoint = svgPoint(event);
+
+            if (!rawPoint) {
+                return;
+            }
+
+            const handle = event.target instanceof Element
+                ? event.target.closest('[data-map-handles] circle')
+                : null;
+
+            if (handle instanceof SVGCircleElement) {
+                event.preventDefault();
+                event.stopPropagation();
+                drag = {
+                    type: 'point',
+                    index: Number(handle.dataset.index),
+                    pointerId: event.pointerId,
+                };
+                startDragSurface(event);
+                return;
+            }
+
+            if (event.target === polygonElement) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (!event.altKey || points.length < 3 || drawing) {
+                    return;
+                }
+
+                drag = {
+                    type: 'polygon',
+                    start: rawPoint,
+                    original: points.map((item) => ({ ...item })),
+                    pointerId: event.pointerId,
+                };
+                startDragSurface(event);
+                return;
+            }
+
+            if (drawing) {
+                event.preventDefault();
+                event.stopPropagation();
+                const point = applyAssists(event, points.at(-1));
+
+                if (!point) {
+                    return;
+                }
+
+                points.push(point);
+                removeInput.value = '0';
+                clearAssists();
+                update();
+            }
+        });
+
+        svg.addEventListener('pointermove', (event) => {
+            if (drawing && !drag) {
+                applyAssists(event, points.at(-1));
+
+                return;
+            }
+
+            moveDraggedShape(event);
+        });
 
         svg.addEventListener('pointerup', stopDragging);
         svg.addEventListener('pointercancel', stopDragging);
