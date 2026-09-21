@@ -120,7 +120,7 @@
                 </svg>
             </div>
             <div class="small text-secondary mt-2" aria-label="Zeichenhilfen">
-                <kbd>Strg</kbd>/<kbd>Cmd</kbd> = Einrasten · <kbd>Umschalt</kbd> = Parallel
+                <kbd>Strg</kbd>/<kbd>Cmd</kbd> = Einrasten · <kbd>Umschalt</kbd> = Parallel · <kbd>Alt</kbd> = Fläche verschieben
                 <span class="ms-2" data-map-assist-status aria-live="polite"></span>
             </div>
             <p class="small text-secondary mt-2 mb-0">Die übrigen Parzellen sind zur Orientierung sichtbar, aber nicht bearbeitbar. Nutze die Zoomschaltflächen oder Strg und Mausrad. Ziehe freie Bildfläche mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Knoten verschieben die Form; Alt und Ziehen auf der Fläche verschiebt die ganze Parzelle.</p>

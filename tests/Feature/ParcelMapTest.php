@@ -222,6 +222,7 @@ class ParcelMapTest extends TestCase
             ->assertSee('halte Alt gedrückt und ziehe die Fläche', false)
             ->assertSee('<kbd>Strg</kbd>/<kbd>Cmd</kbd> = Einrasten', false)
             ->assertSee('<kbd>Umschalt</kbd> = Parallel', false)
+            ->assertSee('<kbd>Alt</kbd> = Fläche verschieben', false)
             ->assertSee('Strg und Mausrad')
             ->assertDontSee('data-map-pan-toggle', false)
             ->assertSee('Ziehe freie Bildfläche')
