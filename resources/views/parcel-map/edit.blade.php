@@ -132,6 +132,7 @@
                 <input type="hidden" name="remove_polygon" value="0" data-map-remove-input>
                 <button class="btn btn-primary" type="submit" data-map-save disabled>Fläche speichern</button>
                 <span class="text-secondary ms-2" data-map-point-count>0 Punkte</span>
+                <span class="ms-2" data-map-save-status aria-live="polite"></span>
             </form>
         </div>
     </div>

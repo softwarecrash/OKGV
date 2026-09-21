@@ -7,6 +7,7 @@ use App\Http\Requests\ParcelMapPolygonRequest;
 use App\Models\ApplicationSetting;
 use App\Models\Parcel;
 use App\Services\ParcelMapManager;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -87,16 +88,23 @@ class ParcelMapController extends Controller
     public function updatePolygon(
         ParcelMapPolygonRequest $request,
         Parcel $parcel,
-    ): RedirectResponse {
+    ): JsonResponse|RedirectResponse {
         $validated = $request->validated();
 
-        $this->manager->updatePolygon(
+        $parcel = $this->manager->updatePolygon(
             $parcel,
             $request->boolean('remove_polygon')
                 ? null
                 : $validated['polygon'],
             $request->user(),
         );
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => "Fläche für Parzelle {$parcel->parcel_number} wurde gespeichert.",
+                'polygon' => $parcel->map_polygon,
+            ]);
+        }
 
         return back()->with('status', "Fläche für Parzelle {$parcel->parcel_number} wurde gespeichert.");
     }

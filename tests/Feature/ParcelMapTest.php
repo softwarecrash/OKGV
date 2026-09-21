@@ -188,6 +188,15 @@ class ParcelMapTest extends TestCase
         ]);
 
         $this->actingAs($administrator)
+            ->putJson(route('parcel-map.polygon.update', $parcel), [
+                'polygon' => json_encode($polygon, JSON_THROW_ON_ERROR),
+                'remove_polygon' => false,
+            ])
+            ->assertOk()
+            ->assertJsonPath('message', 'Fläche für Parzelle PLAN-01 wurde gespeichert.')
+            ->assertJsonPath('polygon.0.x', 100);
+
+        $this->actingAs($administrator)
             ->get(route('parcel-map.index'))
             ->assertOk()
             ->assertSee('PLAN-01')
@@ -207,6 +216,7 @@ class ParcelMapTest extends TestCase
             ->assertSee('data-parcel-map-zoom', false)
             ->assertSee('data-map-handle-radius="9"', false)
             ->assertSee('data-map-snap-radius="9"', false)
+            ->assertSee('data-map-save-status', false)
             ->assertSee('<kbd>Strg</kbd>/<kbd>Cmd</kbd> = Einrasten', false)
             ->assertSee('<kbd>Umschalt</kbd> = Parallel', false)
             ->assertSee('Strg und Mausrad')

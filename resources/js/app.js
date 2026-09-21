@@ -201,6 +201,18 @@ document.addEventListener('DOMContentLoaded', () => {
         let panDrag = null;
         let suppressClick = false;
 
+        const keepViewportProportion = () => {
+            const mapWidth = Number(map.dataset.width);
+            const mapHeight = Number(map.dataset.height);
+
+            if (mapWidth <= 0 || mapHeight <= 0 || viewport.clientWidth <= 0) {
+                return;
+            }
+
+            const naturalHeight = viewport.clientWidth * (mapHeight / mapWidth);
+            viewport.style.height = `${Math.round(Math.min(naturalHeight, window.innerHeight * 0.75))}px`;
+        };
+
         const updateEditorHandles = () => {
             const handleRadius = Number(map.dataset.mapHandleRadius ?? 9);
 
@@ -344,6 +356,8 @@ document.addEventListener('DOMContentLoaded', () => {
             suppressClick = false;
         }, true);
 
+        keepViewportProportion();
+        window.addEventListener('resize', keepViewportProportion);
         applyZoom(minimumZoom);
     });
 
@@ -362,10 +376,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const pointCount = editor.querySelector('[data-map-point-count]');
         const help = editor.querySelector('[data-map-help]');
         const activeLabel = editor.querySelector('[data-map-active-label]');
-        const referenceParcels = editor.querySelectorAll('[data-map-reference-parcel]');
         const assistStatus = editor.querySelector('[data-map-assist-status]');
         const parallelLine = editor.querySelector('[data-map-parallel-line]');
         const snapIndicator = editor.querySelector('[data-map-snap-indicator]');
+        const saveStatus = editor.querySelector('[data-map-save-status]');
 
         if (!(svg instanceof SVGSVGElement)
             || !(polygonElement instanceof SVGPolygonElement)
@@ -422,7 +436,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        const referencePolygons = () => Array.from(referenceParcels)
+        const referenceParcels = () => editor.querySelectorAll('[data-map-reference-parcel]');
+
+        const referencePolygons = () => Array.from(referenceParcels())
             .filter((reference) => reference.dataset.mapReferenceParcel !== selection.value)
             .map((reference) => {
                 try {
@@ -614,6 +630,64 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
+        const updateSavedReference = () => {
+            const option = selection.selectedOptions[0];
+
+            if (!option) {
+                return;
+            }
+
+            option.dataset.polygon = JSON.stringify(points);
+            let reference = Array.from(referenceParcels())
+                .find((item) => item.dataset.mapReferenceParcel === selection.value);
+
+            if (points.length === 0) {
+                reference?.remove();
+
+                return;
+            }
+
+            if (!reference) {
+                reference = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                reference.dataset.mapReferenceParcel = selection.value;
+                reference.setAttribute('pointer-events', 'none');
+
+                const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                polygon.setAttribute('fill-opacity', '0.28');
+                polygon.setAttribute('stroke', 'var(--bs-body-color)');
+                polygon.setAttribute('stroke-opacity', '0.65');
+                polygon.setAttribute('stroke-width', '3');
+                polygon.setAttribute('vector-effect', 'non-scaling-stroke');
+
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('fill', '#FFFFFF');
+                label.setAttribute('stroke', '#263238');
+                label.setAttribute('stroke-width', '4');
+                label.setAttribute('paint-order', 'stroke');
+                label.setAttribute('font-size', '24');
+                label.setAttribute('font-weight', '700');
+                label.setAttribute('text-anchor', 'middle');
+                label.setAttribute('dominant-baseline', 'middle');
+                reference.append(polygon, label);
+                svg.insertBefore(reference, polygonElement);
+            }
+
+            reference.dataset.mapReferencePolygon = JSON.stringify(points);
+            reference.hidden = true;
+            const polygon = reference.querySelector('polygon');
+            const label = reference.querySelector('text');
+            const centerX = points.reduce((sum, point) => sum + point.x, 0) / points.length;
+            const centerY = points.reduce((sum, point) => sum + point.y, 0) / points.length;
+
+            polygon?.setAttribute('points', points.map((point) => `${point.x},${point.y}`).join(' '));
+            polygon?.setAttribute('fill', option.dataset.color ?? '#66BB6A');
+            if (label instanceof SVGTextElement) {
+                label.textContent = option.dataset.number ?? '';
+                label.setAttribute('x', String(centerX));
+                label.setAttribute('y', String(centerY));
+            }
+        };
+
         const selectParcel = () => {
             const option = selection.selectedOptions[0];
             points = option?.dataset.polygon
@@ -621,7 +695,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 : [];
             form.action = option?.dataset.action ?? '';
             polygonElement.style.fill = option?.dataset.color ?? '#66BB6A';
-            referenceParcels.forEach((reference) => {
+            referenceParcels().forEach((reference) => {
                 reference.hidden = reference.dataset.mapReferenceParcel === selection.value;
             });
             drawing = false;
@@ -662,6 +736,55 @@ document.addEventListener('DOMContentLoaded', () => {
             clearAssists();
             help.textContent = 'Die Fläche wird beim Speichern aus dem Lageplan entfernt. Der Parzellendatensatz bleibt erhalten.';
             update();
+        });
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            if (!form.action || !(saveButton instanceof HTMLButtonElement) || saveButton.disabled) {
+                return;
+            }
+
+            saveButton.disabled = true;
+            if (saveStatus instanceof HTMLElement) {
+                saveStatus.className = 'text-secondary ms-2';
+                saveStatus.textContent = 'Speichert ...';
+            }
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    credentials: 'same-origin',
+                    headers: {
+                        Accept: 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                });
+                const payload = await response.json().catch(() => null);
+
+                if (!response.ok) {
+                    const errors = payload?.errors
+                        ? Object.values(payload.errors).flat().join(' ')
+                        : payload?.message;
+                    throw new Error(errors || 'Die Fläche konnte nicht gespeichert werden.');
+                }
+
+                updateSavedReference();
+                if (saveStatus instanceof HTMLElement) {
+                    saveStatus.className = 'text-success ms-2';
+                    saveStatus.textContent = payload?.message ?? 'Fläche gespeichert.';
+                }
+            } catch (error) {
+                if (saveStatus instanceof HTMLElement) {
+                    saveStatus.className = 'text-danger ms-2';
+                    saveStatus.textContent = error instanceof Error
+                        ? error.message
+                        : 'Die Fläche konnte nicht gespeichert werden.';
+                }
+            } finally {
+                update();
+            }
         });
 
         svg.addEventListener('pointerdown', (event) => {
