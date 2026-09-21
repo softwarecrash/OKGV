@@ -278,7 +278,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: false });
 
         viewport.addEventListener('pointerdown', (event) => {
-            if (isEditor || zoom <= minimumZoom || event.button !== 0) {
+            if (zoom <= minimumZoom || event.button !== 0) {
+                return;
+            }
+
+            const editorBackgroundTarget = event.target === target
+                || event.target instanceof SVGImageElement
+                || event.target instanceof SVGRectElement;
+
+            if (isEditor && !editorBackgroundTarget) {
                 return;
             }
 

@@ -123,7 +123,7 @@
                 <kbd>Strg</kbd>/<kbd>Cmd</kbd> = Einrasten · <kbd>Umschalt</kbd> = Parallel
                 <span class="ms-2" data-map-assist-status aria-live="polite"></span>
             </div>
-            <p class="small text-secondary mt-2 mb-0">Die übrigen Parzellen sind zur Orientierung sichtbar, aber nicht bearbeitbar. Nutze die Zoomschaltflächen oder Strg und Mausrad. Verschiebe den vergrößerten Ausschnitt über die Scrollleisten oder das Mausrad. Eckpunkte und die markierte Parzellenfläche bleiben direkt bearbeitbar.</p>
+            <p class="small text-secondary mt-2 mb-0">Die übrigen Parzellen sind zur Orientierung sichtbar, aber nicht bearbeitbar. Nutze die Zoomschaltflächen oder Strg und Mausrad. Ziehe freie Bildfläche mit gedrückter Maustaste, um den Ausschnitt zu verschieben. Eckpunkte und die markierte Parzellenfläche bleiben direkt bearbeitbar.</p>
 
             <form class="mt-3" method="POST" data-map-form>
                 @csrf
