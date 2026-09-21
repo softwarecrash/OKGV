@@ -51,7 +51,9 @@ class TenantPortalTest extends TestCase
         ])->assertRedirect('/dashboard');
         $verificationUrl = (new VerifyEmailNotification)->toMail($user)->actionUrl;
         $this->assertStringNotContainsString('expires=', $verificationUrl);
-        $this->get($verificationUrl)->assertRedirect();
+        $this->get($verificationUrl)
+            ->assertOk()
+            ->assertSee('E-Mail-Adresse bestätigt');
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
         $this->get(route('home'))->assertRedirect(route('registration.pending'));
 
@@ -64,6 +66,20 @@ class TenantPortalTest extends TestCase
         $this->actingAs($user->fresh())->get(route('tenant-portal.index'))
             ->assertOk()->assertSee($member->member_number)->assertSee('Keine aktuelle Parzelle zugeordnet.');
         $this->assertDatabaseCount('members', 1);
+    }
+
+    public function test_signed_verification_link_confirms_email_without_login(): void
+    {
+        $user = User::factory()->unverified()->create();
+        $verificationUrl = (new VerifyEmailNotification)->toMail($user)->actionUrl;
+
+        $this->get($verificationUrl)
+            ->assertOk()
+            ->assertSee('Deine E-Mail-Adresse wurde erfolgreich bestätigt.')
+            ->assertSee('Zur Anmeldung');
+
+        $this->assertTrue($user->fresh()->hasVerifiedEmail());
+        $this->assertGuest();
     }
 
     public function test_public_registration_waits_for_board_approval(): void
