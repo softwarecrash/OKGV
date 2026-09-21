@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0.151] - 2026-09-21
+
+### Fehlerbehebungen
+
+- Der Lageplan-Editor trennt das Verschieben von Knoten und Parzellenflächen verbindlich vom Verschieben des Kartenausschnitts. Dadurch bleibt der Hintergrund beim Bearbeiten stehen.
+- Eine Parzellenfläche wird nur noch mit gedrückter Alt-Taste verschoben; die Tastaturhilfe zeigt diese Geste direkt unter dem Lageplan an.
+
 ## [0.2.0.150] - 2026-09-21
 
 ### Fehlerbehebungen
