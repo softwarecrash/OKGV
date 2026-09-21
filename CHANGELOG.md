@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.0.148] - 2026-09-21
+
+### Lageplan
+
+- Der Lageplan-Editor bietet Einrasten an fremden Eckpunkten, parallele Kantenführung und eine kompakte Tastaturhilfe.
+- Hintergrundbildverwaltung und Zeichnen von Parzellenflächen sind getrennt; das Hintergrundbild wird versionsbasiert im Browser gecacht.
+- Beim Zoomen bleibt der sichtbare Kartenausschnitt proportional. Gespeicherte Flächen werden ohne Neuladen übernommen, sodass Zoom und Auswahl erhalten bleiben.
+- Das Verschieben von Knoten oder ganzen Parzellen löst kein Karten-Panning oder Scrollen mehr aus.
+
 ## [0.2.0.147] - 2026-09-20
 
 ### Änderungen
