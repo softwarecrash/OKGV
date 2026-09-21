@@ -401,16 +401,14 @@ document.addEventListener('DOMContentLoaded', () => {
             height: Number(editor.dataset.height),
         };
 
-        const lockViewportPosition = () => {
+        const setViewportScrollLocked = (locked) => {
             const viewport = editor.querySelector('[data-map-viewport]');
 
-            if (!(viewport instanceof HTMLElement) || !drag) {
+            if (!(viewport instanceof HTMLElement)) {
                 return;
             }
 
-            if (viewport.scrollLeft !== drag.scrollLeft || viewport.scrollTop !== drag.scrollTop) {
-                viewport.scrollTo({ left: drag.scrollLeft, top: drag.scrollTop });
-            }
+            viewport.style.overflow = locked ? 'hidden' : '';
         };
 
         const svgPoint = (event) => {
@@ -816,9 +814,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 drag = {
                     type: 'point',
                     index: Number(event.target.dataset.index),
-                    scrollLeft: editor.querySelector('[data-map-viewport]')?.scrollLeft ?? 0,
-                    scrollTop: editor.querySelector('[data-map-viewport]')?.scrollTop ?? 0,
                 };
+                setViewportScrollLocked(true);
                 svg.setPointerCapture(event.pointerId);
                 return;
             }
@@ -830,9 +827,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     type: 'polygon',
                     start: rawPoint,
                     original: points.map((item) => ({ ...item })),
-                    scrollLeft: editor.querySelector('[data-map-viewport]')?.scrollLeft ?? 0,
-                    scrollTop: editor.querySelector('[data-map-viewport]')?.scrollTop ?? 0,
                 };
+                setViewportScrollLocked(true);
                 svg.setPointerCapture(event.pointerId);
                 return;
             }
@@ -865,7 +861,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             event.preventDefault();
-            lockViewportPosition();
 
             const rawPoint = svgPoint(event);
 
@@ -907,12 +902,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             drag = null;
+            setViewportScrollLocked(false);
             clearAssists();
         };
 
         svg.addEventListener('pointerup', stopDragging);
         svg.addEventListener('pointercancel', stopDragging);
-        editor.querySelector('[data-map-viewport]')?.addEventListener('scroll', lockViewportPosition);
         selectParcel();
     });
 
