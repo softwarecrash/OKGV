@@ -799,6 +799,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (event.target instanceof SVGCircleElement) {
+                event.preventDefault();
+                event.stopPropagation();
                 drag = {
                     type: 'point',
                     index: Number(event.target.dataset.index),
@@ -808,6 +810,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (event.target === polygonElement && points.length >= 3 && !drawing) {
+                event.preventDefault();
+                event.stopPropagation();
                 drag = {
                     type: 'polygon',
                     start: rawPoint,
@@ -818,6 +822,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (drawing) {
+                event.preventDefault();
+                event.stopPropagation();
                 const point = applyAssists(event, points.at(-1));
 
                 if (!point) {
@@ -841,6 +847,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!drag) {
                 return;
             }
+
+            event.preventDefault();
 
             const rawPoint = svgPoint(event);
 
