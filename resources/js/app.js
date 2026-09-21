@@ -406,16 +406,8 @@ document.addEventListener('DOMContentLoaded', () => {
             height: Number(editor.dataset.height),
         };
 
-        const setViewportScrollLocked = (locked) => {
-            const viewport = editor.querySelector('[data-map-viewport]');
-
-            if (!(viewport instanceof HTMLElement)) {
-                return;
-            }
-
-            viewport.style.overflow = locked ? 'hidden' : '';
-            editor.dataset.mapDragging = String(locked);
-            document.documentElement.classList.toggle('parcel-map-dragging', locked);
+        const setMapDragging = (dragging) => {
+            editor.dataset.mapDragging = String(dragging);
         };
 
         const svgPoint = (event) => {
@@ -822,7 +814,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     type: 'point',
                     index: Number(event.target.dataset.index),
                 };
-                setViewportScrollLocked(true);
+                setMapDragging(true);
                 svg.setPointerCapture(event.pointerId);
                 return;
             }
@@ -835,7 +827,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     start: rawPoint,
                     original: points.map((item) => ({ ...item })),
                 };
-                setViewportScrollLocked(true);
+                setMapDragging(true);
                 svg.setPointerCapture(event.pointerId);
                 return;
             }
@@ -868,6 +860,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             event.preventDefault();
+            event.stopPropagation();
 
             const rawPoint = svgPoint(event);
 
@@ -909,7 +902,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             drag = null;
-            setViewportScrollLocked(false);
+            setMapDragging(false);
             clearAssists();
         };
 
