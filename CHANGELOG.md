@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0.152] - 2026-09-21
+
+### Änderungen
+
+- Signierte E-Mail-Bestätigungslinks funktionieren jetzt ohne vorherige Anmeldung und zeigen anschließend eine klare Bestätigungsseite mit dem nächsten Schritt an.
+
 ## [0.2.0.151] - 2026-09-21
 
 ### Fehlerbehebungen
