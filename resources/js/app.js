@@ -278,17 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: false });
 
         viewport.addEventListener('pointerdown', (event) => {
-            if (zoom <= minimumZoom || event.button !== 0) {
-                return;
-            }
-
-            const targetIsEditorControl = isEditor
-                && (map.dataset.mapDragging === 'true'
-                    || map.dataset.mapDrawing === 'true'
-                    || event.target instanceof SVGCircleElement
-                    || event.target === map.querySelector('[data-map-polygon]'));
-
-            if (targetIsEditorControl) {
+            if (isEditor || zoom <= minimumZoom || event.button !== 0) {
                 return;
             }
 
@@ -304,10 +294,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         viewport.addEventListener('pointermove', (event) => {
-            if (isEditor && map.dataset.mapDragging === 'true') {
-                return;
-            }
-
             if (!panDrag || panDrag.pointerId !== event.pointerId) {
                 return;
             }
@@ -404,10 +390,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const dimensions = {
             width: Number(editor.dataset.width),
             height: Number(editor.dataset.height),
-        };
-
-        const setMapDragging = (dragging) => {
-            editor.dataset.mapDragging = String(dragging);
         };
 
         const svgPoint = (event) => {
@@ -814,7 +796,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     type: 'point',
                     index: Number(event.target.dataset.index),
                 };
-                setMapDragging(true);
                 svg.setPointerCapture(event.pointerId);
                 return;
             }
@@ -827,7 +808,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     start: rawPoint,
                     original: points.map((item) => ({ ...item })),
                 };
-                setMapDragging(true);
                 svg.setPointerCapture(event.pointerId);
                 return;
             }
@@ -902,7 +882,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             drag = null;
-            setMapDragging(false);
             clearAssists();
         };
 

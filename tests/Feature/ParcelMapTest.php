@@ -223,7 +223,7 @@ class ParcelMapTest extends TestCase
             ->assertSee('<kbd>Umschalt</kbd> = Parallel', false)
             ->assertSee('Strg und Mausrad')
             ->assertDontSee('data-map-pan-toggle', false)
-            ->assertSee('Ziehe freie Bildfläche')
+            ->assertSee('Verschiebe den vergrößerten Ausschnitt über die Scrollleisten')
             ->assertSee(route('parcel-map.background.edit'), false)
             ->assertDontSee('Quelle und Nutzungsrecht');
 
