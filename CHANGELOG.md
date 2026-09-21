@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0.150] - 2026-09-21
+
+### Fehlerbehebungen
+
+- Im Lageplan-Editor lässt sich der freie Hintergrund wieder mit der linken Maustaste verschieben. Knoten, Parzellenflächen und Beschriftungen bleiben davon getrennt und lösen kein Panning aus.
+
 ## [0.2.0.149] - 2026-09-21
 
 ### Fehlerbehebungen
