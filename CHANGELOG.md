@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0.149] - 2026-09-21
+
+### Fehlerbehebungen
+
+- Der Lageplan-Editor verwendet beim Bearbeiten keine linke-Maus-Pan-Geste mehr. Das Verschieben von Knoten und Parzellen bleibt dadurch präzise und kann nicht mit dem Verschieben des Kartenausschnitts kollidieren.
+
 ## [0.2.0.148] - 2026-09-21
 
 ### Lageplan
