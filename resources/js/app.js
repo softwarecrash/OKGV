@@ -401,46 +401,15 @@ document.addEventListener('DOMContentLoaded', () => {
             height: Number(editor.dataset.height),
         };
 
-        const autoScrollAtViewportEdge = (event) => {
+        const lockViewportPosition = () => {
             const viewport = editor.querySelector('[data-map-viewport]');
-            const zoom = Number(editor.dataset.mapZoom ?? 1);
 
-            if (!(viewport instanceof HTMLElement) || zoom <= 1) {
+            if (!(viewport instanceof HTMLElement) || !drag) {
                 return;
             }
 
-            const bounds = viewport.getBoundingClientRect();
-            const edgeSize = 48;
-            const scrollStep = 18;
-            const horizontalDistance = event.clientX < bounds.left + edgeSize
-                ? event.clientX - bounds.left
-                : bounds.right - event.clientX;
-            const verticalDistance = event.clientY < bounds.top + edgeSize
-                ? event.clientY - bounds.top
-                : bounds.bottom - event.clientY;
-            const horizontalDirection = event.clientX < bounds.left + edgeSize
-                ? -1
-                : event.clientX > bounds.right - edgeSize
-                    ? 1
-                    : 0;
-            const verticalDirection = event.clientY < bounds.top + edgeSize
-                ? -1
-                : event.clientY > bounds.bottom - edgeSize
-                    ? 1
-                    : 0;
-
-            const horizontalSpeed = horizontalDirection
-                ? Math.ceil(((edgeSize - Math.max(0, horizontalDistance)) / edgeSize) * scrollStep)
-                : 0;
-            const verticalSpeed = verticalDirection
-                ? Math.ceil(((edgeSize - Math.max(0, verticalDistance)) / edgeSize) * scrollStep)
-                : 0;
-
-            if (horizontalSpeed || verticalSpeed) {
-                viewport.scrollBy({
-                    left: horizontalDirection * horizontalSpeed,
-                    top: verticalDirection * verticalSpeed,
-                });
+            if (viewport.scrollLeft !== drag.scrollLeft || viewport.scrollTop !== drag.scrollTop) {
+                viewport.scrollTo({ left: drag.scrollLeft, top: drag.scrollTop });
             }
         };
 
@@ -847,6 +816,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 drag = {
                     type: 'point',
                     index: Number(event.target.dataset.index),
+                    scrollLeft: editor.querySelector('[data-map-viewport]')?.scrollLeft ?? 0,
+                    scrollTop: editor.querySelector('[data-map-viewport]')?.scrollTop ?? 0,
                 };
                 svg.setPointerCapture(event.pointerId);
                 return;
@@ -859,6 +830,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     type: 'polygon',
                     start: rawPoint,
                     original: points.map((item) => ({ ...item })),
+                    scrollLeft: editor.querySelector('[data-map-viewport]')?.scrollLeft ?? 0,
+                    scrollTop: editor.querySelector('[data-map-viewport]')?.scrollTop ?? 0,
                 };
                 svg.setPointerCapture(event.pointerId);
                 return;
@@ -892,7 +865,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             event.preventDefault();
-            autoScrollAtViewportEdge(event);
+            lockViewportPosition();
 
             const rawPoint = svgPoint(event);
 
@@ -939,6 +912,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         svg.addEventListener('pointerup', stopDragging);
         svg.addEventListener('pointercancel', stopDragging);
+        editor.querySelector('[data-map-viewport]')?.addEventListener('scroll', lockViewportPosition);
         selectParcel();
     });
 
