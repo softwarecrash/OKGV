@@ -703,7 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clearAssists();
             drawButton.disabled = !selection.value;
             help.textContent = selection.value
-                ? 'Ziehe vorhandene Eckpunkte oder die Fläche. Mit „Punkte zeichnen“ setzt du eine neue Form.'
+                ? 'Ziehe vorhandene Eckpunkte. Halte Alt gedrückt und ziehe die Fläche, um die ganze Parzelle zu verschieben. Mit „Punkte zeichnen“ setzt du eine neue Form.'
                 : 'Wähle eine Parzelle.';
             update();
         };
@@ -797,20 +797,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            if (event.target instanceof SVGCircleElement) {
+            const handle = event.target instanceof Element
+                ? event.target.closest('[data-map-handles] circle')
+                : null;
+
+            if (handle instanceof SVGCircleElement) {
                 event.preventDefault();
                 event.stopPropagation();
                 drag = {
                     type: 'point',
-                    index: Number(event.target.dataset.index),
+                    index: Number(handle.dataset.index),
                 };
                 svg.setPointerCapture(event.pointerId);
                 return;
             }
 
-            if (event.target === polygonElement && points.length >= 3 && !drawing) {
+            if (event.target === polygonElement) {
                 event.preventDefault();
                 event.stopPropagation();
+
+                if (!event.altKey || points.length < 3 || drawing) {
+                    return;
+                }
+
                 drag = {
                     type: 'polygon',
                     start: rawPoint,
