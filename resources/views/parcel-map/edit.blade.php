@@ -113,7 +113,7 @@
                         </g>
                     @endforeach
                     <polygon class="parcel-map-editor-polygon" data-map-polygon points="" fill-opacity="0.58" stroke="var(--bs-body-color)" stroke-width="4" vector-effect="non-scaling-stroke"/>
-                    <text data-map-active-label fill="#FFFFFF" stroke="#263238" stroke-width="4" paint-order="stroke" font-size="24" font-weight="700" text-anchor="middle" dominant-baseline="middle"></text>
+                    <text data-map-active-label fill="#FFFFFF" stroke="#263238" stroke-width="4" paint-order="stroke" font-size="24" font-weight="700" text-anchor="middle" dominant-baseline="middle" pointer-events="none"></text>
                     <line class="parcel-map-parallel-guide" data-map-parallel-line hidden pointer-events="none" vector-effect="non-scaling-stroke"/>
                     <circle class="parcel-map-snap-indicator" data-map-snap-indicator r="7" hidden pointer-events="none" vector-effect="non-scaling-stroke"/>
                     <g data-map-handles></g>

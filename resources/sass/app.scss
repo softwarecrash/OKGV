@@ -24,6 +24,11 @@
     overscroll-behavior: contain;
 }
 
+html.parcel-map-dragging {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+}
+
 .parcel-map-viewport.is-pannable {
     cursor: grab;
     touch-action: none;

@@ -409,6 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             viewport.style.overflow = locked ? 'hidden' : '';
+            document.documentElement.classList.toggle('parcel-map-dragging', locked);
         };
 
         const svgPoint = (event) => {

@@ -217,6 +217,8 @@ class ParcelMapTest extends TestCase
             ->assertSee('data-map-handle-radius="9"', false)
             ->assertSee('data-map-snap-radius="9"', false)
             ->assertSee('data-map-save-status', false)
+            ->assertSee('data-map-active-label', false)
+            ->assertSee('pointer-events="none"', false)
             ->assertSee('<kbd>Strg</kbd>/<kbd>Cmd</kbd> = Einrasten', false)
             ->assertSee('<kbd>Umschalt</kbd> = Parallel', false)
             ->assertSee('Strg und Mausrad')
