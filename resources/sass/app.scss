@@ -44,15 +44,6 @@
     touch-action: none;
 }
 
-.parcel-map-drag-surface {
-    position: fixed;
-    z-index: 2147483647;
-    inset: 0;
-    cursor: grabbing;
-    touch-action: none;
-    user-select: none;
-}
-
 .parcel-map-editor-polygon {
     fill-opacity: 0.42;
     stroke: #ffffff;

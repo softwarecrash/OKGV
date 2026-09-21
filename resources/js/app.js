@@ -282,6 +282,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            if (isEditor && (map.dataset.mapDragging === 'true' || event.defaultPrevented)) {
+                return;
+            }
+
             const editorBackgroundTarget = event.target === target
                 || event.target instanceof SVGImageElement
                 || event.target instanceof SVGRectElement;
@@ -303,6 +307,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         viewport.addEventListener('pointermove', (event) => {
             if (!panDrag || panDrag.pointerId !== event.pointerId) {
+                return;
+            }
+
+            if (isEditor && (map.dataset.mapDragging === 'true' || event.defaultPrevented)) {
                 return;
             }
 
@@ -342,6 +350,19 @@ document.addEventListener('DOMContentLoaded', () => {
             panDrag = null;
             viewport.classList.remove('is-panning');
         };
+
+        map.addEventListener('parcel-map-shape-drag-start', () => {
+            if (!panDrag) {
+                return;
+            }
+
+            if (viewport.hasPointerCapture(panDrag.pointerId)) {
+                viewport.releasePointerCapture(panDrag.pointerId);
+            }
+
+            panDrag = null;
+            viewport.classList.remove('is-panning');
+        });
 
         viewport.addEventListener('pointerup', stopPanning);
         viewport.addEventListener('pointercancel', stopPanning);
@@ -393,8 +414,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let points = [];
         let drawing = false;
         let drag = null;
-        let dragSurface = null;
         editor.dataset.mapDrawing = 'false';
+        editor.dataset.mapDragging = 'false';
 
         const dimensions = {
             width: Number(editor.dataset.width),
@@ -834,27 +855,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            if (dragSurface instanceof HTMLElement) {
-                if (dragSurface.hasPointerCapture(event.pointerId)) {
-                    dragSurface.releasePointerCapture(event.pointerId);
-                }
-
-                dragSurface.remove();
-                dragSurface = null;
+            if (svg.hasPointerCapture(event.pointerId)) {
+                svg.releasePointerCapture(event.pointerId);
             }
 
             drag = null;
+            editor.dataset.mapDragging = 'false';
             clearAssists();
         };
 
-        const startDragSurface = (event) => {
-            dragSurface = document.createElement('div');
-            dragSurface.className = 'parcel-map-drag-surface';
-            document.body.append(dragSurface);
-            dragSurface.addEventListener('pointermove', moveDraggedShape);
-            dragSurface.addEventListener('pointerup', stopDragging);
-            dragSurface.addEventListener('pointercancel', stopDragging);
-            dragSurface.setPointerCapture(event.pointerId);
+        const startShapeDrag = (event) => {
+            editor.dataset.mapDragging = 'true';
+            editor.dispatchEvent(new CustomEvent('parcel-map-shape-drag-start'));
+            svg.setPointerCapture(event.pointerId);
         };
 
         svg.addEventListener('pointerdown', (event) => {
@@ -880,7 +893,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     index: Number(handle.dataset.index),
                     pointerId: event.pointerId,
                 };
-                startDragSurface(event);
+                startShapeDrag(event);
                 return;
             }
 
@@ -898,7 +911,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     original: points.map((item) => ({ ...item })),
                     pointerId: event.pointerId,
                 };
-                startDragSurface(event);
+                startShapeDrag(event);
                 return;
             }
 
